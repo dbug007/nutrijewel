@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive SVG Buttons</title>
+  <style>
+    body {
+      margin: 0;
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo {
+      width: 200px;
+      margin: 20px;
+    }
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .active-button {
+      fill: #F8F8F8 !important;
+    }
+  </style>
+</head>
+<body>
+  <img src="njlogo.png" alt="Top Logo" class="logo" />
+
+  <!-- Inline SVG with JavaScript behavior -->
+  <div id="svg-container">
+    <!-- BEGIN SVG -->
+    <svg width="20096" height="31368" viewBox="0 0 20096 31368" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="20096" height="31368" fill="#313C1D"/>
+      <g filter="url(#filter0_d_348_400)">
+        <rect x="2880" y="9834" width="14336" height="3200" rx="1000" fill="#B4D281" class="svg-button" />
+      </g>
+      <g filter="url(#filter1_d_348_400)">
+        <rect x="2880" y="22572" width="14336" height="3200" rx="1000" fill="#B4D281" class="svg-button" />
+      </g>
+      <g filter="url(#filter2_d_348_400)">
+        <rect x="2880" y="16200" width="14336" height="3200" rx="1000" fill="#F8F8F8" class="svg-button" />
+      </g>
+    </svg>
+    <!-- END SVG -->
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".svg-button");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active-button"));
+        btn.classList.add("active-button");
+      });
+    });
+  </script>
+</body>
+</html>
