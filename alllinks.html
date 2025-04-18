@@ -1,60 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interactive SVG Buttons</title>
-  <style>
-    body {
-      margin: 0;
-      background: #1a1a1a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .logo {
-      width: 200px;
-      margin: 20px;
-    }
-    svg {
-      max-width: 100%;
-      height: auto;
-    }
-    .active-button {
-      fill: #F8F8F8 !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linktree Page</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* Updated font */
+            text-align: center;
+            background-color: #313C1D; /* Updated background color */
+            margin: 0;
+            padding: 0;
+            color: #FFF; /* Updated font color */
+        }
+        .logo {
+            margin-top: 20px;
+        }
+        .button-container {
+            margin-top: 30px;
+        }
+        .link-button {
+            display: block;
+            width: 250px; /* Increased button width */
+            margin: 23px auto; /* Increased space between buttons */
+            padding: 19px 23px; /* Increased button size */
+            text-decoration: none;
+            color: #FFF; /* Updated font color for buttons */
+            background-color: #B4D281; /* Updated button color */
+            border-radius: 19px; /* Increased corner curvature */
+            font-size: 19px; /* Increased font size */
+            font-weight: 500; /* Set font weight to 500 */
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 5px 5px 1px 1px rgba(255, 255, 255, 0.45); /* Drop shadow */
+        }
+        .link-button:hover {
+            background-color: #FFF; /* Change button color to white */
+            color: #B4D281; /* Change font color to #B4D281 */
+            box-shadow: none; /* Hide drop shadow */
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 10px; /* Small font size */
+            color: #FFF; /* Font color */
+            font-weight: 300; /* Decreased font weight */
+        }
+    </style>
 </head>
 <body>
-  <img src="njlogo.png" alt="Top Logo" class="logo" />
+    <!-- Logo Section -->
+    <div class="logo">
+        <img src="logonj.png" alt="NJ Logo" width="150">
+    </div>
 
-  <!-- Inline SVG with JavaScript behavior -->
-  <div id="svg-container">
-    <!-- BEGIN SVG -->
-    <svg width="20096" height="31368" viewBox="0 0 20096 31368" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="20096" height="31368" fill="#313C1D"/>
-      <g filter="url(#filter0_d_348_400)">
-        <rect x="2880" y="9834" width="14336" height="3200" rx="1000" fill="#B4D281" class="svg-button" />
-      </g>
-      <g filter="url(#filter1_d_348_400)">
-        <rect x="2880" y="22572" width="14336" height="3200" rx="1000" fill="#B4D281" class="svg-button" />
-      </g>
-      <g filter="url(#filter2_d_348_400)">
-        <rect x="2880" y="16200" width="14336" height="3200" rx="1000" fill="#F8F8F8" class="svg-button" />
-      </g>
-    </svg>
-    <!-- END SVG -->
-  </div>
+    <!-- Buttons Section -->
+    <div class="button-container">
+        <a href="https://chat.whatsapp.com/EeAovsyRNWPHiWGkAU7Km9" class="link-button">Join WhatsApp Group</a>
+        <a href="https://www.instagram.com/nutrijewel" class="link-button">Follow on Instagram</a>
+        <a href="https://wa.me/919960637656?text=Hi%2C%20I%20want%20to%20place%20an%20order
+        " class="link-button">Order Now</a>
+        <a href="our-story.html" class="link-button">About Our Journey</a>
+    </div>
 
-  <script>
-    const buttons = document.querySelectorAll(".svg-button");
-
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("active-button"));
-        btn.classList.add("active-button");
-      });
-    });
-  </script>
+    <!-- Footer Section -->
+    <div class="footer">
+        All rights reserved &copy NutriJewel 2025
+    </div>
 </body>
 </html>
