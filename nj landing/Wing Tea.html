@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>NutriJewel</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="TemplatesJungle">
+    <meta name="keywords" content="ecommerce,herbal NutriJewel,shop">
+    <meta name="description" content="Bootstrap 5 NutriJewel Shop HTML CSS Template">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/new/fevicon.ico">
+    <!-- script ================================================== -->
+    <script src="js/modernizr.js"></script>
+  </head>
+  <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol xmlns="http://www.w3.org/2000/svg" id="navbar-icon" viewBox="0 0 16 16">
+        <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 16 16">
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="cart" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="search" viewBox="0 0 512 512">
+        <path fill="currentColor" d="M456.69 421.39L362.6 327.3a173.81 173.81 0 0 0 34.84-104.58C397.44 126.38 319.06 48 222.72 48S48 126.38 48 222.72s78.38 174.72 174.72 174.72A173.81 173.81 0 0 0 327.3 362.6l94.09 94.09a25 25 0 0 0 35.3-35.3ZM97.92 222.72a124.8 124.8 0 1 1 124.8 124.8a124.95 124.95 0 0 1-124.8-124.8Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="caret-arrow-left" viewBox="0 0 1024 1024">
+        <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="caret-arrow-right" viewBox="0 0 24 24">
+        <path fill="currentColor" d="m19.704 12l-8.492-8.727a.75.75 0 1 1 1.075-1.046l9 9.25a.75.75 0 0 1 0 1.046l-9 9.25a.75.75 0 1 1-1.075-1.046L19.705 12Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-fill" viewBox="0 0 16 16">
+        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-empty" viewBox="0 0 16 16">
+        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-left" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M10.78 19.03a.75.75 0 0 1-1.06 0l-6.25-6.25a.75.75 0 0 1 0-1.06l6.25-6.25a.749.749 0 0 1 1.275.326a.749.749 0 0 1-.215.734L5.81 11.5h14.44a.75.75 0 0 1 0 1.5H5.81l4.97 4.97a.75.75 0 0 1 0 1.06Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-right" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M2.5 7.5a.5.5 0 1 0 0 1h9.697l-4.031 3.628a.5.5 0 1 0 .668.744l5-4.5a.5.5 0 0 0 0-.744l-5-4.5a.5.5 0 0 0-.668.744L12.197 7.5H2.5Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="play" viewBox="0 0 32 32">
+        <path fill="currentColor" d="M7 28a1 1 0 0 1-1-1V5a1 1 0 0 1 1.482-.876l20 11a1 1 0 0 1 0 1.752l-20 11A1 1 0 0 1 7 28ZM8 6.69v18.62L24.925 16Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="truck" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+          <path stroke-linejoin="round" stroke-miterlimit="1.5" d="M8 19a2 2 0 1 0 0-4a2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z" />
+          <path d="M10.05 17H15V6.6a.6.6 0 0 0-.6-.6H1m4.65 11H3.6a.6.6 0 0 1-.6-.6v-4.9" />
+          <path stroke-linejoin="round" d="M2 9h4" />
+          <path d="M15 9h5.61a.6.6 0 0 1 .548.356l1.79 4.028a.6.6 0 0 1 .052.243V16.4a.6.6 0 0 1-.6.6h-1.9M15 17h1" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="luggage-cart" viewBox="0 0 32 32">
+        <path fill="currentColor" d="M19 6c-1.645 0-3 1.355-3 3h-6v12h18V9h-6c0-1.645-1.355-3-3-3zM4 7v2h1c.555 0 1 .445 1 1v11c0 2.21 1.79 4 4 4h18v-2H10c-1.191 0-2-.809-2-2V10c0-1.645-1.355-3-3-3zm20.5 18a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3zm-12 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3zM19 8c.555 0 1 .445 1 1h-2c0-.555.445-1 1-1zm-7 3h14v8H12z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="coffee" viewBox="0 0 32 32">
+        <path fill="currentColor" d="M11 3v4h2V3zm4 1v3h2V4zM4.875 8L5 9.094l1.813 17.218c.16 1.52 1.472 2.688 3 2.688h9.374c1.528 0 2.84-1.168 3-2.688l.47-4.312H25c1.645 0 3-1.355 3-3v-3c0-1.645-1.355-3-3-3h-1.406L24 9.094L24.125 8zm2.25 2h14.75l-1.688 16.094a1 1 0 0 1-1 .906H9.813c-.519 0-.945-.387-1-.906zm16.25 5H25c.566 0 1 .434 1 1v3c0 .566-.434 1-1 1h-2.156z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="insta" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="send" viewBox="0 0 32 32">
+        <path fill="currentColor" d="M26.07 3.996a2.974 2.974 0 0 0-.933.223h-.004c-.285.113-1.64.683-3.7 1.547l-7.382 3.109c-5.297 2.23-10.504 4.426-10.504 4.426l.062-.024s-.359.118-.734.375a2.03 2.03 0 0 0-.586.567c-.184.27-.332.683-.277 1.11c.09.722.558 1.155.894 1.394c.34.242.664.355.664.355h.008l4.883 1.645c.219.703 1.488 4.875 1.793 5.836c.18.574.355.933.574 1.207c.106.14.23.257.379.351a1.119 1.119 0 0 0 .246.106l-.05-.012c.015.004.027.016.038.02c.04.011.067.015.118.023c.773.234 1.394-.246 1.394-.246l.035-.028l2.883-2.625l4.832 3.707l.11.047c1.007.442 2.027.196 2.566-.238c.543-.437.754-.996.754-.996l.035-.09l3.734-19.129c.106-.472.133-.914.016-1.343a1.807 1.807 0 0 0-.781-1.047a1.872 1.872 0 0 0-1.067-.27zm-.101 2.05c-.004.063.008.056-.02.177v.011l-3.699 18.93c-.016.027-.043.086-.117.145c-.078.062-.14.101-.465-.028l-5.91-4.531l-3.57 3.254l.75-4.79l9.656-9c.398-.37.265-.448.265-.448c.028-.454-.601-.133-.601-.133l-12.176 7.543l-.004-.02l-5.836-1.965v-.004l-.015-.003a.27.27 0 0 0 .03-.012l.032-.016l.031-.011s5.211-2.196 10.508-4.426c2.652-1.117 5.324-2.242 7.379-3.11a807.312 807.312 0 0 1 3.66-1.53c.082-.032.043-.032.102-.032z"></path>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-up" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m6-8l-6-6m-6 6l6-6" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="cup" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+          <path d="M17 11.6V15a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6v-3.4a.6.6 0 0 1 .6-.6h12.8a.6.6 0 0 1 .6.6ZM12 9c0-1 .714-2 2.143-2v0A2.857 2.857 0 0 0 17 4.143V3.5M8 9v-.5a3 3 0 0 1 3-3v0a2 2 0 0 0 2-2V3"/><path d="M16 11h2.5a2.5 2.5 0 0 1 0 5H17"/>
+        </g>
+      </symbol>
+    </svg>
+
+    <div class="preloader">
+      <div class="loader">
+        <div class="dot">
+          <svg class="cup svg-primary" width="40" height="40">
+            <use xlink:href="#cup"></use>
+          </svg>
+        </div>
+        <div class="dot">
+          <svg class="cup svg-primary" width="40" height="40">
+            <use xlink:href="#cup"></use>
+          </svg>
+        </div>
+        <div class="dot">
+          <svg class="cup svg-primary" width="40" height="40">
+            <use xlink:href="#cup"></use>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasLogin" aria-labelledby="My Login">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="login-detail">
+          <div class="login-form p-0">
+            <div class="col-lg-12 mx-auto">
+              <form id="login-form">
+                <input type="text" name="username" placeholder="Username or Email Address *" class="mb-3 ps-3 text-input w-100">
+                <input type="password" name="password" placeholder="Password" class="ps-3 text-input w-100">
+                <div class="checkbox d-flex justify-content-between mt-4">
+                  <p class="checkbox-form">
+                    <label class="">
+                      <input name="rememberme" type="checkbox" id="remember-me" value="forever"> Remember me </label>
+                  </p>
+                  <p class="lost-password">
+                    <a href="#">Forgot your password?</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer mt-5 d-flex justify-content-center">
+            <button type="button" class="btn btn-primary w-100 mb-2">Login</button>
+            <button type="button" class="btn btn-outline-primary w-100">Register</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="order-md-last">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Your Cart</span>
+            <span class="badge bg-primary rounded-pill">3</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Roselle NutriJewel</h6>
+                <small class="text-body-secondary">Brief descriptn</small>
+              </div>
+              <span class="text-body-secondary">$12</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Apple Flower NutriJewel</h6>
+                <small class="text-body-secondary">Brief description</small>
+              </div>
+              <span class="text-body-secondary">$14</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Honey NutriJewel</h6>
+                <small class="text-body-secondary">Brief description</small>
+              </div>
+              <span class="text-body-secondary">$12</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total (USD)</span>
+              <strong>$38</strong>
+            </li>
+          </ul>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to Checkout</button>
+        </div>
+      </div>
+    </div>
+    <header id="header" class="site-header fixed-top border-bottom">
+      <div class="container-lg">
+        <div class="row">
+          <nav class="navbar navbar-expand-lg">
+            <button class="navbar-toggler d-flex d-lg-none order-3 p-2 border-0 shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+              <svg class="navbar-icon svg-white" width="40" height="40">
+                <use xlink:href="#navbar-icon"></use>
+              </svg>
+            </button>
+            <a href="index.html" class="navbar-brand order-2 order-lg-2 d-flex d-lg-none">
+              <img src="images/njlogo.svg" alt="NutriJewel Logo" width="100" height="50">
+            </a>
+            <div class="offcanvas offcanvas-end order-3" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
+              <div class="offcanvas-body">
+                <div class="offcanvas-header px-4 pb-0">
+                  <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
+                </div>
+                <div class="navbar-collapse order-1 order-lg-1" id="navbarMenu">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                      <a class="nav-link text-light me-4" href="#"> Home </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-light me-4" href="about.html"> About </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-light me-4" href="shop.html"> Shop </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link me-4 dropdown-toggle text-light" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pages</a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="about.html" class="dropdown-item">About<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="blog.html" class="dropdown-item">Blog<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="shop.html" class="dropdown-item">Shop<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="checkout.html" class="dropdown-item">Checkout<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="single-post.html" class="dropdown-item">Single Post<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="single-product.html" class="dropdown-item">Single Product<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                        <li>
+                          <a href="faqs.html" class="dropdown-item">Faqs<span class="badge ms-1 bg-primary">PRO</span></a>
+                        </li>
+                      </ul>
+                    </li>                    
+                    <li class="nav-item">
+                    </li>
+                  </ul>
+                </div>
+                <a href="index.html" class="navbar-brand order-2 order-lg-2 d-none d-lg-flex">
+                  <img src="images/logoletters.svg" alt="NutriJewel Logo" width="100" height="50">
+                </a>
+                <ul class="user-items list-unstyled d-none d-lg-flex justify-content-end align-items-center order-3 flex-grow-1 gap-5 m-0">
+                  <li>
+                    <a href="#" class="text-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
+                      <svg class="user svg-white" width="18" height="18">
+                        <use xlink:href="#user"></use>
+                      </svg>
+                      <span>Login</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="cart.html" class="text-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                      <svg class="cart svg-white" width="18" height="18">
+                        <use xlink:href="#cart"></use>
+                      </svg>
+                      <span>(0)</span>
+                    </a>
+                  </li>
+                  <li>
+                    <svg class="search svg-white" width="18" height="18">
+                      <use xlink:href="#search"></use>
+                    </svg>
+                    <input type="text" placeholder="Search..." class="border-0 bg-transparent fst-italic outline-none text-light">
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <section id="intro" class="position-relative overflow-hidden" style="background-image: url(images/banner-image1.jpg); background-repeat: no-repeat; background-position: center; width: 100%; height: 898px;">
+      <div class="hero-content position-absolute d-flex justify-content-center align-items-center text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="page-title text-light fst-italic">About Us</h1>
+              <div class="breadcrumbs text-light">
+                <span class="item">
+                  <a href="https://demo.templatesjungle.com/wingtea/index.html" class="text-light">Home /</a>
+                </span>
+                <span class="item">About Us</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="about" class="py-lg-8">
+      <div class="container-lg">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <figure class="image-holder mb-5 jarallax">
+              <img src="./Wing Tea_files/single-image1.jpg" alt="tea" class="jarallax-img">
+            </figure>
+          </div>
+          <div class="col-lg-5">
+            <div class="detail-entry px-4">
+              <h4 class="fs-6">HOUSE OF TEA</h4>
+              <h3 class="mt-0 mb-4 fs-2 fst-italic">"Our main motive is to make our beautiful people stay fit &amp; healthy everytime."</h3>
+              <p>A pellentesque pretium feugiat vel morbi sagittis lorem habitasse cursus. Suspendisse tempus rhoncus enim pellentesque est in neque, elit mattis vehicula vitae eget. Viverra imperdiet felis sollicitudin tesque cursus sit.</p>
+              <p>Suspendisse tempus rhoncus enim pellentesque est vehicula vitae eget. Viverra imperdiet felis sollicitudin pellentesque cursus sit. Feugiat hac porttitor.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="icon-box-wrap">
+      <div class="container-lg">
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="icon-box">
+              <div class="icon-box-content">
+                <h3 class="feature-title">100% Organic</h3>
+                <p>Suspendisse tempus rhoncus enim pellentesque est vehicula vitae eget.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="icon-box">
+              <div class="icon-box-content">
+                <h3 class="feature-title">Always Fresh</h3>
+                <p>Suspendisse tempus rhoncus enim pellentesque est vehicula vitae eget.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="icon-box">
+              <div class="icon-box-content">
+                <h3 class="feature-title">High Quality</h3>
+                <p>Suspendisse tempus rhoncus enim pellentesque est vehicula vitae eget.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="icon-box">
+              <div class="icon-box-content">
+                <h3 class="feature-title">Our Plantations</h3>
+                <p>Suspendisse tempus rhoncus enim pellentesque est vehicula vitae eget.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="our-team" class="py-lg-8">
+      <div class="container-lg">
+        <div class="row">
+          <div class="display-header text-center mb-5">
+            <h2 class="display-6 fst-italic m-0">Our Team</h2>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5">
+            <div class="team-member text-center">
+              <div class="image-holder position-relative">
+                <img src="./Wing Tea_files/team-member1.jpg" alt="team" class="img-fluid">
+                <ul class="social-links list-unstyled position-absolute">
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="facebook" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#facebook"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="twitter" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#twitter"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="instagram" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#instagram"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="youtube" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#youtube"></use>
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="member-details text-center">
+                <h3 class="member-title fst-italic mb-0">Isabella Moore</h3>
+                <div class="designation">CEO-Founder</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5">
+            <div class="team-member text-center">
+              <div class="image-holder position-relative">
+                <img src="./Wing Tea_files/team-member2.jpg" alt="team" class="img-fluid">
+                <ul class="social-links list-unstyled position-absolute">
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="facebook" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#facebook"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="twitter" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#twitter"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="instagram" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#instagram"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="youtube" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#youtube"></use>
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="member-details text-center">
+                <h3 class="member-title fst-italic mb-0">Harold Morgan</h3>
+                <div class="designation">General Manager</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5">
+            <div class="team-member text-center">
+              <div class="image-holder position-relative">
+                <img src="./Wing Tea_files/team-member3.jpg" alt="team" class="img-fluid">
+                <ul class="social-links list-unstyled position-absolute">
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="facebook" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#facebook"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="twitter" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#twitter"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="instagram" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#instagram"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="youtube" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#youtube"></use>
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="member-details text-center">
+                <h3 class="member-title fst-italic mb-0">Alexis Spencer</h3>
+                <div class="designation">Asst Manager</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-5">
+            <div class="team-member text-center">
+              <div class="image-holder position-relative">
+                <img src="./Wing Tea_files/team-member4.jpg" alt="team" class="img-fluid">
+                <ul class="social-links list-unstyled position-absolute">
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="facebook" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#facebook"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="twitter" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#twitter"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="instagram" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#instagram"></use>
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="text-dark">
+                      <svg class="youtube" width="25" height="20" aria-hidden="true">
+                        <use xlink:href="#youtube"></use>
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="member-details text-center">
+                <h3 class="member-title fst-italic mb-0">Josephine Lavoie</h3>
+                <div class="designation">Staff</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="call-to-action" class="py-lg-6">
+      <div class="container-lg">
+        <div class="row align-items-center justify-content-between">
+          <div class="col-lg-7">
+            <blockquote class="fs-1">Each tea purchase comes with organically and ethically grown loose theleaf tea, carefully blended to create the perfect cup. </blockquote>
+          </div>
+          <div class="col-lg-4">
+            <a href="https://demo.templatesjungle.com/wingtea/shop.html" class="btn btn-lg btn-primary">Know More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="instagram-wrap" class="py-lg-6">
+      <div class="container-lg">
+        <div class="row">
+          <h2 class="display-6 text-center fst-italic">Shop Our Insta</h2>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item1.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item2.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item3.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item4.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item5.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-3">
+            <div class="image-holder position-relative">
+              <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+                <img src="./Wing Tea_files/insta-item6.jpg" alt="instagram" class="img-fluid">
+                <div class="border insta-item position-absolute d-flex align-items-center justify-content-center">
+                  <svg class="insta svg-white" width="25" height="25">
+                    <use xlink:href="#insta"></use>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer id="footer" class="mt-5">
+      <div class="container-lg">
+        <div class="row d-flex flex-wrap justify-content-between py-5">
+          <div class="col-lg-3 col-md-6 mb-5">
+            <div class="footer-menu">
+              <div class="footer-intro mb-2">
+                <h4 class="fs-2 fst-italic pb-2">Know Our Wing Tea</h4>
+                <p>We are the best tea supplier in the town. Our main motive is to make our beautiful people stay fit &amp; healthy everytime.</p>
+                <form id="form" class="mt-4 position-relative">
+                  <input type="text" name="email" placeholder="Your Email Addresss" class="border-0 border-bottom bg-transparent w-100">
+                  <a href="https://demo.templatesjungle.com/wingtea/about.html#">
+                    <svg class="send svg-primary position-absolute" width="20" height="20">
+                      <use xlink:href="#send"></use>
+                    </svg>
+                  </a>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title fst-italic">Quick Links</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/index.html" class="item-anchor">Home</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/about.html" class="item-anchor">About</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/shop.html" class="item-anchor">Shop</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/blog.html" class="item-anchor">Blogs</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title fst-italic">Help</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/faqs.html" class="item-anchor">Faqs</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="item-anchor">Store policy</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="item-anchor">Shipping &amp; returns</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/checkout.html" class="item-anchor">Checkout</a>
+                </li>
+                <li class="menu-item fw-medium pb-2">
+                  <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="item-anchor">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6">
+            <div class="footer-menu">
+              <h5 class="widget-title fst-italic">Social Links</h5>
+              <div class="social-links">
+                <ul class="list-unstyled">
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#">Facebook </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#">Instagram </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#">Pinterest </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#">Twitter </a>
+                  </li>
+                  <li class="fw-medium pb-2">
+                    <a href="https://demo.templatesjungle.com/wingtea/about.html#">Youtube </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-top py-4">
+        <div class="container-lg">
+          <div class="row justify-content-between">
+            <div class="col-md-10">
+              <p>©2023 Template designed by <a href="https://templatesjungle.com/" target="_blank" class="fw-medium">TemplatesJungle</a>
+              </p>
+            </div>
+            <div class="col-md-2">
+              <a href="https://demo.templatesjungle.com/wingtea/about.html#" class="d-flex">
+                <svg class="arrow-up svg-primary position-absolute" width="20" height="20">
+                  <use xlink:href="#arrow-up"></use>
+                </svg>
+                <span class="ps-4">Back to top</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="./Wing Tea_files/jquery.min.js"></script>
+    <script src="./Wing Tea_files/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="./Wing Tea_files/swiper-bundle.min.js"></script>
+    <script src="./Wing Tea_files/plugins.js"></script>
+    <script src="./Wing Tea_files/script.js"></script>
+  
+<div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;"><div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxTitle" style="float: left;"></div><div id="cboxCurrent" style="float: left;"></div><button type="button" id="cboxPrevious"></button><button type="button" id="cboxNext"></button><button type="button" id="cboxSlideshow"></button><div id="cboxLoadingOverlay" style="float: left;"></div><div id="cboxLoadingGraphic" style="float: left;"></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div><div id="veepn-breach-alert"><template shadowrootmode="open"><style>.breach-popup{font-family:FigtreeVF,sans-serif;position:fixed;z-index:2147483638;text-rendering:optimizelegibility;top:0;left:0;right:0;pointer-events:none;padding-inline:16px;height:0;overflow:visible;color:#222e3a}.breach-popup *{box-sizing:border-box}.breach-popup__inner{background-color:#de4558;width:100%;border-radius:16px;margin-inline:auto;pointer-events:all;position:relative;transition:transform .25s ease-in-out,max-width .25s ease-in-out;transform:translateY(16px);max-height:calc(100svh - 80px);display:flex;flex-direction:column}.breach-popup__header{min-height:32px;display:flex;align-items:center;justify-content:space-between;column-gap:16px;padding:4px;cursor:pointer}.breach-popup__close{cursor:pointer;background-color:transparent;border-style:none;outline:none;display:flex;align-items:center;justify-content:center;width:24px;height:24px;flex-shrink:0;opacity:.5}.breach-popup__wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease-in-out;overflow:hidden}.breach-popup__content{overflow:hidden;opacity:0;transform:translateY(-10px)}.breach-popup--minimize .breach-popup__inner{max-width:485px;transform:translateY(-100%)}.breach-popup--collapse .breach-popup__inner{max-width:485px}.breach-popup--expand .breach-popup__inner{max-width:1120px}.breach-popup--expand .breach-popup__wrap{grid-template-rows:1fr}.breach-popup--expand .breach-popup__content{opacity:1;transform:translateY(0);transition:transform .25s ease-in-out,opacity .25s ease-in-out;transition-delay:.15s}.breach-popup--expand .breach-popup__header{cursor:default}.breach-info{padding:2px;height:100%}.breach-info__inner{padding:22px 22px 0;background-color:#fff;border-bottom-left-radius:15px;border-bottom-right-radius:15px;height:100%;overflow:auto}.breach-info__alert{font-size:24px;line-height:32px;font-weight:700;margin:0}.breach-info__list{margin-top:24px;display:flex;flex-wrap:wrap;gap:24px}@media only screen and (width >= 992px){.breach-info__list{flex-wrap:nowrap}}.breach-info__item{width:100%}.breach-info__item:nth-child(2){max-width:320px}.breach-info__item:nth-child(3){max-width:200px}.breach-info__title{font-size:18px;font-weight:700;line-height:32px;letter-spacing:-.1px;color:#de4558;margin-top:0;margin-bottom:4px}.breach-info__description{font-size:16px;line-height:28px;letter-spacing:-.1px}.breach-info__description ul{margin:0}.breach-info__actions{display:flex;justify-content:center;padding-top:32px;padding-bottom:22px;background-color:#fff;position:sticky;bottom:0}.breach-info__btn{cursor:pointer;border-style:none;outline:none;display:inline-flex;align-items:center;height:48px;padding-inline:20px;border-radius:12px;text-align:center;font-size:16px;font-weight:700;line-height:28px;letter-spacing:-.1px;color:#fff;background-color:#ff6400}.button-expand{position:absolute;bottom:0;left:50%;transform:translate(-50%,100%);z-index:1}.button-expand__pointer{cursor:pointer}.button-expand__alert{pointer-events:none;transition:opacity .25s ease-in-out}.button-expand__arrow{pointer-events:none;transition:transform .25s ease-in-out,opacity .25s ease-in-out;transform-origin:center}.button-expand--minimize .button-expand__arrow,.button-expand--collapse .button-expand__alert,.button-expand--expand .button-expand__alert{opacity:0}.button-expand--expand .button-expand__arrow{transform:rotate(180deg)}.header-collapse{display:flex;align-items:center;flex-wrap:wrap;column-gap:4px;padding-left:8px;font-size:14px;line-height:20px;letter-spacing:-.1px;color:#fff}.header-expand{display:flex;align-items:center;flex-wrap:wrap;column-gap:4px;padding-left:20px;font-size:14px;font-weight:500;line-height:20px;letter-spacing:-.1px;color:#fff}</style></template></div><style>@font-face{font-family:FigtreeVF;src:url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2 supports variations"),url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2-variations");font-weight:100 1000;font-display:swap}</style><div id="veepn-guard-alert"><template shadowrootmode="open"><style>html{box-sizing:border-box;text-size-adjust:100%;word-break:normal;-moz-tab-size:4;tab-size:4}*,:before,:after{background-repeat:no-repeat;box-sizing:border-box}:before,:after{text-decoration:inherit;vertical-align:inherit}*{padding:0;margin:0}hr{overflow:visible;height:0;color:inherit;border:0;border-top:1px solid}details,main{display:block}summary{display:list-item}small{font-size:80%}[hidden]{display:none}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}a{background-color:transparent}a:active,a:hover{outline-width:0}code,kbd,pre,samp{font-family:monospace}pre{font-size:1em}b,strong{font-weight:bolder}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-color:inherit;text-indent:0}iframe{border-style:none}input{border-radius:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none;-moz-appearance:none;appearance:none}textarea{overflow:auto;resize:vertical}button,input,optgroup,select,textarea{font:inherit;color:inherit}optgroup{font-weight:700}button{overflow:visible}button,select{text-transform:none}button,[type=button],[type=reset],[type=submit],[role=button]{cursor:pointer}button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner{border-style:none;padding:0}button,html [type=button],[type=reset],[type=submit]{-webkit-appearance:button;-moz-appearance:button;appearance:button}button,input,select,textarea{background-color:transparent;border-style:none}button:-moz-focusring,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner{outline:1px dotted ButtonText}select{-webkit-appearance:none;-moz-appearance:none;appearance:none}a:focus,button:focus,input:focus,select:focus,textarea:focus{outline-width:0}select::-ms-expand{display:none}select::-ms-value{color:currentcolor}legend{border:0;color:inherit;display:table;white-space:normal;max-width:100%}::-webkit-file-upload-button{-webkit-appearance:button;-moz-appearance:button;appearance:button;color:inherit;font:inherit}[disabled]{cursor:default}img{border-style:none}progress{vertical-align:baseline}[aria-busy=true]{cursor:progress}[aria-controls]{cursor:pointer}[aria-disabled=true]{cursor:default}ul,ol{list-style-type:none}figure{margin:0}.guard-popup{font-family:FigtreeVF,sans-serif;position:fixed;z-index:2147483638;top:8px;left:24px;overflow:visible;color:#222e3a;background-color:#fff;max-width:416px;width:calc(100% - 48px);border-radius:16px;box-shadow:0 4px 20px #00000040;padding:24px}.guard-popup__header{display:flex;justify-content:space-between;align-items:center;column-gap:16px;margin-bottom:24px}.guard-popup__close{display:flex;align-items:center;justify-content:center;width:24px;height:24px;opacity:.7}.guard-popup__img{line-height:0;margin-bottom:24px}.guard-popup__img img{width:100%;aspect-ratio:368/142;object-fit:cover;border-radius:12px;overflow:hidden}.guard-popup__title{font-size:24px;line-height:32px;margin-bottom:8px}.guard-popup__description{font-size:20px;line-height:28px;font-weight:500;color:#4a5764;margin-bottom:28px}.guard-popup__actions{display:flex;justify-content:flex-end;column-gap:16px}.guard-popup__btn{display:flex;align-items:center;justify-content:center;padding:8px 16px;border-radius:5px;font-size:16px;line-height:24px;font-weight:700;cursor:pointer;color:#fff;background:linear-gradient(180deg,#5695fd,#1554ff)}</style></template></div><style>@font-face{font-family:FigtreeVF;src:url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2 supports variations"),url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2-variations");font-weight:100 1000;font-display:swap}</style></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
