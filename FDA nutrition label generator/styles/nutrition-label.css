@@ -1,0 +1,359 @@
+/* FDA Nutrition Label Styles */
+.nutrition-facts {
+    width: 320px; /* Wider to accommodate three columns */
+    max-height: 960px; /* Maintain 3:1 ratio (320px × 3) */
+    margin: 0 auto;
+    background: white;
+    border: 2px solid #000;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1.2;
+    color: #000;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* iPhone 11 Pro nutrition label adjustments */
+@media (max-width: 480px) {
+    .nutrition-facts {
+        width: 300px; /* Slightly smaller for mobile */
+        max-height: 900px; /* Maintain 3:1 ratio */
+        font-size: 10px;
+        padding: 6px;
+        margin: 0 auto 20px auto;
+    }
+}
+
+/* iPhone 11 Pro landscape mode (when height < width) */
+@media (max-width: 812px) and (orientation: landscape) {
+    .nutrition-facts {
+        width: 280px;
+        max-height: 840px;
+        font-size: 9px;
+        padding: 5px;
+    }
+}
+
+.nutrition-title {
+    font-size: 24px;
+    font-weight: 900;
+    text-align: center;
+    margin: 0 -8px 2px -8px;
+    letter-spacing: 0.5px;
+    font-family: Arial, sans-serif;
+    text-shadow: 0.5px 0 0 currentColor;
+    width: calc(100% + 16px);
+    display: block;
+    padding: 4px 8px;
+    background: white;
+    border-bottom: 1px solid #000;
+}
+
+/* iPhone 11 Pro title adjustments */
+@media (max-width: 480px) {
+    .nutrition-title {
+        font-size: 20px;
+        margin: 0 -6px 2px -6px;
+        width: calc(100% + 12px);
+        padding: 3px 6px;
+        letter-spacing: 0.3px;
+    }
+}
+
+/* iPhone 11 Pro landscape title adjustments */
+@media (max-width: 812px) and (orientation: landscape) {
+    .nutrition-title {
+        font-size: 18px;
+        margin: 0 -5px 2px -5px;
+        width: calc(100% + 10px);
+        padding: 2px 5px;
+    }
+}
+
+.serving-info {
+    border-bottom: 8px solid #000;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+
+.servings-per-container {
+    font-size: 11px;
+    font-weight: normal; /* FDA standard: normal weight */
+    margin-bottom: 2px;
+}
+
+.serving-size {
+    font-size: 11px;
+    font-weight: normal; /* FDA standard: normal weight */
+}
+
+.amount-per-serving {
+    font-size: 11px;
+    font-weight: normal;
+    margin: 3px 0 2px 0;
+    text-align: left;
+    color: #000;
+}
+
+.calories-section {
+    border-bottom: 4px solid #000;
+    padding: 2px 0;
+    margin-bottom: 2px;
+}
+
+.calories {
+    font-size: 16px;
+    font-weight: 900;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.calories-value {
+    font-size: 28px;
+    font-weight: 900;
+}
+
+/* iPhone 11 Pro calories adjustments */
+@media (max-width: 480px) {
+    .calories-value {
+        font-size: 24px;
+    }
+}
+
+/* iPhone 11 Pro landscape calories adjustments */
+@media (max-width: 812px) and (orientation: landscape) {
+    .calories-value {
+        font-size: 20px;
+    }
+}
+
+.daily-value-note {
+    font-size: 10px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 1px;
+    margin-bottom: 1px;
+    font-weight: 700;
+    display: grid;
+    grid-template-columns: 1fr 70px 70px 50px; /* Four columns: name, per serving, per 100g, DV */
+    gap: 2px;
+    text-align: center;
+}
+
+/* iPhone 11 Pro daily value note adjustments */
+@media (max-width: 480px) {
+    .daily-value-note {
+        font-size: 9px;
+        grid-template-columns: 1fr 55px 55px 40px;
+        gap: 1px;
+    }
+}
+
+/* iPhone 11 Pro landscape daily value note adjustments */
+@media (max-width: 812px) and (orientation: landscape) {
+    .daily-value-note {
+        font-size: 8px;
+        grid-template-columns: 1fr 50px 50px 35px;
+        gap: 1px;
+    }
+}
+
+.per-serving-header,
+.per-100g-header,
+.dv-header {
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.nutrient-header {
+    font-size: 9px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.nutrients {
+    border-bottom: 4px solid #000;
+    margin-bottom: 2px;
+}
+
+.nutrient-row {
+    display: grid;
+    grid-template-columns: 1fr 70px 70px 50px; /* Four columns: name, per serving, per 100g, DV */
+    gap: 2px;
+    padding: 1px 0;
+    font-size: 11px;
+    border-bottom: 1px solid #000;
+    font-weight: normal; /* FDA standard: normal weight for sub-nutrients */
+    align-items: center;
+}
+
+/* iPhone 11 Pro nutrient row adjustments */
+@media (max-width: 480px) {
+    .nutrient-row {
+        grid-template-columns: 1fr 55px 55px 40px;
+        gap: 1px;
+        font-size: 10px;
+        padding: 0.5px 0;
+    }
+}
+
+/* iPhone 11 Pro landscape nutrient row adjustments */
+@media (max-width: 812px) and (orientation: landscape) {
+    .nutrient-row {
+        grid-template-columns: 1fr 50px 50px 35px;
+        gap: 1px;
+        font-size: 9px;
+        padding: 0.5px 0;
+    }
+}
+
+.nutrient-row:last-child {
+    border-bottom: none;
+}
+
+.nutrient-row.major {
+    font-weight: 700; /* FDA standard: bold for major nutrients only */
+}
+
+.nutrient-row.major .nutrient-name,
+.nutrient-row.major .nutrient-amount,
+.nutrient-row.major .nutrient-amount-100g,
+.nutrient-row.major .daily-value {
+    font-weight: 700; /* Ensure all elements in major rows are bold */
+}
+
+.nutrient-row.indent {
+    padding-left: 15px;
+    font-weight: normal; /* FDA standard: normal weight for indented nutrients */
+}
+
+.nutrient-row.double-indent {
+    padding-left: 30px;
+    font-style: italic;
+    font-weight: normal; /* FDA standard: normal weight for double-indented */
+}
+
+.nutrient-name {
+    text-align: left;
+    justify-self: start;
+}
+
+.nutrient-amount,
+.nutrient-amount-100g {
+    text-align: center;
+    justify-self: center;
+    font-weight: inherit; /* Inherit weight from parent row */
+}
+
+.daily-value {
+    text-align: center;
+    justify-self: center;
+    font-weight: inherit; /* Inherit weight from parent row */
+}
+
+.vitamins-minerals {
+    margin-bottom: 3px;
+}
+
+.vitamins-minerals .nutrient-row {
+    border-bottom: none;
+    font-size: 10px;
+    font-weight: normal; /* FDA standard: normal weight for vitamins/minerals */
+}
+
+.vitamins-minerals .nutrient-name {
+    font-weight: normal;
+}
+
+.vitamins-minerals .nutrient-amount,
+.vitamins-minerals .nutrient-amount-100g {
+    font-weight: normal;
+}
+
+.vitamins-minerals .daily-value {
+    font-weight: normal;
+}
+
+.daily-value-footnote {
+    font-size: 9px;
+    border-top: 1px solid #000;
+    padding-top: 2px;
+    line-height: 1.1;
+    font-weight: normal;
+}
+
+/* Print styles */
+@media print {
+    .nutrition-facts {
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+    
+    .export-section,
+    .input-section {
+        display: none;
+    }
+}
+
+/* Responsive adjustments - maintaining 3:1 ratio */
+@media (max-width: 768px) {
+    .nutrition-facts {
+        width: 280px;
+        max-height: 840px;
+        font-size: 10px;
+        padding: 6px;
+    }
+    
+    .nutrition-title {
+        font-size: 20px;
+        margin: 0 -6px 2px -6px;
+        width: calc(100% + 12px);
+        padding: 3px 6px;
+    }
+    
+    .calories-value {
+        font-size: 22px;
+    }
+    
+    .daily-value-note {
+        grid-template-columns: 1fr 60px 60px 45px;
+        gap: 2px;
+    }
+    
+    .nutrient-row {
+        grid-template-columns: 1fr 60px 60px 45px;
+        gap: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nutrition-facts {
+        width: 240px;
+        max-height: 720px;
+        font-size: 9px;
+        padding: 5px;
+    }
+    
+    .nutrition-title {
+        font-size: 18px;
+        margin: 0 -5px 2px -5px;
+        width: calc(100% + 10px);
+        padding: 2px 5px;
+    }
+    
+    .calories-value {
+        font-size: 20px;
+    }
+    
+    .daily-value-note {
+        grid-template-columns: 1fr 50px 50px 35px;
+        gap: 1px;
+    }
+    
+    .nutrient-row {
+        grid-template-columns: 1fr 50px 50px 35px;
+        gap: 1px;
+    }
+}
