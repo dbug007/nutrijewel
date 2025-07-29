@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/nutrijewel/static/css/main.6f703407.css",
-    "main.js": "/nutrijewel/static/js/main.56177163.js",
+    "main.js": "/nutrijewel/static/js/main.d6e66d48.js",
     "static/js/453.5920b6c0.chunk.js": "/nutrijewel/static/js/453.5920b6c0.chunk.js",
     "index.html": "/nutrijewel/index.html",
     "main.6f703407.css.map": "/nutrijewel/static/css/main.6f703407.css.map",
-    "main.56177163.js.map": "/nutrijewel/static/js/main.56177163.js.map",
+    "main.d6e66d48.js.map": "/nutrijewel/static/js/main.d6e66d48.js.map",
     "453.5920b6c0.chunk.js.map": "/nutrijewel/static/js/453.5920b6c0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6f703407.css",
-    "static/js/main.56177163.js"
+    "static/js/main.d6e66d48.js"
   ]
 }
