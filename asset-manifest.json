@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nutrijewel/static/css/main.3e475d44.css",
-    "main.js": "/nutrijewel/static/js/main.e13b8e52.js",
-    "static/js/453.5920b6c0.chunk.js": "/nutrijewel/static/js/453.5920b6c0.chunk.js",
-    "index.html": "/nutrijewel/index.html",
-    "main.3e475d44.css.map": "/nutrijewel/static/css/main.3e475d44.css.map",
-    "main.e13b8e52.js.map": "/nutrijewel/static/js/main.e13b8e52.js.map",
-    "453.5920b6c0.chunk.js.map": "/nutrijewel/static/js/453.5920b6c0.chunk.js.map"
+    "main.css": "/static/css/main.3e475d44.css",
+    "main.js": "/static/js/main.0a224c64.js",
+    "static/js/453.5920b6c0.chunk.js": "/static/js/453.5920b6c0.chunk.js",
+    "index.html": "/index.html",
+    "main.3e475d44.css.map": "/static/css/main.3e475d44.css.map",
+    "main.0a224c64.js.map": "/static/js/main.0a224c64.js.map",
+    "453.5920b6c0.chunk.js.map": "/static/js/453.5920b6c0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3e475d44.css",
-    "static/js/main.e13b8e52.js"
+    "static/js/main.0a224c64.js"
   ]
 }
