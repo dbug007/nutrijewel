@@ -1,8 +1,22 @@
+/*
+ * ContactPage Component - Version 2.0
+ * 
+ * Version 2.0 Features:
+ * - Enhanced desktop layout alignment and responsiveness
+ * - Optimized contact information and form grid balance
+ * - Improved visual hierarchy and professional styling
+ * - Better form field spacing and user experience
+ * - WhatsApp integration for contact form submissions
+ * - Comprehensive validation and error handling
+ * - Updated: July 30, 2025
+ */
+
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import './ContactPage.css';
 
 const ContactPage = () => {
+  // Form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,19 +25,137 @@ const ContactPage = () => {
     message: ''
   });
 
+  // Form status state
+  const [formStatus, setFormStatus] = useState({
+    isSubmitting: false,
+    isSubmitted: false,
+    error: null
+  });
+
+  // Form validation state
+  const [errors, setErrors] = useState({});
+
+  // Form validation function
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Phone validation (optional but if provided, should be valid)
+    if (formData.phone.trim() && !/^[+]?[\d\s-()]{10,}$/.test(formData.phone.trim())) {
+      newErrors.phone = 'Please enter a valid phone number';
+    }
+
+    // Subject validation
+    if (!formData.subject) {
+      newErrors.subject = 'Please select a subject';
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const message = `Hi! I'm ${formData.name}. ${formData.message}. You can reach me at ${formData.email} or ${formData.phone}.`;
-    const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+
+    // Validate form
+    if (!validateForm()) {
+      return;
+    }
+
+    setFormStatus({
+      isSubmitting: true,
+      isSubmitted: false,
+      error: null
+    });
+
+    try {
+      // Format WhatsApp message
+      const whatsappMessage = `
+*New Contact Form Submission*
+
+*Name:* ${formData.name}
+*Email:* ${formData.email}
+*Phone:* ${formData.phone || 'Not provided'}
+*Subject:* ${formData.subject}
+
+*Message:*
+${formData.message}
+      `.trim();
+
+      const whatsappURL = `https://wa.me/919960637656?text=${encodeURIComponent(whatsappMessage)}`;
+      
+      // Open WhatsApp in new tab
+      window.open(whatsappURL, '_blank');
+
+      // Simulate successful submission
+      setTimeout(() => {
+        setFormStatus({
+          isSubmitting: false,
+          isSubmitted: true,
+          error: null
+        });
+
+        // Reset form after successful submission
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setFormStatus(prev => ({
+            ...prev,
+            isSubmitted: false
+          }));
+        }, 5000);
+      }, 1000);
+
+    } catch (error) {
+      setFormStatus({
+        isSubmitting: false,
+        isSubmitted: false,
+        error: 'Failed to send message. Please try again or contact us directly.'
+      });
+    }
   };
 
   const contactInfo = [
@@ -48,50 +180,50 @@ const ContactPage = () => {
     {
       icon: Clock,
       title: "Business Hours",
-      details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat: 10:00 AM - 4:00 PM"],
+      details: ["Mon - Sat: 9:00 AM - 7:00 PM", "Sunday: 10:00 AM - 4:00 PM"],
       action: null
     }
   ];
 
   return (
     <div className="contact-page">
-      {/* Contact Header */}
-      <section className="contact-header">
-        <div className="contact-container">
-          <h1 className="contact-title">
-            Get in <span className="contact-title-green">Touch</span>
+      {/* Header Section */}
+      <section className="contact-page-header">
+        <div className="contact-page-container">
+          <h1 className="contact-page-title">
+            Get in <span className="contact-page-title-green">Touch</span>
           </h1>
-          <p className="contact-subtitle">
+          <p className="contact-page-subtitle">
             Ready to start your healthy snacking journey? We'd love to hear from you! 
             Have questions about our products, ingredients, or want to place a custom order?
           </p>
-          <div className="contact-divider"></div>
+          <div className="contact-page-divider"></div>
         </div>
       </section>
 
-      <div className="contact-container">
-        <div className="contact-main-grid">
+      <div className="contact-page-container">
+        <div className="contact-page-main-grid">
           {/* Contact Information */}
-          <div className="contact-info-section">
+          <div className="contact-page-info-section">
             <h2 className="section-title">Contact Information</h2>
             <p className="section-description">
               Have questions about our products or services? We'd love to hear from you. 
               Send us a message and we'll respond as soon as possible.
             </p>
 
-            <div className="contact-info-grid">
+            <div className="contact-page-info-grid">
               {contactInfo.map((info, index) => (
-                <div key={index} className="contact-info-card">
-                  <div className="contact-info-icon">
+                <div key={index} className="contact-page-info-card">
+                  <div className="contact-page-info-icon">
                     <info.icon size={24} />
                   </div>
-                  <div className="contact-info-content">
+                  <div className="contact-page-info-content">
                     <h3>{info.title}</h3>
-                    <div className="contact-info-details">
+                    <div className="contact-page-info-details">
                       {info.details.map((detail, idx) => (
                         <p key={idx}>
                           {info.action ? (
-                            <a href={info.action} className="contact-link">
+                            <a href={info.action} className="contact-page-link">
                               {detail}
                             </a>
                           ) : (
@@ -107,14 +239,30 @@ const ContactPage = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="contact-form-section">
-            <div className="contact-form-wrapper">
+          <div className="contact-page-form-section">
+            <div className="contact-page-form-wrapper">
               <h2 className="form-title">Send us a Message</h2>
               <p className="form-description">
                 Fill out the form below and we'll get back to you within 24 hours
               </p>
 
-              <form className="contact-form" onSubmit={handleSubmit}>
+              {/* Success Message */}
+              {formStatus.isSubmitted && (
+                <div className="form-success-message">
+                  <CheckCircle size={20} />
+                  <span>Message sent successfully! We'll get back to you soon.</span>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {formStatus.error && (
+                <div className="form-error-message">
+                  <AlertCircle size={20} />
+                  <span>{formStatus.error}</span>
+                </div>
+              )}
+
+              <form className="contact-page-form" onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="name">Full Name *</label>
@@ -126,7 +274,10 @@ const ContactPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter your full name"
+                      className={errors.name ? 'error' : ''}
+                      disabled={formStatus.isSubmitting}
                     />
+                    {errors.name && <span className="error-text">{errors.name}</span>}
                   </div>
                   <div className="form-group">
                     <label htmlFor="email">Email Address *</label>
@@ -138,7 +289,10 @@ const ContactPage = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter your email"
+                      className={errors.email ? 'error' : ''}
+                      disabled={formStatus.isSubmitting}
                     />
+                    {errors.email && <span className="error-text">{errors.email}</span>}
                   </div>
                 </div>
 
@@ -152,7 +306,10 @@ const ContactPage = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="Enter your phone number"
+                      className={errors.phone ? 'error' : ''}
+                      disabled={formStatus.isSubmitting}
                     />
+                    {errors.phone && <span className="error-text">{errors.phone}</span>}
                   </div>
                   <div className="form-group">
                     <label htmlFor="subject">Subject *</label>
@@ -162,6 +319,8 @@ const ContactPage = () => {
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
+                      className={errors.subject ? 'error' : ''}
+                      disabled={formStatus.isSubmitting}
                     >
                       <option value="">Select a subject</option>
                       <option value="product-inquiry">Product Inquiry</option>
@@ -171,6 +330,7 @@ const ContactPage = () => {
                       <option value="feedback">Feedback</option>
                       <option value="other">Other</option>
                     </select>
+                    {errors.subject && <span className="error-text">{errors.subject}</span>}
                   </div>
                 </div>
 
@@ -184,12 +344,28 @@ const ContactPage = () => {
                     required
                     rows="5"
                     placeholder="Tell us how we can help you..."
+                    className={errors.message ? 'error' : ''}
+                    disabled={formStatus.isSubmitting}
                   ></textarea>
+                  {errors.message && <span className="error-text">{errors.message}</span>}
                 </div>
 
-                <button type="submit" className="submit-btn">
-                  <Send size={18} />
-                  Send Message
+                <button 
+                  type="submit" 
+                  className={`submit-btn ${formStatus.isSubmitting ? 'submitting' : ''}`}
+                  disabled={formStatus.isSubmitting}
+                >
+                  {formStatus.isSubmitting ? (
+                    <>
+                      <div className="spinner"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </div>
@@ -198,8 +374,8 @@ const ContactPage = () => {
       </div>
 
       {/* Map Section */}
-      <section className="contact-map">
-        <div className="contact-container">
+      <section className="contact-page-map">
+        <div className="contact-page-container">
           <h2 className="section-title">Visit Our Office</h2>
           <div className="map-wrapper">
             <iframe 
@@ -218,7 +394,7 @@ const ContactPage = () => {
 
       {/* FAQ Section */}
       <section className="contact-faq">
-        <div className="contact-container">
+        <div className="contact-page-container">
           <h2 className="section-title">Frequently Asked Questions</h2>
           <div className="faq-grid">
             <div className="faq-item">

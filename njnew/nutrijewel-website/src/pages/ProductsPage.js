@@ -88,10 +88,10 @@ const ProductsPage = () => {
                         <Star 
                           key={i} 
                           size={16} 
-                          className={i < 4 ? 'star-filled' : 'star-empty'}
+                          className="star-filled"
                         />
                       ))}
-                      <span className="rating-number">4.8</span>
+                      <span className="rating-number">5.0</span>
                     </div>
                     <span className="product-reviews">(150+ reviews)</span>
                   </div>
@@ -105,7 +105,17 @@ const ProductsPage = () => {
 
                   {/* Price */}
                   <div className="product-pricing">
-                    <span className="product-price">₹{product.price}</span>
+                    <div className="price-container">
+                      <span className="product-price">₹{product.price}</span>
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <>
+                          <span className="original-price">₹{product.originalPrice}</span>
+                          <span className="discount-badge">
+                            {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                          </span>
+                        </>
+                      )}
+                    </div>
                     <span className="product-weight">{product.weight}</span>
                   </div>
 

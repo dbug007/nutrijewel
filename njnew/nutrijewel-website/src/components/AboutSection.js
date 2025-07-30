@@ -4,38 +4,37 @@ import './AboutSection.css';
 
 const AboutSection = () => {
   return (
-    <section id="about" className="about-section">
-      <div className="about-container">
+    <section id="about" className="home-about-section">
+      <div className="home-about-container">
         {/* Header */}
-        <div className="about-header">
+        <div className="home-about-header">
           <h2>
-            Meet the Heart Behind 
-            <span className="about-header-green">NutriJewel</span>
+            Meet the Heart Behind <span className="home-about-header-green">NutriJewel</span>
           </h2>
-          <div className="about-divider"></div>
+          <div className="home-about-divider"></div>
         </div>
 
         {/* Main Content Grid - Image and Text at same height */}
-        <div className="about-main-grid">
+        <div className="home-about-main-grid">
           {/* Left - Founder Photo */}
-          <div className="about-image-section">
-            <div className="about-founder-wrapper">
-              <div className="about-founder-card">
-                <div className="about-founder-background">
+          <div className="home-about-image-section">
+            <div className="home-about-founder-wrapper">
+              <div className="home-about-founder-card">
+                <div className="home-about-founder-background">
                   <img 
                     src="/images/ruchikaamritbites.jpeg" 
-                    alt="Dt. Ruchika Bachwani - Founder of NutriJewel"
-                    className="about-founder-bg"
+                    alt="Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist, Founder of NutriJewel"
+                    className="home-about-founder-bg"
                   />
                 </div>
-                <div className="about-founder-overlay">
-                  <div className="about-founder-content">
-                    <div className="about-founder-info">
-                      <h3 className="about-founder-name">
+                <div className="home-about-founder-overlay">
+                  <div className="home-about-founder-content">
+                    <div className="home-about-founder-info">
+                      <h3 className="home-about-founder-name">
                         Dt. Ruchika Bachwani
                       </h3>
-                      <p className="about-founder-title">Founder & Nutritionist</p>
-                      <p className="about-founder-quote">
+                      <p className="home-about-founder-title">Certified Pharmacist, Dietitian & Nutritionist</p>
+                      <p className="home-about-founder-quote">
                         "Every product tells a story of health, happiness, and handcrafted excellence"
                       </p>
                     </div>
@@ -46,10 +45,10 @@ const AboutSection = () => {
           </div>
 
           {/* Right - Story Content */}
-          <div className="about-story-section">
-            <div className="about-text">
-              <p className="about-text-large">
-                Founded by <span className="about-founder-name-text">Dt. Ruchika Bachwani</span>, 
+          <div className="home-about-story-section">
+            <div className="home-about-text">
+              <p className="home-about-text-large">
+                Founded by <span className="home-about-founder-name-text">Dt. Ruchika Bachwani</span>, 
                 NutriJewel was born from a passion to create guilt-free alternatives to traditional sweets and snacks 
                 without compromising on taste or nutrition.
               </p>
@@ -67,44 +66,44 @@ const AboutSection = () => {
             </div>
 
             {/* Stats */}
-            <div className="about-stats">
-              <div className="about-stat-item">
-                <div className="about-stat-number">100%</div>
-                <div className="about-stat-label">Natural Ingredients</div>
+            <div className="home-about-stats">
+              <div className="home-about-stat-item">
+                <div className="home-about-stat-number">100%</div>
+                <div className="home-about-stat-label">Natural Ingredients</div>
               </div>
-              <div className="about-stat-item">
-                <div className="about-stat-number">0</div>
-                <div className="about-stat-label">Artificial Preservatives</div>
+              <div className="home-about-stat-item">
+                <div className="home-about-stat-number">0</div>
+                <div className="home-about-stat-label">Artificial Preservatives</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Values Grid - Below main content */}
-        <div className="about-values-section">
-          <div className="about-values">
-            <div className="about-value-card">
-              <Award className="about-value-icon" size={32} />
-              <h4 className="about-value-title">Quality First</h4>
-              <p className="about-value-description">Premium ingredients sourced with care</p>
+        <div className="home-about-values-section">
+          <div className="home-about-values">
+            <div className="home-about-value-card">
+              <Award className="home-about-value-icon" size={32} />
+              <h4 className="home-about-value-title">Quality First</h4>
+              <p className="home-about-value-description">Premium ingredients sourced with care</p>
             </div>
             
-            <div className="about-value-card">
-              <Leaf className="about-value-icon" size={32} />
-              <h4 className="about-value-title">Clean Eating</h4>
-              <p className="about-value-description">No refined sugars or artificial additives</p>
+            <div className="home-about-value-card">
+              <Leaf className="home-about-value-icon" size={32} />
+              <h4 className="home-about-value-title">Clean Eating</h4>
+              <p className="home-about-value-description">No refined sugars or artificial additives</p>
             </div>
             
-            <div className="about-value-card">
-              <Heart className="about-value-icon" size={32} />
-              <h4 className="about-value-title">Made with Love</h4>
-              <p className="about-value-description">Handcrafted in small batches</p>
+            <div className="home-about-value-card">
+              <Heart className="home-about-value-icon" size={32} />
+              <h4 className="home-about-value-title">Made with Love</h4>
+              <p className="home-about-value-description">Handcrafted in small batches</p>
             </div>
             
-            <div className="about-value-card">
-              <Users className="about-value-icon" size={32} />
-              <h4 className="about-value-title">Family First</h4>
-              <p className="about-value-description">Safe for the whole family</p>
+            <div className="home-about-value-card">
+              <Users className="home-about-value-icon" size={32} />
+              <h4 className="home-about-value-title">Family First</h4>
+              <p className="home-about-value-description">Safe for the whole family</p>
             </div>
           </div>
         </div>

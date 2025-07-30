@@ -111,13 +111,13 @@ const ServicesPage = () => {
 
   const handleBookService = (serviceName) => {
     const message = `Hi! I'm interested in booking "${serviceName}". Can you provide more details and check availability?`;
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleGeneralInquiry = () => {
     const message = "Hi! I'd like to know more about your nutrition services. Can you help me choose the right option for my needs?";
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -144,7 +144,7 @@ const ServicesPage = () => {
             <div className="feature-card">
               <Award className="feature-icon" size={32} />
               <h3>Certified Nutritionist</h3>
-              <p>Led by Dt. Ruchika Bachwani with years of professional experience</p>
+              <p>Led by Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist with years of professional experience</p>
             </div>
             <div className="feature-card">
               <Users className="feature-icon" size={32} />

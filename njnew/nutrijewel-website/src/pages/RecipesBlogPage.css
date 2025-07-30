@@ -137,17 +137,38 @@
   position: relative;
   aspect-ratio: 16/10;
   overflow: hidden;
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .content-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: brightness(1.1) contrast(1.05) saturate(1.1);
 }
 
 .content-card:hover .content-image {
   transform: scale(1.05);
+  filter: brightness(1.2) contrast(1.1) saturate(1.15);
+}
+
+/* Recipe-specific image styling */
+.content-card[data-type="recipe"] .content-image {
+  border: 3px solid var(--nj-mint);
+}
+
+.content-card[data-type="recipe"]:hover .content-image {
+  box-shadow: 0 8px 20px rgba(147, 181, 89, 0.3);
+}
+
+/* Blog-specific image styling */
+.content-card[data-type="blog"] .content-image {
+  border: 3px solid var(--nj-olive);
+}
+
+.content-card[data-type="blog"]:hover .content-image {
+  box-shadow: 0 8px 20px rgba(109, 138, 60, 0.3);
 }
 
 .content-overlay {

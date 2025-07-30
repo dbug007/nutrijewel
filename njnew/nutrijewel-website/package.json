@@ -2,7 +2,7 @@
   "name": "nutrijewel-website",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dbug007.github.io/nutrijewel",
+  "homepage": "https://nutrijewel.com",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",

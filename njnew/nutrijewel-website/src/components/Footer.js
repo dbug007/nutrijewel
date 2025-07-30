@@ -144,7 +144,7 @@ const Footer = () => {
             <div className="footer-section">
               <div className="footer-brand">
                 <div className="footer-logo-section">
-                  <img src="/njlogo.svg" alt="NutriJewel Logo" className="footer-logo" />
+                  <img src={`${process.env.PUBLIC_URL}/njlogo.svg`} alt="NutriJewel Logo" className="footer-logo" />
                 </div>
                 <p className="footer-description">
                   Crafting healthy, delicious snacks that nourish your body and delight your taste buds. 

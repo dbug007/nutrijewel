@@ -34,7 +34,7 @@ const TopSellers = () => {
               <div className="product-image-container">
                 <div className="product-image">
                   <img 
-                    src={product.image} 
+                    src={`${process.env.PUBLIC_URL}${product.image}`}
                     alt={product.displayName}
                     className="product-image-img"
                   />
@@ -75,7 +75,12 @@ const TopSellers = () => {
                 {/* Price and Actions */}
                 <div className="product-footer">
                   <div className="product-price-container">
-                    <span className="product-price">₹{product.price}</span>
+                    <div className="price-section">
+                      <span className="product-price">₹{product.price}</span>
+                      {product.originalPrice && product.originalPrice !== product.price && (
+                        <span className="original-price">₹{product.originalPrice}</span>
+                      )}
+                    </div>
                     <span className="product-weight">({product.weight})</span>
                   </div>
                   

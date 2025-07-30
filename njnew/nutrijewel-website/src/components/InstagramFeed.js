@@ -7,42 +7,42 @@ const InstagramFeed = () => {
   const instagramPosts = [
     {
       id: 1,
-      image: '/images/fresh batch of cambridge of chocolate cake.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/fresh batch of cambridge of chocolate cake.jpeg`,
       caption: 'Fresh batch of Cambridge Chocolate Cake straight from our kitchen! 🍰✨',
       likes: 187,
       date: '1 day ago'
     },
     {
       id: 2,
-      image: '/images/ruchikaamritbites.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/ruchikaamritbites.jpeg`,
       caption: 'Dt. Ruchika with her signature Amrit Bites - made with love & tradition ❤️',
       likes: 156,
       date: '2 days ago'
     },
     {
       id: 3,
-      image: '/images/fresh oxford of love cake.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/fresh oxford of love cake.jpeg`,
       caption: 'Oxford of Love - fresh strawberry & dark chocolate perfection! 🍓🍫',
       likes: 203,
       date: '3 days ago'
     },
     {
       id: 4,
-      image: '/images/hummuspitabread.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/hummuspitabread.jpeg`,
       caption: 'Low-fat hummus paired perfectly with fresh pita bread! 🥙 Healthy never tasted so good',
       likes: 92,
       date: '5 days ago'
     },
     {
       id: 5,
-      image: '/images/workshopsession.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/workshopsession.jpeg`,
       caption: 'Teaching the art of healthy baking! 👩‍🍳 Join our next workshop to learn these secrets',
       likes: 134,
       date: '1 week ago'
     },
     {
       id: 6,
-      image: '/images/packed cambridge of love cake.jpeg',
+      image: `${process.env.PUBLIC_URL}/images/packed cambridge of love cake.jpeg`,
       caption: 'Ready to ship with love! 📦 Your favorite Cambridge cake, packed fresh',
       likes: 89,
       date: '1 week ago'

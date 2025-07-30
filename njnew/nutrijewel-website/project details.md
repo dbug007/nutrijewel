@@ -141,9 +141,49 @@ A complete reference document for building the **NutriJewel** website. This site
 For inquiries or help:
 **Email:** [hello@nutrijewel.com](mailto:hello@nutrijewel.com)
 **Phone/WhatsApp:** +91 996-063-7656
-**Founder:** Dt. Ruchika Bachwani
+**Founder:** Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist
 **FSSAI:** 21524037004182
 
 ---
 
 NutriJewel — Nourish with Intention. Snack with Joy.
+
+
+| Product Name               | Weight        | Discounted Price | Original Price |
+| -------------------------- | ------------- | ---------------- | -------------- |
+| **NJ Amrit Bites**         | 1kg           | ₹1199            | ₹1549          |
+| **NJ Signature Granola**   | 250g          | ₹499             | ₹699           |
+| **NJ Granola Cookies**     | 5 big cookies | ₹449             | ₹649           |
+| **NJ Special Bliss Bites** | 1kg           | ₹1599            | ₹1949          |
+| **Foxnut & Millet Crunch** | 250g          | ₹549             | ₹749           |
+| **NJ Ragi Sattva**         | 1kg           | ₹1599            | ₹1949          |
+| **NJ Nutri Bars / Bites**  | 200g          | ₹449             | ₹649           |
+| **Jewel’s Omega Crunch**   | 250g          | ₹299             | ₹499           |
+| **Jewel’s Gun Powder**     | 200g          | ₹249             | ₹449           |
+| **100% Peanut Butter**     | 200g          | ₹249             | ₹449           |
+| **Low Fat Hummus**         | 80g           | ₹49              | ₹149           |
+| **Jewel’s Avo Guac Quack** | \~100g (est.) | ₹149             | ₹249           |
+| **Thandai Maharaja Cake**  | 1kg           | ₹999             | ₹1349          |
+| **Cambridge of Chocolate** | 1kg           | ₹1280            | ₹1630          |
+| **Khajoor Ka Khazana**     | 12 pieces     | ₹999             | ₹1400          |
+| **Oxford of Love**         | 1kg           | ₹999             | ₹1349          |
+
+
+NutriJewel: A Brand Story
+Sparked by Passion & Purpose
+
+As a child, my dreams always revolved around food. Whether it was owning a café, sharing recipes, conducting cooking workshops, or launching a healthy snacking brand, I knew my journey would be woven around the joy of cooking and feeding others. Food has always been my passion, my comfort, and my creative outlet.
+
+But as I grew, I noticed a gap especially in India. The resources and ingredients I craved were rare, often inaccessible, or simply didn’t exist. Every trip to the market was a reminder: why shouldn’t healthy, delicious snacks be easy to find at home? This pain point became the seed for NJ.
+
+Leaving a stable corporate job wasn’t easy. But the call to create something meaningful was louder. Before I took the leap, I dove deep into learning — studying the technicalities of food, nutrition, and product development, hence decided to pursue Masters in Nutritional Sciences & Dietetics. I wanted clarity and confidence, not just for myself but for everyone who would one day trust NJ.
+
+NutriJewel was born in 2023, not just as a brand, but as a promise — to make healthy snacking accessible, exciting, and truly Indian. Every product is a reflection of my journey: the challenges, the learning, and the unwavering hope that food can bring people together and make lives better.
+
+Today, NJ stands for more than just snacks. It’s about bringing joy back to eating, making health a habit, and proving that passion, when combined with purpose, can nourish a nation. If you’ve ever struggled to find the right snack, or felt let down by what’s available, know that NutriJewel was created for you — by someone who’s been there, too.
+
+Join us on this journey. Let’s make healthy snacking a celebration, every single day.
+
+— Dt. Ruchika Bachwani
+MSc. Nutritional Sciences & Dietetics
+

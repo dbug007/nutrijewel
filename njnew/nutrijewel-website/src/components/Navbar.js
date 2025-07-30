@@ -5,7 +5,6 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -13,14 +12,10 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleAboutDropdown = () => {
-    setIsAboutDropdownOpen(!isAboutDropdownOpen);
-  };
-
-  const scrollToSection = (sectionId) => {
-    // If we're not on the home page, navigate to home first
-    if (location.pathname !== '/') {
-      navigate('/');
+  const scrollToAboutSection = (sectionId) => {
+    // Navigate to about page first
+    if (location.pathname !== '/about') {
+      navigate('/about');
       // Wait for navigation to complete, then scroll
       setTimeout(() => {
         const element = document.getElementById(sectionId);
@@ -35,12 +30,11 @@ const Navbar = () => {
       }
     }
     setIsMenuOpen(false);
-    setIsAboutDropdownOpen(false);
   };
 
   const handleBuyNow = () => {
     const message = "Hi! I'm interested in NutriJewel products. Can you help me with the latest offerings?";
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -50,7 +44,7 @@ const Navbar = () => {
         {/* Logo Only */}
         <div className="navbar-brand">
           <Link to="/">
-            <img src="/njlogonav.svg" alt="NutriJewel Logo" className="navbar-logo-icon" />
+            <img src={`${process.env.PUBLIC_URL}/njlogonav.svg`} alt="NutriJewel Logo" className="navbar-logo-icon" />
           </Link>
         </div>
 
@@ -60,19 +54,17 @@ const Navbar = () => {
           
           {/* About Dropdown */}
           <li className="navbar-dropdown">
-            <button 
-              className="navbar-link navbar-dropdown-toggle"
-              onClick={toggleAboutDropdown}
-            >
+            <Link to="/about" className="navbar-link navbar-dropdown-toggle">
               About <ChevronDown size={16} />
-            </button>
-            {isAboutDropdownOpen && (
-              <div className="navbar-dropdown-menu">
-                <button onClick={() => scrollToSection('about')} className="navbar-dropdown-link">About NJ</button>
-                <button onClick={() => scrollToSection('mission')} className="navbar-dropdown-link">Mission & Vision</button>
-                <button onClick={() => scrollToSection('testimonials')} className="navbar-dropdown-link">Reviews</button>
-              </div>
-            )}
+            </Link>
+            <div className="navbar-dropdown-menu">
+              <Link to="/about" className="navbar-dropdown-link">About NutriJewel</Link>
+              <button onClick={() => scrollToAboutSection('aboutpage-story')} className="navbar-dropdown-link">Our Story</button>
+              <button onClick={() => scrollToAboutSection('aboutpage-founder')} className="navbar-dropdown-link">Meet Our Founder</button>
+              <button onClick={() => scrollToAboutSection('aboutpage-mission')} className="navbar-dropdown-link">Mission & Vision</button>
+              <button onClick={() => scrollToAboutSection('aboutpage-values')} className="navbar-dropdown-link">Our Values</button>
+              <button onClick={() => scrollToAboutSection('aboutpage-testimonials')} className="navbar-dropdown-link">Customer Reviews</button>
+            </div>
           </li>
           
           <li><Link to="/products" className="navbar-link">Products</Link></li>
@@ -97,30 +89,125 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="navbar-mobile">
-          <ul className="navbar-mobile-nav">
-            <li><Link to="/" className="navbar-mobile-link" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
-            
-            {/* About Section */}
-            <li><button onClick={() => scrollToSection('about')} className="navbar-mobile-link">About NJ</button></li>
-            <li><button onClick={() => scrollToSection('mission')} className="navbar-mobile-link">Mission & Vision</button></li>
-            <li><button onClick={() => scrollToSection('testimonials')} className="navbar-mobile-link">Reviews</button></li>
-            
-            <li><Link to="/products" className="navbar-mobile-link" onClick={() => setIsMenuOpen(false)}>Products</Link></li>
-            <li><Link to="/services" className="navbar-mobile-link" onClick={() => setIsMenuOpen(false)}>Services</Link></li>
-            <li><Link to="/recipes-blog" className="navbar-mobile-link" onClick={() => setIsMenuOpen(false)}>Recipes & Blog</Link></li>
-            <li><Link to="/contact" className="navbar-mobile-link" onClick={() => setIsMenuOpen(false)}>Contact</Link></li>
-            <li>
-              <button className="navbar-mobile-buy-btn" onClick={handleBuyNow}>
-                <ShoppingBag size={18} />
-                Buy Now
-              </button>
-            </li>
-          </ul>
+      {/* Mobile Navigation - Elegant Hamburger Menu */}
+      <div 
+        className={`navbar-mobile-overlay ${isMenuOpen ? 'active' : ''}`}
+        onClick={toggleMenu}
+      >
+        <div 
+          className={`navbar-mobile-menu ${isMenuOpen ? 'active' : ''}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Mobile Navigation Links */}
+          <nav className="navbar-mobile-nav">
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+            </div>
+
+            {/* About Section with Submenu */}
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/about" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About NutriJewel
+              </Link>
+              <div className="navbar-mobile-submenu">
+                <button 
+                  onClick={() => scrollToAboutSection('aboutpage-story')} 
+                  className="navbar-mobile-sublink"
+                >
+                  Our Story
+                </button>
+                <button 
+                  onClick={() => scrollToAboutSection('aboutpage-founder')} 
+                  className="navbar-mobile-sublink"
+                >
+                  Meet Our Founder
+                </button>
+                <button 
+                  onClick={() => scrollToAboutSection('aboutpage-mission')} 
+                  className="navbar-mobile-sublink"
+                >
+                  Mission & Vision
+                </button>
+                <button 
+                  onClick={() => scrollToAboutSection('aboutpage-values')} 
+                  className="navbar-mobile-sublink"
+                >
+                  Our Values
+                </button>
+                <button 
+                  onClick={() => scrollToAboutSection('aboutpage-testimonials')} 
+                  className="navbar-mobile-sublink"
+                >
+                  Customer Reviews
+                </button>
+              </div>
+            </div>
+
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/products" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Products
+              </Link>
+            </div>
+
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/services" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Services
+              </Link>
+            </div>
+
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/recipes-blog" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Recipes & Blog
+              </Link>
+            </div>
+
+            <div className="navbar-mobile-section">
+              <Link 
+                to="/contact" 
+                className="navbar-mobile-link main-link" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+            </div>
+          </nav>
+
+          {/* Mobile CTA Button */}
+          <div className="navbar-mobile-cta">
+            <button className="navbar-mobile-buy-btn" onClick={handleBuyNow}>
+              <ShoppingBag size={20} />
+              <span>Buy Now</span>
+            </button>
+          </div>
+
+          {/* Mobile Menu Footer */}
+          <div className="navbar-mobile-footer">
+            <p>Experience Premium Nutrition</p>
+          </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };

@@ -7,90 +7,137 @@ const RecipesBlogPage = () => {
     {
       id: 1,
       type: "recipe",
-      title: "Protein-Rich Quinoa Bowl",
-      description: "A nutritious and filling bowl packed with plant-based proteins, perfect for lunch or dinner.",
-      image: "/images/recipe1.jpg",
-      cookTime: "25 mins",
+      title: "NutriJewel Granola Breakfast Bowl",
+      description: "Start your day right with our signature granola topped with fresh fruits and nuts - a perfect nutritious breakfast.",
+      image: "/images/granola.png",
+      cookTime: "10 mins",
       servings: "2 people",
       difficulty: "Easy",
       ingredients: [
-        "1 cup quinoa",
-        "1 can black beans",
-        "1 avocado",
-        "2 cups spinach",
-        "1/2 cup cherry tomatoes",
-        "2 tbsp olive oil",
-        "Lime juice",
-        "Salt and pepper"
+        "1 cup NJ Signature Granola",
+        "1 cup Greek yogurt",
+        "1 banana (sliced)",
+        "1/2 cup mixed berries",
+        "2 tbsp honey or maple syrup",
+        "1/4 cup chopped almonds",
+        "Fresh mint leaves"
       ],
       instructions: [
-        "Cook quinoa according to package instructions",
-        "Rinse and drain black beans",
-        "Wash and chop all vegetables",
-        "Assemble bowl with quinoa as base",
-        "Add beans, vegetables, and avocado",
-        "Drizzle with olive oil and lime juice",
-        "Season with salt and pepper"
+        "In a bowl, add Greek yogurt as the base",
+        "Top generously with NJ Signature Granola",
+        "Arrange sliced banana and berries on top",
+        "Sprinkle chopped almonds for extra crunch",
+        "Drizzle with honey or maple syrup",
+        "Garnish with fresh mint leaves",
+        "Serve immediately and enjoy!"
       ],
-      tags: ["Vegan", "High Protein", "Gluten-Free"],
-      author: "Dt. Ruchika Bachwani",
+      tags: ["Breakfast", "High Fiber", "Protein-Rich"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
       date: "2024-01-15"
     },
     {
       id: 2,
       type: "blog",
-      title: "5 Myths About Healthy Eating Debunked",
-      description: "Common misconceptions about nutrition that might be holding you back from achieving your health goals.",
-      image: "/images/blog1.jpg",
-      readTime: "5 min read",
+      title: "5 Benefits of Refined Sugar-Free Living",
+      description: "Discover how eliminating refined sugar from your diet can transform your health and energy levels.",
+      image: "/images/blissbites.png",
+      readTime: "6 min read",
       category: "Nutrition Tips",
-      content: "Many people believe that healthy eating is complicated, expensive, or tasteless. Let's debunk these myths and make nutrition simple and enjoyable...",
-      tags: ["Nutrition", "Health Tips", "Myths"],
-      author: "Dt. Ruchika Bachwani",
+      content: "Refined sugar is hidden in many foods we consume daily. By choosing sugar-free alternatives like our NJ products, you can experience improved energy, better sleep, clearer skin, and stable blood sugar levels. Let's explore how to make this transition naturally...",
+      tags: ["Sugar-Free", "Health Tips", "Clean Eating"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
       date: "2024-01-10"
     },
     {
       id: 3,
       type: "recipe",
-      title: "No-Bake Energy Balls",
-      description: "Quick and easy energy balls made with dates, nuts, and seeds - perfect for a healthy snack.",
-      image: "/images/recipe2.jpg",
-      cookTime: "15 mins",
-      servings: "12 balls",
+      title: "Energy-Boosting Bliss Bites Smoothie",
+      description: "Blend our Bliss Bites with fruits to create a protein-packed smoothie perfect for post-workout recovery.",
+      image: "/images/blissbites.png",
+      cookTime: "5 mins",
+      servings: "1 large glass",
       difficulty: "Very Easy",
       ingredients: [
-        "1 cup dates (pitted)",
-        "1/2 cup almonds",
-        "1/4 cup chia seeds",
-        "2 tbsp coconut oil",
-        "1 tsp vanilla extract",
-        "Coconut flakes for rolling"
+        "2-3 NJ Bliss Bites",
+        "1 banana",
+        "1 cup almond milk",
+        "1 tbsp almond butter",
+        "1/2 tsp cinnamon",
+        "1 cup ice cubes",
+        "1 tsp vanilla extract"
       ],
       instructions: [
-        "Soak dates in warm water for 10 minutes",
-        "Blend dates until smooth paste forms",
-        "Add almonds and pulse until roughly chopped",
-        "Mix in chia seeds, coconut oil, and vanilla",
-        "Roll mixture into small balls",
-        "Roll in coconut flakes",
-        "Refrigerate for 30 minutes before serving"
+        "Crumble the Bliss Bites into small pieces",
+        "Add all ingredients to a high-speed blender",
+        "Blend until smooth and creamy",
+        "Add more almond milk if needed for consistency",
+        "Pour into a large glass",
+        "Garnish with a sprinkle of cinnamon",
+        "Enjoy immediately for best taste!"
       ],
-      tags: ["No-Bake", "Energy Snack", "Vegan"],
-      author: "Dt. Ruchika Bachwani",
+      tags: ["Post-Workout", "Protein", "Quick Recipe"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
       date: "2024-01-12"
     },
     {
       id: 4,
       type: "blog",
-      title: "The Science Behind Intermittent Fasting",
-      description: "Understanding how intermittent fasting works and whether it's right for your lifestyle and health goals.",
-      image: "/images/blog2.jpg",
-      readTime: "8 min read",
-      category: "Diet Trends",
-      content: "Intermittent fasting has gained popularity, but what does science say about its benefits and risks? Let's explore the evidence...",
-      tags: ["Intermittent Fasting", "Science", "Weight Loss"],
-      author: "Dt. Ruchika Bachwani",
+      title: "The Power of Ragi: Ancient Grain, Modern Benefits",
+      description: "Learn why ragi (finger millet) is considered a superfood and how our Ragi Sattva brings these benefits to your table.",
+      image: "/images/ragisattva.png",
+      readTime: "7 min read",
+      category: "Superfoods",
+      content: "Ragi, also known as finger millet, has been a staple in Indian cuisine for centuries. Rich in calcium, iron, and fiber, this gluten-free grain supports bone health, aids digestion, and helps maintain stable blood sugar. Our NJ Ragi Sattva makes it easy to incorporate this superfood into your daily routine...",
+      tags: ["Ragi", "Superfoods", "Gluten-Free"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
       date: "2024-01-08"
+    },
+    {
+      id: 5,
+      type: "recipe",
+      title: "Healthy Chocolate Cake Recipe",
+      description: "Recreate the magic of our Cambridge Cake at home with this guilt-free, nutrient-dense chocolate cake recipe.",
+      image: "/images/fresh batch of cambridge of chocolate cake.jpeg",
+      cookTime: "45 mins",
+      servings: "8 slices",
+      difficulty: "Medium",
+      ingredients: [
+        "1 1/2 cups whole wheat flour",
+        "1/2 cup unsweetened cocoa powder",
+        "1 cup coconut sugar",
+        "1/2 cup chopped walnuts",
+        "1/2 cup coconut oil (melted)",
+        "1 cup almond milk",
+        "1 tsp vanilla extract",
+        "1 tsp baking soda",
+        "Pinch of sea salt"
+      ],
+      instructions: [
+        "Preheat oven to 350°F (175°C)",
+        "Mix all dry ingredients in a large bowl",
+        "In another bowl, whisk wet ingredients",
+        "Combine wet and dry ingredients gently",
+        "Fold in chopped walnuts",
+        "Pour into greased 9-inch cake pan",
+        "Bake for 35-40 minutes until toothpick comes clean",
+        "Cool completely before serving"
+      ],
+      tags: ["Healthy Dessert", "Eggless", "Refined Sugar-Free"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      date: "2024-01-05"
+    },
+    {
+      id: 6,
+      type: "blog",
+      title: "Creating a Sustainable Healthy Lifestyle",
+      description: "Small changes that make a big difference in your journey toward lasting health and wellness.",
+      image: "/images/workshopsession.jpeg",
+      readTime: "8 min read", 
+      category: "Lifestyle",
+      content: "True health isn't about perfect diets or intense workouts - it's about creating sustainable habits that nourish your body and mind. From meal planning with wholesome snacks like our NutriJewel products to mindful eating practices, discover how to build a lifestyle that supports your long-term wellness goals...",
+      tags: ["Lifestyle", "Sustainability", "Wellness"],
+      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      date: "2024-01-03"
     }
   ];
 
@@ -148,7 +195,7 @@ const RecipesBlogPage = () => {
         <div className="content-container">
           <div className="content-grid">
             {filteredContent.map((item) => (
-              <div key={item.id} className="content-card" onClick={() => setSelectedContent(item)}>
+              <div key={item.id} className="content-card" data-type={item.type} onClick={() => setSelectedContent(item)}>
                 <div className="content-image-wrapper">
                   <img 
                     src={item.image} 

@@ -3,10 +3,10 @@ import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import TopSellers from '../components/TopSellers';
 import MissionVision from '../components/MissionVision';
+import TestimonialsSection from '../components/TestimonialsSection';
 import InstagramFeed from '../components/InstagramFeed';
 import JoinCommunity from '../components/JoinCommunity';
 import WorkshopUpdates from '../components/WorkshopUpdates';
-import TestimonialsSection from '../components/TestimonialsSection';
 
 const HomePage = () => {
   return (
@@ -15,10 +15,10 @@ const HomePage = () => {
       <AboutSection />
       <TopSellers />
       <MissionVision />
+      <TestimonialsSection />
       <InstagramFeed />
       <JoinCommunity />
       <WorkshopUpdates />
-      <TestimonialsSection />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 /* TopSellers Component Styles */
 
 .top-sellers-section {
-  padding: 5rem 0;
+  padding: 2rem 0 5rem 0;
   background-color: white;
 }
 
@@ -212,10 +212,24 @@
   flex-direction: column;
 }
 
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .product-price {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--nj-green);
+}
+
+.original-price {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--nj-grey);
+  text-decoration: line-through;
+  opacity: 0.8;
 }
 
 .product-weight {

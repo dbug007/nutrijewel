@@ -16,7 +16,7 @@ const testimonials = [
     name: "Rajesh Kumar",
     location: "Pune, Maharashtra, India - 412101",
     rating: 5,
-    text: "The Cambridge Cake was a hit at my daughter's birthday! No one could believe it was refined sugar free and healthy. Dt. Ruchika has truly created magic with these recipes.",
+    text: "The Cambridge Cake was a hit at my daughter's birthday! No one could believe it was refined sugar free and healthy. Dt. Ruchika Bachwani has truly created magic with these recipes.",
     product: "Cambridge Cake"
   },
   {
@@ -158,7 +158,7 @@ const TestimonialsSection = () => {
             <div className="testimonial-stat-label">Happy Customers</div>
           </div>
           <div className="testimonial-stat">
-            <div className="testimonial-stat-number">4.9★</div>
+            <div className="testimonial-stat-number">5.0★</div>
             <div className="testimonial-stat-label">Average Rating</div>
           </div>
           <div className="testimonial-stat">
