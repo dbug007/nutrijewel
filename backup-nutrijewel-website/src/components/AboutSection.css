@@ -1,0 +1,346 @@
+/* AboutSection Component Styles */
+
+.about-section {
+  padding: 5rem 0;
+  background: linear-gradient(to bottom right, var(--nj-cream), white);
+}
+
+.about-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .about-container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-container {
+    padding: 0 2rem;
+  }
+}
+
+/* Header Section */
+.about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-header h2 {
+  font-size: 2.25rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--nj-charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.about-header-green {
+  display: block;
+  color: var(--nj-green);
+}
+
+.about-divider {
+  width: 6rem;
+  height: 0.25rem;
+  background: linear-gradient(to right, var(--nj-green), var(--nj-olive));
+  margin: 0 auto;
+}
+
+/* Main Content Grid - Image and Text at same height */
+.about-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: start;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .about-main-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+/* Image Section */
+.about-image-section {
+  display: flex;
+  justify-content: center;
+}
+
+/* Story Content Section */
+.about-story-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  justify-content: center;
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: var(--nj-grey);
+  line-height: 1.6;
+}
+
+.about-text p {
+  margin: 0;
+}
+
+.about-text-large {
+  font-size: 1.125rem;
+}
+
+.about-founder-name-text {
+  color: var(--nj-green);
+  font-weight: 600;
+}
+
+/* Stats */
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding-top: 2rem;
+}
+
+.about-stat-item {
+  text-align: center;
+}
+
+.about-stat-number {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--nj-green);
+  margin-bottom: 0.5rem;
+}
+
+.about-stat-label {
+  color: var(--nj-grey);
+}
+
+.about-stat-label {
+  color: var(--nj-grey);
+}
+
+/* Values Section - Now below main content */
+.about-values-section {
+  margin-top: 2rem;
+}
+
+/* Values Grid */
+.about-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .about-values {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+.about-value-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.about-value-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.about-value-icon {
+  color: var(--nj-green);
+  margin-bottom: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.about-value-title {
+  font-weight: 600;
+  color: var(--nj-charcoal);
+  margin-bottom: 0.5rem;
+}
+
+.about-value-description {
+  color: var(--nj-grey);
+  font-size: 0.875rem;
+}
+
+/* Right Content - Keep for existing founder styles */
+.about-right-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Founder Image */
+.about-founder-wrapper {
+  background: linear-gradient(to bottom right, rgba(147, 181, 89, 0.2), rgba(109, 138, 60, 0.2));
+  border-radius: 1rem;
+  padding: 1rem;
+  max-width: 450px;
+  width: 100%;
+}
+
+.about-founder-card {
+  aspect-ratio: 4/5;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.about-founder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 35px 70px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Background Image */
+.about-founder-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.about-founder-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.about-founder-card:hover .about-founder-bg {
+  transform: scale(1.05);
+  filter: brightness(0.9);
+}
+
+/* Overlay */
+.about-founder-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    transparent 100%
+  );
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.about-founder-content {
+  width: 100%;
+}
+
+.about-founder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.about-founder-name {
+  font-size: 1.25rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--nj-green);
+  line-height: 1.2;
+}
+
+.about-founder-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.about-founder-quote {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.about-founder-quote {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 1023px) {
+  .about-section {
+    padding: 3rem 0;
+  }
+  
+  .about-main-grid {
+    gap: 3rem;
+  }
+  
+  .about-header {
+    margin-bottom: 3rem;
+  }
+  
+  .about-header h2 {
+    font-size: 2rem;
+  }
+  
+  .about-founder-wrapper {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .about-text-large {
+    font-size: 1rem;
+  }
+  
+  .about-stats {
+    gap: 1.5rem;
+  }
+  
+  .about-values {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .about-value-card {
+    padding: 1.25rem;
+  }
+  
+  .about-main-grid {
+    gap: 2rem;
+  }
+  
+  .about-header {
+    margin-bottom: 2rem;
+  }
+  
+  .about-values-section {
+    margin-top: 1.5rem;
+  }
+}
