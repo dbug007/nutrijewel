@@ -1,11 +1,68 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
 import { featuredTopSellers } from '../data/products';
+import WeightSelector from './WeightSelector';
 import './TopSellers.css';
 
 const TopSellers = () => {
-  const handleWhatsApp = (productName) => {
-    const message = `Hi! I'm interested in ordering ${productName}. Can you provide more details?`;
+  const navigate = useNavigate();
+  const [selectedVariants, setSelectedVariants] = useState({});
+
+  // Initialize default variants for products that have variants
+  React.useEffect(() => {
+    const initialVariants = {};
+    featuredTopSellers.forEach(product => {
+      if (product.variants && product.variants.length > 0) {
+        initialVariants[product.id] = product.variants[0];
+      }
+    });
+    setSelectedVariants(initialVariants);
+  }, []);
+
+  const handleVariantChange = useCallback((productId, variant) => {
+    console.log('TopSellers: Variant change for product', productId, ':', variant);
+    setSelectedVariants(prev => {
+      const newState = {
+        ...prev,
+        [productId]: variant
+      };
+      console.log('TopSellers: New selectedVariants state:', newState);
+      return newState;
+    });
+  }, []);
+
+  const getProductPrice = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    console.log(`Getting price for ${product.id}:`, selectedVariant ? selectedVariant.price : product.price);
+    if (selectedVariant) {
+      return selectedVariant.price;
+    }
+    return product.price;
+  };
+
+  const getProductOriginalPrice = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    if (selectedVariant) {
+      return selectedVariant.originalPrice;
+    }
+    return product.originalPrice;
+  };
+
+  const getProductWeight = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    if (selectedVariant) {
+      return selectedVariant.weight;
+    }
+    return product.weight;
+  };
+
+  const handleWhatsApp = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    const weight = selectedVariant ? selectedVariant.weight : product.weight;
+    const price = selectedVariant ? selectedVariant.price : product.price;
+    
+    const message = `Hi! I'm interested in ordering ${product.displayName} (${weight}) - ₹${price}. Can you provide more details?`;
     window.open(`https://wa.me/919960637656?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -60,6 +117,14 @@ const TopSellers = () => {
                   {product.description}
                 </p>
 
+                {/* Weight Selector for products with variants */}
+                <WeightSelector 
+                  product={product}
+                  onVariantChange={(variant) => handleVariantChange(product.id, variant)}
+                  variant="compact"
+                  showImagePreview={false}
+                />
+
                 {/* Features */}
                 <div className="product-features">
                   {product.features.slice(0, 2).map((feature, index) => (
@@ -76,12 +141,12 @@ const TopSellers = () => {
                 <div className="product-footer">
                   <div className="product-price-container">
                     <div className="price-section">
-                      <span className="product-price">₹{product.price}</span>
-                      {product.originalPrice && product.originalPrice !== product.price && (
-                        <span className="original-price">₹{product.originalPrice}</span>
+                      <span className="product-price">₹{getProductPrice(product)}</span>
+                      {getProductOriginalPrice(product) && getProductOriginalPrice(product) !== getProductPrice(product) && (
+                        <span className="original-price">₹{getProductOriginalPrice(product)}</span>
                       )}
                     </div>
-                    <span className="product-weight">({product.weight})</span>
+                    <span className="product-weight">({getProductWeight(product)})</span>
                   </div>
                   
                   <div className="product-actions">
@@ -89,7 +154,7 @@ const TopSellers = () => {
                       <Heart size={18} />
                     </button>
                     <button 
-                      onClick={() => handleWhatsApp(product.displayName)}
+                      onClick={() => handleWhatsApp(product)}
                       className="product-order-btn"
                     >
                       <ShoppingCart size={16} className="product-order-icon" />
@@ -105,7 +170,7 @@ const TopSellers = () => {
         {/* View All Products Button */}
         <div className="view-all-container">
           <button 
-            onClick={() => handleWhatsApp('all products catalog')}
+            onClick={() => navigate('/products')}
             className="view-all-btn"
           >
             View All Products

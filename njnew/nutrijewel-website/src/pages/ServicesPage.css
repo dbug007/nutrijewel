@@ -61,8 +61,13 @@
   font-family: 'Playfair Display', serif;
   font-weight: 700;
   color: var(--nj-charcoal);
-  text-align: center;
+  text-align: center !important;
   margin-bottom: 3rem;
+}
+
+/* Ensure section titles in why-choose section are centered */
+.services-why-choose .section-title {
+  text-align: center !important;
 }
 
 /* Why Choose Us Section */
@@ -437,6 +442,7 @@
   
   .section-title {
     font-size: 2rem;
+    text-align: center !important;
   }
   
   .category-filters {

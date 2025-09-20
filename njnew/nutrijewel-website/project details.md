@@ -141,7 +141,7 @@ A complete reference document for building the **NutriJewel** website. This site
 For inquiries or help:
 **Email:** [hello@nutrijewel.com](mailto:hello@nutrijewel.com)
 **Phone/WhatsApp:** +91 996-063-7656
-**Founder:** Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist
+**Founder:** Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist
 **FSSAI:** 21524037004182
 
 ---
@@ -151,20 +151,20 @@ NutriJewel — Nourish with Intention. Snack with Joy.
 
 | Product Name               | Weight        | Discounted Price | Original Price |
 | -------------------------- | ------------- | ---------------- | -------------- |
-| **NJ Amrit Bites**         | 1kg           | ₹1199            | ₹1549          |
-| **NJ Signature Granola**   | 250g          | ₹499             | ₹699           |
-| **NJ Granola Cookies**     | 5 big cookies | ₹449             | ₹649           |
-| **NJ Special Bliss Bites** | 1kg           | ₹1599            | ₹1949          |
-| **Foxnut & Millet Crunch** | 250g          | ₹549             | ₹749           |
-| **NJ Ragi Sattva**         | 1kg           | ₹1599            | ₹1949          |
-| **NJ Nutri Bars / Bites**  | 200g          | ₹449             | ₹649           |
+| **NJ Amrit Bites**         | 1kg, 500g     | 1600, 800        | ₹1549          |
+| **NJ Signature Granola**   | 250g, 500g    | ₹550, 999        | ₹699           |
+| **NJ Granola Cookies**     | 5 big cookies | ₹499             | ₹649           |
+| **NJ Special Bliss Bites** | 1kg, 500g     | 16oo, 800        | ₹1949          |
+| **Foxnut & Millet Crunch** | 250g          | ₹299             | ₹749           |
+| **NJ Ragi Sattva**         | 1kg, 500g     | ₹1599, 800       | ₹1949          |
+| **NJ Nutri Bars / Bites**  | 250g          | 550              | ₹649           |
 | **Jewel’s Omega Crunch**   | 250g          | ₹299             | ₹499           |
-| **Jewel’s Gun Powder**     | 200g          | ₹249             | ₹449           |
+| **Jewel’s Gun Powder**     | 100g          | ₹99              | ₹449           |
 | **100% Peanut Butter**     | 200g          | ₹249             | ₹449           |
-| **Low Fat Hummus**         | 80g           | ₹49              | ₹149           |
+| **Low Fat Hummus**         | 200g          | 249              | ₹149           |
 | **Jewel’s Avo Guac Quack** | \~100g (est.) | ₹149             | ₹249           |
 | **Thandai Maharaja Cake**  | 1kg           | ₹999             | ₹1349          |
-| **Cambridge of Chocolate** | 1kg           | ₹1280            | ₹1630          |
+| **Cambridge of Chocolate** | 1kg,750g,500g,| ₹1550,1150,850   | ₹1630          |
 | **Khajoor Ka Khazana**     | 12 pieces     | ₹999             | ₹1400          |
 | **Oxford of Love**         | 1kg           | ₹999             | ₹1349          |
 
@@ -186,4 +186,3 @@ Join us on this journey. Let’s make healthy snacking a celebration, every sing
 
 — Dt. Ruchika Bachwani
 MSc. Nutritional Sciences & Dietetics
-

@@ -95,7 +95,7 @@ const HeroSection = () => {
                 <div className="hero-image-background">
                   <img 
                     src={`${process.env.PUBLIC_URL}/images/ruchika.jpeg`}
-                    alt="Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist, Founder of NutriJewel"
+                    alt="Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist, Founder of NutriJewel"
                     className="hero-image-bg"
                   />
                 </div>
@@ -105,7 +105,7 @@ const HeroSection = () => {
                       Handcrafted with Love
                     </h3>
                     <p className="hero-image-description">
-                      Every product is carefully made by Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist with years of nutritional expertise
+                      Every product is carefully made by Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist with years of nutritional expertise
                     </p>
                   </div>
                 </div>

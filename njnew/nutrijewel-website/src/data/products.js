@@ -6,9 +6,13 @@ export const products = [
     category: 'Traditional Sweets',
     image: '/images/amritbites.png',
     description: 'Traditional Dink/Gond ladoos, refined sugar free, ideal for postpartum recovery and bone health support.',
-    price: 1199,
+    price: 1600,
     originalPrice: 1549,
     weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 1600, originalPrice: 1549 },
+      { weight: '500g', price: 800, originalPrice: 775 }
+    ],
     features: ['Refined Sugar Free', 'Bone Health Support', 'Postpartum Recovery', 'Traditional Recipe'],
     isTopSeller: false,
     isBestSeller: true,
@@ -21,9 +25,13 @@ export const products = [
     category: 'Healthy Snacks',
     image: '/images/granola.png',
     description: 'Gourmet blend with cinnamon, dark chocolate, and mocha hints. High in fiber, great for breakfast or snacking.',
-    price: 499,
+    price: 550,
     originalPrice: 699,
     weight: '250g',
+    variants: [
+      { weight: '250g', price: 550, originalPrice: 699 },
+      { weight: '500g', price: 999, originalPrice: 1398 }
+    ],
     features: ['High Fiber', 'Cinnamon & Dark Chocolate', 'Breakfast Perfect', 'Gourmet Blend'],
     isTopSeller: true,
     isBestSeller: false,
@@ -36,7 +44,7 @@ export const products = [
     category: 'Healthy Snacks',
     image: '/images/granolacookies.png',
     description: 'Wholesome cookies made from granola, free from refined sugar, preservatives, and artificial additives.',
-    price: 449,
+    price: 499,
     originalPrice: 649,
     weight: '5 big cookies',
     features: ['No Preservatives', 'Refined Sugar Free', 'Wholesome Granola', 'Artificial Free'],
@@ -51,9 +59,13 @@ export const products = [
     category: 'Traditional Sweets',
     image: '/images/blissbites.png',
     description: 'Rich in fiber and protein, this refined sugar free laddoo is perfect for pre/post workout nourishment.',
-    price: 1599,
+    price: 1600,
     originalPrice: 1949,
     weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 1600, originalPrice: 1949 },
+      { weight: '500g', price: 800, originalPrice: 975 }
+    ],
     features: ['High Protein', 'Pre/Post Workout', 'Dates & Nuts', 'Energy Boost'],
     isTopSeller: true,
     isBestSeller: true,
@@ -66,7 +78,7 @@ export const products = [
     category: 'Healthy Snacks',
     image: '/images/foxnutmilletcrunch.png',
     description: 'Roasted foxnuts and millet blend for a crunchy, guilt-free snack full of minerals and light on calories.',
-    price: 549,
+    price: 299,
     originalPrice: 749,
     weight: '250g',
     features: ['Low Calorie', 'Mineral Rich', 'Crunchy Texture', 'Guilt-Free'],
@@ -84,6 +96,10 @@ export const products = [
     price: 1599,
     originalPrice: 1949,
     weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 1599, originalPrice: 1949 },
+      { weight: '500g', price: 800, originalPrice: 975 }
+    ],
     features: ['Gluten Free', 'Refined Sugar Free', 'Immunity Boost', 'Bone Strength'],
     isTopSeller: true,
     isBestSeller: true,
@@ -96,9 +112,9 @@ export const products = [
     category: 'Energy Bars',
     image: '/images/nutribars.png',
     description: 'Dark chocolate-flavored bars packed with nutrients. Ideal for healthy snacking and sustained energy.',
-    price: 449,
+    price: 550,
     originalPrice: 649,
-    weight: '200g',
+    weight: '250g',
     features: ['Dark Chocolate', 'Nutrient Packed', 'Sustained Energy', 'Healthy Snack'],
     isTopSeller: true,
     isBestSeller: false,
@@ -126,9 +142,9 @@ export const products = [
     category: 'Dips & Spreads',
     image: '/images/gunpowder.png',
     description: 'South Indian-style spice blend (podi) perfect as a dry chutney or seasoning, handcrafted in small batches.',
-    price: 249,
+    price: 99,
     originalPrice: 449,
-    weight: '200g',
+    weight: '100g',
     features: ['South Indian Style', 'Handcrafted', 'Small Batches', 'Versatile Seasoning'],
     isTopSeller: false,
     isBestSeller: false,
@@ -156,9 +172,9 @@ export const products = [
     category: 'Dips & Spreads',
     image: '/images/image.png',
     description: 'High-protein, fiber-rich hummus with no added oil. Smooth, savory, and gut-friendly.',
-    price: 49,
+    price: 249,
     originalPrice: 149,
-    weight: '80g',
+    weight: '200g',
     features: ['Low Fat', 'High Protein', 'No Added Oil', 'Gut Friendly'],
     isTopSeller: false,
     isBestSeller: false,
@@ -201,9 +217,14 @@ export const products = [
     category: 'Cakes',
     image: '/images/fresh batch of cambridge of chocolate cake.jpeg',
     description: 'Luxurious dark chocolate cake with walnut crunch. Clean, eggless, preservative-free indulgence.',
-    price: 1280,
+    price: 1550,
     originalPrice: 1630,
     weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 1550, originalPrice: 1630 },
+      { weight: '750g', price: 1150, originalPrice: 1223 },
+      { weight: '500g', price: 850, originalPrice: 815 }
+    ],
     features: ['Dark Chocolate', 'Walnut Crunch', 'Eggless', 'Preservative Free'],
     isTopSeller: true,
     isBestSeller: true,
@@ -257,17 +278,17 @@ export const categories = [
 export const brandInfo = {
   name: 'NutriJewel',
   tagline: 'Nourish with Intention. Snack with Joy.',
-  founder: 'Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist',
+  founder: 'Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist',
   fssai: '21524037004182',
   mission: 'To provide clean, handcrafted, nutritious snacks that promote health and happiness without compromising on taste. We are committed to creating guilt-free alternatives that nourish both body and soul.',
   vision: 'To become the most trusted brand for guilt-free, artisanal snacks that nourish both body and soul. We envision a world where healthy eating is joyful and accessible to everyone.',
   contact: {
     phone: '+91 996-063-7656',
     whatsapp: '+91 996-063-7656',
-    email: 'info@nutrijewel.com'
+    email: 'hello@nutrijewel.com'
   },
   social: {
-    instagram: '@nutrijewel_official'
+    instagram: '@nutrijewel'
   }
 };
 

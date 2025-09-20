@@ -53,7 +53,7 @@ Place all product images in `public/assets/products/` directory with the followi
 
 ## Contact Information
 
-- **Founder**: Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist
+- **Founder**: Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist
 - **Email**: hello@nutrijewel.com
 - **Phone/WhatsApp**: +91 996-063-7656
 - **FSSAI**: 21524037004182
@@ -69,10 +69,7 @@ This creates an optimized build in the `build` folder ready for deployment.
 ## Deployment
 
 The website can be deployed to:
-- Vercel (recommended)
-- Netlify
-- GitHub Pages
-- Any static hosting service
+- GH Pages
 
 ---
 

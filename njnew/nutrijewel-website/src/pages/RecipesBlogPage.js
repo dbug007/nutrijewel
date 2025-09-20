@@ -32,7 +32,7 @@ const RecipesBlogPage = () => {
         "Serve immediately and enjoy!"
       ],
       tags: ["Breakfast", "High Fiber", "Protein-Rich"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
       date: "2024-01-15"
     },
     {
@@ -45,7 +45,7 @@ const RecipesBlogPage = () => {
       category: "Nutrition Tips",
       content: "Refined sugar is hidden in many foods we consume daily. By choosing sugar-free alternatives like our NJ products, you can experience improved energy, better sleep, clearer skin, and stable blood sugar levels. Let's explore how to make this transition naturally...",
       tags: ["Sugar-Free", "Health Tips", "Clean Eating"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
       date: "2024-01-10"
     },
     {
@@ -76,7 +76,7 @@ const RecipesBlogPage = () => {
         "Enjoy immediately for best taste!"
       ],
       tags: ["Post-Workout", "Protein", "Quick Recipe"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
       date: "2024-01-12"
     },
     {
@@ -89,7 +89,7 @@ const RecipesBlogPage = () => {
       category: "Superfoods",
       content: "Ragi, also known as finger millet, has been a staple in Indian cuisine for centuries. Rich in calcium, iron, and fiber, this gluten-free grain supports bone health, aids digestion, and helps maintain stable blood sugar. Our NJ Ragi Sattva makes it easy to incorporate this superfood into your daily routine...",
       tags: ["Ragi", "Superfoods", "Gluten-Free"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
       date: "2024-01-08"
     },
     {
@@ -122,9 +122,9 @@ const RecipesBlogPage = () => {
         "Bake for 35-40 minutes until toothpick comes clean",
         "Cool completely before serving"
       ],
-      tags: ["Healthy Dessert", "Eggless", "Refined Sugar-Free"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
-      date: "2024-01-05"
+      tags: ["Dessert", "Refined Sugar Free", "Celebration"],
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
+      date: "2024-02-14"
     },
     {
       id: 6,
@@ -136,7 +136,7 @@ const RecipesBlogPage = () => {
       category: "Lifestyle",
       content: "True health isn't about perfect diets or intense workouts - it's about creating sustainable habits that nourish your body and mind. From meal planning with wholesome snacks like our NutriJewel products to mindful eating practices, discover how to build a lifestyle that supports your long-term wellness goals...",
       tags: ["Lifestyle", "Sustainability", "Wellness"],
-      author: "Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist",
+      author: "Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist",
       date: "2024-01-03"
     }
   ];

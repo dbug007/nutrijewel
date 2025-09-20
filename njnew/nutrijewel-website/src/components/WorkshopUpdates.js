@@ -61,7 +61,7 @@ const WorkshopUpdates = () => {
             Upcoming Workshops
           </h2>
           <p className="workshops-subtitle">
-            Join Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist for hands-on learning experiences in healthy cooking and nutrition
+            Join Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist for hands-on learning experiences in healthy cooking and nutrition
           </p>
           <div className="workshops-divider"></div>
         </div>

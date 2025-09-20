@@ -1,10 +1,54 @@
-import React, { useState } from 'react';
-import { Star, Heart, ShoppingBag } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { Star, Heart, ShoppingBag, Phone } from 'lucide-react';
 import { products, categories } from '../data/products';
+import WeightSelector from '../components/WeightSelector';
 import './ProductsPage.css';
 
 const ProductsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Products');
+  const [selectedVariants, setSelectedVariants] = useState({});
+
+  // Initialize default variants for products that have variants
+  React.useEffect(() => {
+    const initialVariants = {};
+    products.forEach(product => {
+      if (product.variants && product.variants.length > 0) {
+        initialVariants[product.id] = product.variants[0];
+      }
+    });
+    setSelectedVariants(initialVariants);
+  }, []);
+
+  const handleVariantChange = useCallback((productId, variant) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [productId]: variant
+    }));
+  }, []);
+
+  const getProductPrice = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    if (selectedVariant) {
+      return selectedVariant.price;
+    }
+    return product.price;
+  };
+
+  const getProductOriginalPrice = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    if (selectedVariant) {
+      return selectedVariant.originalPrice;
+    }
+    return product.originalPrice;
+  };
+
+  const getProductWeight = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    if (selectedVariant) {
+      return selectedVariant.weight;
+    }
+    return product.weight;
+  };
 
   const filteredProducts = selectedCategory === 'All Products' 
     ? products 
@@ -14,8 +58,12 @@ const ProductsPage = () => {
     ? products.filter(product => product.isChefsSpecial)
     : products.filter(product => product.category === selectedCategory);
 
-  const handlePurchase = (productName) => {
-    const message = `Hi! I'm interested in purchasing ${productName}. Can you please provide more details about availability and delivery?`;
+    const handlePurchase = (product) => {
+    const selectedVariant = selectedVariants[product.id];
+    const weight = selectedVariant ? selectedVariant.weight : product.weight;
+    const price = selectedVariant ? selectedVariant.price : product.price;
+    
+    const message = `Hi! I'm interested in purchasing ${product.name} (${weight}) - ₹${price}. Can you please provide more details about availability and delivery?`;
     const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -81,6 +129,13 @@ const ProductsPage = () => {
                   <h3 className="product-name">{product.name}</h3>
                   <p className="product-description">{product.description}</p>
 
+                  {/* Weight Selector for products with variants */}
+                  <WeightSelector 
+                    product={product}
+                    onVariantChange={(variant) => handleVariantChange(product.id, variant)}
+                    variant="default"
+                  />
+
                   {/* Rating */}
                   <div className="product-rating">
                     <div className="product-stars">
@@ -106,23 +161,23 @@ const ProductsPage = () => {
                   {/* Price */}
                   <div className="product-pricing">
                     <div className="price-container">
-                      <span className="product-price">₹{product.price}</span>
-                      {product.originalPrice && product.originalPrice > product.price && (
+                      <span className="product-price">₹{getProductPrice(product)}</span>
+                      {getProductOriginalPrice(product) && getProductOriginalPrice(product) > getProductPrice(product) && (
                         <>
-                          <span className="original-price">₹{product.originalPrice}</span>
+                          <span className="original-price">₹{getProductOriginalPrice(product)}</span>
                           <span className="discount-badge">
-                            {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                            {Math.round(((getProductOriginalPrice(product) - getProductPrice(product)) / getProductOriginalPrice(product)) * 100)}% OFF
                           </span>
                         </>
                       )}
                     </div>
-                    <span className="product-weight">{product.weight}</span>
+                    <span className="product-weight">{getProductWeight(product)}</span>
                   </div>
 
                   {/* Buy Button */}
                   <button 
                     className="product-buy-btn"
-                    onClick={() => handlePurchase(product.name)}
+                    onClick={() => handlePurchase(product)}
                   >
                     <ShoppingBag size={18} />
                     Buy Now
@@ -140,12 +195,27 @@ const ProductsPage = () => {
           <div className="cta-content">
             <h2>Can't Find What You're Looking For?</h2>
             <p>Let us know your preferences and we'll create something special just for you!</p>
-            <button 
-              className="cta-btn"
-              onClick={() => handlePurchase("custom product consultation")}
-            >
-              Get Custom Products
-            </button>
+            <div className="cta-buttons">
+              <button 
+                className="cta-btn"
+                onClick={() => {
+                  const message = "Hi! I'm interested in custom product consultation. Can you help me create something special based on my preferences?";
+                  const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
+                  window.open(whatsappUrl, '_blank');
+                }}
+              >
+                Get Custom Products
+              </button>
+              <button 
+                className="cta-btn cta-btn-call"
+                onClick={() => {
+                  window.open('tel:+919960637656', '_self');
+                }}
+              >
+                <Phone size={18} />
+                Call Now
+              </button>
+            </div>
           </div>
         </div>
       </section>

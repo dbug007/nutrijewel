@@ -40,7 +40,7 @@ const ServicesPage = () => {
       id: 3,
       category: "Sessions",
       title: "Personal Nutrition Consultation",
-      description: "One-on-one session with our expert nutritionist to create a personalized diet plan based on your health goals and lifestyle.",
+      description: "One-on-one session with our Registered Pharmacist & Qualified Nutritionist to create a personalized diet plan based on your health goals and lifestyle.",
       duration: "60 minutes",
       groupSize: "1-on-1",
       price: "₹1,999",
@@ -143,8 +143,8 @@ const ServicesPage = () => {
           <div className="features-grid">
             <div className="feature-card">
               <Award className="feature-icon" size={32} />
-              <h3>Certified Nutritionist</h3>
-              <p>Led by Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist with years of professional experience</p>
+              <h3>Registered Pharmacist & Qualified Nutritionist</h3>
+              <p>Led by Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist with years of professional experience</p>
             </div>
             <div className="feature-card">
               <Users className="feature-icon" size={32} />

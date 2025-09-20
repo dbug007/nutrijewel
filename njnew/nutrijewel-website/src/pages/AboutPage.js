@@ -138,7 +138,7 @@ const AboutPage = () => {
                   <h3 className="aboutpage-timeline-title">The Beginning</h3>
                   <p className="aboutpage-timeline-text">
                     It all started in a small kitchen in Pune, where Dt. Ruchika Bachwani, 
-                    a certified pharmacist and nutritionist, was experimenting with healthy 
+                    a Registered Pharmacist & Qualified Nutritionist, was experimenting with healthy 
                     alternatives to traditional Indian sweets. As a healthcare professional, 
                     she witnessed firsthand how sugar-laden treats were affecting her clients' 
                     health goals.
@@ -227,7 +227,7 @@ const AboutPage = () => {
                   <div className="aboutpage-credentials">
                     <div className="aboutpage-credential">
                       <Shield size={16} />
-                      <span>Certified Pharmacist</span>
+                      <span>Registered Pharmacist & Qualified Nutritionist</span>
                     </div>
                     <div className="aboutpage-credential">
                       <Award size={16} />
@@ -250,7 +250,7 @@ const AboutPage = () => {
               
               <h2 className="aboutpage-founder-name">Dt. Ruchika Bachwani</h2>
               <p className="aboutpage-founder-title">
-                Certified Pharmacist, Dietitian & Nutritionist
+                Registered Pharmacist & Qualified Nutritionist
               </p>
               
               <div className="aboutpage-founder-quote">

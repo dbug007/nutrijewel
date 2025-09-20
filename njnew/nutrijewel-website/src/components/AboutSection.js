@@ -23,7 +23,7 @@ const AboutSection = () => {
                 <div className="home-about-founder-background">
                   <img 
                     src="/images/ruchikaamritbites.jpeg" 
-                    alt="Dt. Ruchika Bachwani - Certified Pharmacist, Dietitian & Nutritionist, Founder of NutriJewel"
+                    alt="Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist, Founder of NutriJewel"
                     className="home-about-founder-bg"
                   />
                 </div>
@@ -33,7 +33,7 @@ const AboutSection = () => {
                       <h3 className="home-about-founder-name">
                         Dt. Ruchika Bachwani
                       </h3>
-                      <p className="home-about-founder-title">Certified Pharmacist, Dietitian & Nutritionist</p>
+                      <p className="home-about-founder-title">Registered Pharmacist & Qualified Nutritionist</p>
                       <p className="home-about-founder-quote">
                         "Every product tells a story of health, happiness, and handcrafted excellence"
                       </p>
