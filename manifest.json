@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "NutriJewel",
+  "name": "NutriJewel - Premium Health & Nutrition Products",
+  "description": "Handcrafted, nutritious snacks by Registered Pharmacist & Qualified Nutritionist",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,8 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#93B559",
+  "background_color": "#ffffff",
+  "categories": ["food", "health", "lifestyle"],
+  "lang": "en-IN"
 }

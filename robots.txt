@@ -1,3 +1,12 @@
-# https://www.robotstxt.org/robotstxt.html
+# NutriJewel - Premium Health & Nutrition Products
+# https://nutrijewel.com
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap
+Sitemap: https://nutrijewel.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
