@@ -1,6 +1,6 @@
 # NutriJewel Website Project Details
 
-A complete reference document for building the **NutriJewel** website. This site showcases clean, handcrafted, nutritious snacks designed to promote health and happiness.
+A complete reference document for building the **NutriJewel** website. This site showcases clean, handcrafted, nutritious | **Jewel's Omega Crunch**   | 250g          | ₹299             | ₹350           || **Jewel's Gun Powder**     | 100g          | ₹99              | ₹120           |ac| **Jewel's Avo Guac Quack** | ~100g (est.) | ₹299             | ₹350           |s designed to promote health and happiness.
 
 ---
 
@@ -151,22 +151,22 @@ NutriJewel — Nourish with Intention. Snack with Joy.
 
 | Product Name               | Weight        | Discounted Price | Original Price |
 | -------------------------- | ------------- | ---------------- | -------------- |
-| **NJ Amrit Bites**         | 1kg, 500g     | 1600, 800        | ₹1549          |
-| **NJ Signature Granola**   | 250g, 500g    | ₹550, 999        | ₹699           |
-| **NJ Granola Cookies**     | 5 big cookies | ₹499             | ₹649           |
-| **NJ Special Bliss Bites** | 1kg, 500g     | 16oo, 800        | ₹1949          |
-| **Foxnut & Millet Crunch** | 250g          | ₹299             | ₹749           |
-| **NJ Ragi Sattva**         | 1kg, 500g     | ₹1599, 800       | ₹1949          |
-| **NJ Nutri Bars / Bites**  | 250g          | 550              | ₹649           |
-| **Jewel’s Omega Crunch**   | 250g          | ₹299             | ₹499           |
-| **Jewel’s Gun Powder**     | 100g          | ₹99              | ₹449           |
-| **100% Peanut Butter**     | 200g          | ₹249             | ₹449           |
-| **Low Fat Hummus**         | 200g          | 249              | ₹149           |
-| **Jewel’s Avo Guac Quack** | \~100g (est.) | ₹149             | ₹249           |
-| **Thandai Maharaja Cake**  | 1kg           | ₹999             | ₹1349          |
-| **Cambridge of Chocolate** | 1kg,750g,500g,| ₹1550,1150,850   | ₹1630          |
-| **Khajoor Ka Khazana**     | 12 pieces     | ₹999             | ₹1400          |
-| **Oxford of Love**         | 1kg           | ₹999             | ₹1349          |
+| **NJ Amrit Bites**         | 1kg, 500g     | ₹1599, ₹799      | ₹1850, ₹950    |
+| **NJ Signature Granola**   | 250g, 500g    | ₹550, ₹999       | ₹650, ₹1200    |
+| **NJ Granola Cookies**     | 5 big cookies | ₹499             | ₹600           |
+| **NJ Special Bliss Bites** | 1kg, 500g     | ₹1599, ₹799      | ₹1850, ₹950    |
+| **Foxnut & Millet Crunch** | 250g          | ₹299             | ₹350           |
+| **NJ Ragi Sattva**         | 1kg, 500g     | ₹1599, ₹799      | ₹1850, ₹950    |
+| **NJ Nutri Bars / Bites**  | 250g          | ₹550             | ₹650           |
+| **Jewel’s Omega Crunch**   | 200g          | ₹499             | ₹550           |
+| **Jewel’s Gun Powder**     | 80g           | ₹99              | ₹150           |
+| **100% Peanut Butter**     | 200g          | ₹249             | ₹300           |
+| **Low Fat Hummus**         | 200g          | ₹249             | ₹300           |
+| **Jewel’s Avo Guac Quack** | \~180 to 200g | ₹299             | ₹399           |
+| **Thandai Maharaja Cake**  | 1kg, 500g     | ₹1099, ₹850      | ₹1300, ₹1000   |
+| **Cambridge of Chocolate** | 1kg,750g,500g | ₹1599,₹1199,₹850 | ₹1880,₹1410,₹1000 |
+| **Khajoor Ka Khazana**     | 12 pieces     | ₹999             | ₹1200          |
+| **Oxford of Love**         | 1kg           | ₹999             | ₹1200          |
 
 
 NutriJewel: A Brand Story
