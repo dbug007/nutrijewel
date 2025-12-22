@@ -235,6 +235,24 @@ export const products = [
     isChefsSpecial: true
   },
   {
+    id: 'plum-cake',
+    name: 'Golden Plum Kiss (Plum Cake)',
+    displayName: 'Golden Plum Kiss',
+    category: 'Cakes',
+    image: '/images/plumcake.png',
+    description: 'Rich plum cake with warm spices and dried fruits. Clean, eggless, and preservative-free — perfect for festive occasions.',
+    price: 850,
+    originalPrice: 966,
+    weight: '500g',
+    variants: [
+      { weight: '500g', price: 850, originalPrice: 966 }
+    ],
+    features: ['Eggless', 'Preservative Free', 'Festive Special', 'Dried Fruits & Spices'],
+    isTopSeller: false,
+    isBestSeller: true,
+    isChefsSpecial: false
+  },
+  {
     id: 'khajoor-khazana',
     name: 'Khajoor Ka Khazana (Stuffed Dates)',
     displayName: 'Khajoor Ka Khazana',

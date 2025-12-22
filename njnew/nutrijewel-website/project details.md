@@ -168,6 +168,8 @@ NutriJewel — Nourish with Intention. Snack with Joy.
 | **Khajoor Ka Khazana**     | 12 pieces     | ₹999             | ₹1200          |
 | **Oxford of Love**         | 1kg           | ₹999             | ₹1200          |
 
+| **Golden Plum Kiss**       | 500g          | ₹850             | ₹966           |
+
 
 NutriJewel: A Brand Story
 Sparked by Passion & Purpose
