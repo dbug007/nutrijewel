@@ -290,8 +290,8 @@ const rawProducts = [
     isTopSeller: false,
     isBestSeller: true,
     isChefsSpecial: true
-  },
-  */
+  }
+  /*
   {
     id: 'oxford-cake',
     name: 'Oxford of Love (Strawberry Dark Chocolate Cake)',
@@ -307,8 +307,9 @@ const rawProducts = [
     isTopSeller: false,
     isBestSeller: true,
     isChefsSpecial: true
-  },
+  }
   */
+];
 
 const normalizeProductImages = (product) => ({
   ...product,
