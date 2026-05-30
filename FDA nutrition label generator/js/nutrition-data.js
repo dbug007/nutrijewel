@@ -55,6 +55,24 @@ const NUTRITION_DATA = {
         iron: 4.1,
         potassium: 350
     },
+    'jowar-flour': {
+        name: 'Jowar Flour (Sorghum Flour)',
+        calories: 329,
+        totalFat: 3.1,
+        saturatedFat: 0.9,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 6,
+        totalCarbs: 70,
+        fiber: 6.7,
+        sugars: 2.5,
+        addedSugars: 0,
+        protein: 10.6,
+        vitaminD: 0,
+        calcium: 25,
+        iron: 4.1,
+        potassium: 350
+    },
     'amaranth-grain': {
         name: 'Amaranth Grain',
         calories: 371,
@@ -182,42 +200,6 @@ const NUTRITION_DATA = {
         calcium: 60,
         iron: 1.4,
         potassium: 350
-    },
-    'chia-seeds': {
-        name: 'Chia Seeds',
-        calories: 486,
-        totalFat: 31,
-        saturatedFat: 3.3,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 16,
-        totalCarbs: 42,
-        fiber: 34,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 17,
-        vitaminD: 0,
-        calcium: 631,
-        iron: 7.7,
-        potassium: 407
-    },
-    'flax-seeds': {
-        name: 'Flax Seeds',
-        calories: 534,
-        totalFat: 42,
-        saturatedFat: 3.7,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 30,
-        totalCarbs: 29,
-        fiber: 27,
-        sugars: 1.6,
-        addedSugars: 0,
-        protein: 18,
-        vitaminD: 0,
-        calcium: 255,
-        iron: 5.7,
-        potassium: 813
     },
     // Comprehensive World Seeds Collection
     // Popular Superfood Seeds
@@ -757,42 +739,6 @@ const NUTRITION_DATA = {
         iron: 6.0,
         potassium: 370
     },
-    'fenugreek-seeds': {
-        name: 'Fenugreek Seeds',
-        calories: 323,
-        totalFat: 6.4,
-        saturatedFat: 1.5,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 67,
-        totalCarbs: 58,
-        fiber: 25,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 23,
-        vitaminD: 0,
-        calcium: 176,
-        iron: 34,
-        potassium: 770
-    },
-    'mustard-seeds': {
-        name: 'Mustard Seeds',
-        calories: 508,
-        totalFat: 36,
-        saturatedFat: 1.9,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 13,
-        totalCarbs: 28,
-        fiber: 12,
-        sugars: 7.0,
-        addedSugars: 0,
-        protein: 26,
-        vitaminD: 0,
-        calcium: 521,
-        iron: 9.2,
-        potassium: 738
-    },
 
     // Comprehensive World Nuts Collection
     // Tree Nuts - Common Varieties
@@ -888,6 +834,114 @@ const NUTRITION_DATA = {
     },
     'hazelnuts': {
         name: 'Hazelnuts (Filberts)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnuts-raw': {
+        name: 'Hazelnuts (Raw)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnuts-roasted': {
+        name: 'Hazelnuts (Roasted)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnuts-blanched': {
+        name: 'Hazelnuts (Blanched)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnuts-chopped': {
+        name: 'Hazelnuts (Chopped)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnut-flour': {
+        name: 'Hazelnut Flour (Meal)',
+        calories: 628,
+        totalFat: 61,
+        saturatedFat: 4.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        totalCarbs: 17,
+        fiber: 9.7,
+        sugars: 4.3,
+        addedSugars: 0,
+        protein: 15,
+        vitaminD: 0,
+        calcium: 114,
+        iron: 4.7,
+        potassium: 680
+    },
+    'hazelnut-butter': {
+        name: 'Hazelnut Butter (Pure)',
         calories: 628,
         totalFat: 61,
         saturatedFat: 4.5,
@@ -1345,24 +1399,6 @@ const NUTRITION_DATA = {
         potassium: 1050
     },
     // Dairy and fats for healthy snacks
-    'ghee': {
-        name: 'Ghee (Clarified Butter)',
-        calories: 900,
-        totalFat: 100,
-        saturatedFat: 62,
-        transFat: 3,
-        cholesterol: 256,
-        sodium: 0,
-        totalCarbs: 0,
-        fiber: 0,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 0,
-        vitaminD: 15,
-        calcium: 4,
-        iron: 0,
-        potassium: 5
-    },
     'amul-milk': {
         name: 'Amul Whole Milk',
         calories: 68,
@@ -1419,6 +1455,42 @@ const NUTRITION_DATA = {
     },
     'curd-yogurt': {
         name: 'Curd (Plain Yogurt)',
+        calories: 63,
+        totalFat: 3.3,
+        saturatedFat: 2.1,
+        transFat: 0.1,
+        cholesterol: 13,
+        sodium: 46,
+        totalCarbs: 4.7,
+        fiber: 0,
+        sugars: 4.7,
+        addedSugars: 0,
+        protein: 3.5,
+        vitaminD: 2,
+        calcium: 121,
+        iron: 0.1,
+        potassium: 155
+    },
+    'amul-curd': {
+        name: 'Amul Curd (Commercial)',
+        calories: 63,
+        totalFat: 3.3,
+        saturatedFat: 2.1,
+        transFat: 0.1,
+        cholesterol: 13,
+        sodium: 46,
+        totalCarbs: 4.7,
+        fiber: 0,
+        sugars: 4.7,
+        addedSugars: 0,
+        protein: 3.5,
+        vitaminD: 2,
+        calcium: 121,
+        iron: 0.1,
+        potassium: 155
+    },
+    'milky-mist-curd': {
+        name: 'Milky Mist Curd (Commercial)',
         calories: 63,
         totalFat: 3.3,
         saturatedFat: 2.1,
@@ -1600,8 +1672,98 @@ const NUTRITION_DATA = {
         iron: 11.9,
         potassium: 715
     },
-    'dark-chocolate-70': {
-        name: 'Dark Chocolate 70% Cocoa',
+    'vanhouten-cocoa-powder': {
+        name: 'Van Houten Cocoa Powder (Unsweetened)',
+        calories: 228,
+        totalFat: 14,
+        saturatedFat: 8.1,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 21,
+        totalCarbs: 58,
+        fiber: 37,
+        sugars: 1.8,
+        addedSugars: 0,
+        protein: 20,
+        vitaminD: 0,
+        calcium: 128,
+        iron: 13.9,
+        potassium: 1524
+    },
+    'vanhouten-dutch-cocoa': {
+        name: 'Van Houten Dutch-Process Cocoa',
+        calories: 228,
+        totalFat: 14,
+        saturatedFat: 8.1,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 21,
+        totalCarbs: 58,
+        fiber: 37,
+        sugars: 1.8,
+        addedSugars: 0,
+        protein: 20,
+        vitaminD: 0,
+        calcium: 128,
+        iron: 13.9,
+        potassium: 1524
+    },
+    'vanhouten-drinking-chocolate': {
+        name: 'Van Houten Drinking Chocolate (Sweetened)',
+        calories: 400,
+        totalFat: 8,
+        saturatedFat: 5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 120,
+        totalCarbs: 70,
+        fiber: 8,
+        sugars: 55,
+        addedSugars: 50,
+        protein: 8,
+        vitaminD: 0,
+        calcium: 120,
+        iron: 7,
+        potassium: 900
+    },
+    'vanhouten-milk-chocolate': {
+        name: 'Van Houten Milk Chocolate',
+        calories: 535,
+        totalFat: 30,
+        saturatedFat: 18,
+        transFat: 0,
+        cholesterol: 21,
+        sodium: 79,
+        totalCarbs: 59,
+        fiber: 2,
+        sugars: 52,
+        addedSugars: 50,
+        protein: 8,
+        vitaminD: 0,
+        calcium: 251,
+        iron: 1.0,
+        potassium: 350
+    },
+    'amul-dark-chocolate-55': {
+        name: 'Amul Dark Chocolate 55% (Commercial)',
+        calories: 570,
+        totalFat: 38,
+        saturatedFat: 23,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 8,
+        totalCarbs: 50,
+        fiber: 8,
+        sugars: 45,
+        addedSugars: 40,
+        protein: 6,
+        vitaminD: 0,
+        calcium: 70,
+        iron: 8,
+        potassium: 600
+    },
+    'amul-dark-chocolate-70': {
+        name: 'Amul Dark Chocolate 70% (Commercial)',
         calories: 598,
         totalFat: 43,
         saturatedFat: 25,
@@ -1618,23 +1780,77 @@ const NUTRITION_DATA = {
         iron: 11.9,
         potassium: 715
     },
-    'cocoa-powder': {
-        name: 'Unsweetened Cocoa Powder',
-        calories: 228,
-        totalFat: 14,
-        saturatedFat: 8.1,
+    'amul-dark-chocolate-85': {
+        name: 'Amul Dark Chocolate 85% (Commercial)',
+        calories: 600,
+        totalFat: 46,
+        saturatedFat: 28,
         transFat: 0,
-        cholesterol: 0,
-        sodium: 21,
-        totalCarbs: 58,
-        fiber: 37,
-        sugars: 1.8,
-        addedSugars: 0,
-        protein: 20,
+        cholesterol: 2,
+        sodium: 6,
+        totalCarbs: 30,
+        fiber: 14,
+        sugars: 14,
+        addedSugars: 10,
+        protein: 7,
         vitaminD: 0,
-        calcium: 128,
-        iron: 13.9,
-        potassium: 1524
+        calcium: 80,
+        iron: 12,
+        potassium: 750
+    },
+    'amul-dark-chocolate-90': {
+        name: 'Amul Dark Chocolate 90% (Commercial)',
+        calories: 610,
+        totalFat: 50,
+        saturatedFat: 30,
+        transFat: 0,
+        cholesterol: 2,
+        sodium: 5,
+        totalCarbs: 23,
+        fiber: 15,
+        sugars: 7,
+        addedSugars: 2,
+        protein: 8,
+        vitaminD: 0,
+        calcium: 90,
+        iron: 13,
+        potassium: 800
+    },
+    'dark-chocolate-70': {
+        name: 'Dark Chocolate 70% Cocoa (Pure)',
+        calories: 598,
+        totalFat: 43,
+        saturatedFat: 25,
+        transFat: 0,
+        cholesterol: 2,
+        sodium: 6,
+        totalCarbs: 46,
+        fiber: 11,
+        sugars: 24,
+        addedSugars: 0,
+        protein: 7.8,
+        vitaminD: 0,
+        calcium: 73,
+        iron: 11.9,
+        potassium: 715
+    },
+    'dark-chocolate-70-sweetened': {
+        name: 'Dark Chocolate 70% (Sweetened)',
+        calories: 598,
+        totalFat: 43,
+        saturatedFat: 25,
+        transFat: 0,
+        cholesterol: 2,
+        sodium: 6,
+        totalCarbs: 46,
+        fiber: 11,
+        sugars: 24,
+        addedSugars: 20,
+        protein: 7.8,
+        vitaminD: 0,
+        calcium: 73,
+        iron: 11.9,
+        potassium: 715
     },
     'white-chocolate': {
         name: 'White Chocolate',
@@ -1655,24 +1871,6 @@ const NUTRITION_DATA = {
         potassium: 286
     },
     // Cake and baking ingredients
-    'vanilla-extract': {
-        name: 'Pure Vanilla Extract',
-        calories: 288,
-        totalFat: 0.1,
-        saturatedFat: 0,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 9,
-        totalCarbs: 13,
-        fiber: 0,
-        sugars: 13,
-        addedSugars: 0,
-        protein: 0.1,
-        vitaminD: 0,
-        calcium: 11,
-        iron: 0.1,
-        potassium: 148
-    },
     'baking-powder': {
         name: 'Baking Powder',
         calories: 53,
@@ -1690,24 +1888,6 @@ const NUTRITION_DATA = {
         calcium: 7300,
         iron: 0.4,
         potassium: 170
-    },
-    'baking-soda': {
-        name: 'Baking Soda',
-        calories: 0,
-        totalFat: 0,
-        saturatedFat: 0,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 27360,
-        totalCarbs: 0,
-        fiber: 0,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 0,
-        vitaminD: 0,
-        calcium: 0,
-        iron: 0,
-        potassium: 0
     },
     'eggs': {
         name: 'Whole Eggs',
@@ -1968,7 +2148,7 @@ const NUTRITION_DATA = {
         potassium: 1524
     },
     'dark-chocolate': {
-        name: 'Dark Chocolate (70-85%)',
+        name: 'Dark Chocolate (70-85% Pure)',
         calories: 598,
         totalFat: 43,
         saturatedFat: 25,
@@ -1978,7 +2158,7 @@ const NUTRITION_DATA = {
         totalCarbs: 46,
         fiber: 11,
         sugars: 24,
-        addedSugars: 23,
+        addedSugars: 0,
         protein: 7.9,
         vitaminD: 0,
         calcium: 73,
@@ -2004,6 +2184,42 @@ const NUTRITION_DATA = {
         calcium: 330,
         iron: 25,
         potassium: 1950
+    },
+    'chili-flakes': {
+        name: 'Chilli Flakes (Crushed Red Pepper)',
+        calories: 282,
+        totalFat: 14,
+        saturatedFat: 2.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 91,
+        totalCarbs: 50,
+        fiber: 28,
+        sugars: 8.8,
+        addedSugars: 0,
+        protein: 12,
+        vitaminD: 0,
+        calcium: 330,
+        iron: 25,
+        potassium: 1950
+    },
+    'oregano-dried': {
+        name: 'Oregano (Dried)',
+        calories: 265,
+        totalFat: 4.3,
+        saturatedFat: 1.6,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 25,
+        totalCarbs: 69,
+        fiber: 42.5,
+        sugars: 4.1,
+        addedSugars: 0,
+        protein: 9,
+        vitaminD: 0,
+        calcium: 1597,
+        iron: 36.8,
+        potassium: 1522
     },
     'coriander-seeds': {
         name: 'Coriander Seeds',
@@ -2112,24 +2328,6 @@ const NUTRITION_DATA = {
         calcium: 690,
         iron: 39,
         potassium: 97
-    },
-    'curry-leaves': {
-        name: 'Curry Leaves (dried)',
-        calories: 108,
-        totalFat: 1.0,
-        saturatedFat: 0.3,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 16,
-        totalCarbs: 19,
-        fiber: 6.4,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 6.1,
-        vitaminD: 0,
-        calcium: 830,
-        iron: 3.1,
-        potassium: 290
     },
 
     // Legumes for Hummus & Protein
@@ -2244,7 +2442,25 @@ const NUTRITION_DATA = {
         potassium: 77
     },
     'cranberries-dried': {
-        name: 'Dried Cranberries',
+        name: 'Dried Cranberries (Unsweetened)',
+        calories: 308,
+        totalFat: 1.4,
+        saturatedFat: 0.1,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 5,
+        totalCarbs: 83,
+        fiber: 5.3,
+        sugars: 65,
+        addedSugars: 0,
+        protein: 0.1,
+        vitaminD: 0,
+        calcium: 7,
+        iron: 0.4,
+        potassium: 49
+    },
+    'cranberries-dried-sweetened': {
+        name: 'Dried Cranberries (Sweetened)',
         calories: 308,
         totalFat: 1.4,
         saturatedFat: 0.1,
@@ -2260,6 +2476,42 @@ const NUTRITION_DATA = {
         calcium: 7,
         iron: 0.4,
         potassium: 49
+    },
+    'blueberries-dried': {
+        name: 'Dried Blueberries (Unsweetened)',
+        calories: 317,
+        totalFat: 2.7,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 3,
+        totalCarbs: 80,
+        fiber: 5.5,
+        sugars: 65,
+        addedSugars: 0,
+        protein: 2,
+        vitaminD: 0,
+        calcium: 20,
+        iron: 0.9,
+        potassium: 275
+    },
+    'blueberries-dried-sweetened': {
+        name: 'Dried Blueberries (Sweetened)',
+        calories: 317,
+        totalFat: 2.7,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 3,
+        totalCarbs: 80,
+        fiber: 5.5,
+        sugars: 65,
+        addedSugars: 25,
+        protein: 2,
+        vitaminD: 0,
+        calcium: 20,
+        iron: 0.9,
+        potassium: 275
     },
     'black-raisins': {
         name: 'Black Raisins (Kala Manuka)',
@@ -2298,24 +2550,6 @@ const NUTRITION_DATA = {
         calcium: 183,
         iron: 41.4,
         potassium: 2525
-    },
-    'salt': {
-        name: 'Table Salt',
-        calories: 0,
-        totalFat: 0,
-        saturatedFat: 0,
-        transFat: 0,
-        cholesterol: 0,
-        sodium: 38758,
-        totalCarbs: 0,
-        fiber: 0,
-        sugars: 0,
-        addedSugars: 0,
-        protein: 0,
-        vitaminD: 0,
-        calcium: 24,
-        iron: 0.3,
-        potassium: 8
     },
     'cinnamon-powder': {
         name: 'Cinnamon Powder (Dalchini)',
@@ -2501,6 +2735,42 @@ const NUTRITION_DATA = {
         iron: 3.2,
         potassium: 290
     },
+    'haldiram-sev': {
+        name: 'Haldiram Sev (Commercial)',
+        calories: 463,
+        totalFat: 26,
+        saturatedFat: 9,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 1350,
+        totalCarbs: 50,
+        fiber: 6,
+        sugars: 3,
+        addedSugars: 1,
+        protein: 14,
+        vitaminD: 0,
+        calcium: 38,
+        iron: 3.2,
+        potassium: 290
+    },
+    'garden-sev': {
+        name: 'Garden Sev (Commercial)',
+        calories: 463,
+        totalFat: 26,
+        saturatedFat: 9,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 1350,
+        totalCarbs: 50,
+        fiber: 6,
+        sugars: 3,
+        addedSugars: 1,
+        protein: 14,
+        vitaminD: 0,
+        calcium: 38,
+        iron: 3.2,
+        potassium: 290
+    },
     'chana-dal': {
         name: 'Chana Dal (Split Bengal Gram)',
         calories: 335,
@@ -2611,6 +2881,158 @@ const NUTRITION_DATA = {
         iron: 4.9,
         potassium: 846
     },
+    'sattu': {
+        name: 'Sattu (Roasted Chickpea Flour)',
+        calories: 355,
+        totalFat: 4.5,
+        saturatedFat: 0.5,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 24,
+        totalCarbs: 62,
+        fiber: 15,
+        sugars: 10,
+        addedSugars: 0,
+        protein: 18,
+        vitaminD: 0,
+        calcium: 60,
+        iron: 4.5,
+        potassium: 846
+    },
+
+    // Nut & Seed Butters
+    'peanut-butter': {
+        name: 'Peanut Butter (Natural)',
+        calories: 588,
+        totalFat: 50,
+        saturatedFat: 10,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 17,
+        totalCarbs: 20,
+        fiber: 6,
+        sugars: 2.4,
+        addedSugars: 0,
+        protein: 25,
+        vitaminD: 0,
+        calcium: 43,
+        iron: 1.9,
+        potassium: 649
+    },
+    'almond-butter': {
+        name: 'Almond Butter',
+        calories: 614,
+        totalFat: 56,
+        saturatedFat: 4.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 7,
+        totalCarbs: 18,
+        fiber: 10,
+        sugars: 4.4,
+        addedSugars: 0,
+        protein: 21,
+        vitaminD: 0,
+        calcium: 347,
+        iron: 3.9,
+        potassium: 748
+    },
+
+    // Breakfast Cereals
+    'rice-crisps': {
+        name: 'Rice Crisps (Puffed Rice)',
+        calories: 387,
+        totalFat: 1,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 2,
+        totalCarbs: 87,
+        fiber: 2,
+        sugars: 0.3,
+        addedSugars: 0,
+        protein: 7,
+        vitaminD: 0,
+        calcium: 11,
+        iron: 0.8,
+        potassium: 95
+    },
+
+    // Dried Fruits
+    'dried-blueberry': {
+        name: 'Dried Blueberries (Unsweetened)',
+        calories: 317,
+        totalFat: 2.7,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 3,
+        totalCarbs: 80,
+        fiber: 5.5,
+        sugars: 65,
+        addedSugars: 0,
+        protein: 2,
+        vitaminD: 0,
+        calcium: 20,
+        iron: 0.9,
+        potassium: 275
+    },
+    'dried-blueberry-sweetened': {
+        name: 'Dried Blueberries (Sweetened)',
+        calories: 317,
+        totalFat: 2.7,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 3,
+        totalCarbs: 80,
+        fiber: 5.5,
+        sugars: 65,
+        addedSugars: 25,
+        protein: 2,
+        vitaminD: 0,
+        calcium: 20,
+        iron: 0.9,
+        potassium: 275
+    },
+
+    // Beverages
+    'orange-juice': {
+        name: 'Orange Juice (Fresh)',
+        calories: 45,
+        totalFat: 0.2,
+        saturatedFat: 0,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 1,
+        totalCarbs: 10.4,
+        fiber: 0.2,
+        sugars: 8.4,
+        addedSugars: 0,
+        protein: 0.7,
+        vitaminD: 0,
+        calcium: 11,
+        iron: 0.2,
+        potassium: 200
+    },
+    'instant-coffee': {
+        name: 'Instant Coffee (Powder)',
+        calories: 94,
+        totalFat: 0.5,
+        saturatedFat: 0.2,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 76,
+        totalCarbs: 17,
+        fiber: 0,
+        sugars: 0,
+        addedSugars: 0,
+        protein: 12,
+        vitaminD: 0,
+        calcium: 141,
+        iron: 4.4,
+        potassium: 3535
+    },
 
     // Basic ingredients
     'salt': {
@@ -2695,6 +3117,10 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
     },
     'jowar-sorghum': {
         'cup': 115
+    },
+    'jowar-flour': {
+        'cup': 120,
+        'tablespoon': 7.5
     },
     'amaranth-grain': {
         'cup': 195
@@ -3108,6 +3534,38 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
         'cup': 92,
         'tablespoon': 5.8
     },
+    'sattu': {
+        'cup': 95,
+        'tablespoon': 6
+    },
+    'peanut-butter': {
+        'cup': 250,
+        'tablespoon': 16
+    },
+    'almond-butter': {
+        'cup': 250,
+        'tablespoon': 16
+    },
+    'rice-crisps': {
+        'cup': 14,
+        'tablespoon': 3.5
+    },
+    'dried-blueberry': {
+        'cup': 140,
+        'tablespoon': 8.8
+    },
+    'orange-juice': {
+        'cup': 248,
+        'tablespoon': 15.5
+    },
+    'instant-coffee': {
+        'teaspoon': 1.8,
+        'tablespoon': 5.4
+    },
+    'active-dry-yeast': {
+        'tablespoon': 9.5,
+        'teaspoon': 3.2
+    },
     'ghee': {
         'cup': 205,
         'tablespoon': 13,
@@ -3129,6 +3587,14 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
         'cup': 245,
         'tablespoon': 15.3
     },
+    'amul-curd': {
+        'cup': 245,
+        'tablespoon': 15.3
+    },
+    'milky-mist-curd': {
+        'cup': 245,
+        'tablespoon': 15.3
+    },
     'white-sugar': {
         'cup': 200,
         'tablespoon': 12.5
@@ -3146,6 +3612,38 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
         'tablespoon': 20
     },
     'vanhouten-dark-chocolate': {
+        'cup': 150,  // chopped
+        'piece': 5   // small square
+    },
+    'vanhouten-cocoa-powder': {
+        'tablespoon': 5,
+        'teaspoon': 2
+    },
+    'vanhouten-dutch-cocoa': {
+        'tablespoon': 5,
+        'teaspoon': 2
+    },
+    'vanhouten-drinking-chocolate': {
+        'tablespoon': 10,
+        'teaspoon': 3.3
+    },
+    'vanhouten-milk-chocolate': {
+        'cup': 150,  // chopped
+        'piece': 5   // small square
+    },
+    'amul-dark-chocolate-55': {
+        'cup': 150,  // chopped
+        'piece': 5   // small square
+    },
+    'amul-dark-chocolate-70': {
+        'cup': 150,  // chopped
+        'piece': 5   // small square
+    },
+    'amul-dark-chocolate-85': {
+        'cup': 150,  // chopped
+        'piece': 5   // small square
+    },
+    'amul-dark-chocolate-90': {
         'cup': 150,  // chopped
         'piece': 5   // small square
     },
@@ -3192,6 +3690,14 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
         'tablespoon': 5.4,
         'teaspoon': 1.8
     },
+    'oregano-dried': {
+        'tablespoon': 3,
+        'teaspoon': 1
+    },
+    'chili-flakes': {
+        'tablespoon': 5.3,
+        'teaspoon': 1.8
+    },
     'garlic': {
         'clove': 3,  // minced
         'tablespoon': 8.5
@@ -3220,9 +3726,74 @@ const INGREDIENT_SPECIFIC_CONVERSIONS = {
         'cup': 45,   // as measured for garnish
         'tablespoon': 2.8
     },
+    'haldiram-sev': {
+        'cup': 45,   // as measured for garnish
+        'tablespoon': 2.8
+    },
+    'garden-sev': {
+        'cup': 45,   // as measured for garnish
+        'tablespoon': 2.8
+    },
     'chana-dal': {
         'cup': 196,  // dry weight
         'tablespoon': 12.3
+    },
+    'almond-butter': {
+        'cup': 250,
+        'tablespoon': 16
+    },
+    'peanut-butter': {
+        'cup': 258,
+        'tablespoon': 16
+    },
+    'hazelnuts-raw': {
+        'cup': 135,
+        'tablespoon': 8.5
+    },
+    'hazelnuts-roasted': {
+        'cup': 135,
+        'tablespoon': 8.5
+    },
+    'hazelnuts-blanched': {
+        'cup': 135,
+        'tablespoon': 8.5
+    },
+    'hazelnuts-chopped': {
+        'cup': 135,
+        'tablespoon': 8.5
+    },
+    'hazelnut-flour': {
+        'cup': 96,
+        'tablespoon': 6
+    },
+    'hazelnut-butter': {
+        'cup': 250,
+        'tablespoon': 16
+    },
+    'blueberries-dried': {
+        'cup': 140,
+        'tablespoon': 8.8
+    },
+    'sattu': {
+        'cup': 120,
+        'tablespoon': 7.5
+    },
+    'yeast-active-dry': {
+        'tablespoon': 8,
+        'teaspoon': 2.7,
+        'packet': 7  // standard 7g packet
+    },
+    'orange-juice': {
+        'cup': 248,
+        'tablespoon': 15.5
+    },
+    'instant-coffee': {
+        'tablespoon': 6,
+        'teaspoon': 2
+    },
+    'rice-crisps': {
+        'cup': 14,  // puffed, very light
+        'tablespoon': 0.9
     }
 };
 

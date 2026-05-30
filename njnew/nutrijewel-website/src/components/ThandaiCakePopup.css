@@ -1,0 +1,401 @@
+/* Thandai Popup Overlay */
+.thandai-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 10, 20, 0.72);
+  backdrop-filter: blur(6px);
+  z-index: 9998;
+  animation: thandaiFadeIn 0.3s ease-in-out;
+}
+
+/* Thandai Popup Container */
+.thandai-popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  max-width: 560px;
+  width: 90%;
+  max-height: 92vh;
+  background: linear-gradient(160deg, #fdf6ee 0%, #faf0e6 60%, #f5e8d6 100%);
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px rgba(181, 131, 110, 0.4),
+    0 0 0 3px rgba(125, 35, 73, 0.15),
+    0 24px 60px rgba(30, 10, 20, 0.35);
+  overflow-y: auto;
+  overflow-x: hidden;
+  animation: thandaiSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Header Badge */
+.thandai-popup-header-badge {
+  background: linear-gradient(135deg, #7d2349 0%, #a8365b 50%, #7d2349 100%);
+  color: #fdf0e0;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 22px 22px 0 0;
+}
+
+/* Close Button */
+.thandai-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(253, 246, 238, 0.95);
+  border: 1.5px solid rgba(181, 131, 110, 0.6);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  color: #7d2349;
+}
+
+.thandai-popup-close:hover {
+  background: #7d2349;
+  color: #fdf0e0;
+  border-color: #7d2349;
+  transform: rotate(90deg);
+}
+
+/* Popup Content */
+.thandai-popup-content {
+  padding: 0;
+}
+
+/* Image Wrapper */
+.thandai-popup-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.thandai-popup-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Info Section */
+.thandai-popup-info {
+  padding: 1.5rem 1.5rem 1rem;
+}
+
+.thandai-popup-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #c06c84;
+  margin: 0 0 1rem 0;
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+}
+
+.thandai-popup-description {
+  font-size: 1.05rem;
+  color: #2C1810;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Features List */
+.thandai-popup-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.thandai-feature {
+  background: linear-gradient(135deg, #fff 0%, #fef5e7 100%);
+  border: 2px solid #ff8c00;
+  color: #2C1810;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.thandai-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 140, 0, 0.2);
+}
+
+/* Price Grid Section */
+.thandai-popup-price-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  background: rgba(125, 35, 73, 0.05);
+  border: 1.5px solid rgba(125, 35, 73, 0.15);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+}
+
+.thandai-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.thandai-weight-label {
+  background: #7d2349;
+  color: #fdf0e0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  min-width: 42px;
+  text-align: center;
+}
+
+.thandai-arrow {
+  color: #b5836e;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.thandai-original-price {
+  font-size: 1.35rem;
+  color: #b0a098;
+  text-decoration: line-through;
+  font-weight: 600;
+}
+
+.thandai-special-price {
+  font-size: 1.75rem;
+  color: #a8365b;
+  font-weight: 800;
+  font-family: 'Playfair Display', serif;
+}
+
+.thandai-badge-wrap {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.thandai-badge {
+  background: linear-gradient(135deg, #b5836e 0%, #c8960c 100%);
+  color: #fff;
+  padding: 0.45rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(200, 150, 12, 0.3);
+  animation: subtlePulse 2.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Actions Section */
+.thandai-popup-actions {
+  padding: 0 1.5rem 1.5rem;
+  text-align: center;
+}
+
+/* Buy Now Button */
+.thandai-popup-buy-btn {
+  width: 100%;
+  padding: 1.125rem 2rem;
+  background: linear-gradient(135deg, #7d2349 0%, #a8365b 60%, #7d2349 100%);
+  color: #fdf0e0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(125, 35, 73, 0.35);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.thandai-popup-buy-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(125, 35, 73, 0.45);
+  background: linear-gradient(135deg, #a8365b 0%, #7d2349 100%);
+}
+
+.thandai-popup-buy-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Delivery Note */
+.thandai-popup-delivery-note {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #7d5a4f;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes thandaiFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes thandaiSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .thandai-popup-container {
+    width: 95%;
+    max-width: 500px;
+    border-radius: 20px;
+    max-height: 95vh;
+  }
+
+  .thandai-popup-header-badge {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+
+  .thandai-popup-info {
+    padding: 1.25rem 1rem 0.75rem;
+  }
+
+  .thandai-popup-title {
+    font-size: 1.65rem;
+  }
+
+  .thandai-popup-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .thandai-popup-features {
+    gap: 0.5rem;
+  }
+
+  .thandai-feature {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .thandai-original-price {
+    font-size: 1.5rem;
+  }
+
+  .thandai-special-price {
+    font-size: 2rem;
+  }
+
+  .thandai-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .thandai-popup-actions {
+    padding: 0 1rem 1.25rem;
+  }
+
+  .thandai-popup-buy-btn {
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .thandai-popup-delivery-note {
+    font-size: 0.9rem;
+  }
+
+  .thandai-popup-close {
+    width: 38px;
+    height: 38px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thandai-popup-container {
+    width: 96%;
+  }
+
+  .thandai-popup-header-badge {
+    font-size: 0.9rem;
+    padding: 0.65rem;
+  }
+
+  .thandai-popup-info {
+    padding: 1rem 0.875rem 0.5rem;
+  }
+
+  .thandai-popup-title {
+    font-size: 1.5rem;
+  }
+
+  .thandai-popup-description {
+    font-size: 0.875rem;
+  }
+
+  .thandai-feature {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .thandai-original-price {
+    font-size: 1.35rem;
+  }
+
+  .thandai-special-price {
+    font-size: 1.75rem;
+  }
+
+  .thandai-popup-buy-btn {
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+  }
+
+  .thandai-popup-delivery-note {
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+  }
+}
+
+/* Smooth scroll lock when popup is open */
+body.thandai-popup-open {
+  overflow: hidden;
+}

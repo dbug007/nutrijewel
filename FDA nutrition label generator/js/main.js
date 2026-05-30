@@ -60,6 +60,7 @@ function addIngredientInput() {
     ingredientItem.innerHTML = `
         <h4>Ingredient ${index + 1}</h4>
         <div class="ingredient-controls">
+            <input type="text" class="ingredient-search" placeholder="🔍 Search ingredients..." data-index="${index}">
             <select class="ingredient-select" data-index="${index}" required>
                 <option value="">Select ingredient...</option>
                 ${getIngredientOptions()}
@@ -81,9 +82,24 @@ function addIngredientInput() {
     ingredientsList.appendChild(ingredientItem);
     
     // Add event listeners for this ingredient
+    const searchInput = ingredientItem.querySelector('.ingredient-search');
     const select = ingredientItem.querySelector('.ingredient-select');
     const amount = ingredientItem.querySelector('.ingredient-amount');
     const unit = ingredientItem.querySelector('.ingredient-unit');
+    
+    // Search filter
+    searchInput.addEventListener('input', function(e) {
+        filterIngredientOptions(select, e.target.value);
+    });
+    
+    // Focus on select when clicking search
+    searchInput.addEventListener('focus', function() {
+        select.size = 8; // Show 8 options at once
+    });
+    
+    searchInput.addEventListener('blur', function() {
+        setTimeout(() => select.size = 1, 200); // Delay to allow selection
+    });
     
     [select, amount, unit].forEach(element => {
         element.addEventListener('change', updateIngredientPreview);
@@ -95,6 +111,27 @@ function getIngredientOptions() {
     return ingredients.map(ingredient => 
         `<option value="${ingredient.id}">${ingredient.name}</option>`
     ).join('');
+}
+
+function filterIngredientOptions(selectElement, searchTerm) {
+    const options = Array.from(selectElement.options);
+    const searchLower = searchTerm.toLowerCase().trim();
+    
+    options.forEach((option, index) => {
+        if (index === 0) return; // Keep the "Select ingredient..." option
+        
+        const text = option.textContent.toLowerCase();
+        const matches = searchLower === '' || text.includes(searchLower);
+        
+        option.style.display = matches ? '' : 'none';
+    });
+    
+    // Auto-select if only one match
+    const visibleOptions = options.filter((opt, idx) => idx > 0 && opt.style.display !== 'none');
+    if (visibleOptions.length === 1 && searchTerm.length > 2) {
+        selectElement.value = visibleOptions[0].value;
+        selectElement.dispatchEvent(new Event('change'));
+    }
 }
 
 function removeIngredient(index) {

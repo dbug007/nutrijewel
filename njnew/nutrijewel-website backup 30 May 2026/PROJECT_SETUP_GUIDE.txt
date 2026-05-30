@@ -1,0 +1,290 @@
+===============================================================================
+                        NUTRIJEWEL WEBSITE - COMPLETE PROJECT SETUP GUIDE
+===============================================================================
+
+PROJECT OVERVIEW
+================
+NutriJewel E-commerce Website - A modern, responsive React.js website for 
+India's finest handcrafted, guilt-free snacks and sweets brand.
+
+BUSINESS REQUIREMENTS
+=====================
+- Brand: NutriJewel - Healthy snacking brand
+- Founder: Dt. Ruchika Bachwani
+- Contact: +91 996-063-7656 (WhatsApp ordering)
+- Email: hello@nutrijewel.com
+- FSSAI: 21524037004182
+- Tagline: "Nourish with Intention. Snack with Joy."
+
+TECHNICAL SPECIFICATIONS
+========================
+- Framework: React.js (Create React App)
+- Styling: Plain CSS with CSS Variables (converted from Tailwind CSS)
+- Icons: Lucide React
+- Fonts: Playfair Display (serif), Inter (sans-serif)
+- Port: 3366 (custom port requirement)
+- Node.js: Required
+- NPM: Package manager
+
+BRAND COLORS SYSTEM
+===================
+Primary Green: #93B559     (Main brand color)
+Earthy Olive: #6D8A3C      (Secondary green)
+Organic Cream: #FAF9F6     (Background/light)
+Natural Charcoal: #2F2F2F  (Dark text)
+Muted Grey: #6B6B6B        (Secondary text)
+Mint Pastel: #D1E8A7       (Accent light)
+Golden Beige: #DCC99C      (Accent warm)
+
+DIRECTORY STRUCTURE
+===================
+nutrijewel-website/
+├── package.json               (Dependencies and scripts)
+├── postcss.config.js         (PostCSS configuration)
+├── tailwind.config.js        (Tailwind config - legacy)
+├── README.md                  (Project documentation)
+├── PROJECT_SETUP_GUIDE.txt   (This file)
+├── public/
+│   ├── index.html            (Main HTML template)
+│   ├── favicon.ico           (Site icon)
+│   ├── manifest.json         (PWA config)
+│   └── assets/
+│       └── products/         (Product images directory)
+└── src/
+    ├── App.js                (Main application component)
+    ├── index.js              (React entry point)
+    ├── index.css             (Global styles + brand colors)
+    ├── App.css               (App-specific styles)
+    ├── components/           (All React components)
+    │   ├── Navbar.js         (Navigation component)
+    │   ├── Navbar.css        (Navbar styles - CONVERTED)
+    │   ├── HeroSection.js    (Hero/banner component)
+    │   ├── AboutSection.js   (About company section)
+    │   ├── TopSellers.js     (Product showcase)
+    │   ├── MissionVision.js  (Company mission/vision)
+    │   ├── TestimonialsSection.js (Customer reviews)
+    │   └── Footer.js         (Site footer)
+    └── data/
+        ├── products.js       (Complete product catalog)
+        └── images/           (Local image assets)
+
+COMPLETE SETUP INSTRUCTIONS
+============================
+
+1. WORKSPACE PREPARATION
+   - Navigate to your desired workspace directory
+   - Ensure the nutrijewel-website folder exists with all files
+   - Verify Node.js and npm are installed
+
+2. DEPENDENCY INSTALLATION
+   cd nutrijewel-website
+   npm install
+
+3. START DEVELOPMENT SERVER
+   PORT=3366 npm start
+   
+   Server will run on: http://localhost:3366
+
+4. VERIFY INSTALLATION
+   - Check browser opens automatically
+   - Verify Navbar displays correctly
+   - Test WhatsApp integration button
+   - Confirm responsive design works
+
+PACKAGE.JSON DEPENDENCIES
+==========================
+{
+  "name": "nutrijewel-website",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "lucide-react": "^0.263.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  }
+}
+
+COMPONENT IMPLEMENTATION STATUS
+===============================
+
+✅ COMPLETED COMPONENTS:
+- src/App.js (Main app structure)
+- src/components/Navbar.js (Full implementation with CSS)
+- src/components/Navbar.css (Complete styling)
+- src/data/products.js (16 products with full details)
+- src/index.css (Global styles with brand colors)
+
+🔄 COMPONENTS NEEDING CSS CONVERSION:
+- src/components/HeroSection.js (Logic complete, needs CSS file)
+- src/components/AboutSection.js (Logic complete, needs CSS file)
+- src/components/TopSellers.js (Logic complete, needs CSS file)
+- src/components/MissionVision.js (Logic complete, needs CSS file)
+- src/components/TestimonialsSection.js (Logic complete, needs CSS file)
+- src/components/Footer.js (Logic complete, needs CSS file)
+
+CURRENT APP.JS STATE
+=====================
+Currently simplified version with only Navbar active. Full version available
+but commented out pending CSS conversion completion.
+
+PRODUCT CATALOG DETAILS
+========================
+Total Products: 16 items
+Categories: Healthy snacks, granola, energy bites, nuts, seeds
+
+Sample Products:
+1. Amrit Bites - ₹299 (Energy balls with dates, nuts, seeds)
+2. Granola Mix - ₹449 (Oats, nuts, honey, dried fruits)
+3. Bliss Bites - ₹349 (Coconut energy balls)
+4. Trail Mix Supreme - ₹399 (Premium nuts and dried fruits)
+... (12 more products with full details)
+
+Each product includes:
+- Name, price, description
+- Key ingredients
+- Health benefits
+- Allergen information
+- Weight/serving size
+
+WHATSAPP INTEGRATION
+====================
+Phone: +91 996-063-7656
+Pre-filled message format: "Hi! I'm interested in ordering [Product Name] from NutriJewel."
+Implementation: Direct WhatsApp Web/App link opening
+
+CSS CONVERSION NOTES
+=====================
+Original: Tailwind CSS v4+ (caused PostCSS compatibility issues)
+Current: Plain CSS with CSS custom properties
+
+Brand colors implemented as CSS variables in index.css:
+:root {
+  --primary-green: #93B559;
+  --earthy-olive: #6D8A3C;
+  --organic-cream: #FAF9F6;
+  --natural-charcoal: #2F2F2F;
+  --muted-grey: #6B6B6B;
+  --mint-pastel: #D1E8A7;
+  --golden-beige: #DCC99C;
+}
+
+RESPONSIVE DESIGN BREAKPOINTS
+=============================
+Mobile: < 768px
+Tablet: 768px - 1024px
+Desktop: > 1024px
+
+All components designed mobile-first with responsive breakpoints.
+
+FONT INTEGRATION
+================
+Google Fonts imported in index.css:
+- Playfair Display: Headings and brand text
+- Inter: Body text and general content
+
+DEPLOYMENT OPTIONS
+==================
+1. Development: PORT=3366 npm start
+2. Production Build: npm run build
+3. Hosting Options:
+   - Vercel (recommended)
+   - Netlify
+   - GitHub Pages
+   - Any static hosting service
+
+TROUBLESHOOTING COMMON ISSUES
+=============================
+
+1. PORT ISSUES:
+   - Ensure port 3366 is not in use
+   - Use: lsof -ti:3366 to check
+   - Kill process: kill -9 $(lsof -ti:3366)
+
+2. DEPENDENCY ISSUES:
+   - Clear npm cache: npm cache clean --force
+   - Delete node_modules and package-lock.json
+   - Reinstall: npm install
+
+3. CSS NOT LOADING:
+   - Check import statements in components
+   - Verify CSS file paths are correct
+   - Ensure CSS files exist for all components
+
+4. WHATSAPP INTEGRATION:
+   - Test on mobile devices for best experience
+   - Verify phone number format: +91 996-063-7656
+   - Check URL encoding for special characters
+
+IMMEDIATE NEXT STEPS
+====================
+
+1. PRIORITY 1 - START SERVER:
+   cd nutrijewel-website
+   PORT=3366 npm start
+
+2. PRIORITY 2 - COMPLETE CSS CONVERSION:
+   Create CSS files for remaining 5 components:
+   - HeroSection.css
+   - AboutSection.css
+   - TopSellers.css
+   - MissionVision.css
+   - TestimonialsSection.css
+   - Footer.css
+
+3. PRIORITY 3 - RESTORE FULL APP:
+   Uncomment all component imports in App.js
+
+4. PRIORITY 4 - TESTING:
+   - Test all components render
+   - Verify responsive design
+   - Test WhatsApp integration
+   - Check product displays
+
+DEVELOPMENT WORKFLOW
+====================
+
+1. Component Development:
+   - Create .js component file
+   - Implement React logic and JSX
+   - Create corresponding .css file
+   - Import CSS in component
+   - Test individual component
+
+2. Integration:
+   - Import component in App.js
+   - Test full page integration
+   - Verify responsive behavior
+   - Check cross-browser compatibility
+
+3. Deployment:
+   - Run npm run build
+   - Test production build
+   - Deploy to chosen platform
+   - Verify live site functionality
+
+CONTACT & SUPPORT
+=================
+Project Context: NutriJewel E-commerce Website
+Framework: React.js with Plain CSS
+Port: 3366
+Status: 80% Complete (CSS conversion pending)
+
+Key Files to Monitor:
+- src/App.js (main app structure)
+- src/index.css (global styles)
+- src/components/*.js (component logic)
+- src/data/products.js (product catalog)
+
+===============================================================================
+                              END OF SETUP GUIDE
+===============================================================================
+
+Last Updated: July 28, 2025
+Project Status: Ready for CSS completion and deployment
+Required Action: Complete CSS conversion for remaining 5 components
