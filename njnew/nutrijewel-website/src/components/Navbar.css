@@ -83,7 +83,7 @@
   width: 0;
   height: 2px;
   background-color: var(--nj-green);
-  transition: width 0.3s ease;
+  transition: width 0.35s var(--ease-entrance);
 }
 
 .navbar-link:hover::after {
@@ -126,7 +126,7 @@
   width: 0;
   height: 2px;
   background-color: var(--nj-green);
-  transition: width 0.3s ease;
+  transition: width 0.35s var(--ease-entrance);
 }
 
 .navbar-dropdown:hover .navbar-dropdown-toggle::after {
@@ -147,7 +147,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all 0.3s ease;
+  transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-entrance), visibility 0.3s;
   overflow: hidden;
 }
 
@@ -164,7 +164,7 @@
   text-decoration: none;
   padding: 14px 18px;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth), padding-left 0.3s var(--ease-smooth);
   border-bottom: 1px solid rgba(147, 181, 89, 0.08);
   background: none;
   border-left: none;
@@ -246,7 +246,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
   text-decoration: none;
 }
 
@@ -272,7 +272,7 @@
   padding: 8px;
   color: var(--nj-charcoal);
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
   position: relative;
   z-index: 1001;
 }
@@ -294,7 +294,7 @@
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s var(--ease-smooth), visibility 0.3s;
 }
 
 .navbar-mobile-overlay.active {
@@ -313,7 +313,7 @@
   background: var(--nj-cream);
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.35s var(--ease-entrance);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -345,7 +345,7 @@
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
   background: none;
   border: none;
   width: 100%;
@@ -376,7 +376,7 @@
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 400;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
   background: none;
   border: none;
   width: 100%;

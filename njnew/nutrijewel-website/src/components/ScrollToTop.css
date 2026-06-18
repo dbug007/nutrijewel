@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s var(--ease-smooth), opacity 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
   z-index: 1000;
   box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
   opacity: 0.9;

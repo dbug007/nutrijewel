@@ -1,374 +1,405 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { ShoppingBag, Phone, X, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingBag, Phone, X, Star, ChevronLeft, ChevronRight, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { products, categories } from '../data/products';
+import { products } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
+import { imageCrossfade, imageFadeTransition, smoothEase } from '../components/motionPresets';
 import './ProductsPage.css';
+
+const CATEGORIES = [
+  { id: 'cakes',              name: 'Cakes',              emoji: '🎂' },
+  { id: 'traditional-sweets', name: 'Traditional Sweets', emoji: '🍡' },
+  { id: 'healthy-snacks',     name: 'Healthy Snacks',     emoji: '🌿' },
+  { id: 'energy-bars',        name: 'Energy Bars',        emoji: '⚡' },
+  { id: 'dips-spreads',       name: 'Dips & Spreads',     emoji: '🥑' },
+];
+
+const SORT_LABELS = {
+  default:       'Sort: Default',
+  'price-asc':   'Price: Low → High',
+  'price-desc':  'Price: High → Low',
+  'best-sellers':'Best Sellers First',
+};
 
 const ProductsPage = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
-  const [selectedCategory, setSelectedCategory] = useState('All Products');
+  const [sortBy, setSortBy] = useState('default');
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('cakes');
+  const [sortOpen, setSortOpen] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
   const [imageIndexes, setImageIndexes] = useState({});
   const [activeProduct, setActiveProduct] = useState(null);
   const [modalProductDirection, setModalProductDirection] = useState(1);
   const [activeModalImageIndex, setActiveModalImageIndex] = useState(0);
+  const [modalCategoryProducts, setModalCategoryProducts] = useState([]);
   const reduceMotion = useReducedMotion();
 
-  const slideVariants = {
-    enter: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? 24 : -24),
-      opacity: 1
-    }),
-    center: { x: 0, opacity: 1 },
-    exit: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? -24 : 24),
-      opacity: 1
-    })
-  };
-
   const modalSlideVariants = {
-    enter: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? 64 : -64),
-      opacity: 1
-    }),
+    enter: (direction) => ({ x: reduceMotion ? 0 : (direction > 0 ? 64 : -64), opacity: 1 }),
     center: { x: 0, opacity: 1 },
-    exit: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? -64 : 64),
-      opacity: 1
-    })
+    exit:  (direction) => ({ x: reduceMotion ? 0 : (direction > 0 ? -64 : 64), opacity: 1 }),
   };
 
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 767;
       setIsMobile(mobile);
-      if (!mobile) {
-        setActiveProduct(null);
-      }
+      if (!mobile) setActiveProduct(null);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const getLowestVariant = (product) => {
-    if (!product.variants || product.variants.length === 0) {
-      return null;
-    }
-
-    return product.variants.reduce((lowest, variant) => {
-      return variant.price < lowest.price ? variant : lowest;
-    }, product.variants[0]);
+    if (!product.variants || product.variants.length === 0) return null;
+    return product.variants.reduce((lowest, v) => v.price < lowest.price ? v : lowest, product.variants[0]);
   };
 
-  // Initialize default variants for products that have variants
   useEffect(() => {
     const initialVariants = {};
     products.forEach(product => {
-      if (product.variants && product.variants.length > 0) {
+      if (product.variants && product.variants.length > 0)
         initialVariants[product.id] = getLowestVariant(product);
-      }
     });
     setSelectedVariants(initialVariants);
   }, []);
 
   useEffect(() => {
-    const initialImageIndexes = {};
-    products.forEach(product => {
-      initialImageIndexes[product.id] = 0;
-    });
-    setImageIndexes(initialImageIndexes);
-
-    const slideTimer = setInterval(() => {
+    const init = {};
+    products.forEach(p => { init[p.id] = 0; });
+    setImageIndexes(init);
+    const timer = setInterval(() => {
       setImageIndexes(prev => {
         const next = { ...prev };
-        products.forEach(product => {
-          const images = product.images && product.images.length > 0 ? product.images : [product.image];
-          const current = prev[product.id] ?? 0;
-          next[product.id] = (current + 1) % images.length;
+        products.forEach(p => {
+          const imgs = p.images && p.images.length > 0 ? p.images : [p.image];
+          next[p.id] = ((prev[p.id] ?? 0) + 1) % imgs.length;
         });
         return next;
       });
-    }, 2500);
-
-    return () => clearInterval(slideTimer);
+    }, 5500);
+    return () => clearInterval(timer);
   }, []);
 
-  const getActiveProductImage = (product) => {
-    const images = product.images && product.images.length > 0 ? product.images : [product.image];
-    const currentIndex = imageIndexes[product.id] ?? 0;
-    return images[currentIndex % images.length];
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) setActiveCategory(e.target.id); }),
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+    CATEGORIES.forEach(cat => {
+      const el = document.getElementById(cat.id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const getProductPrice = (product) => {
+    const lv = getLowestVariant(product);
+    return lv ? lv.price : product.price;
   };
 
-  const getProductImages = (product) => {
-    return product.images && product.images.length > 0 ? product.images : [product.image];
+  const getProductOriginalPrice = (product) => {
+    const lv = getLowestVariant(product);
+    if (lv && lv.originalPrice) return lv.originalPrice;
+    return product.originalPrice;
   };
 
-  const getProductImageIndex = (product) => imageIndexes[product.id] ?? 0;
+  const getProductWeight = (product) => {
+    const lv = getLowestVariant(product);
+    return lv ? lv.weight : product.weight;
+  };
 
-  const openProductModal = (product) => {
+  const getProductsForCategory = (categoryName) => {
+    let prods = products.filter(p => p.category === categoryName);
+    if (activeFilters.includes('bestSeller'))   prods = prods.filter(p => p.isBestSeller);
+    if (activeFilters.includes('chefsSpecial')) prods = prods.filter(p => p.isChefsSpecial);
+    if (sortBy === 'price-asc')    prods = [...prods].sort((a, b) => getProductPrice(a) - getProductPrice(b));
+    if (sortBy === 'price-desc')   prods = [...prods].sort((a, b) => getProductPrice(b) - getProductPrice(a));
+    if (sortBy === 'best-sellers') prods = [...prods].sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
+    return prods;
+  };
+
+  const getProductImages    = (p) => p.images && p.images.length > 0 ? p.images : [p.image];
+  const getProductImageIndex = (p) => imageIndexes[p.id] ?? 0;
+  const getActiveProductImage = (p) => {
+    const imgs = getProductImages(p);
+    return imgs[(imageIndexes[p.id] ?? 0) % imgs.length];
+  };
+
+  const openProductModal = (product, categoryProducts) => {
     setModalProductDirection(1);
     setActiveProduct(product);
     setActiveModalImageIndex(0);
+    setModalCategoryProducts(categoryProducts);
   };
 
   const closeProductModal = () => {
     setActiveProduct(null);
     setActiveModalImageIndex(0);
+    setModalCategoryProducts([]);
   };
 
   const getActiveModalImage = (product) => {
-    const images = getProductImages(product);
-    return images[activeModalImageIndex % images.length];
+    const imgs = getProductImages(product);
+    return imgs[activeModalImageIndex % imgs.length];
   };
 
   const showPreviousModalProduct = () => {
-    if (!activeProduct) {
-      return;
-    }
-    const currentIndex = filteredProducts.findIndex(product => product.id === activeProduct.id);
-    if (currentIndex < 0 || filteredProducts.length === 0) {
-      return;
-    }
-    const nextIndex = (currentIndex - 1 + filteredProducts.length) % filteredProducts.length;
+    if (!activeProduct || !modalCategoryProducts.length) return;
+    const idx = modalCategoryProducts.findIndex(p => p.id === activeProduct.id);
+    if (idx < 0) return;
+    const next = (idx - 1 + modalCategoryProducts.length) % modalCategoryProducts.length;
     setModalProductDirection(-1);
-    setActiveProduct(filteredProducts[nextIndex]);
+    setActiveProduct(modalCategoryProducts[next]);
     setActiveModalImageIndex(0);
   };
 
   const showNextModalProduct = () => {
-    if (!activeProduct) {
-      return;
-    }
-    const currentIndex = filteredProducts.findIndex(product => product.id === activeProduct.id);
-    if (currentIndex < 0 || filteredProducts.length === 0) {
-      return;
-    }
-    const nextIndex = (currentIndex + 1) % filteredProducts.length;
+    if (!activeProduct || !modalCategoryProducts.length) return;
+    const idx = modalCategoryProducts.findIndex(p => p.id === activeProduct.id);
+    if (idx < 0) return;
+    const next = (idx + 1) % modalCategoryProducts.length;
     setModalProductDirection(1);
-    setActiveProduct(filteredProducts[nextIndex]);
+    setActiveProduct(modalCategoryProducts[next]);
     setActiveModalImageIndex(0);
   };
 
   const handleVariantChange = useCallback((productId, variant) => {
-    setSelectedVariants(prev => ({
-      ...prev,
-      [productId]: variant
-    }));
+    setSelectedVariants(prev => ({ ...prev, [productId]: variant }));
   }, []);
 
-  const getProductPrice = (product) => {
-    const lowestVariant = getLowestVariant(product);
-    if (lowestVariant) {
-      return lowestVariant.price;
-    }
-    return product.price;
+  const handlePurchase = (product) => {
+    const sv = selectedVariants[product.id];
+    const weight = sv ? sv.weight : product.weight;
+    const price  = sv ? sv.price  : product.price;
+    const msg = `Hi! I'm interested in purchasing ${product.name} (${weight}) - ₹${price}. Can you please provide more details about availability and delivery?`;
+    window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
-  const getProductOriginalPrice = (product) => {
-    const lowestVariant = getLowestVariant(product);
-    if (lowestVariant && lowestVariant.originalPrice) {
-      return lowestVariant.originalPrice;
-    }
-    return product.originalPrice;
+  const toggleFilter = (filter) => {
+    setActiveFilters(prev =>
+      prev.includes(filter) ? prev.filter(f => f !== filter) : [...prev, filter]
+    );
   };
 
-  const getProductWeight = (product) => {
-    const lowestVariant = getLowestVariant(product);
-    if (lowestVariant) {
-      return lowestVariant.weight;
-    }
-    return product.weight;
-  };
-
-  const filteredProducts = selectedCategory === 'All Products' 
-    ? products 
-    : selectedCategory === 'Best Sellers'
-    ? products.filter(product => product.isBestSeller)
-    : selectedCategory === 'Chef\'s Specials'
-    ? products.filter(product => product.isChefsSpecial)
-    : products.filter(product => product.category === selectedCategory);
-
-    const handlePurchase = (product) => {
-    const selectedVariant = selectedVariants[product.id];
-    const weight = selectedVariant ? selectedVariant.weight : product.weight;
-    const price = selectedVariant ? selectedVariant.price : product.price;
-    
-    const message = `Hi! I'm interested in purchasing ${product.name} (${weight}) - ₹${price}. Can you please provide more details about availability and delivery?`;
-    const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  const scrollToCategory = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
-    <div className="products-page">
-      {/* Header Section */}
+    <div className="products-page" onClick={() => sortOpen && setSortOpen(false)}>
+
+      {/* ── Header ── */}
       <section className="products-header">
         <div className="products-container">
           <h1 className="products-title">
             Our <span className="products-title-green">Products</span>
           </h1>
           <p className="products-subtitle">
-            Discover our range of clean, handcrafted, nutritious products designed to promote health and happiness.
+            Handcrafted, nutritious snacks by a Registered Pharmacist &amp; Qualified Nutritionist.
           </p>
           <div className="products-divider"></div>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="products-filter">
+      {/* ── Controls: Filter chips + Sort ── */}
+      <div className="products-controls">
         <div className="products-container">
-          <div className="products-filter-buttons">
-            {categories.map((category) => (
+          <div className="controls-row">
+            <div className="filter-chips">
               <button
-                key={category}
-                className={`products-filter-btn ${selectedCategory === category ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(category)}
+                className={`filter-chip${activeFilters.includes('bestSeller') ? ' active' : ''}`}
+                onClick={() => toggleFilter('bestSeller')}
+                aria-label="Best Sellers"
+                title="Best Sellers"
               >
-                {category}
+                <span className="filter-chip-icon">⭐</span>
+                <span className="filter-chip-label">Best Sellers</span>
               </button>
-            ))}
+              <button
+                className={`filter-chip${activeFilters.includes('chefsSpecial') ? ' active' : ''}`}
+                onClick={() => toggleFilter('chefsSpecial')}
+                aria-label="Chef's Special"
+                title="Chef's Special"
+              >
+                <span className="filter-chip-icon">🧑‍🍳</span>
+                <span className="filter-chip-label">Chef's Special</span>
+              </button>
+            </div>
+            <div className="sort-dropdown-wrap">
+              <button
+                className="sort-btn"
+                onClick={(e) => { e.stopPropagation(); setSortOpen(prev => !prev); }}
+              >
+                <SlidersHorizontal size={14} />
+                {SORT_LABELS[sortBy]}
+                <ChevronDown size={13} className={`sort-chevron${sortOpen ? ' open' : ''}`} />
+              </button>
+              {sortOpen && (
+                <div className="sort-menu" onClick={e => e.stopPropagation()}>
+                  {Object.entries(SORT_LABELS).map(([key, label]) => (
+                    <button
+                      key={key}
+                      className={`sort-option${sortBy === key ? ' active' : ''}`}
+                      onClick={() => { setSortBy(key); setSortOpen(false); }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Products Grid */}
-      <section className="products-grid-section">
-        <div className="products-container">
-          <div className="products-grid">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="product-card"
-                onClick={() => {
-                  if (isMobile) {
-                    openProductModal(product);
-                  }
-                }}
-                role={isMobile ? 'button' : undefined}
-                tabIndex={isMobile ? 0 : -1}
-                onKeyDown={(event) => {
-                  if (isMobile && (event.key === 'Enter' || event.key === ' ')) {
-                    event.preventDefault();
-                    openProductModal(product);
-                  }
-                }}
-              >
-                <div className="product-image-wrapper">
-                  <AnimatePresence initial={false} custom={1} mode="sync">
-                    <motion.img
-                      key={`${product.id}-${getProductImageIndex(product)}`}
-                      src={getActiveProductImage(product)}
-                      alt={product.name}
-                      className="product-image product-image-slide"
-                      loading="lazy"
-                      decoding="async"
-                      fetchPriority="low"
-                      custom={1}
-                      variants={slideVariants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.35, ease: 'easeInOut' }}
-                    />
-                  </AnimatePresence>
-                  {getProductImages(product).length > 1 && (
-                    <div className="product-image-dots">
-                      {getProductImages(product).map((_, idx) => (
-                        <span
-                          key={idx}
-                          className={`product-image-dot ${idx === (imageIndexes[product.id] ?? 0) ? 'active' : ''}`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="product-content">
-                  <div className="product-category-tag">{product.category}</div>
-                  <div className="product-card-flags">
-                    {product.isBestSeller && (
-                      <span
-                        className="product-card-flag best"
-                        title="Best Seller"
-                        aria-label="Best Seller"
-                      >
-                        ⭐
-                      </span>
-                    )}
-                    {product.isChefsSpecial && (
-                      <span
-                        className="product-card-flag chef"
-                        title="Chef's Special"
-                        aria-label="Chef's Special"
-                      >
-                        🧑‍🍳
-                      </span>
-                    )}
+      {/* ── Sticky Category Pill Nav ── */}
+      <nav className="category-pill-nav" aria-label="Product categories">
+        <div className="pill-nav-inner">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              className={`pill-btn${activeCategory === cat.id ? ' active' : ''}`}
+              onClick={() => scrollToCategory(cat.id)}
+            >
+              {cat.emoji} {cat.name}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* ── Category Sections ── */}
+      <div className="categories-wrapper">
+        {CATEGORIES.map(cat => {
+          const catProducts = getProductsForCategory(cat.name);
+          return (
+            <section
+              key={cat.id}
+              id={cat.id}
+              className="category-section"
+            >
+              {/* Category Header */}
+              <div className="category-header">
+                <div className="products-container">
+                  <div className="cat-header-content">
+                    <span className="cat-emoji">{cat.emoji}</span>
+                    <h2 className="cat-title">{cat.name}</h2>
+                    <span className="cat-count">
+                      {catProducts.length} item{catProducts.length !== 1 ? 's' : ''}
+                    </span>
                   </div>
-                  <h3 className="product-name">{product.name}</h3>
-
-                  {/* Price */}
-                  <div className="product-pricing">
-                    <div className="price-container">
-                      <span className="product-price">₹{getProductPrice(product)}</span>
-                      {getProductOriginalPrice(product) && getProductOriginalPrice(product) > getProductPrice(product) && (
-                        <>
-                          <span className="original-price">₹{getProductOriginalPrice(product)}</span>
-                          <span className="discount-badge">
-                            {Math.round(((getProductOriginalPrice(product) - getProductPrice(product)) / getProductOriginalPrice(product)) * 100)}% OFF
-                          </span>
-                        </>
-                      )}
-                    </div>
-                    <span className="product-weight">{getProductWeight(product)}</span>
-                  </div>
-
-                  {!isMobile && (
-                    <div className="product-desktop-details">
-                      <p className="product-description">{product.description}</p>
-
-                      <WeightSelector
-                        product={product}
-                        onVariantChange={(variant) => handleVariantChange(product.id, variant)}
-                        variant="default"
-                      />
-
-                      <div className="products-modal-rating">
-                        <div className="products-modal-stars">
-                          {[...Array(5)].map((_, index) => (
-                            <Star key={index} size={16} className="star-filled" fill="currentColor" />
-                          ))}
-                          <span className="rating-number">5.0</span>
-                        </div>
-                        <span className="products-modal-reviews">(150+ reviews)</span>
-                      </div>
-
-                      <div className="products-modal-benefits">
-                        {product.features && product.features.slice(0, 3).map((feature, index) => (
-                          <span key={index} className="benefit-tag">{feature}</span>
-                        ))}
-                      </div>
-
-                      <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
-                        <ShoppingBag size={18} />
-                        Buy Now
-                      </button>
-                    </div>
-                  )}
+                  <div className="cat-divider" />
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
+              {/* Products */}
+              <div className="products-container">
+                {catProducts.length === 0 ? (
+                  <p className="cat-empty">No products match your current filters in this category.</p>
+                ) : (
+                  <div className="products-scroll-row">
+                    {catProducts.map(product => (
+                      <div
+                        key={product.id}
+                        className="product-card-new"
+                        onClick={() => isMobile && openProductModal(product, catProducts)}
+                        role={isMobile ? 'button' : undefined}
+                        tabIndex={isMobile ? 0 : -1}
+                        onKeyDown={(e) => {
+                          if (isMobile && (e.key === 'Enter' || e.key === ' ')) {
+                            e.preventDefault();
+                            openProductModal(product, catProducts);
+                          }
+                        }}
+                      >
+                        {/* Image band with pastel background */}
+                        <div className="card-image-band">
+                          <AnimatePresence initial={false} custom={1} mode="sync">
+                            <motion.img
+                              key={`${product.id}-${getProductImageIndex(product)}`}
+                              src={getActiveProductImage(product)}
+                              alt={product.name}
+                              className="card-img"
+                              loading="lazy"
+                              decoding="async"
+                              variants={imageCrossfade}
+                              initial="enter"
+                              animate="center"
+                              exit="exit"
+                              transition={reduceMotion ? { duration: 0 } : imageFadeTransition}
+                            />
+                          </AnimatePresence>
+                          {getProductImages(product).length > 1 && (
+                            <div className="card-img-dots">
+                              {getProductImages(product).map((_, idx) => (
+                                <span
+                                  key={idx}
+                                  className={`card-img-dot${idx === getProductImageIndex(product) ? ' active' : ''}`}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          <div className="card-badges">
+                            {product.isBestSeller  && <span className="product-card-flag best" title="Best Seller">⭐</span>}
+                            {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
+                          </div>
+                        </div>
+
+                        {/* Card content */}
+                        <div className="card-content">
+                          <h3 className="card-name">{product.name}</h3>
+                          <div className="card-pricing">
+                            <span className="card-price">₹{getProductPrice(product)}</span>
+                            {getProductOriginalPrice(product) > getProductPrice(product) && (
+                              <>
+                                <span className="card-original-price">₹{getProductOriginalPrice(product)}</span>
+                                <span className="card-discount">
+                                  {Math.round(((getProductOriginalPrice(product) - getProductPrice(product)) / getProductOriginalPrice(product)) * 100)}% OFF
+                                </span>
+                              </>
+                            )}
+                          </div>
+                          <span className="card-weight">{getProductWeight(product)}</span>
+
+                          {!isMobile && (
+                            <div className="card-desktop-extra">
+                              <p className="card-description">{product.description}</p>
+                              <WeightSelector
+                                product={product}
+                                onVariantChange={(variant) => handleVariantChange(product.id, variant)}
+                                variant="default"
+                              />
+                              <div className="card-benefits">
+                                {product.features && product.features.slice(0, 3).map((f, i) => (
+                                  <span key={i} className="benefit-tag">{f}</span>
+                                ))}
+                              </div>
+                              <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
+                                <ShoppingBag size={17} />
+                                Buy Now
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+
+      {/* ── Mobile Product Modal ── */}
       {isMobile && activeProduct && (
         <div className="products-modal-backdrop" onClick={closeProductModal}>
-          <div className="products-modal" onClick={(event) => event.stopPropagation()}>
+          <div className="products-modal" onClick={(e) => e.stopPropagation()}>
             <button className="products-modal-close" onClick={closeProductModal} aria-label="Close product details">
               <X size={18} />
             </button>
-
             <AnimatePresence initial={false} custom={modalProductDirection} mode="sync">
               <motion.div
                 key={activeProduct.id}
@@ -389,16 +420,14 @@ const ProductsPage = () => {
                       className="products-modal-image"
                       loading="lazy"
                       decoding="async"
-                      fetchPriority="low"
-                      custom={1}
-                      variants={slideVariants}
+                      variants={imageCrossfade}
                       initial="enter"
                       animate="center"
                       exit="exit"
-                      transition={{ duration: 0.35, ease: 'easeInOut' }}
+                      transition={reduceMotion ? { duration: 0 } : { duration: 0.5, ease: smoothEase }}
                     />
                   </AnimatePresence>
-                  {filteredProducts.length > 1 && (
+                  {modalCategoryProducts.length > 1 && (
                     <>
                       <button className="modal-image-arrow modal-image-arrow-left" onClick={showPreviousModalProduct} aria-label="Previous product">
                         <ChevronLeft size={18} />
@@ -409,75 +438,60 @@ const ProductsPage = () => {
                     </>
                   )}
                   {getProductImages(activeProduct).length > 1 && (
-                    <>
-                      <div className="modal-image-dots">
-                        {getProductImages(activeProduct).map((image, index) => (
-                          <button
-                            key={image}
-                            className={`modal-image-dot ${index === activeModalImageIndex ? 'active' : ''}`}
-                            onClick={() => setActiveModalImageIndex(index)}
-                            aria-label={`View image ${index + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </>
+                    <div className="modal-image-dots">
+                      {getProductImages(activeProduct).map((image, index) => (
+                        <button
+                          key={image}
+                          className={`modal-image-dot${index === activeModalImageIndex ? ' active' : ''}`}
+                          onClick={() => setActiveModalImageIndex(index)}
+                          aria-label={`View image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
 
                 <div className="products-modal-content">
-                  <div className="product-category-tag">{activeProduct.category}</div>
+                  {(() => {
+                    const catInfo = CATEGORIES.find(c => c.name === activeProduct.category);
+                    return (
+                      <div className="product-category-tag">
+                        {catInfo?.emoji} {activeProduct.category}
+                      </div>
+                    );
+                  })()}
                   <div className="product-card-flags products-modal-flags">
-                    {activeProduct.isBestSeller && (
-                      <span
-                        className="product-card-flag best"
-                        title="Best Seller"
-                        aria-label="Best Seller"
-                      >
-                        ⭐
-                      </span>
-                    )}
-                    {activeProduct.isChefsSpecial && (
-                      <span
-                        className="product-card-flag chef"
-                        title="Chef's Special"
-                        aria-label="Chef's Special"
-                      >
-                        🧑‍🍳
-                      </span>
-                    )}
+                    {activeProduct.isBestSeller  && <span className="product-card-flag best" title="Best Seller">⭐</span>}
+                    {activeProduct.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                   </div>
                   <h3 className="products-modal-title">{activeProduct.name}</h3>
                   <p className="products-modal-description">{activeProduct.description}</p>
-
-                  <div onClick={(event) => event.stopPropagation()}>
+                  <div onClick={(e) => e.stopPropagation()}>
                     <WeightSelector
                       product={activeProduct}
                       onVariantChange={(variant) => handleVariantChange(activeProduct.id, variant)}
                       variant="default"
                     />
                   </div>
-
                   <div className="products-modal-benefits">
-                    {activeProduct.features && activeProduct.features.map((feature, index) => (
-                      <span key={index} className="benefit-tag">{feature}</span>
+                    {activeProduct.features && activeProduct.features.map((feature, i) => (
+                      <span key={i} className="benefit-tag">{feature}</span>
                     ))}
                   </div>
-
                   <div className="products-modal-rating">
                     <div className="products-modal-stars">
-                      {[...Array(5)].map((_, index) => (
-                        <Star key={index} size={16} className="star-filled" fill="currentColor" />
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={16} className="star-filled" fill="currentColor" />
                       ))}
                       <span className="rating-number">5.0</span>
                     </div>
                     <span className="products-modal-reviews">(150+ reviews)</span>
                   </div>
-
                   <div className="products-modal-footer">
                     <div className="product-pricing">
                       <div className="price-container">
                         <span className="product-price">₹{getProductPrice(activeProduct)}</span>
-                        {getProductOriginalPrice(activeProduct) && getProductOriginalPrice(activeProduct) > getProductPrice(activeProduct) && (
+                        {getProductOriginalPrice(activeProduct) > getProductPrice(activeProduct) && (
                           <>
                             <span className="original-price">₹{getProductOriginalPrice(activeProduct)}</span>
                             <span className="discount-badge">
@@ -488,7 +502,6 @@ const ProductsPage = () => {
                       </div>
                       <span className="product-weight">{getProductWeight(activeProduct)}</span>
                     </div>
-
                     <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
                       <ShoppingBag size={18} />
                       Buy Now
@@ -501,29 +514,23 @@ const ProductsPage = () => {
         </div>
       )}
 
-      {/* Call to Action */}
+      {/* ── CTA ── */}
       <section className="products-cta">
         <div className="products-container">
           <div className="cta-content">
             <h2>Can't Find What You're Looking For?</h2>
             <p>Let us know your preferences and we'll create something special just for you!</p>
             <div className="cta-buttons">
-              <button 
+              <button
                 className="cta-btn"
                 onClick={() => {
-                  const message = "Hi! I'm interested in custom product consultation. Can you help me create something special based on my preferences?";
-                  const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
-                  window.open(whatsappUrl, '_blank');
+                  const msg = "Hi! I'm interested in custom product consultation. Can you help me create something special based on my preferences?";
+                  window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
                 }}
               >
                 Get Custom Products
               </button>
-              <button 
-                className="cta-btn cta-btn-call"
-                onClick={() => {
-                  window.open('tel:+919960637656', '_self');
-                }}
-              >
+              <button className="cta-btn cta-btn-call" onClick={() => window.open('tel:+919960637656', '_self')}>
                 <Phone size={18} />
                 Call Now
               </button>

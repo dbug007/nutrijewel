@@ -75,7 +75,8 @@ const Footer = () => {
                 </button>
               </div>
 
-              {/* Contact Form */}
+              {/* Contact Form — removed per request; {false &&} guard keeps the markup for easy re-enable */}
+              {false && (
               <div className="contact-form-container">
                 <form className="contact-form">
                   <div className="form-group">
@@ -131,6 +132,7 @@ const Footer = () => {
                   </button>
                 </form>
               </div>
+              )}
             </div>
           </div>
         </section>

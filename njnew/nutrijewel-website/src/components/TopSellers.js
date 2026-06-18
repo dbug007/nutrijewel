@@ -4,13 +4,13 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ShoppingBag, ChevronLeft, ChevronRight, X, Star } from 'lucide-react';
 import { featuredTopSellers } from '../data/products';
 import WeightSelector from './WeightSelector';
-import { cardVariants, getRevealProps, hoverLift, tapShrink } from './motionPresets';
+import { cardVariants, getRevealProps, hoverLift, tapShrink, smoothEase } from './motionPresets';
 import './TopSellers.css';
 
 const TopSellers = () => {
   const SWIPE_THRESHOLD = 70;
-  const CAROUSEL_IDLE_DELAY = 4000;
-  const CAROUSEL_ROTATE_INTERVAL = 4000;
+  const CAROUSEL_IDLE_DELAY = 5000;
+  const CAROUSEL_ROTATE_INTERVAL = 6000;
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
   const revealProps = getRevealProps(reduceMotion);
@@ -29,7 +29,7 @@ const TopSellers = () => {
 
   const carouselSlideVariants = {
     enter: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? 50 : -50),
+      x: reduceMotion ? 0 : (direction > 0 ? 30 : -30),
       opacity: reduceMotion ? 1 : 0
     }),
     center: {
@@ -37,7 +37,7 @@ const TopSellers = () => {
       opacity: 1
     },
     exit: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? -50 : 50),
+      x: reduceMotion ? 0 : (direction > 0 ? -30 : 30),
       opacity: reduceMotion ? 1 : 0
     })
   };
@@ -312,7 +312,7 @@ const TopSellers = () => {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    transition={{ duration: 0.55, ease: smoothEase }}
                     onClick={() => {
                       markCarouselInteraction();
                       if (suppressCardClickRef.current) {

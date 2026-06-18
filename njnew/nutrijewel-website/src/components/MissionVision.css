@@ -63,7 +63,7 @@
   border-radius: 1.5rem;
   padding: 2rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.4s var(--ease-entrance);
 }
 
 .mission-card:hover, .vision-card:hover {

@@ -25,7 +25,7 @@
   gap: 1.1rem;
   white-space: nowrap;
   padding-left: 1.2rem;
-  animation: njMarqueeScroll 18s linear infinite;
+  animation: njMarqueeScroll 34s linear infinite;
   min-width: max-content;
 }
 
@@ -57,7 +57,7 @@
   }
 
   .top-marquee-track {
-    animation-duration: 16s;
+    animation-duration: 30s;
   }
 }
 

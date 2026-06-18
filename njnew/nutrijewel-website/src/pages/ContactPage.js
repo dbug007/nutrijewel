@@ -238,7 +238,8 @@ ${formData.message}
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Contact Form — removed per request; {false &&} guard keeps the markup for easy re-enable */}
+          {false && (
           <div className="contact-page-form-section">
             <div className="contact-page-form-wrapper">
               <h2 className="form-title">Send us a Message</h2>
@@ -370,6 +371,7 @@ ${formData.message}
               </form>
             </div>
           </div>
+          )}
         </div>
       </div>
 

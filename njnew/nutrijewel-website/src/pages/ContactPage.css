@@ -147,10 +147,13 @@
 
 @media (min-width: 1024px) {
   .contact-page-main-grid {
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr;
     gap: 6rem;
-    padding: 5rem 4rem;
+    padding: 4rem;
     align-items: start;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -674,11 +677,11 @@
 /* Mobile Responsive */
 @media (max-width: 767px) {
   .contact-page-header {
-    padding: 4rem 0 3rem;
+    padding: 3rem 0 2rem;
   }
-  
+
   .contact-page-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   
   .contact-page-subtitle {

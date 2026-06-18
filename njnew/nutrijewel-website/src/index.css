@@ -9,6 +9,10 @@
   --nj-grey: #6B6B6B;
   --nj-mint: #D1E8A7;
   --nj-beige: #DCC99C;
+
+  /* Shared motion easing — use these everywhere for consistent, elegant transitions */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);    /* hover / state changes */
+  --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1); /* lifts / reveals / entrances */
 }
 
 * {
@@ -45,6 +49,18 @@ select {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Respect users who prefer reduced motion — disables animated scroll jumps */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media (max-width: 767px) {
+  html { font-size: 93.75%; }
+}
+@media (max-width: 480px) {
+  html { font-size: 87.5%; }
 }
 
 /* Utility Classes */

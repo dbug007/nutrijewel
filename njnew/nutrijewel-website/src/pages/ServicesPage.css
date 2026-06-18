@@ -429,19 +429,19 @@
 /* Mobile Responsive */
 @media (max-width: 767px) {
   .services-header {
-    padding: 4rem 0 3rem;
+    padding: 3rem 0 2rem;
   }
-  
+
   .services-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
-  
+
   .services-subtitle {
     font-size: 1rem;
   }
-  
+
   .section-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
     text-align: center !important;
   }
   

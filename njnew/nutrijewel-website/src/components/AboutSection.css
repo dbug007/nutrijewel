@@ -63,7 +63,7 @@
   padding: 10px;
   background: linear-gradient(135deg, var(--nj-mint), var(--nj-green), var(--nj-olive));
   border-radius: 30px;
-  transition: all 0.3s ease;
+  transition: transform 0.4s var(--ease-entrance), box-shadow 0.4s var(--ease-entrance);
 }
 
 .home-about-founder-wrapper:hover {
@@ -86,7 +86,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.45s var(--ease-entrance);
 }
 
 .home-about-founder-wrapper:hover .home-about-founder-bg {
@@ -202,11 +202,12 @@
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s var(--ease-entrance), box-shadow 0.4s var(--ease-entrance);
 }
 
 .home-about-value-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.1);
 }
 
 .home-about-value-icon {
@@ -241,22 +242,104 @@
   .home-about-header h2 {
     font-size: 2rem;
   }
+}
 
+@media (max-width: 480px) {
+  .home-about-section   { padding: 2.5rem 0; }
+  .home-about-header h2 { font-size: 1.6rem; }
+}
+
+/* ===== Mobile: compact symmetric feature grid =====
+   Replaces the old single-column stacking block. Scoped to max-width:767px so the
+   >=768px desktop layout (2-col stats, 4-col values) is completely untouched. */
+@media (max-width: 767px) {
+  /* Tighten overall vertical rhythm */
   .home-about-main-grid {
     gap: 2rem;
   }
 
+  .home-about-values-section {
+    margin-top: 1.25rem;
+  }
+
+  /* Stats: keep side-by-side 2 columns, tighter gap + smaller numbers */
   .home-about-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+  }
+  .home-about-stat-number {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  .home-about-stat-label {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  /* Values: tidy 2x2 grid that mirrors the 2-col stats above it */
+  .home-about-values {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Compact, centered cards. Keep brand radius (12px) and the existing soft shadow. */
+  .home-about-value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 0.85rem;
+    border-radius: 12px;
+  }
+
+  /* Prevent a stuck hover-lift after tap on touch devices */
+  .home-about-value-card:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Shrink the lucide icon. size={32} renders width/height ATTRIBUTES on the SVG,
+     which plain CSS width/height override (no !important needed). */
+  .home-about-value-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Smaller title; no bottom margin since the description is hidden (avoids dead space) */
+  .home-about-value-title {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    line-height: 1.25;
+  }
+
+  /* Hide the one-line descriptions on mobile for a clean feature-grid look */
+  .home-about-value-description {
+    display: none;
+  }
+}
+
+/* ===== Extra-small phones: trim a touch more without feeling cramped ===== */
+@media (max-width: 480px) {
+  .home-about-stats {
+    gap: 0.75rem;
+  }
+  .home-about-stat-number {
+    font-size: 1.75rem;
   }
 
   .home-about-values {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.625rem;
   }
-
   .home-about-value-card {
-    padding: 1.5rem;
+    padding: 1.1rem 0.65rem;
+  }
+  .home-about-value-icon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 0.45rem;
+  }
+  .home-about-value-title {
+    font-size: 0.9rem;
   }
 }

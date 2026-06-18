@@ -124,7 +124,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
 }
 
 .nav-button:hover {
@@ -149,7 +149,7 @@
   border: none;
   background-color: rgba(147, 181, 89, 0.3);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth);
 }
 
 .indicator.active {
@@ -221,7 +221,7 @@
   padding: 0.75rem;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth);
 }
 
 .testimonial-nav-btn:hover {
@@ -254,7 +254,7 @@
   background: rgba(107, 107, 107, 0.3);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: width 0.35s var(--ease-entrance), background-color 0.3s var(--ease-smooth), border-radius 0.35s var(--ease-entrance);
 }
 
 .testimonial-dot:hover {
@@ -314,7 +314,14 @@
   .testimonials-title {
     font-size: 1.75rem;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .testimonials-section { padding: 2.5rem 0; }
+  .testimonials-title   { font-size: 1.5rem; }
+}
+
+@media (max-width: 767px) {
   .testimonial-card {
     padding: 1.5rem;
   }

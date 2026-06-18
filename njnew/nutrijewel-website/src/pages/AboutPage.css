@@ -57,12 +57,12 @@
 .aboutpage-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--aboutpage-space-lg);
+  padding: 0 var(--aboutpage-space-md);
 }
 
 @media (min-width: 640px) {
   .aboutpage-container {
-    padding: 0 var(--aboutpage-space-xl);
+    padding: 0 var(--aboutpage-space-lg);
   }
 }
 
@@ -1538,17 +1538,25 @@
   }
 }
 
-@media (max-width: 480px) {
-  .aboutpage-container {
-    padding: 0 var(--aboutpage-space-md);
-  }
+@media (max-width: 767px) {
+  .aboutpage-hero-subtitle { font-size: 1rem; }
+  .aboutpage-section-title { font-size: 1.75rem; }
+}
 
-  /* Smaller headings for mobile */
+@media (max-width: 480px) {
   .aboutpage-hero-title,
   .aboutpage-founder-name,
-  .aboutpage-section-title,
   .aboutpage-cta-title {
-    font-size: var(--aboutpage-text-3xl);
+    font-size: 1.6rem;
+  }
+
+  .aboutpage-section-title { font-size: 1.5rem; }
+
+  .aboutpage-story-section,
+  .aboutpage-values-section,
+  .aboutpage-team-section,
+  .aboutpage-cta-section {
+    padding: 2.5rem 0;
   }
 }
 

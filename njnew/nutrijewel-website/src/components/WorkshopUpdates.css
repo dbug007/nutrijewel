@@ -65,7 +65,7 @@
   border-radius: 1.5rem;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  transition: transform 0.4s var(--ease-entrance), box-shadow 0.4s var(--ease-entrance);
   position: relative;
   overflow: hidden;
 }
@@ -206,7 +206,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.3s ease;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
   white-space: nowrap;
 }
 
@@ -256,7 +256,7 @@
   border-radius: 2rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
 }
 
 .cta-notify-btn:hover {
@@ -274,11 +274,37 @@
   .workshops-title {
     font-size: 1.75rem;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .workshops-section { padding: 2.5rem 0; }
+  .workshops-title   { font-size: 1.5rem; }
+}
+
+@media (max-width: 767px) {
+  /* Mobile: horizontal slider to cut scroll length; equal-height cards via flex stretch */
+  .workshops-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    gap: 1rem;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 2.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .workshops-grid::-webkit-scrollbar { display: none; }
+
   .workshop-card {
+    flex: 0 0 85vw;
+    max-width: 340px;
+    scroll-snap-align: start;
     padding: 1.5rem;
   }
-  
+
   .workshop-footer {
     flex-direction: column;
     align-items: stretch;
