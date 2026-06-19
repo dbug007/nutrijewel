@@ -469,6 +469,57 @@
    RESPONSIVE STYLES
    ================================== */
 
+/* ── Mobile homepage: transparent-at-top, direction-based reveal ──
+   Scoped to <=767px + the .navbar--home class (added only on "/"), so desktop
+   and all other routes keep the normal sticky navbar. */
+@media (max-width: 767px) {
+  .navbar.navbar--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    will-change: transform;
+    transition: transform 0.35s var(--ease-smooth),
+                background-color 0.35s var(--ease-smooth),
+                border-color 0.35s var(--ease-smooth),
+                box-shadow 0.35s var(--ease-smooth);
+  }
+
+  /* minimal — at the very top: transparent, logo only */
+  .navbar.navbar--home.is-minimal {
+    transform: translateY(0);
+    background-color: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+  .navbar.navbar--home.is-minimal .navbar-toggle {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .navbar.navbar--home.is-minimal .navbar-logo-icon {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
+  }
+
+  /* revealed — scrolling up: solid navbar, sits just below the marquee */
+  .navbar.navbar--home.is-revealed {
+    transform: translateY(var(--nj-marquee-height, 1.95rem));
+    background-color: var(--nj-cream);
+    border-bottom-color: rgba(147, 181, 89, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  /* hidden — scrolling down: slide the whole bar away */
+  .navbar.navbar--home.is-hidden {
+    transform: translateY(-110%);
+    background-color: var(--nj-cream);
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar.navbar--home { transition: none; }
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0 1rem;

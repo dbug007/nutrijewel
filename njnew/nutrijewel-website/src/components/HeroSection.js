@@ -7,7 +7,7 @@ import './HeroSection.css';
 /* Cinematic Plate hero — full-bleed food, near-zero words.
    One product photo carries the brand; a kinetic word + signature + single CTA. */
 const ROTATING_WORDS = ['Pure.', 'Joyful.', 'Crafted.'];
-const HERO_IMAGE = `${process.env.PUBLIC_URL}/images/stuffeddates.jpg`;
+const HERO_IMAGE = `${process.env.PUBLIC_URL}/images/hero-chocolate-cake.jpg`;
 
 const HeroSection = () => {
   const reduceMotion = useReducedMotion();
@@ -43,7 +43,7 @@ const HeroSection = () => {
       <motion.img
         className="hero-cinematic-img"
         src={HERO_IMAGE}
-        alt="Handcrafted dark-chocolate stuffed dates topped with pistachio and dried rose"
+        alt="NutriJewel handcrafted dark-chocolate walnut cake"
         initial={{ scale: 1 }}
         animate={reduceMotion ? { scale: 1 } : { scale: 1.09 }}
         transition={reduceMotion ? { duration: 0 } : { duration: 18, ease: 'linear', repeat: Infinity, repeatType: 'mirror' }}

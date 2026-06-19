@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingBag, ChevronDown } from 'lucide-react';
+import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isHome, state: headerState } = useHeaderReveal();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -39,7 +41,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}`}>
       <div className="navbar-container">
         {/* Logo Only */}
         <div className="navbar-brand">

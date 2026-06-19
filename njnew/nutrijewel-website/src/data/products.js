@@ -216,6 +216,38 @@ const rawProducts = [
     isChefsSpecial: false
   },
   {
+    id: 'nj-nutella',
+    name: 'NJ Nutella',
+    displayName: 'NJ Nutella',
+    category: 'Dips & Spreads',
+    image: '/images/peanutbutter.jpg',
+    description: 'Coming soon.',
+    price: 0,
+    originalPrice: 0,
+    weight: 'Coming soon',
+    features: [],
+    comingSoon: true,
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'nj-almond-butter',
+    name: 'NJ Almond Butter',
+    displayName: 'NJ Almond Butter',
+    category: 'Dips & Spreads',
+    image: '/images/peanutbutter.jpg',
+    description: 'Coming soon.',
+    price: 0,
+    originalPrice: 0,
+    weight: 'Coming soon',
+    features: [],
+    comingSoon: true,
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
     id: 'maharaja-cake',
     name: 'Thandai Maharaja Cake',
     displayName: 'Thandai Maharaja Cake',

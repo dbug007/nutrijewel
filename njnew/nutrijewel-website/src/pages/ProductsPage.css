@@ -488,6 +488,49 @@
   transform: translateY(-1px);
 }
 
+/* ── Coming Soon products ── */
+.coming-soon-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 26, 0.4);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.coming-soon-overlay span {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+.card-image-band.is-coming-soon .card-img,
+.products-modal-image-wrap.is-coming-soon .products-modal-image {
+  filter: blur(5px) brightness(0.85);
+  transform: scale(1.05);
+}
+.card-coming-soon {
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--nj-olive);
+}
+.product-buy-btn--soon,
+.product-buy-btn--soon:hover {
+  background: #ececec;
+  color: #9a9a9a;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .product-category-tag {
   display: inline-block;
   padding: 0.2rem 0.65rem;

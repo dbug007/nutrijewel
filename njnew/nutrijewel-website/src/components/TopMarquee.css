@@ -66,3 +66,25 @@
     animation: none;
   }
 }
+
+/* ── Mobile homepage: marquee is a fixed overlay that only shows when the
+   navbar is revealed (scrolling up). Hidden at the hero top and on scroll-down. */
+@media (max-width: 767px) {
+  .top-marquee.marquee--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    transform: translateY(-100%);
+    will-change: transform;
+    transition: transform 0.35s var(--ease-smooth);
+  }
+  .top-marquee.marquee--home.is-revealed {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-marquee.marquee--home { transition: none; }
+}

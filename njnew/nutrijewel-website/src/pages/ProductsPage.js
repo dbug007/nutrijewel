@@ -315,7 +315,7 @@ const ProductsPage = () => {
                         }}
                       >
                         {/* Image band with pastel background */}
-                        <div className="card-image-band">
+                        <div className={`card-image-band${product.comingSoon ? ' is-coming-soon' : ''}`}>
                           <AnimatePresence initial={false} custom={1} mode="sync">
                             <motion.img
                               key={`${product.id}-${getProductImageIndex(product)}`}
@@ -345,41 +345,58 @@ const ProductsPage = () => {
                             {product.isBestSeller  && <span className="product-card-flag best" title="Best Seller">⭐</span>}
                             {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                           </div>
+                          {product.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
                         </div>
 
                         {/* Card content */}
                         <div className="card-content">
                           <h3 className="card-name">{product.name}</h3>
-                          <div className="card-pricing">
-                            <span className="card-price">₹{getProductPrice(product)}</span>
-                            {getProductOriginalPrice(product) > getProductPrice(product) && (
-                              <>
-                                <span className="card-original-price">₹{getProductOriginalPrice(product)}</span>
-                                <span className="card-discount">
-                                  {Math.round(((getProductOriginalPrice(product) - getProductPrice(product)) / getProductOriginalPrice(product)) * 100)}% OFF
-                                </span>
-                              </>
-                            )}
-                          </div>
-                          <span className="card-weight">{getProductWeight(product)}</span>
+                          {product.comingSoon ? (
+                            <div className="card-pricing">
+                              <span className="card-coming-soon">Coming Soon</span>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="card-pricing">
+                                <span className="card-price">₹{getProductPrice(product)}</span>
+                                {getProductOriginalPrice(product) > getProductPrice(product) && (
+                                  <>
+                                    <span className="card-original-price">₹{getProductOriginalPrice(product)}</span>
+                                    <span className="card-discount">
+                                      {Math.round(((getProductOriginalPrice(product) - getProductPrice(product)) / getProductOriginalPrice(product)) * 100)}% OFF
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                              <span className="card-weight">{getProductWeight(product)}</span>
+                            </>
+                          )}
 
                           {!isMobile && (
                             <div className="card-desktop-extra">
                               <p className="card-description">{product.description}</p>
-                              <WeightSelector
-                                product={product}
-                                onVariantChange={(variant) => handleVariantChange(product.id, variant)}
-                                variant="default"
-                              />
-                              <div className="card-benefits">
-                                {product.features && product.features.slice(0, 3).map((f, i) => (
-                                  <span key={i} className="benefit-tag">{f}</span>
-                                ))}
-                              </div>
-                              <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
-                                <ShoppingBag size={17} />
-                                Buy Now
-                              </button>
+                              {product.comingSoon ? (
+                                <button className="product-buy-btn product-buy-btn--soon" disabled>
+                                  Coming Soon
+                                </button>
+                              ) : (
+                                <>
+                                  <WeightSelector
+                                    product={product}
+                                    onVariantChange={(variant) => handleVariantChange(product.id, variant)}
+                                    variant="default"
+                                  />
+                                  <div className="card-benefits">
+                                    {product.features && product.features.slice(0, 3).map((f, i) => (
+                                      <span key={i} className="benefit-tag">{f}</span>
+                                    ))}
+                                  </div>
+                                  <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
+                                    <ShoppingBag size={17} />
+                                    Buy Now
+                                  </button>
+                                </>
+                              )}
                             </div>
                           )}
                         </div>
@@ -411,7 +428,7 @@ const ProductsPage = () => {
                 exit="exit"
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
               >
-                <div className="products-modal-image-wrap">
+                <div className={`products-modal-image-wrap${activeProduct.comingSoon ? ' is-coming-soon' : ''}`}>
                   <AnimatePresence initial={false} custom={1} mode="sync">
                     <motion.img
                       key={`${activeProduct.id}-${activeModalImageIndex}`}
@@ -449,6 +466,7 @@ const ProductsPage = () => {
                       ))}
                     </div>
                   )}
+                  {activeProduct.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
                 </div>
 
                 <div className="products-modal-content">
@@ -466,46 +484,63 @@ const ProductsPage = () => {
                   </div>
                   <h3 className="products-modal-title">{activeProduct.name}</h3>
                   <p className="products-modal-description">{activeProduct.description}</p>
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <WeightSelector
-                      product={activeProduct}
-                      onVariantChange={(variant) => handleVariantChange(activeProduct.id, variant)}
-                      variant="default"
-                    />
-                  </div>
+                  {!activeProduct.comingSoon && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <WeightSelector
+                        product={activeProduct}
+                        onVariantChange={(variant) => handleVariantChange(activeProduct.id, variant)}
+                        variant="default"
+                      />
+                    </div>
+                  )}
                   <div className="products-modal-benefits">
                     {activeProduct.features && activeProduct.features.map((feature, i) => (
                       <span key={i} className="benefit-tag">{feature}</span>
                     ))}
                   </div>
-                  <div className="products-modal-rating">
-                    <div className="products-modal-stars">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={16} className="star-filled" fill="currentColor" />
-                      ))}
-                      <span className="rating-number">5.0</span>
-                    </div>
-                    <span className="products-modal-reviews">(150+ reviews)</span>
-                  </div>
-                  <div className="products-modal-footer">
-                    <div className="product-pricing">
-                      <div className="price-container">
-                        <span className="product-price">₹{getProductPrice(activeProduct)}</span>
-                        {getProductOriginalPrice(activeProduct) > getProductPrice(activeProduct) && (
-                          <>
-                            <span className="original-price">₹{getProductOriginalPrice(activeProduct)}</span>
-                            <span className="discount-badge">
-                              {Math.round(((getProductOriginalPrice(activeProduct) - getProductPrice(activeProduct)) / getProductOriginalPrice(activeProduct)) * 100)}% OFF
-                            </span>
-                          </>
-                        )}
+                  {!activeProduct.comingSoon && (
+                    <div className="products-modal-rating">
+                      <div className="products-modal-stars">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={16} className="star-filled" fill="currentColor" />
+                        ))}
+                        <span className="rating-number">5.0</span>
                       </div>
-                      <span className="product-weight">{getProductWeight(activeProduct)}</span>
+                      <span className="products-modal-reviews">(150+ reviews)</span>
                     </div>
-                    <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
-                      <ShoppingBag size={18} />
-                      Buy Now
-                    </button>
+                  )}
+                  <div className="products-modal-footer">
+                    {activeProduct.comingSoon ? (
+                      <>
+                        <div className="product-pricing">
+                          <span className="card-coming-soon">Coming Soon</span>
+                        </div>
+                        <button className="product-buy-btn product-buy-btn--soon" disabled>
+                          Coming Soon
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="product-pricing">
+                          <div className="price-container">
+                            <span className="product-price">₹{getProductPrice(activeProduct)}</span>
+                            {getProductOriginalPrice(activeProduct) > getProductPrice(activeProduct) && (
+                              <>
+                                <span className="original-price">₹{getProductOriginalPrice(activeProduct)}</span>
+                                <span className="discount-badge">
+                                  {Math.round(((getProductOriginalPrice(activeProduct) - getProductPrice(activeProduct)) / getProductOriginalPrice(activeProduct)) * 100)}% OFF
+                                </span>
+                              </>
+                            )}
+                          </div>
+                          <span className="product-weight">{getProductWeight(activeProduct)}</span>
+                        </div>
+                        <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
+                          <ShoppingBag size={18} />
+                          Buy Now
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </motion.div>
