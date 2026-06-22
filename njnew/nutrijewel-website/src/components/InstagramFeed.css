@@ -214,27 +214,24 @@
     font-size: 1.75rem;
   }
 
-  /* Mobile: horizontal slider with equal-size tiles */
-  .instagram-grid {
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    gap: 0.85rem;
-    scroll-snap-type: x proximity;
-    scroll-padding-left: 1rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    margin-bottom: 2rem;
-    padding-bottom: 0.5rem;
-  }
-  .instagram-grid::-webkit-scrollbar { display: none; }
+}
 
-  .instagram-post {
-    flex: 0 0 62vw;
-    max-width: 240px;
-    scroll-snap-align: start;
-  }
+/* Mobile: continuous auto-scroll + free-scroll shelf (class added by JS <=767px) */
+.instagram-grid.instagram-grid--shelf {
+  display: flex;
+  grid-template-columns: none;
+  gap: 0.85rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 -1rem 1.5rem;
+  padding: 0.75rem 1rem 1.5rem;
+}
+.instagram-grid.instagram-grid--shelf::-webkit-scrollbar { display: none; }
+.instagram-grid.instagram-grid--shelf .instagram-post {
+  flex: 0 0 62vw;
+  max-width: 240px;
 }
 
 @media (max-width: 480px) {

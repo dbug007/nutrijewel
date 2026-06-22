@@ -4,43 +4,23 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ShoppingBag, ChevronLeft, ChevronRight, X, Star } from 'lucide-react';
 import { featuredTopSellers } from '../data/products';
 import WeightSelector from './WeightSelector';
-import { cardVariants, getRevealProps, hoverLift, tapShrink, smoothEase } from './motionPresets';
+import { cardVariants, getRevealProps, hoverLift, tapShrink } from './motionPresets';
+import { useAutoScroll } from '../hooks/useAutoScroll';
 import './TopSellers.css';
 
 const TopSellers = () => {
   const SWIPE_THRESHOLD = 70;
-  const CAROUSEL_IDLE_DELAY = 5000;
-  const CAROUSEL_ROTATE_INTERVAL = 6000;
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
   const revealProps = getRevealProps(reduceMotion);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [selectedVariants, setSelectedVariants] = useState({});
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [carouselDirection, setCarouselDirection] = useState(1);
   const [activeProduct, setActiveProduct] = useState(null);
   const [modalProductDirection, setModalProductDirection] = useState(1);
   const [activeModalImageIndex, setActiveModalImageIndex] = useState(0);
-  const touchStartXRef = useRef(0);
   const modalTouchStartXRef = useRef(0);
-  const suppressCardClickRef = useRef(false);
-  const lastCarouselInteractionRef = useRef(Date.now());
-  const activeFeaturedProduct = featuredTopSellers[activeIndex];
-
-  const carouselSlideVariants = {
-    enter: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? 30 : -30),
-      opacity: reduceMotion ? 1 : 0
-    }),
-    center: {
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction) => ({
-      x: reduceMotion ? 0 : (direction > 0 ? -30 : 30),
-      opacity: reduceMotion ? 1 : 0
-    })
-  };
+  const shelfRef = useRef(null);
+  useAutoScroll(shelfRef, { interval: 4000 });
 
   const modalProductVariants = {
     enter: (direction) => ({
@@ -91,29 +71,6 @@ const TopSellers = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    if (!isMobile) {
-      return undefined;
-    }
-
-    const slideTimer = setInterval(() => {
-      if (activeProduct) {
-        return;
-      }
-
-      const idleFor = Date.now() - lastCarouselInteractionRef.current;
-      if (idleFor < CAROUSEL_IDLE_DELAY) {
-        return;
-      }
-
-      setCarouselDirection(1);
-      setActiveIndex(prev => (prev + 1) % featuredTopSellers.length);
-      lastCarouselInteractionRef.current = Date.now();
-    }, CAROUSEL_ROTATE_INTERVAL);
-
-    return () => clearInterval(slideTimer);
-  }, [activeProduct, isMobile]);
-
   const handleVariantChange = useCallback((productId, variant) => {
     setSelectedVariants(prev => {
       return {
@@ -162,10 +119,6 @@ const TopSellers = () => {
 
   const getActiveImage = (product) => getProductImages(product)[0];
 
-  const markCarouselInteraction = () => {
-    lastCarouselInteractionRef.current = Date.now();
-  };
-
   const getActiveModalImage = (product) => {
     const images = getProductImages(product);
     return images[activeModalImageIndex % images.length];
@@ -194,7 +147,6 @@ const TopSellers = () => {
   };
 
   const openProductModal = (product) => {
-    markCarouselInteraction();
     setActiveProduct(product);
     setActiveModalImageIndex(0);
   };
@@ -215,7 +167,6 @@ const TopSellers = () => {
     const nextIndex = (currentIndex - 1 + featuredTopSellers.length) % featuredTopSellers.length;
     setModalProductDirection(-1);
     setActiveProduct(featuredTopSellers[nextIndex]);
-    setActiveIndex(nextIndex);
     setActiveModalImageIndex(0);
   };
 
@@ -230,38 +181,7 @@ const TopSellers = () => {
     const nextIndex = (currentIndex + 1) % featuredTopSellers.length;
     setModalProductDirection(1);
     setActiveProduct(featuredTopSellers[nextIndex]);
-    setActiveIndex(nextIndex);
     setActiveModalImageIndex(0);
-  };
-
-  const showPreviousProduct = () => {
-    setCarouselDirection(-1);
-    setActiveIndex(prev => (prev - 1 + featuredTopSellers.length) % featuredTopSellers.length);
-  };
-
-  const showNextProduct = () => {
-    setCarouselDirection(1);
-    setActiveIndex(prev => (prev + 1) % featuredTopSellers.length);
-  };
-
-  const handleCarouselTouchStart = (event) => {
-    markCarouselInteraction();
-    touchStartXRef.current = event.touches[0].clientX;
-  };
-
-  const handleCarouselTouchEnd = (event) => {
-    markCarouselInteraction();
-    const deltaX = touchStartXRef.current - event.changedTouches[0].clientX;
-    if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
-      return;
-    }
-
-    suppressCardClickRef.current = true;
-    if (deltaX > 0) {
-      showNextProduct();
-    } else {
-      showPreviousProduct();
-    }
   };
 
   const handleModalTouchStart = (event) => {
@@ -296,101 +216,53 @@ const TopSellers = () => {
         </div>
 
         {isMobile ? (
-          <>
-            <div className="top-sellers-carousel">
-              <motion.button className="carousel-arrow carousel-arrow-left" onClick={showPreviousProduct} whileHover={reduceMotion ? undefined : { scale: 1.05 }} whileTap={tapShrink}>
-                <ChevronLeft size={24} />
-              </motion.button>
-
-              <div className="carousel-viewport">
-                <AnimatePresence initial={false} custom={carouselDirection} mode="wait">
-                  <motion.div
-                    key={activeIndex}
-                    className="top-seller-slide active"
-                    custom={carouselDirection}
-                    variants={carouselSlideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.55, ease: smoothEase }}
-                    onClick={() => {
-                      markCarouselInteraction();
-                      if (suppressCardClickRef.current) {
-                        suppressCardClickRef.current = false;
-                        return;
-                      }
-                      openProductModal(activeFeaturedProduct);
-                    }}
-                    onMouseEnter={markCarouselInteraction}
-                    onMouseMove={markCarouselInteraction}
-                    onTouchStart={handleCarouselTouchStart}
-                    onTouchEnd={handleCarouselTouchEnd}
-                    onFocus={markCarouselInteraction}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        openProductModal(activeFeaturedProduct);
-                      }
-                    }}
-                  >
-                    <div className="top-seller-card">
-                      <div className="top-seller-image-wrap">
-                        <img
-                          src={getActiveImage(activeFeaturedProduct)}
-                          alt={activeFeaturedProduct.name}
-                          className="top-seller-image"
-                          loading="lazy"
-                          decoding="async"
-                          fetchPriority="low"
-                        />
-                      </div>
-
-                      <div className="top-seller-copy">
-                        <div className="product-category-tag">{activeFeaturedProduct.category}</div>
-                        <div className="top-seller-flags">
-                          {activeFeaturedProduct.isBestSeller && (
-                            <span className="top-seller-badge best" title="Best Seller" aria-label="Best Seller">⭐</span>
-                          )}
-                          {activeFeaturedProduct.isChefsSpecial && (
-                            <span className="top-seller-badge chef" title="Chef's Special" aria-label="Chef's Special">👩‍🍳</span>
-                          )}
-                        </div>
-                        <h3 className="product-name">{activeFeaturedProduct.displayName}</h3>
-                        <div className="top-seller-price-row">
-                          <span className="product-price">₹{getProductPrice(activeFeaturedProduct)}</span>
-                          {getProductOriginalPrice(activeFeaturedProduct) && getProductOriginalPrice(activeFeaturedProduct) > getProductPrice(activeFeaturedProduct) && (
-                            <span className="original-price">₹{getProductOriginalPrice(activeFeaturedProduct)}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <motion.button className="carousel-arrow carousel-arrow-right" onClick={showNextProduct} whileHover={reduceMotion ? undefined : { scale: 1.05 }} whileTap={tapShrink}>
-                <ChevronRight size={24} />
-              </motion.button>
-            </div>
-
-            <div className="carousel-dots">
-              {featuredTopSellers.map((product, index) => (
-                <motion.button
-                  key={product.id}
-                  className={`carousel-dot ${index === activeIndex ? 'active' : ''}`}
-                  onClick={() => {
-                    setCarouselDirection(index > activeIndex ? 1 : -1);
-                    setActiveIndex(index);
-                  }}
-                  aria-label={`Go to ${product.displayName}`}
-                  whileHover={reduceMotion ? undefined : { scale: 1.15 }}
-                  whileTap={tapShrink}
-                />
-              ))}
-            </div>
-          </>
+          <div className="top-sellers-shelf" ref={shelfRef} aria-label="Top sellers">
+            {[...featuredTopSellers, ...featuredTopSellers].map((product, index) => (
+              <article
+                className="top-seller-shelf-card"
+                key={index}
+                aria-hidden={index >= featuredTopSellers.length ? 'true' : undefined}
+                role="button"
+                tabIndex={0}
+                onClick={() => openProductModal(product)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openProductModal(product);
+                  }
+                }}
+              >
+                <div className="top-seller-image-wrap">
+                  <img
+                    src={getActiveImage(product)}
+                    alt={product.name}
+                    className="top-seller-image"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                  />
+                </div>
+                <div className="top-seller-copy">
+                  <div className="product-category-tag">{product.category}</div>
+                  <div className="top-seller-flags">
+                    {product.isBestSeller && (
+                      <span className="top-seller-badge best" title="Best Seller" aria-label="Best Seller">⭐</span>
+                    )}
+                    {product.isChefsSpecial && (
+                      <span className="top-seller-badge chef" title="Chef's Special" aria-label="Chef's Special">👩‍🍳</span>
+                    )}
+                  </div>
+                  <h3 className="product-name">{product.displayName}</h3>
+                  <div className="top-seller-price-row">
+                    <span className="product-price">₹{getProductPrice(product)}</span>
+                    {getProductOriginalPrice(product) && getProductOriginalPrice(product) > getProductPrice(product) && (
+                      <span className="original-price">₹{getProductOriginalPrice(product)}</span>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         ) : (
           <div className="top-sellers-desktop-grid">
             {featuredTopSellers.map((product) => (

@@ -114,10 +114,16 @@ const ProductsPage = () => {
     let prods = products.filter(p => p.category === categoryName);
     if (activeFilters.includes('bestSeller'))   prods = prods.filter(p => p.isBestSeller);
     if (activeFilters.includes('chefsSpecial')) prods = prods.filter(p => p.isChefsSpecial);
-    if (sortBy === 'price-asc')    prods = [...prods].sort((a, b) => getProductPrice(a) - getProductPrice(b));
-    if (sortBy === 'price-desc')   prods = [...prods].sort((a, b) => getProductPrice(b) - getProductPrice(a));
-    if (sortBy === 'best-sellers') prods = [...prods].sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
-    return prods;
+
+    // "Coming Soon" items always sit at the end of every category.
+    const available  = prods.filter(p => !p.comingSoon);
+    const comingSoon = prods.filter(p => p.comingSoon);
+
+    if (sortBy === 'price-asc')       available.sort((a, b) => getProductPrice(a) - getProductPrice(b));
+    else if (sortBy === 'price-desc') available.sort((a, b) => getProductPrice(b) - getProductPrice(a));
+    else                              available.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0)); // default + best-sellers: best sellers first
+
+    return [...available, ...comingSoon];
   };
 
   const getProductImages    = (p) => p.images && p.images.length > 0 ? p.images : [p.image];

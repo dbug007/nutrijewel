@@ -42,6 +42,37 @@
   margin: 0 auto;
 }
 
+/* ── Reviews marquee: continuous auto-scroll + free scroll (no arrows) ── */
+.testimonials-marquee {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* generous vertical padding so card shadows aren't clipped by overflow */
+  padding: 1.5rem 1rem 2.75rem;
+  margin: 0 -1rem;
+}
+.testimonials-marquee::-webkit-scrollbar { display: none; }
+.testimonials-marquee .testimonial-card {
+  flex: 0 0 auto;
+  width: min(82vw, 360px);
+  margin: 0;
+  /* lighter, cleaner shadow than the old single-card carousel */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+@media (min-width: 768px) {
+  .testimonials-marquee {
+    gap: 1.5rem;
+    padding: 1.75rem 0.5rem 2.75rem;
+    margin: 0;
+    justify-content: flex-start;
+  }
+  .testimonials-marquee .testimonial-card { width: 360px; padding: 2.25rem; }
+}
+
 .testimonial-card {
   background-color: white;
   border-radius: 1.5rem;

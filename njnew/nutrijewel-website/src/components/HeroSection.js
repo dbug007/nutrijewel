@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { smoothEase, imageCrossfade } from './motionPresets';
@@ -20,6 +20,8 @@ const HeroSection = () => {
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
   );
   const [heroImg, setHeroImg] = useState(0);
+  const heroRef = useRef(null);
+  const heroPausedRef = useRef(false);
 
   useEffect(() => {
     if (reduceMotion) return undefined;
@@ -40,9 +42,40 @@ const HeroSection = () => {
   useEffect(() => {
     if (!isMobile || reduceMotion) return undefined;
     const timer = setInterval(() => {
+      if (heroPausedRef.current) return;
       setHeroImg(i => (i + 1) % MOBILE_HERO_IMAGES.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(timer);
+  }, [isMobile, reduceMotion]);
+
+  // Hold the slideshow while hovering or scrolling.
+  useEffect(() => {
+    if (!isMobile || reduceMotion) return undefined;
+    const el = heroRef.current;
+    let resumeTimer = 0;
+    const pause = () => { heroPausedRef.current = true; clearTimeout(resumeTimer); };
+    const resumeSoon = () => {
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { heroPausedRef.current = false; }, 1500);
+    };
+    const onScroll = () => { pause(); resumeSoon(); };
+    if (el) {
+      el.addEventListener('mouseenter', pause);
+      el.addEventListener('mouseleave', resumeSoon);
+      el.addEventListener('touchstart', pause, { passive: true });
+      el.addEventListener('touchend', resumeSoon, { passive: true });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      clearTimeout(resumeTimer);
+      if (el) {
+        el.removeEventListener('mouseenter', pause);
+        el.removeEventListener('mouseleave', resumeSoon);
+        el.removeEventListener('touchstart', pause);
+        el.removeEventListener('touchend', resumeSoon);
+      }
+      window.removeEventListener('scroll', onScroll);
+    };
   }, [isMobile, reduceMotion]);
 
   const handleWhatsApp = () => {
@@ -62,7 +95,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="hero-section" aria-label="NutriJewel — handcrafted, guilt-free sweets and snacks">
+    <section className="hero-section" ref={heroRef} aria-label="NutriJewel — handcrafted, guilt-free sweets and snacks">
       {/* Layer 0 — full-bleed hero.
           Mobile: soft 3s crossfade slideshow of portrait shots.
           Desktop: the chocolate-cake plate with a slow Ken-Burns drift. */}

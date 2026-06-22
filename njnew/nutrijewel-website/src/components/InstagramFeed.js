@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Instagram, ExternalLink } from 'lucide-react';
+import { useAutoScroll } from '../hooks/useAutoScroll';
 import './InstagramFeed.css';
 
 const InstagramFeed = () => {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+  );
+  const shelfRef = useRef(null);
+  useAutoScroll(shelfRef, { interval: 4000 });
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
   // Instagram posts featuring actual NutriJewel products and behind-the-scenes
   const instagramPosts = [
     {
@@ -75,13 +90,17 @@ const InstagramFeed = () => {
           <div className="instagram-divider"></div>
         </div>
 
-        {/* Instagram Grid */}
-        <div className="instagram-grid">
-          {instagramPosts.map((post) => (
-            <div 
-              key={post.id} 
+        {/* Instagram Grid (desktop) / continuous auto-scroll shelf (mobile) */}
+        <div
+          className={`instagram-grid${isMobile ? ' instagram-grid--shelf' : ''}`}
+          ref={isMobile ? shelfRef : null}
+        >
+          {(isMobile ? [...instagramPosts, ...instagramPosts] : instagramPosts).map((post, index) => (
+            <div
+              key={index}
               className="instagram-post"
               onClick={handleInstagramClick}
+              aria-hidden={isMobile && index >= instagramPosts.length ? 'true' : undefined}
             >
               <div className="instagram-image-wrapper">
                 <img 
