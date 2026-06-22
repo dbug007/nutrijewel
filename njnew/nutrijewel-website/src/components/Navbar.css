@@ -492,7 +492,8 @@
     border-bottom-color: transparent;
     box-shadow: none;
   }
-  .navbar.navbar--home.is-minimal .navbar-toggle {
+  .navbar.navbar--home.is-minimal .navbar-toggle,
+  .navbar.navbar--home.is-minimal .nj-nav-actions {
     opacity: 0;
     pointer-events: none;
   }

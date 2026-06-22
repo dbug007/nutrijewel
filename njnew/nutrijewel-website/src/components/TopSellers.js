@@ -6,6 +6,8 @@ import { featuredTopSellers } from '../data/products';
 import WeightSelector from './WeightSelector';
 import { cardVariants, getRevealProps, hoverLift, tapShrink } from './motionPresets';
 import { useAutoScroll } from '../hooks/useAutoScroll';
+import WishlistHeart from './store/WishlistHeart';
+import AddToCartButton from './store/AddToCartButton';
 import './TopSellers.css';
 
 const TopSellers = () => {
@@ -240,6 +242,7 @@ const TopSellers = () => {
                     decoding="async"
                     fetchPriority="low"
                   />
+                  <WishlistHeart productId={product.id} className="on-image" />
                 </div>
                 <div className="top-seller-copy">
                   <div className="product-category-tag">{product.category}</div>
@@ -276,6 +279,7 @@ const TopSellers = () => {
                     fetchPriority="low"
                   />
                 </div>
+                <WishlistHeart productId={product.id} className="on-image" />
                 <div className="top-sellers-desktop-content">
                   <div className="product-category-tag">{product.category}</div>
                   <div className="top-seller-flags">
@@ -308,10 +312,13 @@ const TopSellers = () => {
                   </div>
                   <span className="product-weight">{getProductWeight(product)}</span>
 
-                  <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(product)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
-                    <ShoppingBag size={18} />
-                    Buy Now
-                  </motion.button>
+                  <div className="nj-cta-row">
+                    <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
+                    <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(product)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
+                      <ShoppingBag size={18} />
+                      Buy Now
+                    </motion.button>
+                  </div>
                 </div>
               </motion.article>
             ))}
@@ -382,6 +389,7 @@ const TopSellers = () => {
                       </div>
                     </>
                   )}
+                  <WishlistHeart productId={activeProduct.id} className="on-image" />
                 </div>
                 <div className="product-modal-content">
                   <div className="product-category-tag">{activeProduct.category}</div>
@@ -436,10 +444,13 @@ const TopSellers = () => {
                       <span className="product-weight">{getProductWeight(activeProduct)}</span>
                     </div>
 
-                    <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(activeProduct)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
-                      <ShoppingBag size={18} />
-                      Buy Now
-                    </motion.button>
+                    <div className="nj-cta-row">
+                      <AddToCartButton product={activeProduct} variant={selectedVariants[activeProduct.id]} className="full" />
+                      <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(activeProduct)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
+                        <ShoppingBag size={18} />
+                        Buy Now
+                      </motion.button>
+                    </div>
                   </div>
                 </div>
               </motion.div>

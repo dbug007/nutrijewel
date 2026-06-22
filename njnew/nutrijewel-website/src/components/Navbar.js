@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ShoppingBag, ChevronDown } from 'lucide-react';
+import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
+import { useStore } from '../store/StoreContext';
+import './store/store.css';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,6 +11,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isHome, state: headerState } = useHeaderReveal();
+  const { cartCount, wishlistCount, openCart, openWishlist } = useStore();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -74,6 +77,18 @@ const Navbar = () => {
           <li><Link to="/recipes-blog" className="navbar-link">Recipes & Blog</Link></li>
           <li><Link to="/contact" className="navbar-link">Contact</Link></li>
         </ul>
+
+        {/* Cart + Wishlist */}
+        <div className="nj-nav-actions">
+          <button className="nj-nav-icon" onClick={openWishlist} aria-label={`Open wishlist, ${wishlistCount} items`}>
+            <Heart size={20} />
+            {wishlistCount > 0 && <span className="nj-nav-badge wish">{wishlistCount}</span>}
+          </button>
+          <button className="nj-nav-icon" onClick={openCart} aria-label={`Open cart, ${cartCount} items`}>
+            <ShoppingCart size={20} />
+            {cartCount > 0 && <span className="nj-nav-badge">{cartCount}</span>}
+          </button>
+        </div>
 
         {/* Buy Now Button */}
         <button className="navbar-buy-btn" onClick={handleBuyNow}>

@@ -4,6 +4,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { products } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
 import { imageCrossfade, imageFadeTransition, smoothEase } from '../components/motionPresets';
+import WishlistHeart from '../components/store/WishlistHeart';
+import AddToCartButton from '../components/store/AddToCartButton';
 import './ProductsPage.css';
 
 const CATEGORIES = [
@@ -352,6 +354,7 @@ const ProductsPage = () => {
                             {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                           </div>
                           {product.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
+                          <WishlistHeart productId={product.id} className="on-image" />
                         </div>
 
                         {/* Card content */}
@@ -397,10 +400,13 @@ const ProductsPage = () => {
                                       <span key={i} className="benefit-tag">{f}</span>
                                     ))}
                                   </div>
-                                  <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
-                                    <ShoppingBag size={17} />
-                                    Buy Now
-                                  </button>
+                                  <div className="nj-cta-row">
+                                    <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
+                                    <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
+                                      <ShoppingBag size={17} />
+                                      Buy Now
+                                    </button>
+                                  </div>
                                 </>
                               )}
                             </div>
@@ -473,6 +479,7 @@ const ProductsPage = () => {
                     </div>
                   )}
                   {activeProduct.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
+                  <WishlistHeart productId={activeProduct.id} className="on-image" />
                 </div>
 
                 <div className="products-modal-content">
@@ -541,10 +548,13 @@ const ProductsPage = () => {
                           </div>
                           <span className="product-weight">{getProductWeight(activeProduct)}</span>
                         </div>
-                        <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
-                          <ShoppingBag size={18} />
-                          Buy Now
-                        </button>
+                        <div className="nj-cta-row">
+                          <AddToCartButton product={activeProduct} variant={selectedVariants[activeProduct.id]} className="full" />
+                          <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
+                            <ShoppingBag size={18} />
+                            Buy Now
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
