@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { smoothEase } from './motionPresets';
+import { smoothEase, imageCrossfade } from './motionPresets';
 import './HeroSection.css';
 
 /* Cinematic Plate hero — full-bleed food, near-zero words.
    One product photo carries the brand; a kinetic word + signature + single CTA. */
 const ROTATING_WORDS = ['Pure.', 'Joyful.', 'Crafted.'];
 const HERO_IMAGE = `${process.env.PUBLIC_URL}/images/hero-chocolate-cake.jpg`;
+/* Mobile-only: a soft crossfade slideshow of portrait hero shots. */
+const MOBILE_HERO_IMAGES = [1, 2, 3, 4, 5].map(
+  n => `${process.env.PUBLIC_URL}/images/hero-mobile-${n}.jpg`
+);
 
 const HeroSection = () => {
   const reduceMotion = useReducedMotion();
   const [wordIdx, setWordIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+  );
+  const [heroImg, setHeroImg] = useState(0);
 
   useEffect(() => {
     if (reduceMotion) return undefined;
@@ -20,6 +28,22 @@ const HeroSection = () => {
     }, 3800);
     return () => clearInterval(timer);
   }, [reduceMotion]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || reduceMotion) return undefined;
+    const timer = setInterval(() => {
+      setHeroImg(i => (i + 1) % MOBILE_HERO_IMAGES.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isMobile, reduceMotion]);
 
   const handleWhatsApp = () => {
     window.open(
@@ -39,15 +63,33 @@ const HeroSection = () => {
 
   return (
     <section className="hero-section" aria-label="NutriJewel — handcrafted, guilt-free sweets and snacks">
-      {/* Layer 0 — full-bleed image with slow Ken-Burns drift */}
-      <motion.img
-        className="hero-cinematic-img"
-        src={HERO_IMAGE}
-        alt="NutriJewel handcrafted dark-chocolate walnut cake"
-        initial={{ scale: 1 }}
-        animate={reduceMotion ? { scale: 1 } : { scale: 1.09 }}
-        transition={reduceMotion ? { duration: 0 } : { duration: 18, ease: 'linear', repeat: Infinity, repeatType: 'mirror' }}
-      />
+      {/* Layer 0 — full-bleed hero.
+          Mobile: soft 3s crossfade slideshow of portrait shots.
+          Desktop: the chocolate-cake plate with a slow Ken-Burns drift. */}
+      {isMobile ? (
+        <AnimatePresence initial={false} mode="sync">
+          <motion.img
+            key={heroImg}
+            className="hero-cinematic-img"
+            src={MOBILE_HERO_IMAGES[heroImg]}
+            alt="NutriJewel handcrafted treats"
+            variants={imageCrossfade}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={reduceMotion ? { duration: 0 } : { duration: 1.1, ease: smoothEase }}
+          />
+        </AnimatePresence>
+      ) : (
+        <motion.img
+          className="hero-cinematic-img"
+          src={HERO_IMAGE}
+          alt="NutriJewel handcrafted dark-chocolate walnut cake"
+          initial={{ scale: 1 }}
+          animate={reduceMotion ? { scale: 1 } : { scale: 1.09 }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 18, ease: 'linear', repeat: Infinity, repeatType: 'mirror' }}
+        />
+      )}
 
       {/* Layers 1-3 — legibility scrim, film grain, gallery frame (all decorative) */}
       <div className="hero-overlay" aria-hidden="true" />
