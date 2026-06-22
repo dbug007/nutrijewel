@@ -14,9 +14,6 @@ const TestimonialsSection = () => {
   const scrollRef = useRef(null);
   useAutoScroll(scrollRef, { interval: 4000 });
 
-  // Rendered twice for a seamless loop (second half is decorative for a11y).
-  const loop = [...testimonials, ...testimonials];
-
   return (
     <motion.section className="testimonials-section" {...revealProps} variants={cardVariants}>
       <div className="testimonials-container">
@@ -31,12 +28,8 @@ const TestimonialsSection = () => {
 
         {/* Auto-scrolling, free-scroll review wall */}
         <div className="testimonials-marquee" ref={scrollRef} aria-label="Customer reviews">
-          {loop.map((testimonial, index) => (
-            <article
-              className="testimonial-card"
-              key={index}
-              aria-hidden={index >= testimonials.length ? 'true' : undefined}
-            >
+          {testimonials.map((testimonial, index) => (
+            <article className="testimonial-card" key={index}>
               <div className="testimonial-content">
                 <div className="testimonial-quote-icon">
                   <Quote size={26} className="testimonial-quote-svg" />

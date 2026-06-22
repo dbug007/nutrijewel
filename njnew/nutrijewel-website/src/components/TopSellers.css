@@ -11,6 +11,12 @@
   );
 }
 
+/* Mobile: the shelf is shorter than the old carousel — tighten the trailing gap */
+@media (max-width: 767px) {
+  .top-sellers-section { padding: 1.5rem 0 2.5rem; }
+  .view-all-container { margin-top: 1.5rem; }
+}
+
 .top-sellers-container {
   max-width: 80rem;
   margin: 0 auto;
@@ -115,6 +121,8 @@
 /* ── Top Sellers shelf (mobile: continuous auto-scroll + free scroll) ── */
 .top-sellers-shelf {
   display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
   gap: 0.9rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

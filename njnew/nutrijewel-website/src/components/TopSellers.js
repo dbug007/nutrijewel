@@ -217,11 +217,10 @@ const TopSellers = () => {
 
         {isMobile ? (
           <div className="top-sellers-shelf" ref={shelfRef} aria-label="Top sellers">
-            {[...featuredTopSellers, ...featuredTopSellers].map((product, index) => (
+            {featuredTopSellers.map((product) => (
               <article
                 className="top-seller-shelf-card"
-                key={index}
-                aria-hidden={index >= featuredTopSellers.length ? 'true' : undefined}
+                key={product.id}
                 role="button"
                 tabIndex={0}
                 onClick={() => openProductModal(product)}

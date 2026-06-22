@@ -3,11 +3,11 @@ import { useReducedMotion } from 'motion/react';
 
 /**
  * Auto-advancing horizontal shelf. Every `interval` ms it smoothly scrolls to the
- * next card. Manual free-scroll/drag works natively; the auto-advance pauses on
+ * next card; when it reaches the end it glides back to the start (no duplicated
+ * cards). Manual free-scroll/drag works natively; auto-advance pauses on
  * hover / touch / drag / wheel / focus and resumes after `resumeDelay`.
  *
- * Seamless infinite loop requires the container's children to be the items rendered
- * TWICE (a duplicated list). Disabled under prefers-reduced-motion; paused off-screen.
+ * Disabled under prefers-reduced-motion; paused while off-screen.
  *
  * @param {React.RefObject<HTMLElement>} ref  the scroll container (overflow-x: auto)
  */
@@ -24,25 +24,19 @@ export function useAutoScroll(ref, { interval = 4000, resumeDelay = 2000 } = {})
 
     const cardStep = () => {
       const kids = el.children;
-      if (kids.length >= 2) return kids[1].offsetLeft - kids[0].offsetLeft;
+      if (kids.length >= 2) return Math.max(1, kids[1].offsetLeft - kids[0].offsetLeft);
       return el.clientWidth;
-    };
-    const loopWidth = () => {
-      const kids = el.children;
-      if (kids.length >= 2) return kids[Math.floor(kids.length / 2)].offsetLeft;
-      return el.scrollWidth / 2;
     };
 
     const advance = () => {
       if (paused || !visible) return;
-      const step = cardStep();
-      const lw = loopWidth();
-      // About to cross into the duplicate half? Jump back by one full set first —
-      // invisible because the content is identical — then smoothly step forward.
-      if (lw > 0 && el.scrollLeft + step >= lw - 1) {
-        el.scrollLeft -= lw;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 1) return; // nothing to scroll
+      if (el.scrollLeft >= maxScroll - 2) {
+        el.scrollTo({ left: 0, behavior: 'smooth' }); // loop back to the start
+      } else {
+        el.scrollBy({ left: cardStep(), behavior: 'smooth' });
       }
-      el.scrollBy({ left: step, behavior: 'smooth' });
     };
 
     const timer = setInterval(advance, interval);

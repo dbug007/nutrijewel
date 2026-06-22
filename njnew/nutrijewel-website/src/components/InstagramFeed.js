@@ -95,12 +95,11 @@ const InstagramFeed = () => {
           className={`instagram-grid${isMobile ? ' instagram-grid--shelf' : ''}`}
           ref={isMobile ? shelfRef : null}
         >
-          {(isMobile ? [...instagramPosts, ...instagramPosts] : instagramPosts).map((post, index) => (
+          {instagramPosts.map((post, index) => (
             <div
               key={index}
               className="instagram-post"
               onClick={handleInstagramClick}
-              aria-hidden={isMobile && index >= instagramPosts.length ? 'true' : undefined}
             >
               <div className="instagram-image-wrapper">
                 <img 

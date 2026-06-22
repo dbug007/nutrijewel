@@ -46,6 +46,7 @@
 .testimonials-marquee {
   display: flex;
   align-items: stretch;
+  flex-wrap: nowrap;
   gap: 1.25rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

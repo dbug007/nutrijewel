@@ -1,6 +1,13 @@
 /* Custom styles for NutriJewel website */
 .App {
   text-align: left;
+  overflow-x: clip; /* guard against any element causing horizontal page overflow */
+}
+
+/* Homepage: contain any horizontal bleed (full-bleed shelves, negative margins)
+   so the page can't scroll sideways or show white gutters when zoomed out. */
+.home-page {
+  overflow-x: clip;
 }
 
 .hero {

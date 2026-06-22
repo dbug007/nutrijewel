@@ -219,6 +219,8 @@
 /* Mobile: continuous auto-scroll + free-scroll shelf (class added by JS <=767px) */
 .instagram-grid.instagram-grid--shelf {
   display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
   grid-template-columns: none;
   gap: 0.85rem;
   overflow-x: auto;
