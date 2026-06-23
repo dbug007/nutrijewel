@@ -530,6 +530,51 @@
   .navbar.navbar--home { transition: none; }
 }
 
+/* ── Desktop homepage: same transparent-at-top + hide/reveal as mobile,
+   but the full nav stays visible (in white) over the hero ── */
+@media (min-width: 768px) {
+  .navbar.navbar--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    will-change: transform;
+    transition: transform 0.4s var(--ease-smooth),
+                background-color 0.4s var(--ease-smooth),
+                border-color 0.4s var(--ease-smooth),
+                box-shadow 0.4s var(--ease-smooth);
+  }
+  /* minimal — transparent over the hero, light contents */
+  .navbar.navbar--home.is-minimal {
+    transform: translateY(0);
+    background-color: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+  .navbar.navbar--home.is-minimal .navbar-link,
+  .navbar.navbar--home.is-minimal .navbar-dropdown-toggle {
+    color: #fff;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+  }
+  .navbar.navbar--home.is-minimal .nj-nav-icon { color: #fff; }
+  .navbar.navbar--home.is-minimal .navbar-logo-icon {
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+  }
+  /* revealed — solid cream, just below the marquee */
+  .navbar.navbar--home.is-revealed {
+    transform: translateY(var(--nj-marquee-height, 2.15rem));
+    background-color: var(--nj-cream);
+    border-bottom-color: rgba(147, 181, 89, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+  /* hidden — slide away on scroll down */
+  .navbar.navbar--home.is-hidden {
+    transform: translateY(-110%);
+    background-color: var(--nj-cream);
+    box-shadow: none;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0 1rem;
