@@ -1,0 +1,49 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import TopMarquee from './components/TopMarquee';
+import ScrollToTop from './components/ScrollToTop';
+import ScrollToTopOnRouteChange from './components/ScrollToTopOnRouteChange';
+import Footer from './components/Footer';
+import { StoreProvider } from './store/StoreContext';
+import CartDrawer from './components/store/CartDrawer';
+import WishlistDrawer from './components/store/WishlistDrawer';
+import StoreToast from './components/store/StoreToast';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import ProductsPage from './pages/ProductsPage';
+import ServicesPage from './pages/ServicesPage';
+import RecipesBlogPage from './pages/RecipesBlogPage';
+import ContactPage from './pages/ContactPage';
+// import ThandaiCakePopup from './components/ThandaiCakePopup';
+import './App.css';
+
+function App() {
+  return (
+    <StoreProvider>
+    <Router>
+      <div className="App">
+        <ScrollToTopOnRouteChange />
+        <TopMarquee />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/recipes-blog" element={<RecipesBlogPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+        {/* <ThandaiCakePopup /> */}
+        <Footer />
+        <ScrollToTop />
+        <CartDrawer />
+        <WishlistDrawer />
+        <StoreToast />
+      </div>
+    </Router>
+    </StoreProvider>
+  );
+}
+
+export default App;

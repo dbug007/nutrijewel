@@ -1,0 +1,1665 @@
+{
+  "_meta": {
+    "generated": "2026-05-25",
+    "notes": "Source map for nutrition facts. Verify before updating nutrition-data.js."
+  },
+  "ragi-finger-millet": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "bajra-pearl-millet": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "jowar-sorghum": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "jowar-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2512373/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2512373,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amaranth-grain": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170683/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170683,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "quinoa": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2512372/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2512372,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "buckwheat-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2512374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2512374,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "oats-rolled": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346396/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346396,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "gond-edible-gum": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "dink-gum-tragacanth": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "foxnuts-makhana": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "chia-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2710819/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2710819,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "flax-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hemp-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170148/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170148,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "pumpkin-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "sunflower-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515381/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515381,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "sesame-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170150/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170150,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "watermelon-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169407/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169407,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "poppy-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171330/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171330,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "nigella-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "lotus-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170149/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170149,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "perilla-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "basil-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172232/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 172232,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "quinoa-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2512372/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2512372,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "caraway-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170918/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170918,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "fennel-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2747655/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2747655,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "anise-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171316/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171316,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dill-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/324653/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 324653,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "amaranth-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2512371/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2512371,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "sacha-inchi-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "pomegranate-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167787/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167787,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "grape-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "baobab-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167806/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167806,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "moringa-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "papaya-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169107/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169107,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cantaloupe-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/746770/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 746770,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "honeydew-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2710816/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2710816,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "teff-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168918/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168918,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "milk-thistle-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "evening-primrose-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515380/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515380,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "almonds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346393/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346393,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "walnuts-english": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346394/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346394,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "walnuts-black": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170186/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170186,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cashews": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515374,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "pistachios": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515379/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515379,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515375/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515375,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnuts-raw": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515375/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515375,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnuts-roasted": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515375/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515375,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnuts-blanched": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170582/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170582,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnuts-chopped": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515375/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515375,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnut-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171427/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171427,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hazelnut-butter": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2262074/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2262074,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "pecans": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346395/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346395,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "brazil-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515374,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "macadamia-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515378/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515378,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "pine-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346392/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346392,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "chestnuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170165/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170165,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "beechnuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170161/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170161,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "hickory-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515374,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "butternuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170570/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170570,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-meat": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170169/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170169,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "candlenuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "sacha-inchi": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "kola-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515374,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "peanuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515376/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515376,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "tiger-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515374/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515374,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "acorns": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170565/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170565,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "ginkgo-nuts": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170584/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170584,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dates-medjool": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168191/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168191,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dates-deglet-noor": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171726/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171726,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dates-mazafati": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168191/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168191,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dates-kimia": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168191/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168191,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "khajoor-paste": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2685580/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2685580,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "figs-dried": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/746768/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 746768,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "raisins": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2758980/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2758980,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "jaggery-gur": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "amul-milk": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/746766/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 746766,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "amul-butter": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2262074/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2262074,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "sunflower-oil": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/1750349/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 1750349,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "curd-yogurt": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346384/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346384,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amul-curd": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346384/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346384,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "milky-mist-curd": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346384/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346384,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "lemon-water": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/175090/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 175090,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "white-sugar": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2758993/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2758993,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "brown-sugar": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170675/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170675,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-sugar": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171575/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171575,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "stevia": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170679/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170679,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "maple-syrup": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170276/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170276,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "honey": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169640/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169640,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-palm-sugar": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173568/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 173568,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanhouten-dark-chocolate": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169592/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169592,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanhouten-cocoa-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174122/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174122,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanhouten-dutch-cocoa": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173247/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 173247,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanhouten-drinking-chocolate": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167601/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167601,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanhouten-milk-chocolate": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167587/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167587,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amul-dark-chocolate-55": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169592/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169592,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amul-dark-chocolate-70": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170273/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170273,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amul-dark-chocolate-85": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170273/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170273,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "amul-dark-chocolate-90": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170274/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170274,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dark-chocolate-70": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170273/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170273,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dark-chocolate-70-sweetened": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170273/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170273,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "white-chocolate": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167571/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167571,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "baking-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172805/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 172805,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "eggs": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/748967/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 748967,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "cream-cheese": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346385/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346385,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "powdered-sugar": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174824/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174824,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-fresh": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515382/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515382,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-desiccated": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168585/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168585,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-oil": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/330458/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 330458,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "milk-whole": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/746766/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 746766,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "almond-milk": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2257045/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2257045,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-milk": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174116/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174116,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "ghee": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171314/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171314,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cinnamon": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171849/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171849,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cardamom": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170919/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170919,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "vanilla-extract": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173471/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 173471,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cocoa-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174122/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174122,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dark-chocolate": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170273/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170273,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "red-chili-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170106/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170106,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "chili-flakes": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170002/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170002,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "oregano-dried": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171328/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171328,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coriander-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170922/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170922,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cumin-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170923/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170923,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "turmeric": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172231/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 172231,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "fenugreek-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171324/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171324,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "mustard-seeds": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/326698/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 326698,
+    "dataType": "Foundation",
+    "status": "error",
+    "note": "USDA detail error: HTTP 404"
+  },
+  "hing-asafoetida": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "chickpeas": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173799/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 173799,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "black-gram-urad": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2644282/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2644282,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "green-gram-moong": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2644282/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2644282,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "avocado": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2710824/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2710824,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "strawberries": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346409/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346409,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "blueberries": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346411/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346411,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cranberries-dried": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2758976/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2758976,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cranberries-dried-sweetened": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2758976/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2758976,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "blueberries-dried": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346411/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346411,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "blueberries-dried-sweetened": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346411/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346411,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "black-raisins": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2758980/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2758980,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "turmeric-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172231/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 172231,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cinnamon-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171849/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 171849,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "cardamom-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170919/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170919,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "ginger-powder": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/169231/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 169231,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "garlic": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/1104647/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 1104647,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "green-chillies": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2710823/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2710823,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "onion": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/790646/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 790646,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "tomato": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170051/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170051,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "curry-leaves": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170924/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 170924,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "haldiram-aloo-bhujiya": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "fine-sev": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2003589/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2003589,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "haldiram-sev": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "garden-sev": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168407/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 168407,
+    "dataType": "SR Legacy",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "chana-dal": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "whole-wheat-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/790085/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 790085,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "all-purpose-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/789890/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 789890,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "almond-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2261420/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2261420,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "coconut-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2515382/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2515382,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "besan-chickpea-flour": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174288/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174288,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "sattu": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "",
+    "sourceDate": "2026-05-26",
+    "fdcId": "",
+    "dataType": "",
+    "status": "no_match",
+    "note": "No USDA Foundation/SR Legacy match."
+  },
+  "peanut-butter": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2262072/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2262072,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "medium",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "almond-butter": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2262074/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2262074,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "rice-crisps": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/1104812/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 1104812,
+    "dataType": "Foundation",
+    "status": "low_confidence",
+    "confidence": "low",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dried-blueberry": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346411/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346411,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "dried-blueberry-sweetened": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2346411/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2346411,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "orange-juice": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/2003591/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 2003591,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "instant-coffee": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174134/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 174134,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "salt": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/746775/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 746775,
+    "dataType": "Foundation",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "baking-soda": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/175040/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 175040,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  },
+  "lemon-juice": {
+    "sourceType": "USDA FoodData Central",
+    "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/167747/nutrients",
+    "sourceDate": "2026-05-26",
+    "fdcId": 167747,
+    "dataType": "SR Legacy",
+    "status": "needs_review",
+    "confidence": "high",
+    "note": "USDA candidate match; pending manual review."
+  }
+}

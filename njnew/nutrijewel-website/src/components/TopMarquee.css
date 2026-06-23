@@ -1,0 +1,107 @@
+:root {
+  --nj-marquee-height: 2.15rem;
+}
+
+.top-marquee {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: var(--nj-marquee-height);
+  background: linear-gradient(90deg, #2f2f2f 0%, #3a3a3a 50%, #2f2f2f 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f7f7f7;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  font-family: 'Open Sans Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.top-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  white-space: nowrap;
+  padding-left: 1.2rem;
+  animation: njMarqueeScroll 34s linear infinite;
+  min-width: max-content;
+}
+
+.top-marquee-item {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.top-marquee-divider {
+  opacity: 0.65;
+}
+
+@keyframes njMarqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nj-marquee-height: 1.95rem;
+  }
+
+  .top-marquee-item {
+    font-size: 0.78rem;
+  }
+
+  .top-marquee-track {
+    animation-duration: 30s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-marquee-track {
+    animation: none;
+  }
+}
+
+/* ── Mobile homepage: marquee is a fixed overlay that only shows when the
+   navbar is revealed (scrolling up). Hidden at the hero top and on scroll-down. */
+@media (max-width: 767px) {
+  .top-marquee.marquee--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    transform: translateY(-100%);
+    will-change: transform;
+    transition: transform 0.35s var(--ease-smooth);
+  }
+  .top-marquee.marquee--home.is-revealed {
+    transform: translateY(0);
+  }
+}
+
+/* Desktop homepage: same fixed-overlay marquee that only shows when revealed */
+@media (min-width: 768px) {
+  .top-marquee.marquee--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    transform: translateY(-100%);
+    will-change: transform;
+    transition: transform 0.4s var(--ease-smooth);
+  }
+  .top-marquee.marquee--home.is-revealed {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-marquee.marquee--home { transition: none; }
+}

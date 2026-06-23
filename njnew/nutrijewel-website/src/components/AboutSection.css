@@ -1,0 +1,345 @@
+/* AboutSection Component */
+
+.home-about-section {
+  padding: 5rem 0;
+  background-color: var(--nj-cream);
+}
+
+.home-about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header */
+.home-about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.home-about-header h2 {
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--nj-charcoal);
+  margin-bottom: 1rem;
+}
+
+.home-about-header-green {
+  color: var(--nj-green);
+}
+
+.home-about-divider {
+  width: 80px;
+  height: 4px;
+  background-color: var(--nj-green);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* Main Grid */
+.home-about-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .home-about-main-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+}
+
+/* Image Section */
+.home-about-image-section {
+  display: flex;
+  justify-content: center;
+}
+
+.home-about-founder-wrapper {
+  padding: 10px;
+  background: linear-gradient(135deg, var(--nj-mint), var(--nj-green), var(--nj-olive));
+  border-radius: 30px;
+  transition: transform 0.4s var(--ease-entrance), box-shadow 0.4s var(--ease-entrance);
+}
+
+.home-about-founder-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.home-about-founder-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.home-about-founder-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.45s var(--ease-entrance);
+}
+
+.home-about-founder-wrapper:hover .home-about-founder-bg {
+  transform: scale(1.05);
+}
+
+.home-about-founder-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 2rem;
+  color: white;
+}
+
+.home-about-founder-name {
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.home-about-founder-title {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.home-about-founder-quote {
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+/* Story Section */
+.home-about-story-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.home-about-text-large {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--nj-charcoal);
+  line-height: 1.6;
+}
+
+.home-about-founder-name-text {
+  color: var(--nj-green);
+  font-weight: 600;
+}
+
+.home-about-text p {
+  color: var(--nj-grey);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Stats */
+.home-about-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.home-about-stat-item {
+  text-align: center;
+}
+
+.home-about-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--nj-green);
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.home-about-stat-label {
+  color: var(--nj-charcoal);
+  font-weight: 500;
+}
+
+/* Values Section */
+.home-about-values-section {
+  margin-top: 2rem;
+}
+
+.home-about-values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .home-about-values {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+.home-about-value-card {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s var(--ease-entrance), box-shadow 0.4s var(--ease-entrance);
+}
+
+.home-about-value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.1);
+}
+
+.home-about-value-icon {
+  color: var(--nj-green);
+  margin-bottom: 1rem;
+}
+
+.home-about-value-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--nj-charcoal);
+  margin-bottom: 0.75rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.home-about-value-description {
+  color: var(--nj-grey);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .home-about-section {
+    padding: 3rem 0;
+  }
+
+  .home-about-container {
+    padding: 0 1rem;
+  }
+
+  .home-about-header h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-about-section   { padding: 2.5rem 0; }
+  .home-about-header h2 { font-size: 1.6rem; }
+}
+
+/* ===== Mobile: compact symmetric feature grid =====
+   Replaces the old single-column stacking block. Scoped to max-width:767px so the
+   >=768px desktop layout (2-col stats, 4-col values) is completely untouched. */
+@media (max-width: 767px) {
+  /* Tighten overall vertical rhythm */
+  .home-about-main-grid {
+    gap: 2rem;
+  }
+
+  .home-about-values-section {
+    margin-top: 1.25rem;
+  }
+
+  /* Stats: keep side-by-side 2 columns, tighter gap + smaller numbers */
+  .home-about-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .home-about-stat-number {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  .home-about-stat-label {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  /* Values: tidy 2x2 grid that mirrors the 2-col stats above it */
+  .home-about-values {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Compact, centered cards. Keep brand radius (12px) and the existing soft shadow. */
+  .home-about-value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 0.85rem;
+    border-radius: 12px;
+  }
+
+  /* Prevent a stuck hover-lift after tap on touch devices */
+  .home-about-value-card:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Shrink the lucide icon. size={32} renders width/height ATTRIBUTES on the SVG,
+     which plain CSS width/height override (no !important needed). */
+  .home-about-value-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Smaller title; no bottom margin since the description is hidden (avoids dead space) */
+  .home-about-value-title {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    line-height: 1.25;
+  }
+
+  /* Hide the one-line descriptions on mobile for a clean feature-grid look */
+  .home-about-value-description {
+    display: none;
+  }
+}
+
+/* ===== Extra-small phones: trim a touch more without feeling cramped ===== */
+@media (max-width: 480px) {
+  .home-about-stats {
+    gap: 0.75rem;
+  }
+  .home-about-stat-number {
+    font-size: 1.75rem;
+  }
+
+  .home-about-values {
+    gap: 0.625rem;
+  }
+  .home-about-value-card {
+    padding: 1.1rem 0.65rem;
+  }
+  .home-about-value-icon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 0.45rem;
+  }
+  .home-about-value-title {
+    font-size: 0.9rem;
+  }
+}

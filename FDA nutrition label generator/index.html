@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate FDA-compliant nutrition facts labels for your recipes">
+    <title>FDA Nutrition Label Generator</title>
+    <link rel="stylesheet" href="styles/main.css?v=2.1">
+    <link rel="stylesheet" href="styles/nutrition-label.css?v=2.1">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FDA Nutrition Label Generator</h1>
+            <p>Create FDA-compliant nutrition facts labels for your recipes</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <div class="recipe-info">
+                    <h2>Recipe Information</h2>
+                    <div class="form-group">
+                        <label for="recipe-name">Recipe Name:</label>
+                        <input type="text" id="recipe-name" placeholder="Enter recipe name">
+                    </div>
+                    <div class="form-group">
+                        <label for="serving-size">Serving Size:</label>
+                        <input type="number" id="serving-size" value="1" min="0.1" step="0.1">
+                        <select id="serving-unit">
+                            <option value="cup">cup</option>
+                            <option value="tablespoon">tablespoon</option>
+                            <option value="teaspoon">teaspoon</option>
+                            <option value="piece">piece</option>
+                            <option value="slice">slice</option>
+                            <option value="gram">gram</option>
+                            <option value="ounce">ounce</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="servings-per-container">Servings per container:</label>
+                        <input type="number" id="servings-per-container" value="1" min="1">
+                    </div>
+                </div>
+
+                <div class="ingredients-section">
+                    <h2>Ingredients</h2>
+                    <div id="ingredients-list">
+                        <!-- Dynamic ingredient inputs will be added here -->
+                    </div>
+                    <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
+                </div>
+
+                <div class="calculation-section">
+                    <button type="button" id="calculate-nutrition" class="btn btn-primary">Calculate Nutrition</button>
+                    <button type="button" id="reset-form" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <div class="label-preview">
+                    <h2>Nutrition Facts Label Preview</h2>
+                    <div id="nutrition-label" class="nutrition-facts">
+                        <!-- FDA Nutrition Label will be generated here -->
+                        <div class="nutrition-title">Nutrition Facts</div>
+                        <div class="serving-info">
+                            <div class="servings-per-container">1 servings per container</div>
+                            <div class="serving-size"><strong>Serving size</strong> 1 cup</div>
+                        </div>
+                        <div class="amount-per-serving">Amount per serving</div>
+                        <div class="calories-section">
+                            <div class="calories"><strong>Calories</strong> <span class="calories-value">0</span></div>
+                        </div>
+                        <div class="daily-value-note">
+                            <span class="nutrient-header"></span>
+                            <span class="per-100g-header">Per 100g</span>
+                            <span class="per-serving-header">Per Serving</span>
+                            <span class="dv-header">% Daily Value*</span>
+                        </div>
+                        <div class="nutrients">
+                            <div class="nutrient-row major">
+                                <span class="nutrient-name">Total Fat</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row indent">
+                                <span class="nutrient-name">Saturated Fat</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row indent">
+                                <span class="nutrient-name"><em>Trans</em> Fat</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value"></span>
+                            </div>
+                            <div class="nutrient-row major">
+                                <span class="nutrient-name">Cholesterol</span>
+                                <span class="nutrient-amount-100g">0mg</span>
+                                <span class="nutrient-amount">0mg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row major">
+                                <span class="nutrient-name">Sodium</span>
+                                <span class="nutrient-amount-100g">0mg</span>
+                                <span class="nutrient-amount">0mg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row major">
+                                <span class="nutrient-name">Total Carbohydrate</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row indent">
+                                <span class="nutrient-name">Dietary Fiber</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row indent">
+                                <span class="nutrient-name">Total Sugars</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value"></span>
+                            </div>
+                            <div class="nutrient-row double-indent">
+                                <span class="nutrient-name">Includes 0g Added Sugars</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount"></span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row major">
+                                <span class="nutrient-name">Protein</span>
+                                <span class="nutrient-amount-100g">0g</span>
+                                <span class="nutrient-amount">0g</span>
+                                <span class="daily-value"></span>
+                            </div>
+                        </div>
+                        <div class="vitamins-minerals">
+                            <div class="nutrient-row">
+                                <span class="nutrient-name">Vitamin D</span>
+                                <span class="nutrient-amount-100g">0mcg</span>
+                                <span class="nutrient-amount">0mcg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row">
+                                <span class="nutrient-name">Calcium</span>
+                                <span class="nutrient-amount-100g">0mg</span>
+                                <span class="nutrient-amount">0mg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row">
+                                <span class="nutrient-name">Iron</span>
+                                <span class="nutrient-amount-100g">0mg</span>
+                                <span class="nutrient-amount">0mg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                            <div class="nutrient-row">
+                                <span class="nutrient-name">Potassium</span>
+                                <span class="nutrient-amount-100g">0mg</span>
+                                <span class="nutrient-amount">0mg</span>
+                                <span class="daily-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="daily-value-footnote">
+                            *The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <h2>Export Options</h2>
+                    <div class="export-buttons">
+                        <button type="button" id="export-png" class="btn btn-primary">Download PNG</button>
+                        <button type="button" id="export-pdf" class="btn btn-primary">Download PDF</button>
+                        <button type="button" id="get-embed-code" class="btn btn-secondary">Get Embed Code</button>
+                    </div>
+                    <div id="embed-code-container" class="embed-code" style="display: none;">
+                        <h3>Embed Code</h3>
+                        <textarea id="embed-code" readonly></textarea>
+                        <button type="button" id="copy-embed-code" class="btn btn-small">Copy Code</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="site-footer">
+            <p>Powered by <a href="https://nutrijewel.com" target="_blank" rel="noopener noreferrer">nutrijewel.com</a></p>
+        </footer>
+    </div>
+
+    <!-- Include external libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/nutrition-data.js?v=2.1"></script>
+    <script src="js/nutrition-calculator.js?v=2.1"></script>
+    <script src="js/label-generator.js?v=2.1"></script>
+    <script src="js/export-handler.js?v=2.1"></script>
+    <script src="js/main.js?v=2.1"></script>
+</body>
+</html>
