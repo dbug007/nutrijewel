@@ -85,6 +85,23 @@
   }
 }
 
+/* Desktop homepage: same fixed-overlay marquee that only shows when revealed */
+@media (min-width: 768px) {
+  .top-marquee.marquee--home {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    transform: translateY(-100%);
+    will-change: transform;
+    transition: transform 0.4s var(--ease-smooth);
+  }
+  .top-marquee.marquee--home.is-revealed {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .top-marquee.marquee--home { transition: none; }
 }

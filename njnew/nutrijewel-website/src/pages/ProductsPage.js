@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ShoppingBag, Phone, X, Star, ChevronLeft, ChevronRight, SlidersHorizontal, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion, useDragControls } from 'motion/react';
 import { products } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
 import { imageCrossfade, imageFadeTransition, smoothEase } from '../components/motionPresets';
+import WishlistHeart from '../components/store/WishlistHeart';
+import AddToCartButton from '../components/store/AddToCartButton';
 import './ProductsPage.css';
 
 const CATEGORIES = [
@@ -34,6 +36,7 @@ const ProductsPage = () => {
   const [activeModalImageIndex, setActiveModalImageIndex] = useState(0);
   const [modalCategoryProducts, setModalCategoryProducts] = useState([]);
   const reduceMotion = useReducedMotion();
+  const modalDragControls = useDragControls();
 
   const modalSlideVariants = {
     enter: (direction) => ({ x: reduceMotion ? 0 : (direction > 0 ? 64 : -64), opacity: 1 }),
@@ -270,7 +273,7 @@ const ProductsPage = () => {
               className={`pill-btn${activeCategory === cat.id ? ' active' : ''}`}
               onClick={() => scrollToCategory(cat.id)}
             >
-              {cat.emoji} {cat.name}
+              <span className="pill-emoji">{cat.emoji} </span>{cat.name}
             </button>
           ))}
         </div>
@@ -352,6 +355,7 @@ const ProductsPage = () => {
                             {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                           </div>
                           {product.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
+                          <WishlistHeart productId={product.id} className="on-image" />
                         </div>
 
                         {/* Card content */}
@@ -397,10 +401,13 @@ const ProductsPage = () => {
                                       <span key={i} className="benefit-tag">{f}</span>
                                     ))}
                                   </div>
-                                  <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
-                                    <ShoppingBag size={17} />
-                                    Buy Now
-                                  </button>
+                                  <div className="nj-cta-row">
+                                    <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
+                                    <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
+                                      <ShoppingBag size={17} />
+                                      Buy Now
+                                    </button>
+                                  </div>
                                 </>
                               )}
                             </div>
@@ -417,9 +424,33 @@ const ProductsPage = () => {
       </div>
 
       {/* ── Mobile Product Modal ── */}
+      <AnimatePresence>
       {isMobile && activeProduct && (
-        <div className="products-modal-backdrop" onClick={closeProductModal}>
-          <div className="products-modal" onClick={(e) => e.stopPropagation()}>
+        <motion.div
+          className="products-modal-backdrop"
+          onClick={closeProductModal}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <motion.div
+            className="products-modal"
+            onClick={(e) => e.stopPropagation()}
+            drag="y"
+            dragListener={false}
+            dragControls={modalDragControls}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.7 }}
+            onDragEnd={(e, info) => { if (info.offset.y > 120 || info.velocity.y > 600) closeProductModal(); }}
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3, ease: smoothEase }}
+          >
+            <span className="modal-grabber" onPointerDown={(e) => modalDragControls.start(e)} aria-hidden="true">
+              <span className="modal-grabber-pill" />
+            </span>
             <button className="products-modal-close" onClick={closeProductModal} aria-label="Close product details">
               <X size={18} />
             </button>
@@ -473,17 +504,11 @@ const ProductsPage = () => {
                     </div>
                   )}
                   {activeProduct.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
+                  <WishlistHeart productId={activeProduct.id} className="on-image on-modal" />
                 </div>
 
                 <div className="products-modal-content">
-                  {(() => {
-                    const catInfo = CATEGORIES.find(c => c.name === activeProduct.category);
-                    return (
-                      <div className="product-category-tag">
-                        {catInfo?.emoji} {activeProduct.category}
-                      </div>
-                    );
-                  })()}
+                  <div className="product-category-tag">{activeProduct.category}</div>
                   <div className="product-card-flags products-modal-flags">
                     {activeProduct.isBestSeller  && <span className="product-card-flag best" title="Best Seller">⭐</span>}
                     {activeProduct.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
@@ -541,19 +566,23 @@ const ProductsPage = () => {
                           </div>
                           <span className="product-weight">{getProductWeight(activeProduct)}</span>
                         </div>
-                        <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
-                          <ShoppingBag size={18} />
-                          Buy Now
-                        </button>
+                        <div className="nj-cta-row">
+                          <AddToCartButton product={activeProduct} variant={selectedVariants[activeProduct.id]} className="full" />
+                          <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
+                            <ShoppingBag size={18} />
+                            Buy Now
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
                 </div>
               </motion.div>
             </AnimatePresence>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* ── CTA ── */}
       <section className="products-cta">

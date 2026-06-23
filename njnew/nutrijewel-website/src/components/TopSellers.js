@@ -1,17 +1,20 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion, useDragControls } from 'motion/react';
 import { ShoppingBag, ChevronLeft, ChevronRight, X, Star } from 'lucide-react';
 import { featuredTopSellers } from '../data/products';
 import WeightSelector from './WeightSelector';
 import { cardVariants, getRevealProps, hoverLift, tapShrink } from './motionPresets';
 import { useAutoScroll } from '../hooks/useAutoScroll';
+import WishlistHeart from './store/WishlistHeart';
+import AddToCartButton from './store/AddToCartButton';
 import './TopSellers.css';
 
 const TopSellers = () => {
   const SWIPE_THRESHOLD = 70;
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
+  const modalDragControls = useDragControls();
   const revealProps = getRevealProps(reduceMotion);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [selectedVariants, setSelectedVariants] = useState({});
@@ -240,6 +243,7 @@ const TopSellers = () => {
                     decoding="async"
                     fetchPriority="low"
                   />
+                  <WishlistHeart productId={product.id} className="on-image" />
                 </div>
                 <div className="top-seller-copy">
                   <div className="product-category-tag">{product.category}</div>
@@ -276,6 +280,7 @@ const TopSellers = () => {
                     fetchPriority="low"
                   />
                 </div>
+                <WishlistHeart productId={product.id} className="on-image" />
                 <div className="top-sellers-desktop-content">
                   <div className="product-category-tag">{product.category}</div>
                   <div className="top-seller-flags">
@@ -308,10 +313,13 @@ const TopSellers = () => {
                   </div>
                   <span className="product-weight">{getProductWeight(product)}</span>
 
-                  <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(product)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
-                    <ShoppingBag size={18} />
-                    Buy Now
-                  </motion.button>
+                  <div className="nj-cta-row">
+                    <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
+                    <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(product)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
+                      <ShoppingBag size={18} />
+                      Buy Now
+                    </motion.button>
+                  </div>
                 </div>
               </motion.article>
             ))}
@@ -332,7 +340,23 @@ const TopSellers = () => {
       <AnimatePresence>
       {isMobile && activeProduct && (
         <motion.div className="product-modal-backdrop" onClick={closeProductModal} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <motion.div className="product-modal" onClick={(event) => event.stopPropagation()} initial={{ y: 18, opacity: 0, scale: 0.98 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 18, opacity: 0, scale: 0.98 }} transition={{ duration: 0.28 }}>
+          <motion.div
+            className="product-modal"
+            onClick={(event) => event.stopPropagation()}
+            drag="y"
+            dragListener={false}
+            dragControls={modalDragControls}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.7 }}
+            onDragEnd={(e, info) => { if (info.offset.y > 120 || info.velocity.y > 600) closeProductModal(); }}
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span className="modal-grabber" onPointerDown={(e) => modalDragControls.start(e)} aria-hidden="true">
+              <span className="modal-grabber-pill" />
+            </span>
             <button className="product-modal-close" onClick={closeProductModal} aria-label="Close product details">
               <X size={18} />
             </button>
@@ -382,6 +406,7 @@ const TopSellers = () => {
                       </div>
                     </>
                   )}
+                  <WishlistHeart productId={activeProduct.id} className="on-image on-modal" />
                 </div>
                 <div className="product-modal-content">
                   <div className="product-category-tag">{activeProduct.category}</div>
@@ -436,10 +461,13 @@ const TopSellers = () => {
                       <span className="product-weight">{getProductWeight(activeProduct)}</span>
                     </div>
 
-                    <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(activeProduct)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
-                      <ShoppingBag size={18} />
-                      Buy Now
-                    </motion.button>
+                    <div className="nj-cta-row">
+                      <AddToCartButton product={activeProduct} variant={selectedVariants[activeProduct.id]} className="full" />
+                      <motion.button className="product-buy-btn" onClick={() => handleWhatsApp(activeProduct)} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
+                        <ShoppingBag size={18} />
+                        Buy Now
+                      </motion.button>
+                    </div>
                   </div>
                 </div>
               </motion.div>

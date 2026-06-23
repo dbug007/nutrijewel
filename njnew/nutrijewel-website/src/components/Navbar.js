@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ShoppingBag, ChevronDown } from 'lucide-react';
+import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
+import { useStore } from '../store/StoreContext';
+import { motion, useAnimationControls } from 'motion/react';
+import './store/store.css';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,6 +12,25 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isHome, state: headerState } = useHeaderReveal();
+  const { cartCount, wishlistCount, openCart, openWishlist } = useStore();
+  const cartCtrls = useAnimationControls();
+  const wishCtrls = useAnimationControls();
+  const prevCart = useRef(cartCount);
+  const prevWish = useRef(wishlistCount);
+
+  useEffect(() => {
+    if (cartCount > prevCart.current) {
+      cartCtrls.start({ scale: [1, 1.28, 0.92, 1], transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } });
+    }
+    prevCart.current = cartCount;
+  }, [cartCount, cartCtrls]);
+
+  useEffect(() => {
+    if (wishlistCount > prevWish.current) {
+      wishCtrls.start({ scale: [1, 1.28, 0.92, 1], transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } });
+    }
+    prevWish.current = wishlistCount;
+  }, [wishlistCount, wishCtrls]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -41,7 +63,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}`}>
+    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}${isMenuOpen ? ' menu-open' : ''}`}>
       <div className="navbar-container">
         {/* Logo Only */}
         <div className="navbar-brand">
@@ -74,6 +96,30 @@ const Navbar = () => {
           <li><Link to="/recipes-blog" className="navbar-link">Recipes & Blog</Link></li>
           <li><Link to="/contact" className="navbar-link">Contact</Link></li>
         </ul>
+
+        {/* Cart + Wishlist */}
+        <div className="nj-nav-actions">
+          <motion.button className="nj-nav-icon" animate={wishCtrls} onClick={openWishlist} aria-label={`Open wishlist, ${wishlistCount} items`}>
+            <Heart size={20} />
+            {wishlistCount > 0 && (
+              <motion.span className="nj-nav-badge wish" key={wishlistCount}
+                initial={{ scale: 0.3, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 18 }}>
+                {wishlistCount}
+              </motion.span>
+            )}
+          </motion.button>
+          <motion.button className="nj-nav-icon" animate={cartCtrls} onClick={openCart} aria-label={`Open cart, ${cartCount} items`}>
+            <ShoppingCart size={20} />
+            {cartCount > 0 && (
+              <motion.span className="nj-nav-badge" key={cartCount}
+                initial={{ scale: 0.3, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 18 }}>
+                {cartCount}
+              </motion.span>
+            )}
+          </motion.button>
+        </div>
 
         {/* Buy Now Button */}
         <button className="navbar-buy-btn" onClick={handleBuyNow}>

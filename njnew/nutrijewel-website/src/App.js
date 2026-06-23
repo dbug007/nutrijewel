@@ -5,6 +5,10 @@ import TopMarquee from './components/TopMarquee';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopOnRouteChange from './components/ScrollToTopOnRouteChange';
 import Footer from './components/Footer';
+import { StoreProvider } from './store/StoreContext';
+import CartDrawer from './components/store/CartDrawer';
+import WishlistDrawer from './components/store/WishlistDrawer';
+import StoreToast from './components/store/StoreToast';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ProductsPage';
@@ -16,6 +20,7 @@ import './App.css';
 
 function App() {
   return (
+    <StoreProvider>
     <Router>
       <div className="App">
         <ScrollToTopOnRouteChange />
@@ -32,8 +37,12 @@ function App() {
         {/* <ThandaiCakePopup /> */}
         <Footer />
         <ScrollToTop />
+        <CartDrawer />
+        <WishlistDrawer />
+        <StoreToast />
       </div>
     </Router>
+    </StoreProvider>
   );
 }
 
