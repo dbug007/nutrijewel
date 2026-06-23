@@ -57,15 +57,21 @@ export default function CartDrawer() {
 
             {cart.length === 0 ? (
               <div className="nj-drawer-empty">
-                <ShoppingCart size={42} />
-                <p>Your cart is empty</p>
-                <button className="nj-ghost-btn" onClick={closeCart}>Continue shopping</button>
+                <span className="nj-empty-icon"><ShoppingCart size={34} /></span>
+                <p className="nj-empty-title">Your cart is empty</p>
+                <p className="nj-empty-sub">Add something delicious to get started.</p>
+                <button className="nj-ghost-btn" onClick={closeCart}>Browse products</button>
               </div>
             ) : (
               <>
                 <div className="nj-drawer-list">
-                  {cart.map((line) => (
-                    <div className="nj-cart-line" key={line.key}>
+                  <AnimatePresence initial={false}>
+                  {cart.map((line, i) => (
+                    <motion.div className="nj-cart-line" key={line.key} layout
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+                      exit={{ opacity: 0, x: 60, transition: { duration: 0.22 } }}
+                    >
                       <img className="nj-cart-thumb" src={img(line.image)} alt={line.name} loading="lazy" />
                       <div className="nj-cart-mid">
                         <p className="nj-cart-name">{line.name}</p>
@@ -86,8 +92,9 @@ export default function CartDrawer() {
                         </button>
                         <span className="nj-cart-price">₹{line.unitPrice * line.qty}</span>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
+                  </AnimatePresence>
                 </div>
 
                 <footer className="nj-drawer-foot">
@@ -96,7 +103,8 @@ export default function CartDrawer() {
                     <strong>₹{subtotal}</strong>
                   </div>
                   <button className="nj-checkout-btn" onClick={checkoutWhatsApp}>
-                    Order on WhatsApp
+                    <span>Order on WhatsApp</span>
+                    <span className="nj-checkout-meta">{cartCount} item{cartCount !== 1 ? 's' : ''} · ₹{subtotal}</span>
                   </button>
                   <p className="nj-drawer-note">No payment now — we'll confirm your order &amp; delivery on WhatsApp.</p>
                 </footer>

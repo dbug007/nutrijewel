@@ -158,6 +158,7 @@ const HeroSection = () => {
 
       {/* Scroll cue */}
       <div className="hero-scrollcue" aria-hidden="true">
+        <span className="hero-scrollcue-label">Best Sellers</span>
         <span className="hero-scrollcue-line" />
         <ChevronDown size={16} className="hero-scrollcue-chevron" />
       </div>

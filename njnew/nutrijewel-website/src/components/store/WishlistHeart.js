@@ -17,7 +17,13 @@ export default function WishlistHeart({ productId, className = '' }) {
       onClick={(e) => { e.stopPropagation(); toggleWishlist(productId); }}
       whileTap={{ scale: 0.82 }}
     >
-      <Heart size={17} fill={active ? 'currentColor' : 'none'} />
+      <motion.span
+        style={{ display: 'inline-flex' }}
+        animate={active ? { scale: [1, 1.45, 1] } : { scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Heart size={17} fill={active ? 'currentColor' : 'none'} />
+      </motion.span>
     </motion.button>
   );
 }

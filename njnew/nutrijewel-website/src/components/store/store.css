@@ -161,6 +161,10 @@
 .nj-subtotal strong { font-size: 1.25rem; color: var(--nj-charcoal); }
 .nj-checkout-btn {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12rem;
   border: none;
   border-radius: 0.7rem;
   padding: 0.95rem 1rem;
@@ -174,6 +178,33 @@
 }
 .nj-checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(109, 138, 60, 0.35); }
 .nj-drawer-note { margin: 0.6rem 0 0; font-size: 0.72rem; color: var(--nj-grey); text-align: center; }
+.nj-checkout-meta { font-size: 0.74rem; font-weight: 500; opacity: 0.92; }
+
+/* richer empty state */
+.nj-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: rgba(147, 181, 89, 0.12);
+}
+.nj-empty-icon svg { color: var(--nj-green); }
+.nj-empty-title {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--nj-charcoal);
+}
+.nj-empty-sub {
+  margin: -0.35rem 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--nj-grey);
+  max-width: 16rem;
+  text-align: center;
+  line-height: 1.5;
+}
 
 /* ---- Empty state ---- */
 .nj-drawer-empty {

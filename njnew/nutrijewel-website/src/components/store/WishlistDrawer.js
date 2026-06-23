@@ -76,14 +76,20 @@ export default function WishlistDrawer() {
 
             {items.length === 0 ? (
               <div className="nj-drawer-empty">
-                <Heart size={42} />
-                <p>Your wishlist is empty</p>
+                <span className="nj-empty-icon"><Heart size={34} /></span>
+                <p className="nj-empty-title">Your wishlist is empty</p>
+                <p className="nj-empty-sub">Tap the heart on anything you love to save it here.</p>
                 <button className="nj-ghost-btn" onClick={closeWishlist}>Browse products</button>
               </div>
             ) : (
               <div className="nj-drawer-list">
-                {items.map((product) => (
-                  <div className="nj-cart-line" key={product.id}>
+                <AnimatePresence initial={false}>
+                {items.map((product, i) => (
+                  <motion.div className="nj-cart-line" key={product.id} layout
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.35, ease: [0.22, 1, 0.36, 1] } }}
+                    exit={{ opacity: 0, x: 60, transition: { duration: 0.22 } }}
+                  >
                     <img className="nj-cart-thumb" src={img((product.images && product.images[0]) || product.image)} alt={product.displayName || product.name} loading="lazy" />
                     <div className="nj-cart-mid">
                       <p className="nj-cart-name">{product.displayName || product.name}</p>
@@ -101,8 +107,9 @@ export default function WishlistDrawer() {
                         <Trash2 size={15} />
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
+                </AnimatePresence>
               </div>
             )}
           </motion.aside>

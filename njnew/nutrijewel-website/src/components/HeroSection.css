@@ -145,6 +145,16 @@
   color: rgba(250, 249, 246, 0.75);
   pointer-events: none;
 }
+.hero-scrollcue-label {
+  display: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 249, 246, 0.85);
+  margin-bottom: 0.2rem;
+}
 .hero-scrollcue-line {
   width: 1px;
   height: 30px;
@@ -173,6 +183,7 @@
   }
   .hero-word { text-align: center; }
   .hero-signature { letter-spacing: 0.24em; }
+  .hero-scrollcue-label { display: block; }
   .hero-cinematic-img { object-position: 50% 45%; }
   /* darken toward the centre so the centered headline stays legible over the cake */
   .hero-overlay {
