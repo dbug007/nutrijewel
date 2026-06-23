@@ -44,7 +44,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}`}>
+    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}${isMenuOpen ? ' menu-open' : ''}`}>
       <div className="navbar-container">
         {/* Logo Only */}
         <div className="navbar-brand">

@@ -78,11 +78,9 @@ const HeroSection = () => {
     };
   }, [isMobile, reduceMotion]);
 
-  const handleWhatsApp = () => {
-    window.open(
-      'https://wa.me/919960637656?text=Hi! I\'m interested in NutriJewel products. Can you help me?',
-      '_blank'
-    );
+  const scrollToProducts = () => {
+    const el = document.getElementById('products');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const stagger = {
@@ -152,7 +150,7 @@ const HeroSection = () => {
           Handcrafted by Dt. Ruchika Bachwani
         </motion.p>
 
-        <motion.button className="hero-taste-btn" variants={fadeUp} onClick={handleWhatsApp}>
+        <motion.button className="hero-taste-btn" variants={fadeUp} onClick={scrollToProducts}>
           <span>Taste Now</span>
           <ChevronRight size={20} />
         </motion.button>

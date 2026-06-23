@@ -515,6 +515,15 @@
     background-color: var(--nj-cream);
     box-shadow: none;
   }
+
+  /* menu open: drop transform + will-change so the fixed, full-screen mobile
+     menu overlay is positioned to the VIEWPORT (a transformed/will-change
+     ancestor would otherwise become its containing block and clip it). */
+  .navbar.navbar--home.menu-open {
+    transform: none;
+    will-change: auto;
+    background-color: var(--nj-cream);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

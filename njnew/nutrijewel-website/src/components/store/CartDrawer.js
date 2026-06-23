@@ -98,7 +98,7 @@ export default function CartDrawer() {
                   <button className="nj-checkout-btn" onClick={checkoutWhatsApp}>
                     Order on WhatsApp
                   </button>
-                  <p className="nj-drawer-note">You'll confirm availability &amp; delivery on WhatsApp.</p>
+                  <p className="nj-drawer-note">No payment now — we'll confirm your order &amp; delivery on WhatsApp.</p>
                 </footer>
               </>
             )}
