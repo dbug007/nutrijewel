@@ -278,6 +278,37 @@
   z-index: 4;
 }
 
+/* Inside product modals the close ✕ owns the top-right corner — move the
+   wishlist heart to the top-left so the two controls never overlap. */
+.nj-heart.on-image.on-modal { left: 0.7rem; right: auto; }
+
+/* Drag-handle for swipe-down-to-dismiss on mobile product modals */
+.modal-grabber { display: none; }
+@media (max-width: 767px) {
+  .modal-grabber {
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
+    cursor: grab;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .modal-grabber:active { cursor: grabbing; }
+  .modal-grabber-pill {
+    width: 2.6rem;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  }
+}
+
 /* ---- Add to cart button (cards/modals) ---- */
 .nj-add-cart-btn {
   display: inline-flex;
