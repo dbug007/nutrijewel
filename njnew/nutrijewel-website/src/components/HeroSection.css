@@ -184,7 +184,7 @@
   .hero-word { text-align: center; }
   .hero-signature { letter-spacing: 0.24em; }
   .hero-scrollcue-label { display: block; }
-  .hero-cinematic-img { object-position: 50% 45%; }
+  .hero-cinematic-img { object-position: 50% 50%; }
   /* darken toward the centre so the centered headline stays legible over the cake */
   .hero-overlay {
     background:
