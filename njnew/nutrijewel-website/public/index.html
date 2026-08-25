@@ -5,7 +5,17 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#93B559" />
-    
+
+    <!-- Google Analytics 4 — REPLACE G-XXXXXXXXXX (in BOTH places) with your real GA4 Measurement ID.
+         Until then no data is collected; the wheel_spin event call is a safe no-op. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <!-- Primary Meta Tags -->
     <title>NutriJewel - Premium Health & Nutrition Products | Clean Artisanal Snacks</title>
     <meta name="title" content="NutriJewel - Premium Health & Nutrition Products | Clean Artisanal Snacks">

@@ -1093,7 +1093,33 @@
   font-size: var(--aboutpage-text-base);
   color: var(--nj-grey);
   line-height: 1.7;
+}
+
+/* Expanded Mission / Vision pointers */
+.aboutpage-card-points {
+  list-style: none;
+  margin: var(--aboutpage-space-lg) 0 0;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
   flex-grow: 1;
+}
+.aboutpage-card-points li {
+  position: relative;
+  padding-left: 1.7rem;
+  color: var(--nj-charcoal);
+  font-size: var(--aboutpage-text-base);
+  line-height: 1.5;
+}
+.aboutpage-card-points li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: var(--nj-green);
+  font-weight: 700;
 }
 
 /* ========================================

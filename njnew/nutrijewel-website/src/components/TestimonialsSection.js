@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { Star, Quote } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
-import { cardVariants, getRevealProps } from './motionPresets';
+import { cardVariants, revealVariants, getRevealProps } from './motionPresets';
 import { useAutoScroll } from '../hooks/useAutoScroll';
 import { websiteTestimonials } from '../data/testimonials';
+import CountUp from './CountUp';
 import './TestimonialsSection.css';
 
 const testimonials = websiteTestimonials;
@@ -50,24 +51,32 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="testimonial-stats">
+        <motion.div className="testimonial-stats" {...revealProps} variants={revealVariants}>
           <div className="testimonial-stat">
-            <div className="testimonial-stat-number">1000+</div>
+            <div className="testimonial-stat-number">
+              <CountUp value={1000} suffix="+" />
+            </div>
             <div className="testimonial-stat-label">Happy Customers</div>
           </div>
           <div className="testimonial-stat">
-            <div className="testimonial-stat-number">5.0★</div>
+            <div className="testimonial-stat-number">
+              <CountUp value={5} decimals={1} suffix="★" />
+            </div>
             <div className="testimonial-stat-label">Average Rating</div>
           </div>
           <div className="testimonial-stat">
-            <div className="testimonial-stat-number">100%</div>
+            <div className="testimonial-stat-number">
+              <CountUp value={100} suffix="%" />
+            </div>
             <div className="testimonial-stat-label">Natural Products</div>
           </div>
           <div className="testimonial-stat">
-            <div className="testimonial-stat-number">24h</div>
-            <div className="testimonial-stat-label">Fresh Guarantee</div>
+            <div className="testimonial-stat-number">
+              <CountUp value={20} suffix="+" />
+            </div>
+            <div className="testimonial-stat-label">Handcrafted Treats</div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </motion.section>
   );

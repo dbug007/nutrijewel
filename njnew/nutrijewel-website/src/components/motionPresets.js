@@ -10,26 +10,29 @@ export const imageCrossfade = {
 
 export const imageFadeTransition = { duration: 0.8, ease: smoothEase };
 
+/* Reveal presets. Tuned for a more noticeable (but still premium) scroll
+   entrance: content starts fully transparent and slides up, rather than the
+   near-invisible baseline it used before. */
 export const revealVariants = {
-  hidden: { opacity: 0.45, y: 8 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.24,
+      duration: 0.55,
       ease: smoothEase
     }
   }
 };
 
 export const cardVariants = {
-  hidden: { opacity: 0.5, y: 10, scale: 0.995 },
+  hidden: { opacity: 0, y: 28, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.28,
+      duration: 0.6,
       ease: smoothEase
     }
   }
@@ -39,19 +42,19 @@ export const staggerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.045,
-      delayChildren: 0.02
+      staggerChildren: 0.09,
+      delayChildren: 0.05
     }
   }
 };
 
 export const listItemVariants = {
-  hidden: { opacity: 0.55, y: 8 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.24,
+      duration: 0.45,
       ease: smoothEase
     }
   }

@@ -1,0 +1,168 @@
+/* ==========================================================================
+   Bakery patterns
+   ==========================================================================
+   The decorative surfaces from the reference sheets: woven gingham, diagonal
+   plaid, candy stripes, windowpane check and fine graph rule.
+
+   All of it is repeating-linear-gradient on a single pseudo element. No images,
+   no extra requests. Gingham and plaid work the way real woven cloth does: two
+   translucent bands crossing, so the overlap darkens on its own without needing
+   a third layer.
+
+   Site-wide utility. Applied on the hampers surfaces for now.
+
+     <section className="nj-pat nj-pat--gingham nj-pat--plum nj-pat--bold">
+
+   Compose one pattern + one tone + optional scale, strength and fade.
+   ========================================================================== */
+
+.nj-pat {
+  /* defaults, overridden by the modifiers below */
+  --pat-cell: 26px;
+  --pat-band: 42%;          /* how much of each cell the woven band covers */
+  --pat-a: rgba(47, 47, 47, 0.05);
+  --pat-b: rgba(47, 47, 47, 0.08);
+
+  position: relative;
+  /* isolation + a negative z-index keeps the pattern above the section's own
+     background but behind every child, without this utility having to touch
+     child positioning. A `> *` rule here would clobber `position: absolute` on
+     decorative children like the hero glow. */
+  isolation: isolate;
+}
+
+.nj-pat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: repeat;
+  /* default fade, so a pattern never stops at a hard edge */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 100%);
+}
+
+/* ---------- gingham: the classic woven check ---------- */
+.nj-pat--gingham::before {
+  background-image:
+    repeating-linear-gradient(90deg,
+      var(--pat-a) 0 var(--pat-band),
+      transparent var(--pat-band) var(--pat-cell)),
+    repeating-linear-gradient(0deg,
+      var(--pat-a) 0 var(--pat-band),
+      transparent var(--pat-band) var(--pat-cell));
+  background-size: var(--pat-cell) var(--pat-cell);
+}
+
+/* ---------- plaid: the same weave on the diagonal ---------- */
+.nj-pat--plaid::before {
+  background-image:
+    repeating-linear-gradient(45deg,
+      var(--pat-a) 0 var(--pat-band),
+      transparent var(--pat-band) var(--pat-cell)),
+    repeating-linear-gradient(-45deg,
+      var(--pat-a) 0 var(--pat-band),
+      transparent var(--pat-band) var(--pat-cell));
+}
+
+/* ---------- stripes: vertical candy stripe ---------- */
+.nj-pat--stripes::before {
+  background-image:
+    repeating-linear-gradient(90deg,
+      var(--pat-a) 0 var(--pat-band),
+      transparent var(--pat-band) var(--pat-cell));
+}
+
+/* ---------- rules: thin vertical lines only, like ruled paper on its side ----------
+   Quieter than stripes: hairlines with a lot of air, not wide bands. */
+.nj-pat--rules::before {
+  --pat-cell: 30px;
+  background-image:
+    repeating-linear-gradient(90deg, var(--pat-b) 0 1px, transparent 1px var(--pat-cell));
+}
+
+/* ---------- horizon: the same, horizontal ---------- */
+.nj-pat--horizon::before {
+  --pat-cell: 30px;
+  background-image:
+    repeating-linear-gradient(0deg, var(--pat-b) 0 1px, transparent 1px var(--pat-cell));
+}
+
+/* ---------- windowpane: thin rules, large cells ---------- */
+.nj-pat--windowpane::before {
+  --pat-cell: 56px;
+  background-image:
+    repeating-linear-gradient(0deg, var(--pat-b) 0 1.5px, transparent 1.5px var(--pat-cell)),
+    repeating-linear-gradient(90deg, var(--pat-b) 0 1.5px, transparent 1.5px var(--pat-cell));
+}
+
+/* ---------- graph: fine rule with a heavier line every fifth cell ---------- */
+.nj-pat--graph::before {
+  --pat-cell: 22px;
+  background-image:
+    repeating-linear-gradient(0deg, var(--pat-b) 0 1px, transparent 1px calc(var(--pat-cell) * 5)),
+    repeating-linear-gradient(90deg, var(--pat-b) 0 1px, transparent 1px calc(var(--pat-cell) * 5)),
+    repeating-linear-gradient(0deg, var(--pat-a) 0 1px, transparent 1px var(--pat-cell)),
+    repeating-linear-gradient(90deg, var(--pat-a) 0 1px, transparent 1px var(--pat-cell));
+}
+
+/* ==========================================================================
+   Tone
+   ========================================================================== */
+.nj-pat--plum    { --pat-a: rgba(107, 63, 160, 0.07); --pat-b: rgba(107, 63, 160, 0.13); }
+.nj-pat--sage    { --pat-a: rgba(109, 138, 60, 0.08); --pat-b: rgba(109, 138, 60, 0.14); }
+.nj-pat--pink    { --pat-a: rgba(199, 90, 140, 0.07); --pat-b: rgba(199, 90, 140, 0.13); }
+.nj-pat--mustard { --pat-a: rgba(201, 162, 39, 0.10); --pat-b: rgba(201, 162, 39, 0.18); }
+.nj-pat--cocoa   { --pat-a: rgba(120, 82, 48, 0.07); --pat-b: rgba(120, 82, 48, 0.13); }
+.nj-pat--terracotta { --pat-a: rgba(200, 106, 66, 0.08); --pat-b: rgba(200, 106, 66, 0.14); }
+.nj-pat--teal    { --pat-a: rgba(58, 122, 124, 0.07); --pat-b: rgba(58, 122, 124, 0.13); }
+
+/* ==========================================================================
+   Strength
+   Bold roughly doubles the alpha by stacking a second pass of the same weave.
+   ========================================================================== */
+.nj-pat--soft::before { opacity: 0.6; }
+.nj-pat--bold::before { opacity: 1.7; }
+
+/* ==========================================================================
+   Scale
+   ========================================================================== */
+.nj-pat--sm { --pat-cell: 16px; }
+.nj-pat--lg { --pat-cell: 40px; }
+.nj-pat--sm.nj-pat--windowpane::before { --pat-cell: 38px; }
+.nj-pat--lg.nj-pat--windowpane::before { --pat-cell: 78px; }
+
+/* ==========================================================================
+   Fade
+   ========================================================================== */
+.nj-pat--fade-t::before {
+  -webkit-mask-image: linear-gradient(0deg, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(0deg, #000 0%, #000 58%, transparent 100%);
+}
+.nj-pat--fade-edges::before {
+  -webkit-mask-image: radial-gradient(ellipse 80% 74% at 50% 42%, #000 28%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 74% at 50% 42%, #000 28%, transparent 100%);
+}
+.nj-pat--solid::before {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* ==========================================================================
+   Phones
+   A 26px weave on a 390px screen is busy, and these are full-viewport paint
+   layers on the device nearly everyone actually uses. Open them up.
+   ========================================================================== */
+@media (max-width: 600px) {
+  .nj-pat { --pat-cell: 34px; }
+  .nj-pat--sm { --pat-cell: 22px; }
+  .nj-pat--lg { --pat-cell: 50px; }
+  .nj-pat--windowpane::before { --pat-cell: 68px; }
+  .nj-pat--graph::before { --pat-cell: 30px; }
+}
+
+/* Decoration only. In forced-colours it is noise. */
+@media (forced-colors: active) {
+  .nj-pat::before { display: none; }
+}

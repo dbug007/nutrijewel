@@ -144,7 +144,7 @@ const ServicesPage = () => {
             <div className="feature-card">
               <Award className="feature-icon" size={32} />
               <h3>Registered Pharmacist & Qualified Nutritionist</h3>
-              <p>Led by Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist with years of professional experience</p>
+              <p>Led by Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist with years of professional experience</p>
             </div>
             <div className="feature-card">
               <Users className="feature-icon" size={32} />
@@ -218,19 +218,47 @@ const ServicesPage = () => {
                     </ul>
                   </div>
 
-                  <div className="service-pricing">
-                    <div className="service-price">{service.price}</div>
-                    <button 
+                  <div className="service-pricing service-pricing--noprice">
+                    <button
                       className="service-book-btn"
                       onClick={() => handleBookService(service.title)}
                     >
                       <Calendar size={18} />
-                      Book Now
+                      Enquire
                     </button>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Past Workshops + upcoming teaser */}
+      <section className="services-grid-section services-past">
+        <div className="services-container">
+          <h2 className="section-title">Workshops We've Hosted</h2>
+          <p className="services-past-intro">
+            We love bringing nutrition to life in person. Here's a glimpse of the sessions we've run.
+          </p>
+          <div className="services-grid">
+            {[
+              { title: 'Summer Camp for Students', blurb: 'A hands-on summer program teaching students healthy eating habits, balanced snacking, and the joy of nutritious food.' },
+              { title: 'Corporate Nutrition Session', blurb: 'An interactive wellness session for corporate teams on mindful eating, sustained energy, and healthier workday routines.' },
+              { title: 'University Students Nutrition & Diet Session', blurb: 'A university-led session guiding students through balanced diets, smart food choices, and sustainable healthy habits.' },
+            ].map((w) => (
+              <div key={w.title} className="service-card">
+                <div className="service-header">
+                  <div className="service-category-tag">Past Workshop</div>
+                  <h3 className="service-title">{w.title}</h3>
+                  <p className="service-description">{w.blurb}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="services-upcoming-note">
+            <span className="services-upcoming-badge">🔔 Coming soon</span>
+            <p>New workshops are in the works. Stay tuned for upcoming workshop announcements!</p>
           </div>
         </div>
       </section>

@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Bakery stamp
+   Inked-on-a-box-lid label. Double rule, condensed caps, slightly off square.
+   ========================================================================== */
+
+.nj-stamp {
+  --stamp-ink: #6B3FA0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0.85rem;
+  border: 1.5px solid var(--stamp-ink);
+  color: var(--stamp-ink);
+  font-family: 'Open Sans Condensed', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Printed slightly crooked, because a real stamp is. */
+  transform: rotate(-1.4deg);
+}
+
+/* the inner rule of the double border */
+.nj-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--stamp-ink);
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+/* short rules either side of the words, like a printer's dash */
+.nj-stamp-rule {
+  width: 0.85rem;
+  height: 1.5px;
+  flex: 0 0 auto;
+  background: var(--stamp-ink);
+  opacity: 0.55;
+}
+
+.nj-stamp-text { padding-bottom: 0.06em; }
+
+/* ==========================================================================
+   Postage frame
+   A perforated stamp edge, cut with a mask rather than drawn. The four
+   repeating-radial-gradients bite semicircles out of each edge; the linear
+   layer keeps the middle solid.
+   ========================================================================== */
+.nj-stamp--postage {
+  --perf: 5px;
+  padding: 0.5rem 0.7rem;
+  border: none;
+  background: var(--stamp-paper, #fffdf8);
+  transform: rotate(-2deg);
+  -webkit-mask-image:
+    radial-gradient(circle at 50% 0, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 50% 100%, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 0 50%, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 100% 50%, transparent calc(var(--perf) - 1px), #000 var(--perf));
+  -webkit-mask-size:
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2);
+  -webkit-mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  -webkit-mask-position: top, bottom, left, right;
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(circle at 50% 0, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 50% 100%, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 0 50%, transparent calc(var(--perf) - 1px), #000 var(--perf)),
+    radial-gradient(circle at 100% 50%, transparent calc(var(--perf) - 1px), #000 var(--perf));
+  mask-size:
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2),
+    calc(var(--perf) * 2) calc(var(--perf) * 2);
+  mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  mask-position: top, bottom, left, right;
+  mask-composite: intersect;
+}
+
+/* The inner rule becomes the stamp's printed border, inset past the perforation. */
+.nj-stamp--postage::before {
+  inset: 5px;
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+/* ---- ink colours ---- */
+.nj-stamp--plum  { --stamp-ink: #6B3FA0; }
+.nj-stamp--gold  { --stamp-ink: #A8811A; }
+.nj-stamp--red   { --stamp-ink: #B3253A; }
+.nj-stamp--green { --stamp-ink: var(--nj-olive); }
+.nj-stamp--ink   { --stamp-ink: var(--nj-charcoal); }
+
+@media (max-width: 600px) {
+  .nj-stamp {
+    padding: 0.38rem 0.7rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.13em;
+    gap: 0.4rem;
+  }
+  .nj-stamp-rule { width: 0.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nj-stamp { transform: none; }
+}

@@ -121,7 +121,7 @@
 /* Content Cards */
 .content-card {
   background: white;
-  border-radius: 1rem;
+  border-radius: var(--nj-card-radius);
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
@@ -329,7 +329,7 @@
 
 .modal-content {
   background: white;
-  border-radius: 1rem;
+  border-radius: var(--nj-card-radius);
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
@@ -511,7 +511,7 @@
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--nj-btn-radius);
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -573,7 +573,7 @@
   color: var(--nj-green);
   border: none;
   padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;

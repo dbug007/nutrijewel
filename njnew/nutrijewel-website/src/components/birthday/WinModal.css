@@ -1,0 +1,168 @@
+.nj-win-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4200;
+  background: rgba(16, 18, 11, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+/* Dark game-show prize card so the marquee bulbs pop */
+.nj-win-card {
+  position: relative;
+  width: 100%;
+  max-width: 25rem;
+  padding: 2.7rem 1.9rem 2rem;
+  text-align: center;
+  color: var(--nj-cream);
+  background: linear-gradient(165deg, #242b1b 0%, #191b12 100%);
+  border: 1px solid rgba(244, 213, 141, 0.35);
+  border-radius: var(--nj-card-radius);
+  box-shadow: 0 30px 72px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.nj-win-card > *:not(.nj-bulbs) { position: relative; z-index: 1; }
+
+.nj-win-close {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.15rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--nj-cream);
+  cursor: pointer;
+  z-index: 3; /* above the .nj-bulbs frame (z-index:0) and content (z-index:1) */
+  transition: background-color 0.25s var(--ease-smooth);
+}
+.nj-win-close:hover { background: rgba(0, 0, 0, 0.72); }
+
+.nj-win-logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  padding: 4px;
+  border: 2px solid rgba(244, 213, 141, 0.75);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), 0 0 28px rgba(244, 213, 141, 0.4);
+  animation: njWinPop 0.6s var(--ease-entrance) both;
+}
+@keyframes njWinPop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.nj-win-eyebrow {
+  margin: 0.6rem 0 0;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #ff5fb0;
+}
+
+.nj-win-prize {
+  margin: 0.25rem 0 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.7rem;
+  font-weight: 700;
+  color: #f7df9a;
+  line-height: 1.05;
+  text-shadow: 0 0 22px rgba(244, 213, 141, 0.4);
+}
+
+.nj-win-sub {
+  margin: 0.35rem 0 1.4rem;
+  font-size: 1rem;
+  color: rgba(250, 249, 246, 0.7);
+}
+
+.nj-win-code {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 2px dashed #f7df9a;
+  border-radius: 0.85rem;
+  background: rgba(0, 0, 0, 0.32);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.25s var(--ease-smooth);
+}
+.nj-win-code:hover { background: rgba(0, 0, 0, 0.5); }
+.nj-win-code-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250, 249, 246, 0.55);
+}
+.nj-win-code-value {
+  flex: 1;
+  text-align: left;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+.nj-win-code-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f7df9a;
+}
+
+.nj-win-valid {
+  margin: 0.85rem 0 1.4rem;
+  font-size: 0.82rem;
+  color: rgba(250, 249, 246, 0.62);
+}
+
+.nj-win-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.nj-win-wa,
+.nj-win-shop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.2rem;
+  border: none;
+  border-radius: var(--nj-btn-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
+}
+.nj-win-wa {
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(37, 211, 102, 0.35);
+}
+.nj-win-wa:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(37, 211, 102, 0.45); }
+.nj-win-shop {
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(109, 138, 60, 0.32);
+}
+.nj-win-shop:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(109, 138, 60, 0.42); }
+
+@media (max-width: 380px) {
+  .nj-win-prize { font-size: 2.2rem; }
+}

@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { scrollToTop } from '../lib/smoothScroll';
 
 const ScrollToTopOnRouteChange = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Scroll to top when route changes
-    window.scrollTo(0, 0);
+    // Jump (never animate) to the top when the route changes.
+    scrollToTop({ immediate: true });
   }, [pathname]);
 
   return null;

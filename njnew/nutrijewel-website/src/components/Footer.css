@@ -44,12 +44,12 @@
   grid-template-columns: 1fr;
   gap: 40px;
   align-items: start;
-  max-width: 560px;
+  max-width: 920px;
   margin: 0 auto;
 }
 
 .contact-info {
-  padding: 20px 0;
+  padding: 0;
 }
 
 .contact-section-header {
@@ -71,18 +71,20 @@
 }
 
 .contact-items {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
 
 .contact-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 1.75rem 1.1rem;
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
+  border-radius: var(--nj-card-radius);
   border: 1px solid rgba(147, 181, 89, 0.2);
   transition: transform 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth), border-color 0.35s var(--ease-smooth);
 }
@@ -122,7 +124,7 @@
 .contact-form-container {
   background: rgba(255, 255, 255, 0.95);
   padding: 40px;
-  border-radius: 20px;
+  border-radius: var(--nj-card-radius);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(147, 181, 89, 0.2);
 }
@@ -181,7 +183,7 @@
   color: white;
   border: none;
   padding: 15px 30px;
-  border-radius: 8px;
+  border-radius: var(--nj-btn-radius);
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -195,26 +197,44 @@
   box-shadow: 0 8px 25px rgba(147, 181, 89, 0.3);
 }
 
-/* WhatsApp Button Styles */
+/* WhatsApp CTA — sits under the contact cards */
+.contact-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.75rem;
+  text-align: center;
+}
+
+.contact-cta-text {
+  margin: 0;
+  max-width: 30rem;
+  color: var(--nj-grey);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
   color: white;
   border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  padding: 0.95rem 2rem;
+  border-radius: var(--nj-btn-radius);
+  font-size: 1.02rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   font-family: 'Inter', sans-serif;
-  margin-top: 30px;
+  box-shadow: 0 10px 26px rgba(109, 138, 60, 0.32);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
 }
 
 .whatsapp-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(147, 181, 89, 0.3);
+  box-shadow: 0 16px 34px rgba(109, 138, 60, 0.42);
   background: linear-gradient(135deg, var(--nj-olive), var(--nj-green));
 }
 
@@ -224,7 +244,7 @@
   color: white;
   border: none;
   padding: 15px 30px;
-  border-radius: 8px;
+  border-radius: var(--nj-btn-radius);
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -379,7 +399,7 @@
   color: white;
   border: none;
   padding: 10px 22px;
-  border-radius: 6px;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
@@ -456,46 +476,57 @@
     padding: 36px 0 20px;
   }
 
-  .footer-content {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.25rem 1rem;
+  /* Contact cards stack on phones */
+  .contact-items {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  /* Brand — full width, centered */
+  /* Brand spans the top; Quick Links · Products · Legal share one row;
+     Contact spans the bottom — everything centered.
+     The grid is capped + auto-margined so the 3 columns cluster in the centre
+     instead of stretching edge-to-edge (which read as left/right, not centred). */
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem 0.6rem;
+    text-align: center;
+    justify-items: center;
+    max-width: 22rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .footer-section:first-child {
     grid-column: 1 / -1;
     text-align: center;
   }
-  .footer-brand { text-align: center; }
-  .social-links { justify-content: center; }
-  .footer-logo-section { justify-content: center; }
-
-  /* Contact — full width, centered */
   .footer-section:last-child {
     grid-column: 1 / -1;
     text-align: center;
   }
-  .footer-section:last-child .footer-contact {
-    align-items: center;
-  }
-  .footer-section:last-child .footer-whatsapp-btn {
-    margin: 12px auto 0;
+  .footer-brand { text-align: center; align-items: center; }
+  .footer-description { margin-left: auto; margin-right: auto; }
+  .social-links { justify-content: center; }
+  .footer-logo-section { justify-content: center; }
+  .footer-contact { align-items: center; }
+  .footer-whatsapp-btn {
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     width: fit-content;
   }
 
-  /* Compact type for narrow 3-col link sections
-     (target .footer-section h3 — it outranks .footer-title on specificity) */
+  /* Compact type for the narrow 3-up link columns */
   .footer-section h3 {
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.85rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.8rem;
   }
   .footer-link {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+    line-height: 1.35;
   }
   .footer-links li {
-    margin-bottom: 7px;
+    margin-bottom: 8px;
   }
 }
 

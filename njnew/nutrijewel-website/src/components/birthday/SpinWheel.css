@@ -1,0 +1,149 @@
+.nj-wheel-wrap {
+  position: relative;
+  width: min(84vw, 380px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Square stage that holds the wheel + pointer + hub, so the hub centres on the
+   wheel itself (not the wrapper, which also contains the CTA below). */
+.nj-wheel-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pulsing spotlight behind the wheel */
+.nj-wheel-glow {
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 213, 141, 0.42) 0%, rgba(147, 181, 89, 0.22) 38%, rgba(147, 181, 89, 0) 70%);
+  z-index: 0;
+  animation: njWheelGlow 3.2s var(--ease-smooth) infinite;
+}
+@keyframes njWheelGlow {
+  0%, 100% { transform: scale(0.96); opacity: 0.8; }
+  50%      { transform: scale(1.05); opacity: 1; }
+}
+
+/* Spinner holds the SVG and is the element that rotates */
+.nj-wheel-spinner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 16px 34px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 26px rgba(244, 213, 141, 0.35));
+  border-radius: 50%;
+}
+
+.nj-wheel-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.nj-wheel-rim {
+  fill: none;
+  stroke: #f4d58d;
+  stroke-width: 9;
+}
+
+.nj-wheel-hubring {
+  fill: #faf9f6;
+  stroke: #2f2f2f;
+  stroke-width: 3;
+}
+
+.nj-wheel-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+}
+.nj-wheel-label.is-narrow {
+  font-size: 10px;
+}
+
+/* Fixed pointer at the top, pointing down into the wheel (gold, matches rim) */
+.nj-wheel-pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 26px solid #f4d58d;
+  z-index: 3;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
+}
+
+/* Center hub = primary spin trigger */
+.nj-wheel-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 8px 20px rgba(109, 138, 60, 0.5), 0 0 0 6px rgba(147, 181, 89, 0.2);
+  animation: njHubPulse 1.8s var(--ease-smooth) infinite;
+  transition: transform 0.2s var(--ease-smooth);
+}
+.nj-wheel-hub:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.06); }
+.nj-wheel-hub:active:not(:disabled) { transform: translate(-50%, -50%) scale(0.96); }
+.nj-wheel-hub:disabled { cursor: not-allowed; opacity: 0.85; animation: none; }
+.nj-wheel-hub.is-spinning { animation: none; }
+
+@keyframes njHubPulse {
+  0%, 100% { box-shadow: 0 8px 20px rgba(109, 138, 60, 0.5), 0 0 0 6px rgba(147, 181, 89, 0.18); }
+  50%      { box-shadow: 0 8px 24px rgba(109, 138, 60, 0.6), 0 0 0 14px rgba(147, 181, 89, 0); }
+}
+
+/* Big call-to-action under the wheel */
+.nj-wheel-cta {
+  margin-top: 1.6rem;
+  padding: 0.95rem 2.2rem;
+  border: none;
+  border-radius: var(--nj-btn-radius);
+  background: linear-gradient(135deg, #e8743b, #e5499b);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(229, 73, 155, 0.45);
+  transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth), opacity 0.25s;
+  animation: njCtaPulse 2.2s var(--ease-smooth) infinite;
+}
+.nj-wheel-cta:hover:not(:disabled) { transform: translateY(-3px) scale(1.03); box-shadow: 0 18px 44px rgba(229, 73, 155, 0.55), 0 0 30px rgba(244, 213, 141, 0.5); }
+.nj-wheel-cta:active:not(:disabled) { transform: translateY(0) scale(0.99); }
+.nj-wheel-cta:disabled { opacity: 0.6; cursor: not-allowed; animation: none; box-shadow: none; }
+
+/* festive multi-color glow pulse (pink body + gold halo) */
+@keyframes njCtaPulse {
+  0%, 100% { transform: translateY(0); box-shadow: 0 12px 30px rgba(229, 73, 155, 0.45), 0 0 0 rgba(244, 213, 141, 0); }
+  50%      { transform: translateY(-4px); box-shadow: 0 16px 38px rgba(229, 73, 155, 0.6), 0 0 26px rgba(244, 213, 141, 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nj-wheel-hub, .nj-wheel-cta { animation: none; }
+}

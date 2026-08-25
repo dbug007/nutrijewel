@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
+import { scrollToTop as smoothScrollToTop } from '../lib/smoothScroll';
 import './ScrollToTop.css';
 
 const ScrollToTop = () => {
@@ -19,10 +20,7 @@ const ScrollToTop = () => {
     return () => window.removeEventListener('scroll', toggleVisibility, { passive: true });
   }, []);
 
-  const scrollToTop = () => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-  };
+  const scrollToTop = () => smoothScrollToTop();
 
   return (
     <>

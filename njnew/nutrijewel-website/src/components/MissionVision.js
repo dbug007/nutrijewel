@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Target, Eye, Lightbulb, Globe } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import { cardVariants, getRevealProps, hoverLift, staggerVariants } from './motionPresets';
 import './MissionVision.css';
 
+const CORE_VALUES = [
+  { title: 'Innovation',     icon: <Lightbulb size={24} />, description: 'Continuously researching and developing new healthy alternatives that taste amazing.' },
+  { title: 'Authenticity',   icon: <Target size={24} />,    description: 'Staying true to traditional recipes while enhancing them with modern nutritional science.' },
+  { title: 'Sustainability', icon: <Globe size={24} />,     description: 'Using natural, responsibly sourced ingredients that are good for you and the planet.' },
+];
+
 const MissionVision = () => {
   const reduceMotion = useReducedMotion();
   const revealProps = getRevealProps(reduceMotion);
+  const [openValue, setOpenValue] = useState(-1);
+
+  const cvPyramidVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.15, delayChildren: 0.08 } } };
+  const cvTierVariants = reduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: 28, scale: 0.9 },
+        visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+      };
 
   return (
     <motion.section className="mission-vision-section" {...revealProps} variants={cardVariants}>
@@ -82,42 +97,36 @@ const MissionVision = () => {
           </motion.div>
         </motion.div>
 
-        {/* Core Values */}
-        <motion.div className="core-values" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-          <h3 className="core-values-title">
-            Our Core Values
-          </h3>
-          
-          <motion.div className="core-values-grid" variants={staggerVariants}>
-            <motion.div className="value-item" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-              <div className="value-icon-wrapper">
-                <Lightbulb size={36} className="value-icon" />
-              </div>
-              <h4 className="value-title">Innovation</h4>
-              <p className="value-description">
-                Continuously researching and developing new healthy alternatives that taste amazing
-              </p>
-            </motion.div>
-            
-            <motion.div className="value-item" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-              <div className="value-icon-wrapper">
-                <Target size={36} className="value-icon" />
-              </div>
-              <h4 className="value-title">Authenticity</h4>
-              <p className="value-description">
-                Staying true to traditional recipes while enhancing them with modern nutritional science
-              </p>
-            </motion.div>
-            
-            <motion.div className="value-item" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-              <div className="value-icon-wrapper">
-                <Globe size={36} className="value-icon" />
-              </div>
-              <h4 className="value-title">Sustainability</h4>
-              <p className="value-description">
-                Using natural, responsibly sourced ingredients that are good for you and the planet
-              </p>
-            </motion.div>
+        {/* Core Values — interactive pyramid */}
+        <motion.div className="core-values" variants={cardVariants}>
+          <h3 className="core-values-title">Our Core Values</h3>
+          <p className="core-values-hint">Hover or tap a value to reveal what it means to us</p>
+
+          <motion.div
+            className="cv-pyramid"
+            variants={cvPyramidVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.35 }}
+          >
+            {CORE_VALUES.map((v, i) => (
+              <motion.button
+                key={v.title}
+                type="button"
+                variants={cvTierVariants}
+                whileHover={reduceMotion ? undefined : { y: -4 }}
+                whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                className={`cv-tier cv-tier--${i + 1}${openValue === i ? ' is-open' : ''}`}
+                onClick={() => setOpenValue(openValue === i ? -1 : i)}
+                aria-expanded={openValue === i}
+              >
+                <span className="cv-tier-head">
+                  <span className="cv-tier-icon">{v.icon}</span>
+                  <span className="cv-tier-title">{v.title}</span>
+                </span>
+                <span className="cv-tier-desc">{v.description}</span>
+              </motion.button>
+            ))}
           </motion.div>
         </motion.div>
       </div>

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { smoothEase, imageCrossfade } from './motionPresets';
+import { scrollToId } from '../lib/smoothScroll';
 import './HeroSection.css';
 
 /* Cinematic Plate hero — full-bleed food, near-zero words.
@@ -9,7 +10,8 @@ import './HeroSection.css';
 const ROTATING_WORDS = ['Pure.', 'Joyful.', 'Crafted.'];
 /* Soft crossfade slideshow — used on all breakpoints for now;
    desktop-specific art can be swapped in later. */
-const HERO_IMAGES = [1, 2, 3, 4, 5].map(
+/* hero-mobile-5 intentionally excluded (not a released product). */
+const HERO_IMAGES = [1, 2, 3, 4].map(
   n => `${process.env.PUBLIC_URL}/images/hero-mobile-${n}.jpg`
 );
 
@@ -19,6 +21,15 @@ const HeroSection = () => {
   const [heroImg, setHeroImg] = useState(0);
   const heroRef = useRef(null);
   const heroPausedRef = useRef(false);
+  const slideTimer = useRef(0);
+
+  const startAutoplay = useCallback(() => {
+    clearInterval(slideTimer.current);
+    slideTimer.current = setInterval(() => {
+      if (heroPausedRef.current) return;
+      setHeroImg(i => (i + 1) % HERO_IMAGES.length);
+    }, 2500);
+  }, []);
 
   useEffect(() => {
     if (reduceMotion) return undefined;
@@ -30,12 +41,16 @@ const HeroSection = () => {
 
   useEffect(() => {
     if (reduceMotion) return undefined;
-    const timer = setInterval(() => {
-      if (heroPausedRef.current) return;
-      setHeroImg(i => (i + 1) % HERO_IMAGES.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [reduceMotion]);
+    startAutoplay();
+    return () => clearInterval(slideTimer.current);
+  }, [reduceMotion, startAutoplay]);
+
+  // Manual slide select — jump + restart the autoplay clock so the next
+  // auto-advance is a full interval away (no jarring quick-skip).
+  const selectSlide = (i) => {
+    setHeroImg(i);
+    if (!reduceMotion) startAutoplay();
+  };
 
   // Hold the slideshow while hovering or scrolling.
   useEffect(() => {
@@ -67,10 +82,7 @@ const HeroSection = () => {
     };
   }, [reduceMotion]);
 
-  const scrollToProducts = () => {
-    const el = document.getElementById('products');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const scrollToProducts = () => scrollToId('products');
 
   const stagger = {
     hidden: {},
@@ -81,6 +93,23 @@ const HeroSection = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: smoothEase } },
   };
 
+  /* Cinematic crossfade + slow Ken-Burns zoom: each photo eases in while
+     drifting from 1.0 → 1.08 over 7s, so the hero is never visually static. */
+  const heroSlide = reduceMotion
+    ? imageCrossfade
+    : {
+        enter: { opacity: 0, scale: 1 },
+        center: {
+          opacity: 1,
+          scale: 1.08,
+          transition: {
+            opacity: { duration: 1.1, ease: smoothEase },
+            scale: { duration: 7, ease: 'linear' },
+          },
+        },
+        exit: { opacity: 0, transition: { duration: 1.1, ease: smoothEase } },
+      };
+
   return (
     <section className="hero-section" ref={heroRef} aria-label="NutriJewel — handcrafted, guilt-free sweets and snacks">
       {/* Layer 0 — full-bleed hero: soft crossfade slideshow (all breakpoints). */}
@@ -90,18 +119,17 @@ const HeroSection = () => {
           className="hero-cinematic-img"
           src={HERO_IMAGES[heroImg]}
           alt="NutriJewel handcrafted treats"
-          variants={imageCrossfade}
+          variants={heroSlide}
           initial="enter"
           animate="center"
           exit="exit"
-          transition={reduceMotion ? { duration: 0 } : { duration: 1.1, ease: smoothEase }}
+          transition={reduceMotion ? { duration: 0 } : undefined}
         />
       </AnimatePresence>
 
-      {/* Layers 1-3 — legibility scrim, film grain, gallery frame (all decorative) */}
+      {/* Layers 1-2 — legibility scrim + subtle film grain (both decorative) */}
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
-      <div className="hero-frame" aria-hidden="true" />
 
       {/* Content — lower-left */}
       <motion.div className="hero-content" variants={stagger} initial="hidden" animate="visible">
@@ -123,7 +151,7 @@ const HeroSection = () => {
         </motion.h1>
 
         <motion.p className="hero-signature" variants={fadeUp}>
-          Handcrafted by Dt. Ruchika Bachwani
+          Handcrafted by Ruchika Bachwani
         </motion.p>
 
         <motion.button className="hero-taste-btn" variants={fadeUp} onClick={scrollToProducts}>
@@ -131,6 +159,24 @@ const HeroSection = () => {
           <ChevronRight size={20} />
         </motion.button>
       </motion.div>
+
+      {/* Slide progress — segmented "story" bar; active segment fills over the
+          2.5s interval and pauses on hover. Each segment is a jump control. */}
+      <div className="hero-progress" role="tablist" aria-label="Hero images">
+        {HERO_IMAGES.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-selected={i === heroImg}
+            aria-label={`Show image ${i + 1} of ${HERO_IMAGES.length}`}
+            className={`hero-progress-seg${i === heroImg ? ' is-active' : ''}`}
+            onClick={() => selectSlide(i)}
+          >
+            <span className="hero-progress-fill" />
+          </button>
+        ))}
+      </div>
 
       {/* Scroll cue */}
       <div className="hero-scrollcue" aria-hidden="true">

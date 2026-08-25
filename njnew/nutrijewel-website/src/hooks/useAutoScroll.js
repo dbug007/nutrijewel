@@ -10,13 +10,15 @@ import { useReducedMotion } from 'motion/react';
  * Disabled under prefers-reduced-motion; paused while off-screen.
  *
  * @param {React.RefObject<HTMLElement>} ref  the scroll container (overflow-x: auto)
+ * @param {boolean} [opts.enabled=true]  set false to opt out (hooks can't be called
+ *        conditionally, so Shelf passes this rather than skipping the call)
  */
-export function useAutoScroll(ref, { interval = 4000, resumeDelay = 2000 } = {}) {
+export function useAutoScroll(ref, { interval = 4000, resumeDelay = 2000, enabled = true } = {}) {
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || reduceMotion) return undefined;
+    if (!el || reduceMotion || !enabled) return undefined;
 
     let paused = false;
     let visible = true;
@@ -78,5 +80,5 @@ export function useAutoScroll(ref, { interval = 4000, resumeDelay = 2000 } = {})
       el.removeEventListener('focusin', pause);
       el.removeEventListener('focusout', resumeSoon);
     };
-  }, [ref, interval, resumeDelay, reduceMotion]);
+  }, [ref, interval, resumeDelay, reduceMotion, enabled]);
 }

@@ -8,11 +8,11 @@ const TermsAndConditions = () => {
       <div className="policy-highlight business-info-box">
         <h2>About NutriJewel</h2>
         <p style={{fontSize: '1.1rem', marginBottom: '1.5rem'}}>
-          <strong>This website www.nutrijewel.com is owned and managed by Dt. Ruchika Bachwani.</strong>
+          <strong>This website www.nutrijewel.com is owned and managed by Ruchika Bachwani.</strong>
         </p>
         <div className="business-details">
           <p><strong>Business Name:</strong> NutriJewel</p>
-          <p><strong>Owner:</strong> Dt. Ruchika Bachwani</p>
+          <p><strong>Owner:</strong> Ruchika Bachwani</p>
           <p><strong>Registered Office:</strong> Lodha Belmondo, Pune, Maharashtra, India</p>
           <p><strong>FSSAI License:</strong> 21524037004182</p>
           <p><strong>Contact:</strong> +91 996-063-7656</p>

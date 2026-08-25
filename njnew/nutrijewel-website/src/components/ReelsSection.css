@@ -1,0 +1,318 @@
+.nj-reels-section {
+  position: relative;
+  z-index: 3; /* lets a hovered reel float above neighbouring sections */
+  padding: 5.5rem 1rem;
+  overflow: hidden; /* clip the ambient wash */
+  background: linear-gradient(180deg, #20261a 0%, #171c14 55%, #12160f 100%);
+  isolation: isolate;
+}
+
+/* Ambient blurred colour wash bleeding from the featured reel */
+.nj-reels-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.nj-reels-ambient-img {
+  position: absolute;
+  inset: -25%;
+  display: block;
+  background-size: cover;
+  background-position: center;
+  filter: blur(90px) saturate(1.35);
+  transform: scale(1.1);
+}
+/* keep the centre readable and edges dark so text/videos pop */
+.nj-reels-ambient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 50% 45%, rgba(18, 22, 15, 0.15), rgba(18, 22, 15, 0.82) 78%);
+}
+
+.nj-reels-head {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto 2.5rem;
+}
+.nj-reels-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--nj-mint);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.nj-reels-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 700;
+  color: var(--nj-cream);
+  margin: 0.55rem 0 0.4rem;
+}
+.nj-reels-sub { color: rgba(255, 255, 255, 0.72); font-size: 1rem; margin: 0; }
+
+.nj-reels-strip {
+  position: relative;
+  z-index: 2;
+  max-width: 90rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.9rem; /* generous space so a hovered reel never reaches its neighbours */
+  padding: 0.75rem 0.5rem 1.5rem; /* breathing room so the lift/scale isn't clipped */
+  overflow: visible;
+}
+
+.nj-reel {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--nj-card-radius);
+  overflow: hidden;
+  background: linear-gradient(135deg, #2a3320, #1c2416);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  outline: none;
+}
+.nj-reel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--nj-card-radius);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  z-index: 2;
+}
+.nj-reel:hover {
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+  z-index: 20; /* keep the enlarged reel above its neighbours */
+}
+.nj-reel:focus-visible {
+  box-shadow: 0 0 0 3px var(--nj-mint), 0 30px 60px rgba(0, 0, 0, 0.55);
+}
+
+.nj-reel-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Soft bottom scrim for depth + badge legibility (eases off on hover) */
+.nj-reel-scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  opacity: 0.9;
+  transition: opacity 0.3s var(--ease-smooth);
+}
+.nj-reel.is-hover .nj-reel-scrim { opacity: 0.55; }
+
+/* Expand affordance: appears on hover to signal "tap for full screen" */
+.nj-reel-expand {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 3;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth);
+}
+.nj-reel:hover .nj-reel-expand,
+.nj-reel:focus-visible .nj-reel-expand { opacity: 1; transform: scale(1); }
+
+/* Mute / sound badge — muted by default, flips to sound-on when hovered */
+.nj-reel-badge {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  z-index: 3;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  transition: background-color 0.25s var(--ease-smooth), color 0.25s var(--ease-smooth), transform 0.25s var(--ease-smooth);
+}
+.nj-reel-badge.is-on {
+  background: var(--nj-green);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+/* active/playing glow ring */
+.nj-reel.is-playing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--nj-card-radius);
+  box-shadow: inset 0 0 0 2px rgba(209, 232, 167, 0.9), 0 0 24px rgba(147, 181, 89, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nj-reels-cta { position: relative; z-index: 2; text-align: center; margin-top: 2.5rem; }
+.nj-reels-follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--nj-btn-radius);
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(109, 138, 60, 0.4);
+  transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
+}
+.nj-reels-follow:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(109, 138, 60, 0.5); }
+
+/* ── Full-screen vertical player ── */
+.nj-reel-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(8, 10, 7, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.nj-reel-viewer-stage {
+  position: relative;
+  height: min(86svh, 720px);
+  aspect-ratio: 9 / 16;
+  max-width: 94vw;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+}
+.nj-reel-viewer-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+.nj-reel-viewer-ig {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background-color 0.2s var(--ease-smooth);
+}
+.nj-reel-viewer-ig:hover { background: rgba(0, 0, 0, 0.75); }
+
+.nj-reel-viewer-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background-color 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+}
+.nj-reel-viewer-close:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.06); }
+
+.nj-reel-viewer-nav {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background-color 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+}
+.nj-reel-viewer-nav:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.06); }
+
+@media (max-width: 900px) {
+  /* Strip becomes a horizontal scroll-snap shelf (hover-sound is desktop; rotation still plays) */
+  .nj-reels-strip {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 0;
+  }
+  .nj-reel {
+    flex: 0 0 62vw;
+    max-width: 260px;
+    scroll-snap-align: start;
+  }
+  .nj-reels-strip::-webkit-scrollbar { display: none; }
+
+  /* viewer nav arrows are edge-anchored on small screens (swipe also works) */
+  .nj-reel-viewer { padding: 0.75rem; gap: 0.4rem; }
+  .nj-reel-viewer-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.6rem;
+    height: 2.6rem;
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .nj-reel-viewer-nav.prev { left: 0.5rem; }
+  .nj-reel-viewer-nav.next { right: 0.5rem; }
+  .nj-reel-viewer-nav:hover { transform: translateY(-50%); }
+}
+@media (max-width: 600px) {
+  .nj-reels-section { padding: 3rem 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nj-reel-expand { transition: none; }
+}

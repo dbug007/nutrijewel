@@ -11,14 +11,18 @@
     "artisanal-snacks",
     "FSSAI-certified"
   ],
-  "author": "Dt. Ruchika Bachwani <hello@nutrijewel.com>",
+  "author": "Ruchika Bachwani <hello@nutrijewel.com>",
   "private": true,
   "homepage": "https://nutrijewel.com",
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@number-flow/react": "^0.6.2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "lenis": "^1.3.26",
     "lucide-react": "^0.526.0",
     "motion": "^12.38.0",
     "react": "^19.1.0",
@@ -41,6 +45,15 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\](?!lenis[/\\\\]).+\\.(js|mjs|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "moduleNameMapper": {
+      "^@number-flow/react$": "<rootDir>/src/test/numberFlowMock.js"
+    }
   },
   "browserslist": {
     "production": [

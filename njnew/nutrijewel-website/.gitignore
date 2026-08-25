@@ -11,6 +11,10 @@
 # production
 /build
 
+# raw source footage (~173MB of camera MP4s). The web versions the site actually
+# loads are the compressed files in public/reels/, which are committed.
+/video
+
 # misc
 .DS_Store
 .env.local

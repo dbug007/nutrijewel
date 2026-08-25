@@ -11,11 +11,21 @@
  * - Updated: July 30, 2025
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { scrollToId } from '../lib/smoothScroll';
 import './ContactPage.css';
 
 const ContactPage = () => {
+  // Deep-link support: /contact#faq scrolls to the FAQ (after the route-change
+  // scroll-to-top has run).
+  useEffect(() => {
+    if (window.location.hash === '#faq') {
+      const t = setTimeout(() => scrollToId('faq'), 250);
+      return () => clearTimeout(t);
+    }
+    return undefined;
+  }, []);
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -395,7 +405,7 @@ ${formData.message}
       </section>
 
       {/* FAQ Section */}
-      <section className="contact-faq">
+      <section id="faq" className="contact-faq">
         <div className="contact-page-container">
           <h2 className="section-title">Frequently Asked Questions</h2>
           <div className="faq-grid">

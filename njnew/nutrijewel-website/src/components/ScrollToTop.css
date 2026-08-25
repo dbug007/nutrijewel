@@ -1,11 +1,15 @@
 /* Scroll to Top Button Styles */
 .scroll-to-top-btn {
   position: fixed;
-  bottom: 30px;
+  /* --nj-dock-h is set on <body> by pages that dock a bar to the bottom edge
+     (see hampers.css). Defaults to 0 everywhere else. */
+  bottom: calc(30px + var(--nj-dock-h, 0px));
   right: 30px;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+  /* --primary-green / --secondary-green were never defined anywhere, which made
+     this gradient invalid and left the button with no background at all. */
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
   color: white;
   border: none;
   border-radius: 50%;
@@ -22,8 +26,15 @@
 .scroll-to-top-btn:hover {
   transform: translateY(-3px);
   opacity: 1;
-  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
-  background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
+  box-shadow: 0 6px 20px rgba(109, 138, 60, 0.4);
+  background: linear-gradient(135deg, var(--nj-olive), var(--nj-green));
+}
+
+/* A full-screen sheet is up, so get out of the way completely. */
+body.nj-sheet-open .scroll-to-top-btn {
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
 }
 
 .scroll-to-top-btn:active {
@@ -36,7 +47,7 @@
   .scroll-to-top-btn {
     width: 45px;
     height: 45px;
-    bottom: 20px;
+    bottom: calc(20px + var(--nj-dock-h, 0px));
     right: 20px;
   }
 }
@@ -45,7 +56,7 @@
   .scroll-to-top-btn {
     width: 40px;
     height: 40px;
-    bottom: 15px;
+    bottom: calc(15px + var(--nj-dock-h, 0px));
     right: 15px;
   }
 }

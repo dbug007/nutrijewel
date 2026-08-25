@@ -188,9 +188,9 @@ const AboutPage = () => {
           <div className="aboutpage-founder-grid">
             <div className="aboutpage-founder-image">
               <div className="aboutpage-image-frame">
-                <img 
-                  src="/images/ruchikaamritbites.jpg" 
-                  alt="Dt. Ruchika Bachwani - Founder of NutriJewel"
+                <img
+                  src="/images/ruchika.jpg"
+                  alt="Ruchika Bachwani - Founder of NutriJewel"
                   className="aboutpage-founder-photo"
                 />
                 <div className="aboutpage-image-overlay">
@@ -218,7 +218,7 @@ const AboutPage = () => {
                 <span>Meet Our Founder</span>
               </div>
               
-              <h2 className="aboutpage-founder-name">Dt. Ruchika Bachwani</h2>
+              <h2 className="aboutpage-founder-name">Ruchika Bachwani</h2>
               <p className="aboutpage-founder-title">
                 Registered Pharmacist & Qualified Nutritionist
               </p>
@@ -234,8 +234,8 @@ const AboutPage = () => {
 
               <div className="aboutpage-founder-story">
                 <p>
-                  With over a decade of experience in nutrition science and pharmacy, 
-                  Dt. Ruchika combines traditional wisdom with modern nutritional research 
+                  With over a decade of experience across food, nutrition science, and pharmacy,
+                  Ruchika combines traditional wisdom with modern nutritional research 
                   to create products that truly nourish.
                 </p>
                 <p>
@@ -285,10 +285,17 @@ const AboutPage = () => {
               </div>
               <h3 className="aboutpage-card-title">Our Mission</h3>
               <p className="aboutpage-card-content">
-                To revolutionize healthy eating by creating artisanal, nutrient-dense 
-                alternatives to traditional sweets and snacks that don't compromise on 
+                To revolutionize healthy eating by creating artisanal, nutrient-dense
+                alternatives to traditional sweets and snacks that never compromise on
                 taste, quality, or satisfaction.
               </p>
+              <ul className="aboutpage-card-points">
+                <li>Handcraft clean, small-batch treats with no preservatives</li>
+                <li>Reinvent traditional recipes with modern nutritional science</li>
+                <li>Use natural, responsibly sourced ingredients and no refined sugar</li>
+                <li>Keep every treat made to order, fresh, and honestly labelled</li>
+                <li>Make guilt-free indulgence joyful and accessible to every home</li>
+              </ul>
             </div>
 
             <div className="aboutpage-mission-card">
@@ -297,10 +304,17 @@ const AboutPage = () => {
               </div>
               <h3 className="aboutpage-card-title">Our Vision</h3>
               <p className="aboutpage-card-content">
-                To become the most trusted name in healthy indulgence, inspiring 
-                families worldwide to embrace clean eating without sacrificing the 
+                To become the most trusted name in healthy indulgence, inspiring
+                families to embrace clean eating without sacrificing the
                 joy of delicious, satisfying treats.
               </p>
+              <ul className="aboutpage-card-points">
+                <li>Be India's most trusted name in healthy indulgence</li>
+                <li>Inspire families to embrace clean eating without giving up taste</li>
+                <li>Grow a community built around mindful, joyful snacking</li>
+                <li>Set the benchmark for artisanal, nutrition-first food</li>
+                <li>Prove that wholesome and delicious belong together</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -347,7 +361,7 @@ const AboutPage = () => {
               <div className="aboutpage-value-icon">
                 <Heart size={28} />
               </div>
-              <h4 className="aboutpage-value-title">Made with Love</h4>
+              <h4 className="aboutpage-value-title">Made to Order with Love</h4>
               <p className="aboutpage-value-description">
                 Every product is handcrafted in small batches with 
                 attention to detail and genuine care.
@@ -454,7 +468,7 @@ const AboutPage = () => {
             <div className="aboutpage-stat-card">
               <div className="aboutpage-stat-number">10+</div>
               <div className="aboutpage-stat-label">Years Experience</div>
-              <div className="aboutpage-stat-description">In nutrition science</div>
+              <div className="aboutpage-stat-description">In food & nutrition science</div>
             </div>
           </div>
         </div>
@@ -469,7 +483,7 @@ const AboutPage = () => {
             </h2>
             <p className="aboutpage-cta-text">
               Join 1000+ families who've discovered that healthy can be delicious. 
-              Explore our range of artisanal, nutritious treats made with love and expertise.
+              Explore our range of artisanal, nutritious treats made to order with love and expertise.
             </p>
             <div className="aboutpage-cta-buttons">
               <a href="/products" className="aboutpage-btn-primary">
@@ -484,7 +498,7 @@ const AboutPage = () => {
             
             <div className="aboutpage-cta-signature">
               <p>With love and nutrition,</p>
-              <p className="aboutpage-signature-name">Dt. Ruchika Bachwani</p>
+              <p className="aboutpage-signature-name">Ruchika Bachwani</p>
               <p className="aboutpage-signature-title">Founder, NutriJewel</p>
             </div>
           </div>

@@ -4,6 +4,20 @@ const path = require('path');
 const buildDir = path.join(__dirname, '..', 'build');
 const sourceIndex = path.join(buildDir, 'index.html');
 const siteUrl = 'https://nutrijewel.com';
+const productCatalog = require(path.join(__dirname, '..', 'src', 'data', 'products.data.js'));
+const hamperData = require(path.join(__dirname, '..', 'src', 'data', 'hampers.data.js'));
+
+// FAQ structured data for /hampers, built from the same array the page renders,
+// so the visible copy and the structured data can never drift apart.
+const hamperFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: hamperData.HAMPER_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+};
 
 // Keep this map aligned with React Router public routes.
 const routeSeo = {
@@ -18,6 +32,13 @@ const routeSeo = {
     description:
       'Explore NutriJewel top sellers including clean cakes, granola, ladoos, and energy bites crafted with premium ingredients and no artificial preservatives.',
     canonical: `${siteUrl}/products/`
+  },
+  hampers: {
+    title: 'Gift Hampers | Build Your Own Healthy Hamper | NutriJewel',
+    description:
+      'Build your own NutriJewel gift hamper for Diwali, weddings, corporate gifting and more. Pick a box, add ladoos, granola, cakes and imported treats, and save up to 15%.',
+    canonical: `${siteUrl}/hampers/`,
+    jsonLd: hamperFaqJsonLd
   },
   services: {
     title: 'NutriJewel Services | Workshops, Nutrition & Healthy Baking',
@@ -37,6 +58,7 @@ const routeSeo = {
       'Contact NutriJewel for product inquiries, custom orders, and workshop details. Connect on WhatsApp or email for quick support.',
     canonical: `${siteUrl}/contact/`
   }
+  // Birthday "Spin & Win" campaign disabled, /spin & /birthday static pages intentionally not generated.
 };
 
 function ensureBuiltIndexExists() {
@@ -77,8 +99,72 @@ function applySeoToHtml(html, seo) {
 function writeIndexForRoute(route, seo, sourceHtml) {
   const routeDir = path.join(buildDir, route);
   fs.mkdirSync(routeDir, { recursive: true });
-  const routeHtml = applySeoToHtml(sourceHtml, seo);
+  let routeHtml = applySeoToHtml(sourceHtml, seo);
+
+  if (seo.jsonLd) {
+    const ldScript = `<script type="application/ld+json">${JSON.stringify(seo.jsonLd)}</script>`;
+    routeHtml = routeHtml.replace('</head>', `${ldScript}</head>`);
+  }
+
   fs.writeFileSync(path.join(routeDir, 'index.html'), routeHtml, 'utf8');
+}
+
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+const lowestPrice = (product) => {
+  if (product.variants && product.variants.length) {
+    return product.variants.reduce((lo, v) => (v.price < lo.price ? v : lo), product.variants[0]).price;
+  }
+  return product.price;
+};
+
+function buildProductHtml(sourceHtml, product) {
+  const url = `${siteUrl}/products/${product.id}/`;
+  const title = `${product.displayName || product.name} | NutriJewel`;
+  const description = product.description || '';
+  const image = `${siteUrl}${encodeURI(product.image || '/preview.jpg')}`;
+
+  let html = applySeoToHtml(sourceHtml, {
+    title: escapeHtml(title),
+    description: escapeHtml(description),
+    canonical: url,
+  });
+  html = replaceMetaByAttribute(html, 'property', 'og:image', image);
+  html = replaceMetaByAttribute(html, 'property', 'twitter:image', image);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image,
+    description,
+    brand: { '@type': 'Brand', name: 'NutriJewel' },
+    category: product.category,
+    ...(product.comingSoon
+      ? {}
+      : {
+          offers: {
+            '@type': 'Offer',
+            url,
+            priceCurrency: 'INR',
+            price: String(lowestPrice(product)),
+            availability: 'https://schema.org/InStock',
+          },
+        }),
+  };
+  const ldScript = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+  return html.replace('</head>', `${ldScript}</head>`);
+}
+
+function writeProductPage(product, sourceHtml) {
+  const dir = path.join(buildDir, 'products', product.id);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), buildProductHtml(sourceHtml, product), 'utf8');
 }
 
 function main() {
@@ -90,7 +176,10 @@ function main() {
     writeIndexForRoute(route, routeSeo[route], sourceHtml);
   });
 
+  productCatalog.forEach((product) => writeProductPage(product, sourceHtml));
+
   console.log(`Created static route index files with SEO metadata for: ${routes.join(', ')}`);
+  console.log(`Created ${productCatalog.length} product detail pages with SEO + Product JSON-LD.`);
 }
 
 main();

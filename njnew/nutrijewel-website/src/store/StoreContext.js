@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 
 /*
- * Cart + Wishlist store. No backend — everything lives in the browser:
+ * Cart + Wishlist store. No backend, everything lives in the browser:
  *  - cart/wishlist persisted to localStorage (per device/browser), key-versioned
  *  - a stable nj_device_id cookie is set for identity (future backend/analytics)
  *  - checkout = a single prefilled WhatsApp order (no payment gateway on a static site)
@@ -61,7 +61,9 @@ const loadPersisted = () => {
 
 const validCartLine = (l) =>
   l && typeof l.key === 'string' && typeof l.productId === 'string' &&
-  typeof l.unitPrice === 'number' && typeof l.qty === 'number';
+  typeof l.unitPrice === 'number' && typeof l.qty === 'number' &&
+  // a hamper line is only usable if its contents survived serialisation
+  (l.kind !== 'hamper' || Array.isArray(l.hamperItems));
 
 /* ---------- reducer ---------- */
 const initialState = {
@@ -88,7 +90,17 @@ function reducer(state, action) {
       } else {
         cart = [...state.cart, { ...line, qty: clampQty(line.qty) }];
       }
-      return { ...state, cart, toast: { id: Date.now(), message: `Added to cart — ${line.name}` } };
+      return { ...state, cart, toast: { id: Date.now(), message: `Added to cart, ${line.name}` } };
+    }
+
+    /* A curated hamper is one composite line. Never merged with an existing line -
+       two hampers built the same way are still two separate gifts. */
+    case 'ADD_HAMPER': {
+      return {
+        ...state,
+        cart: [...state.cart, action.line],
+        toast: { id: Date.now(), message: `Added to cart, ${action.line.name}` },
+      };
     }
 
     case 'SET_QTY': {
@@ -180,6 +192,52 @@ export function StoreProvider({ children }) {
     });
   };
 
+  /* Drop a finished hamper into the cart as a single expandable line, so it can be
+     ordered alongside normal products through the existing WhatsApp checkout.
+     `lines` and `pricing` come straight from useHamperBuilder. */
+  const addHamperToCart = ({ lines, pricing, boxTier, containerStyle, noteOption, noteMessage, occasion }) => {
+    if (!Array.isArray(lines) || lines.length === 0 || !pricing) return null;
+
+    const id = `${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
+    const name = occasion ? `${occasion.name} Hamper` : 'Custom NutriJewel Hamper';
+    const itemCount = lines.reduce((n, l) => n + l.qty, 0);
+    const styleName = containerStyle?.name || 'Gift box';
+
+    const line = {
+      kind: 'hamper',
+      key: `hamper__${id}`,
+      productId: 'custom-hamper',
+      name,
+      image: lines.find((l) => l.image)?.image || null,
+      category: 'Hampers',
+      weight: `${boxTier?.name || 'Gift'} ${styleName.toLowerCase()} · ${itemCount} item${itemCount === 1 ? '' : 's'}`,
+      unitPrice: pricing.total,
+      // pre-discount value, so the drawer can strike through and show the saving
+      originalPrice: pricing.itemsTotal + pricing.presentationTotal,
+      qty: 1,
+      hamperItems: lines.map(({ productId, name: itemName, weight, unitPrice, qty, isImported, packingName, ribbon }) => ({
+        productId, name: itemName, weight, unitPrice, qty,
+        isImported: !!isImported,
+        packingName: packingName || null,
+        ribbon: !!ribbon,
+      })),
+      boxTierName: boxTier?.name || null,
+      containerStyleName: styleName,
+      noteOptionName: noteOption && noteOption.id !== 'none' ? noteOption.name : null,
+      noteMessage: (noteOption && noteOption.id !== 'none' && noteMessage) || null,
+      occasionName: occasion?.name || null,
+      itemsTotal: pricing.itemsTotal,
+      packingTotal: pricing.packingTotal,
+      containerTotal: pricing.containerTotal,
+      notePrice: pricing.notePrice,
+      discount: pricing.discount,
+      savings: pricing.savings,
+    };
+
+    dispatch({ type: 'ADD_HAMPER', line });
+    return line;
+  };
+
   const setQty = (key, qty) => dispatch({ type: 'SET_QTY', key, qty });
   const removeFromCart = (key) => dispatch({ type: 'REMOVE_FROM_CART', key });
   const clearCart = () => dispatch({ type: 'CLEAR_CART' });
@@ -197,9 +255,29 @@ export function StoreProvider({ children }) {
 
   const checkoutWhatsApp = () => {
     if (state.cart.length === 0) return;
-    const lines = state.cart.map(
-      (l, i) => `${i + 1}. ${l.name} (${l.weight}) x${l.qty} — ₹${l.unitPrice * l.qty}`
-    );
+    const lines = state.cart.map((l, i) => {
+      const head = `${i + 1}. ${l.name} (${l.weight}) x${l.qty}, ₹${l.unitPrice * l.qty}`;
+      // Hampers list their contents, packing and note so the order is unambiguous.
+      if (l.kind === 'hamper' && Array.isArray(l.hamperItems) && l.hamperItems.length > 0) {
+        const parts = [head];
+        parts.push(
+          l.hamperItems
+            .map((it) => {
+              const packing = [it.packingName, it.ribbon ? 'with ribbon' : null]
+                .filter(Boolean)
+                .join(', ');
+              return `    • ${it.name} (${it.weight})${it.qty > 1 ? ` x${it.qty}` : ''}${packing ? `, ${packing}` : ''}`;
+            })
+            .join('\n')
+        );
+        if (l.containerStyleName) parts.push(`    Presented in: ${l.boxTierName} ${l.containerStyleName.toLowerCase()}`);
+        if (l.noteOptionName) {
+          parts.push(`    ${l.noteOptionName}${l.noteMessage ? `: "${l.noteMessage}"` : ' (wording to confirm)'}`);
+        }
+        return parts.join('\n');
+      }
+      return head;
+    });
     const message =
       `Hi NutriJewel! I'd like to order:\n\n${lines.join('\n')}\n\nTotal: ₹${subtotal}`;
     if (hasWindow) {
@@ -217,6 +295,7 @@ export function StoreProvider({ children }) {
     wishlistCount: state.wishlist.length,
     subtotal,
     addToCart,
+    addHamperToCart,
     setQty,
     removeFromCart,
     clearCart,

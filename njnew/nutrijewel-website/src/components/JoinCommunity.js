@@ -1,8 +1,25 @@
 import React from 'react';
 import { MessageCircle, Users, Gift, Heart } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
+import { staggerVariants, listItemVariants, getRevealProps, smoothEase } from './motionPresets';
+import CountUp from './CountUp';
 import './JoinCommunity.css';
 
+// Received chat bubbles slide in from the left (the message-received side),
+// fading up one at a time like a live conversation typing in.
+const bubbleVariants = {
+  hidden: { opacity: 0, x: -16, y: 4 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: { duration: 0.45, ease: smoothEase },
+  },
+};
+
 const JoinCommunity = () => {
+  const reduceMotion = useReducedMotion();
+  const revealProps = getRevealProps(reduceMotion);
   const message = "Hello NutriJewel team, I want to join your WhatsApp community group. Could you please add me?";
   const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
 
@@ -24,7 +41,7 @@ const JoinCommunity = () => {
     {
       icon: <Users size={24} />,
       title: 'Health Tips',
-      description: 'Daily nutrition tips and wellness advice from Dt. Ruchika'
+      description: 'Daily nutrition tips and wellness advice from Ruchika'
     },
     {
       icon: <Heart size={24} />,
@@ -56,9 +73,13 @@ const JoinCommunity = () => {
             </p>
 
             {/* Benefits Grid */}
-            <div className="community-benefits">
+            <motion.div
+              className="community-benefits"
+              variants={staggerVariants}
+              {...revealProps}
+            >
               {communityBenefits.map((benefit, index) => (
-                <div key={index} className="benefit-item">
+                <motion.div key={index} className="benefit-item" variants={listItemVariants}>
                   <div className="benefit-icon">
                     {benefit.icon}
                   </div>
@@ -66,9 +87,9 @@ const JoinCommunity = () => {
                     <h4 className="benefit-title">{benefit.title}</h4>
                     <p className="benefit-description">{benefit.description}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Join Button */}
             <div className="community-cta">
@@ -83,7 +104,7 @@ const JoinCommunity = () => {
                 <span>Join WhatsApp Community</span>
               </a>
               <p className="community-note">
-                🌟 Over 220+ members already sharing their wellness journey!
+                🌟 Over <CountUp value={220} suffix="+" /> members already sharing their wellness journey!
               </p>
             </div>
           </div>
@@ -104,28 +125,32 @@ const JoinCommunity = () => {
                 </div>
               </div>
               
-              <div className="community-card-content">
-                <div className="community-message">
+              <motion.div
+                className="community-card-content"
+                variants={staggerVariants}
+                {...revealProps}
+              >
+                <motion.div className="community-message" variants={bubbleVariants}>
                   <div className="message-bubble">
                     <p>"Just tried the Bliss Bites recipe - amazing! 😍"</p>
                     <span className="message-time">2 min ago</span>
                   </div>
-                </div>
-                
-                <div className="community-message">
+                </motion.div>
+
+                <motion.div className="community-message" variants={bubbleVariants}>
                   <div className="message-bubble">
                     <p>"Thank you for the healthy lifestyle tips! 🙏"</p>
                     <span className="message-time">5 min ago</span>
                   </div>
-                </div>
-                
-                <div className="community-message">
+                </motion.div>
+
+                <motion.div className="community-message" variants={bubbleVariants}>
                   <div className="message-bubble">
                     <p>"Can't wait for the next workshop! 🎉"</p>
                     <span className="message-time">10 min ago</span>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </div>

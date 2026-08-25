@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import { scrollToTop } from '../lib/smoothScroll';
 import '../styles/PolicyPages.css';
 
 const PolicyLayout = ({ title, lastUpdated, children }) => {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollToTop({ immediate: true });
   }, []);
 
   return (

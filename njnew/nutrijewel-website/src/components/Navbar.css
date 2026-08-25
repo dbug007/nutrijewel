@@ -195,6 +195,22 @@
   background-color: rgba(147, 181, 89, 0.12);
 }
 
+/* "New" badge — used on the Hampers nav entry (desktop + mobile) */
+.navbar-new-pill {
+  display: inline-block;
+  margin-left: 0.3rem;
+  padding: 0.1rem 0.34rem;
+  border-radius: 4px;
+  background: var(--nj-green);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  text-shadow: none;
+}
+
 /* Service Button Styles */
 .navbar-service-btn {
   background: none;
@@ -239,7 +255,7 @@
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 25px;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 1rem;
   display: flex;
@@ -403,7 +419,7 @@
   color: white;
   border: none;
   padding: 12px 20px;
-  border-radius: 25px;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 1rem;
   display: flex;
@@ -571,6 +587,62 @@
   .navbar.navbar--home.is-hidden {
     transform: translateY(-110%);
     background-color: var(--nj-cream);
+    box-shadow: none;
+  }
+}
+
+/* ── Spin hero: NutriJewel logo centered at the very top, then docks to the
+   left and reveals the controls on scroll-up. Works on top of the home-like
+   transparent + hide/reveal machinery (/spin is home-like). ── */
+.navbar-logo-icon { transition: height 0.4s var(--ease-entrance); }
+
+/* Controls fade as the bar transitions between the centered-logo hero state
+   and the normal docked navbar. */
+.navbar.navbar--spin .navbar-nav,
+.navbar.navbar--spin .nj-nav-actions,
+.navbar.navbar--spin .navbar-buy-btn,
+.navbar.navbar--spin .navbar-toggle {
+  transition: opacity 0.4s var(--ease-smooth);
+}
+.navbar.navbar--spin.is-minimal .navbar-brand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.navbar.navbar--spin.is-minimal .navbar-nav,
+.navbar.navbar--spin.is-minimal .nj-nav-actions,
+.navbar.navbar--spin.is-minimal .navbar-buy-btn,
+.navbar.navbar--spin.is-minimal .navbar-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+.navbar.navbar--spin.is-minimal .navbar-logo-icon {
+  height: 84px;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.6));
+}
+@media (max-width: 767px) {
+  .navbar.navbar--spin.is-minimal .navbar-logo-icon { height: 64px; }
+}
+
+/* ── Desktop inner pages (Products, About, Services, …): solid sticky bar that
+   auto-hides on scroll-down and reveals on scroll-up — same instinct as the
+   homepage, minus the transparent-over-hero treatment. ── */
+@media (min-width: 768px) {
+  .navbar.navbar--scroll {
+    will-change: transform;
+    transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+  }
+  .navbar.navbar--scroll.is-minimal,
+  .navbar.navbar--scroll.is-revealed {
+    transform: translateY(0);
+  }
+  .navbar.navbar--scroll.is-revealed {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+  /* slide fully above the marquee so no sliver peeks through */
+  .navbar.navbar--scroll.is-hidden {
+    transform: translateY(calc(-100% - var(--nj-marquee-height, 2.15rem) - 6px));
     box-shadow: none;
   }
 }

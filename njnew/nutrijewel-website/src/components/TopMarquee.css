@@ -20,13 +20,16 @@
 }
 
 .top-marquee-track {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 1.1rem;
+  width: max-content;
   white-space: nowrap;
-  padding-left: 1.2rem;
-  animation: njMarqueeScroll 34s linear infinite;
-  min-width: max-content;
+  animation: njMarqueeScroll 60s linear infinite;
+}
+.top-marquee-half {
+  display: flex;
+  align-items: center;
+  flex: none;
 }
 
 .top-marquee-item {
@@ -35,7 +38,8 @@
 }
 
 .top-marquee-divider {
-  opacity: 0.65;
+  margin: 0 1.4rem;
+  opacity: 0.6;
 }
 
 @keyframes njMarqueeScroll {
@@ -43,7 +47,7 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
@@ -57,7 +61,7 @@
   }
 
   .top-marquee-track {
-    animation-duration: 30s;
+    animation-duration: 48s;
   }
 }
 

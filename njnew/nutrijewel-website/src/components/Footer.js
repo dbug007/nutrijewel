@@ -1,11 +1,14 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Mail, Phone, MapPin, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, MessageCircle } from 'lucide-react';
 import './Footer.css';
 
 const Footer = () => {
   const location = useLocation();
-  const isContactPage = location.pathname === '/contact';
+  // "Get in Touch" was repeating on every page. Show it only on the homepage;
+  // every other page relies on the dedicated Contact page, the nav Contact link,
+  // and the footer's Contact column.
+  const showContactSection = location.pathname === '/';
 
   const handleWhatsApp = () => {
     const message = "Hi! I'm interested in NutriJewel products. Can you help me?";
@@ -15,8 +18,8 @@ const Footer = () => {
 
   return (
     <>
-      {/* Contact Section - Show on all pages except Contact page */}
-      {!isContactPage && (
+      {/* Contact Section - homepage only (avoids repeating "Get in Touch" everywhere) */}
+      {showContactSection && (
         <section id="contact" className="contact-section">
           <div className="contact-container">
             <div className="contact-header">
@@ -30,14 +33,6 @@ const Footer = () => {
             <div className="contact-grid">
               {/* Contact Info */}
               <div className="contact-info">
-                <div className="contact-section-header">
-                  <h3 className="contact-section-title">Let's Connect</h3>
-                  <p className="contact-description">
-                    Have questions about our products, ingredients, or want to place a custom order? 
-                    We're here to help you make the best choice for your healthy lifestyle.
-                  </p>
-                </div>
-
                 <div className="contact-items">
                   <div className="contact-item">
                     <div className="contact-icon">
@@ -70,9 +65,15 @@ const Footer = () => {
                   </div>
                 </div>
 
-                <button className="whatsapp-btn" onClick={handleWhatsApp}>
-                  Order on WhatsApp
-                </button>
+                <div className="contact-cta">
+                  <p className="contact-cta-text">
+                    Prefer to chat? Place your order and get instant answers on WhatsApp.
+                  </p>
+                  <button className="whatsapp-btn" onClick={handleWhatsApp}>
+                    <MessageCircle size={20} />
+                    <span>Order on WhatsApp</span>
+                  </button>
+                </div>
               </div>
 
               {/* Contact Form — removed per request; {false &&} guard keeps the markup for easy re-enable */}
@@ -150,7 +151,7 @@ const Footer = () => {
                 </div>
                 <p className="footer-description">
                   Crafting healthy, delicious snacks that nourish your body and delight your taste buds. 
-                  Made with love, served with care.
+                  Made to order with love, served with care.
                 </p>
                 <div className="social-links">
                 <a href="https://instagram.com/nutrijewel" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
@@ -169,6 +170,7 @@ const Footer = () => {
                 <li><a href="#products" className="footer-link">Products</a></li>
                 <li><a href="#mission" className="footer-link">Our Mission</a></li>
                 <li><a href="#testimonials" className="footer-link">Reviews</a></li>
+                <li><a href="/contact#faq" className="footer-link">FAQs</a></li>
                 <li><a href="#contact" className="footer-link">Contact</a></li>
               </ul>
             </div>
@@ -199,7 +201,7 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="footer-section">
-              <h3 className="footer-title">Get in Touch</h3>
+              <h3 className="footer-title">Contact</h3>
               <div className="footer-contact">
                 <div className="footer-contact-item">
                   <Phone size={16} />

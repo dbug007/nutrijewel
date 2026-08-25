@@ -157,7 +157,7 @@
   color: var(--nj-green);
   border: none;
   padding: 1rem 2rem;
-  border-radius: 50px;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 1.125rem;
   display: inline-flex;
@@ -191,7 +191,7 @@
 
 .community-card {
   background-color: white;
-  border-radius: 1.5rem;
+  border-radius: var(--nj-card-radius);
   padding: 2rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   max-width: 24rem;

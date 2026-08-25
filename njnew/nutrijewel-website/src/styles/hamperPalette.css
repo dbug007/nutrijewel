@@ -1,0 +1,28 @@
+/* ==========================================================================
+   Hamper palette
+   ==========================================================================
+   Gifting gets its own colour so the new section reads as distinct from the
+   green brand. Plum and gold rather than red, for one specific reason: the
+   ribbon that ties itself onto a product is red, and on a red section it would
+   vanish. Against plum it is the loudest thing on screen, which is the point.
+
+   TO SWITCH TO INDULGENT RED instead, replace the three plum values below with
+   these and change nothing else:
+       --hmp-primary: #B3253A;
+       --hmp-deep:    #7C1526;
+       --hmp-soft:    #FBE9EC;
+   Then set --hmp-ribbon to a gold (#C9A227) so the ribbon still separates.
+
+   Defined on both surfaces because the homepage teaser lives outside
+   .hampers-page.
+   ========================================================================== */
+
+.hampers-page,
+.nj-hteaser {
+  --hmp-primary: #6B3FA0;   /* plum, the working accent */
+  --hmp-deep:    #4A2870;   /* aubergine, for text and hovers */
+  --hmp-soft:    #EFE6F7;   /* wash, for chips and soft fills */
+  --hmp-gold:    #A8811A;   /* unlocked offers, top tier */
+  --hmp-gold-lt: #C9A227;
+  --hmp-ribbon:  #D6273E;   /* ribbons only, never furniture */
+}

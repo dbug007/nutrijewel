@@ -30,7 +30,7 @@ const InstagramFeed = () => {
     {
       id: 2,
       image: `${process.env.PUBLIC_URL}/images/ruchikaamritbites.jpg`,
-      caption: 'Dt. Ruchika with her signature Amrit Bites - made with love & tradition ❤️',
+      caption: 'Ruchika with her signature Amrit Bites - made with love & tradition ❤️',
       likes: 156,
       date: '2 days ago'
     },

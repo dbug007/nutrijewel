@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans+Condensed:wght@300;700&family=Playfair+Display:wght@400;600;700&display=swap');
 
+/* Bakery pattern library: gingham, plaid, stripes, windowpane, graph.
+   Available site-wide, currently applied on the hampers surfaces only. */
+@import './styles/patterns.css';
+
+/* Plum + gold palette for the gifting surfaces. */
+@import './styles/hamperPalette.css';
+
 /* CSS Variables for NutriJewel Brand Colors */
 :root {
   --nj-green: #93B559;
@@ -13,6 +20,10 @@
   /* Shared motion easing — use these everywhere for consistent, elegant transitions */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);    /* hover / state changes */
   --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1); /* lifts / reveals / entrances */
+
+  /* Shared corner-radius system: soft rounded rectangles (replaces pills / 180° arcs) */
+  --nj-btn-radius: 12px;   /* buttons */
+  --nj-card-radius: 16px;  /* cards, panels, modals */
 }
 
 * {
@@ -74,7 +85,7 @@ html {
   display: inline-block;
   padding: 12px 24px;
   border: none;
-  border-radius: 25px;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;

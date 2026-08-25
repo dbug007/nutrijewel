@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Award, Users, Leaf, Heart } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { cardVariants, getRevealProps, hoverLift, staggerVariants } from './motionPresets';
+import CountUp from './CountUp';
 import './AboutSection.css';
 
 const AboutSection = () => {
   const reduceMotion = useReducedMotion();
   const revealProps = getRevealProps(reduceMotion);
 
+  // Subtle scroll-driven parallax for the founder portrait. The portrait layer
+  // drifts vertically (-20px to +20px) as the section moves through the viewport.
+  // Disabled under reduced motion (transform stays at 0).
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const portraitParallax = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+  const portraitY = reduceMotion ? 0 : portraitParallax;
+
   return (
-    <motion.section id="about" className="home-about-section" {...revealProps} variants={cardVariants}>
+    <motion.section id="about" ref={sectionRef} className="home-about-section" {...revealProps} variants={cardVariants}>
       <div className="home-about-container">
         {/* Header */}
         <div className="home-about-header">
@@ -25,18 +37,18 @@ const AboutSection = () => {
           <motion.div className="home-about-image-section" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
             <motion.div className="home-about-founder-wrapper" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
               <motion.div className="home-about-founder-card" whileHover={reduceMotion ? undefined : { scale: 1.01 }}>
-                <div className="home-about-founder-background">
-                  <img 
-                    src="/images/ruchikaamritbites.jpg" 
-                    alt="Dt. Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist, Founder of NutriJewel"
+                <motion.div className="home-about-founder-background" style={{ y: portraitY }}>
+                  <img
+                    src="/images/ruchika.jpg"
+                    alt="Ruchika Bachwani - Registered Pharmacist & Qualified Nutritionist, Founder of NutriJewel"
                     className="home-about-founder-bg"
                   />
-                </div>
+                </motion.div>
                 <div className="home-about-founder-overlay">
                   <div className="home-about-founder-content">
                     <div className="home-about-founder-info">
                       <h3 className="home-about-founder-name">
-                        Dt. Ruchika Bachwani
+                        Ruchika Bachwani
                       </h3>
                       <p className="home-about-founder-title">Registered Pharmacist & Qualified Nutritionist</p>
                       <p className="home-about-founder-quote">
@@ -53,7 +65,7 @@ const AboutSection = () => {
           <motion.div className="home-about-story-section" variants={staggerVariants}>
             <div className="home-about-text">
               <p className="home-about-text-large">
-                Founded by <span className="home-about-founder-name-text">Dt. Ruchika Bachwani</span>, 
+                Founded by <span className="home-about-founder-name-text">Ruchika Bachwani</span>, 
                 NutriJewel was born from a passion to create guilt-free alternatives to traditional sweets and snacks 
                 without compromising on taste or nutrition.
               </p>
@@ -73,11 +85,11 @@ const AboutSection = () => {
             {/* Stats */}
             <div className="home-about-stats">
               <motion.div className="home-about-stat-item" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-                <div className="home-about-stat-number">100%</div>
+                <div className="home-about-stat-number"><CountUp value={100} suffix="%" /></div>
                 <div className="home-about-stat-label">Natural Ingredients</div>
               </motion.div>
               <motion.div className="home-about-stat-item" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
-                <div className="home-about-stat-number">0</div>
+                <div className="home-about-stat-number"><CountUp value={0} /></div>
                 <div className="home-about-stat-label">Artificial Preservatives</div>
               </motion.div>
             </div>
@@ -101,7 +113,7 @@ const AboutSection = () => {
             
             <motion.div className="home-about-value-card" variants={cardVariants} whileHover={reduceMotion ? undefined : hoverLift}>
               <Heart className="home-about-value-icon" size={32} />
-              <h4 className="home-about-value-title">Made with Love</h4>
+              <h4 className="home-about-value-title">Made to Order with Love</h4>
               <p className="home-about-value-description">Handcrafted in small batches</p>
             </motion.div>
             

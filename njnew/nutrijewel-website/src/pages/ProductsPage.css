@@ -228,10 +228,9 @@
   justify-content: center;
   gap: 0.75rem;
 }
-.cat-emoji {
-  font-size: 1.75rem;
-  line-height: 1;
-}
+/* Category emojis hidden on all breakpoints (desktop + mobile) for a cleaner look */
+.pill-emoji,
+.cat-emoji { display: none; }
 .cat-title {
   font-size: clamp(1.5rem, 3.5vw, 2.25rem);
   font-family: 'Playfair Display', serif;
@@ -309,7 +308,7 @@
   flex: 0 0 min(72vw, 280px);
   max-width: 280px;
   scroll-snap-align: start;
-  border-radius: 16px;
+  border-radius: var(--nj-card-radius);
   background: white;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.05);
   overflow: hidden;
@@ -322,7 +321,7 @@
   .product-card-new {
     flex: unset;
     max-width: unset;
-    cursor: default;
+    cursor: pointer;
   }
   .product-card-new:hover {
     transform: translateY(-5px);
@@ -470,7 +469,7 @@
   color: white;
   border: none;
   padding: 0.7rem 1rem;
-  border-radius: 0.6rem;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 0.9rem;
   display: flex;
@@ -583,7 +582,7 @@
   max-height: calc(100dvh - 1rem);
   overflow: hidden;
   background: white;
-  border-radius: 1.4rem;
+  border-radius: var(--nj-card-radius);
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -745,7 +744,7 @@
   color: var(--nj-green);
   border: none;
   padding: 0.85rem 2rem;
-  border-radius: 2rem;
+  border-radius: var(--nj-btn-radius);
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;

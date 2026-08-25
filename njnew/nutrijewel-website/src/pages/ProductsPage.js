@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { ShoppingBag, Phone, X, Star, ChevronLeft, ChevronRight, SlidersHorizontal, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence, useReducedMotion, useDragControls } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
+import { ShoppingBag, Phone, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { products } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
-import { imageCrossfade, imageFadeTransition, smoothEase } from '../components/motionPresets';
+import { imageCrossfade, imageFadeTransition } from '../components/motionPresets';
+import { scrollToId } from '../lib/smoothScroll';
 import WishlistHeart from '../components/store/WishlistHeart';
 import AddToCartButton from '../components/store/AddToCartButton';
 import './ProductsPage.css';
@@ -14,6 +16,7 @@ const CATEGORIES = [
   { id: 'healthy-snacks',     name: 'Healthy Snacks',     emoji: '🌿' },
   { id: 'energy-bars',        name: 'Energy Bars',        emoji: '⚡' },
   { id: 'dips-spreads',       name: 'Dips & Spreads',     emoji: '🥑' },
+  { id: 'seasonal',           name: 'Seasonal',           emoji: '🎊' },
 ];
 
 const SORT_LABELS = {
@@ -31,24 +34,13 @@ const ProductsPage = () => {
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
   const [imageIndexes, setImageIndexes] = useState({});
-  const [activeProduct, setActiveProduct] = useState(null);
-  const [modalProductDirection, setModalProductDirection] = useState(1);
-  const [activeModalImageIndex, setActiveModalImageIndex] = useState(0);
-  const [modalCategoryProducts, setModalCategoryProducts] = useState([]);
   const reduceMotion = useReducedMotion();
-  const modalDragControls = useDragControls();
-
-  const modalSlideVariants = {
-    enter: (direction) => ({ x: reduceMotion ? 0 : (direction > 0 ? 64 : -64), opacity: 1 }),
-    center: { x: 0, opacity: 1 },
-    exit:  (direction) => ({ x: reduceMotion ? 0 : (direction > 0 ? -64 : 64), opacity: 1 }),
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 767;
       setIsMobile(mobile);
-      if (!mobile) setActiveProduct(null);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -136,43 +128,6 @@ const ProductsPage = () => {
     return imgs[(imageIndexes[p.id] ?? 0) % imgs.length];
   };
 
-  const openProductModal = (product, categoryProducts) => {
-    setModalProductDirection(1);
-    setActiveProduct(product);
-    setActiveModalImageIndex(0);
-    setModalCategoryProducts(categoryProducts);
-  };
-
-  const closeProductModal = () => {
-    setActiveProduct(null);
-    setActiveModalImageIndex(0);
-    setModalCategoryProducts([]);
-  };
-
-  const getActiveModalImage = (product) => {
-    const imgs = getProductImages(product);
-    return imgs[activeModalImageIndex % imgs.length];
-  };
-
-  const showPreviousModalProduct = () => {
-    if (!activeProduct || !modalCategoryProducts.length) return;
-    const idx = modalCategoryProducts.findIndex(p => p.id === activeProduct.id);
-    if (idx < 0) return;
-    const next = (idx - 1 + modalCategoryProducts.length) % modalCategoryProducts.length;
-    setModalProductDirection(-1);
-    setActiveProduct(modalCategoryProducts[next]);
-    setActiveModalImageIndex(0);
-  };
-
-  const showNextModalProduct = () => {
-    if (!activeProduct || !modalCategoryProducts.length) return;
-    const idx = modalCategoryProducts.findIndex(p => p.id === activeProduct.id);
-    if (idx < 0) return;
-    const next = (idx + 1) % modalCategoryProducts.length;
-    setModalProductDirection(1);
-    setActiveProduct(modalCategoryProducts[next]);
-    setActiveModalImageIndex(0);
-  };
 
   const handleVariantChange = useCallback((productId, variant) => {
     setSelectedVariants(prev => ({ ...prev, [productId]: variant }));
@@ -192,10 +147,7 @@ const ProductsPage = () => {
     );
   };
 
-  const scrollToCategory = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const scrollToCategory = (id) => scrollToId(id);
 
   return (
     <div className="products-page" onClick={() => sortOpen && setSortOpen(false)}>
@@ -313,13 +265,13 @@ const ProductsPage = () => {
                       <div
                         key={product.id}
                         className="product-card-new"
-                        onClick={() => isMobile && openProductModal(product, catProducts)}
-                        role={isMobile ? 'button' : undefined}
-                        tabIndex={isMobile ? 0 : -1}
+                        onClick={() => navigate(`/products/${product.id}`)}
+                        role="button"
+                        tabIndex={0}
                         onKeyDown={(e) => {
-                          if (isMobile && (e.key === 'Enter' || e.key === ' ')) {
+                          if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            openProductModal(product, catProducts);
+                            navigate(`/products/${product.id}`);
                           }
                         }}
                       >
@@ -383,7 +335,7 @@ const ProductsPage = () => {
                           )}
 
                           {!isMobile && (
-                            <div className="card-desktop-extra">
+                            <div className="card-desktop-extra" onClick={(e) => e.stopPropagation()}>
                               <p className="card-description">{product.description}</p>
                               {product.comingSoon ? (
                                 <button className="product-buy-btn product-buy-btn--soon" disabled>
@@ -423,166 +375,6 @@ const ProductsPage = () => {
         })}
       </div>
 
-      {/* ── Mobile Product Modal ── */}
-      <AnimatePresence>
-      {isMobile && activeProduct && (
-        <motion.div
-          className="products-modal-backdrop"
-          onClick={closeProductModal}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        >
-          <motion.div
-            className="products-modal"
-            onClick={(e) => e.stopPropagation()}
-            drag="y"
-            dragListener={false}
-            dragControls={modalDragControls}
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.7 }}
-            onDragEnd={(e, info) => { if (info.offset.y > 120 || info.velocity.y > 600) closeProductModal(); }}
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.3, ease: smoothEase }}
-          >
-            <span className="modal-grabber" onPointerDown={(e) => modalDragControls.start(e)} aria-hidden="true">
-              <span className="modal-grabber-pill" />
-            </span>
-            <button className="products-modal-close" onClick={closeProductModal} aria-label="Close product details">
-              <X size={18} />
-            </button>
-            <AnimatePresence initial={false} custom={modalProductDirection} mode="sync">
-              <motion.div
-                key={activeProduct.id}
-                className="products-modal-body"
-                custom={modalProductDirection}
-                variants={modalSlideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-              >
-                <div className={`products-modal-image-wrap${activeProduct.comingSoon ? ' is-coming-soon' : ''}`}>
-                  <AnimatePresence initial={false} custom={1} mode="sync">
-                    <motion.img
-                      key={`${activeProduct.id}-${activeModalImageIndex}`}
-                      src={getActiveModalImage(activeProduct)}
-                      alt={activeProduct.name}
-                      className="products-modal-image"
-                      loading="lazy"
-                      decoding="async"
-                      variants={imageCrossfade}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={reduceMotion ? { duration: 0 } : { duration: 0.5, ease: smoothEase }}
-                    />
-                  </AnimatePresence>
-                  {modalCategoryProducts.length > 1 && (
-                    <>
-                      <button className="modal-image-arrow modal-image-arrow-left" onClick={showPreviousModalProduct} aria-label="Previous product">
-                        <ChevronLeft size={18} />
-                      </button>
-                      <button className="modal-image-arrow modal-image-arrow-right" onClick={showNextModalProduct} aria-label="Next product">
-                        <ChevronRight size={18} />
-                      </button>
-                    </>
-                  )}
-                  {getProductImages(activeProduct).length > 1 && (
-                    <div className="modal-image-dots">
-                      {getProductImages(activeProduct).map((image, index) => (
-                        <button
-                          key={image}
-                          className={`modal-image-dot${index === activeModalImageIndex ? ' active' : ''}`}
-                          onClick={() => setActiveModalImageIndex(index)}
-                          aria-label={`View image ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  {activeProduct.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
-                  <WishlistHeart productId={activeProduct.id} className="on-image on-modal" />
-                </div>
-
-                <div className="products-modal-content">
-                  <div className="product-category-tag">{activeProduct.category}</div>
-                  <div className="product-card-flags products-modal-flags">
-                    {activeProduct.isBestSeller  && <span className="product-card-flag best" title="Best Seller">⭐</span>}
-                    {activeProduct.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
-                  </div>
-                  <h3 className="products-modal-title">{activeProduct.name}</h3>
-                  <p className="products-modal-description">{activeProduct.description}</p>
-                  {!activeProduct.comingSoon && (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <WeightSelector
-                        product={activeProduct}
-                        onVariantChange={(variant) => handleVariantChange(activeProduct.id, variant)}
-                        variant="default"
-                      />
-                    </div>
-                  )}
-                  <div className="products-modal-benefits">
-                    {activeProduct.features && activeProduct.features.map((feature, i) => (
-                      <span key={i} className="benefit-tag">{feature}</span>
-                    ))}
-                  </div>
-                  {!activeProduct.comingSoon && (
-                    <div className="products-modal-rating">
-                      <div className="products-modal-stars">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={16} className="star-filled" fill="currentColor" />
-                        ))}
-                        <span className="rating-number">5.0</span>
-                      </div>
-                      <span className="products-modal-reviews">(150+ reviews)</span>
-                    </div>
-                  )}
-                  <div className="products-modal-footer">
-                    {activeProduct.comingSoon ? (
-                      <>
-                        <div className="product-pricing">
-                          <span className="card-coming-soon">Coming Soon</span>
-                        </div>
-                        <button className="product-buy-btn product-buy-btn--soon" disabled>
-                          Coming Soon
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <div className="product-pricing">
-                          <div className="price-container">
-                            <span className="product-price">₹{getProductPrice(activeProduct)}</span>
-                            {getProductOriginalPrice(activeProduct) > getProductPrice(activeProduct) && (
-                              <>
-                                <span className="original-price">₹{getProductOriginalPrice(activeProduct)}</span>
-                                <span className="discount-badge">
-                                  {Math.round(((getProductOriginalPrice(activeProduct) - getProductPrice(activeProduct)) / getProductOriginalPrice(activeProduct)) * 100)}% OFF
-                                </span>
-                              </>
-                            )}
-                          </div>
-                          <span className="product-weight">{getProductWeight(activeProduct)}</span>
-                        </div>
-                        <div className="nj-cta-row">
-                          <AddToCartButton product={activeProduct} variant={selectedVariants[activeProduct.id]} className="full" />
-                          <button className="product-buy-btn" onClick={() => handlePurchase(activeProduct)}>
-                            <ShoppingBag size={18} />
-                            Buy Now
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </motion.div>
-      )}
-      </AnimatePresence>
 
       {/* ── CTA ── */}
       <section className="products-cta">

@@ -3,14 +3,24 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import { useStore } from '../store/StoreContext';
+import { OCCASIONS } from '../data/hampers';
+import { scrollToId } from '../lib/smoothScroll';
 import { motion, useAnimationControls } from 'motion/react';
 import './store/store.css';
 import './Navbar.css';
+
+/* The occasions worth surfacing straight from the nav. Everything else lives on
+   the /hampers occasion rail. */
+const NAV_OCCASION_IDS = ['diwali', 'raksha-bandhan', 'wedding', 'corporate', 'christmas', 'new-mom'];
+const NAV_OCCASIONS = NAV_OCCASION_IDS
+  .map((id) => OCCASIONS.find((o) => o.id === id))
+  .filter(Boolean);
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  // const isSpin = location.pathname === '/spin'; // birthday spin campaign disabled
   const { isHome, state: headerState } = useHeaderReveal();
   const { cartCount, wishlistCount, openCart, openWishlist } = useStore();
   const cartCtrls = useAnimationControls();
@@ -41,17 +51,9 @@ const Navbar = () => {
     if (location.pathname !== '/about') {
       navigate('/about');
       // Wait for navigation to complete, then scroll
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      setTimeout(() => scrollToId(sectionId), 100);
     } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      scrollToId(sectionId);
     }
     setIsMenuOpen(false);
   };
@@ -63,7 +65,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ''}${isMenuOpen ? ' menu-open' : ''}`}>
+    <nav className={`navbar${isHome ? ` navbar--home is-${headerState}` : ` navbar--scroll is-${headerState}`}${isMenuOpen ? ' menu-open' : ''}`}>
       <div className="navbar-container">
         {/* Logo Only */}
         <div className="navbar-brand">
@@ -92,6 +94,26 @@ const Navbar = () => {
           </li>
           
           <li><Link to="/products" className="navbar-link">Products</Link></li>
+
+          {/* Hampers Dropdown */}
+          <li className="navbar-dropdown">
+            <Link to="/hampers" className="navbar-link navbar-dropdown-toggle">
+              Hampers <span className="navbar-new-pill">New</span> <ChevronDown size={16} />
+            </Link>
+            <div className="navbar-dropdown-menu">
+              <Link to="/hampers" className="navbar-dropdown-link">Build your own</Link>
+              {NAV_OCCASIONS.map((occasion) => (
+                <Link
+                  key={occasion.id}
+                  to={`/hampers/${occasion.slug}`}
+                  className="navbar-dropdown-link"
+                >
+                  {occasion.emoji} {occasion.name}
+                </Link>
+              ))}
+            </div>
+          </li>
+
           <li><Link to="/services" className="navbar-link">Services</Link></li>
           <li><Link to="/recipes-blog" className="navbar-link">Recipes & Blog</Link></li>
           <li><Link to="/contact" className="navbar-link">Contact</Link></li>
@@ -211,10 +233,33 @@ const Navbar = () => {
               </Link>
             </div>
 
+            {/* Hampers Section with Submenu */}
             <div className="navbar-mobile-section">
-              <Link 
-                to="/services" 
-                className="navbar-mobile-link main-link" 
+              <Link
+                to="/hampers"
+                className="navbar-mobile-link main-link"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Hampers <span className="navbar-new-pill">New</span>
+              </Link>
+              <div className="navbar-mobile-submenu">
+                {NAV_OCCASIONS.map((occasion) => (
+                  <Link
+                    key={occasion.id}
+                    to={`/hampers/${occasion.slug}`}
+                    className="navbar-mobile-sublink"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {occasion.emoji} {occasion.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="navbar-mobile-section">
+              <Link
+                to="/services"
+                className="navbar-mobile-link main-link"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Services

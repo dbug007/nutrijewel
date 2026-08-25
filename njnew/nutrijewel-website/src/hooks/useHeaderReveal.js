@@ -11,9 +11,13 @@ import { useLocation } from 'react-router-dom';
  * mobile gating is done in CSS (@media max-width:767px), so these classes are
  * harmless on desktop / other routes.
  */
+/* Routes that get the full homepage header treatment (transparent-over-hero at
+   the top + direction-based hide/reveal). */
+const HOME_LIKE = ['/'];
+
 export function useHeaderReveal({ topThreshold = 16, delta = 4 } = {}) {
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = HOME_LIKE.includes(pathname);
   const [state, setState] = useState('minimal');
   const lastY = useRef(typeof window !== 'undefined' ? window.scrollY : 0);
 
