@@ -21,13 +21,13 @@ export default function HamperHero() {
         };
 
   return (
-    <section className="nj-hero-hampers nj-pat nj-pat--gingham nj-pat--plum nj-pat--bold nj-pat--fade-edges">
+    <section className="nj-hero-hampers nj-pat nj-pat--gingham nj-pat--red nj-pat--bold nj-pat--fade-edges">
       <div className="nj-hero-hampers-glow" aria-hidden="true" />
 
       <div className="container nj-hero-hampers-inner">
         <div className="nj-hero-hampers-copy">
           <motion.span className="nj-hero-hampers-eyebrow" {...reveal(0)}>
-            <BakeryStamp tone="plum">New &middot; Hand packed</BakeryStamp>
+            <BakeryStamp tone="red">New &middot; Hand packed</BakeryStamp>
           </motion.span>
 
           <motion.h1 className="nj-hero-hampers-title" {...reveal(0.08)}>

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import { getDefaultPacking, findHamperProduct } from '../data/hampers';
+import { buildOrderMessage } from '../utils/orderMessage';
 
 /*
  * Cart + Wishlist store. No backend, everything lives in the browser:
@@ -215,12 +217,21 @@ export function StoreProvider({ children }) {
       // pre-discount value, so the drawer can strike through and show the saving
       originalPrice: pricing.itemsTotal + pricing.presentationTotal,
       qty: 1,
-      hamperItems: lines.map(({ productId, name: itemName, weight, unitPrice, qty, isImported, packingName, ribbon }) => ({
-        productId, name: itemName, weight, unitPrice, qty,
-        isImported: !!isImported,
-        packingName: packingName || null,
-        ribbon: !!ribbon,
-      })),
+      hamperItems: lines.map((item) => {
+        const standard = getDefaultPacking(findHamperProduct(item.productId));
+        return {
+          productId: item.productId,
+          name: item.name,
+          weight: item.weight,
+          unitPrice: item.unitPrice,
+          qty: item.qty,
+          isImported: !!item.isImported,
+          packingName: item.packingName || null,
+          // Lets the order message mention packing only when it was changed.
+          packingIsDefault: !!standard && standard.id === item.packingId,
+          ribbon: !!item.ribbon,
+        };
+      }),
       boxTierName: boxTier?.name || null,
       containerStyleName: styleName,
       noteOptionName: noteOption && noteOption.id !== 'none' ? noteOption.name : null,
@@ -255,31 +266,7 @@ export function StoreProvider({ children }) {
 
   const checkoutWhatsApp = () => {
     if (state.cart.length === 0) return;
-    const lines = state.cart.map((l, i) => {
-      const head = `${i + 1}. ${l.name} (${l.weight}) x${l.qty}, ₹${l.unitPrice * l.qty}`;
-      // Hampers list their contents, packing and note so the order is unambiguous.
-      if (l.kind === 'hamper' && Array.isArray(l.hamperItems) && l.hamperItems.length > 0) {
-        const parts = [head];
-        parts.push(
-          l.hamperItems
-            .map((it) => {
-              const packing = [it.packingName, it.ribbon ? 'with ribbon' : null]
-                .filter(Boolean)
-                .join(', ');
-              return `    • ${it.name} (${it.weight})${it.qty > 1 ? ` x${it.qty}` : ''}${packing ? `, ${packing}` : ''}`;
-            })
-            .join('\n')
-        );
-        if (l.containerStyleName) parts.push(`    Presented in: ${l.boxTierName} ${l.containerStyleName.toLowerCase()}`);
-        if (l.noteOptionName) {
-          parts.push(`    ${l.noteOptionName}${l.noteMessage ? `: "${l.noteMessage}"` : ' (wording to confirm)'}`);
-        }
-        return parts.join('\n');
-      }
-      return head;
-    });
-    const message =
-      `Hi NutriJewel! I'd like to order:\n\n${lines.join('\n')}\n\nTotal: ₹${subtotal}`;
+    const message = buildOrderMessage(state.cart, subtotal);
     if (hasWindow) {
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
     }

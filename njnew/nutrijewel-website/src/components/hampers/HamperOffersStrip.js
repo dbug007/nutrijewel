@@ -13,7 +13,7 @@ export default function HamperOffersStrip() {
 
   return (
     <section
-      className="nj-offers nj-pat nj-pat--plaid nj-pat--plum nj-pat--bold nj-pat--fade-t"
+      className="nj-offers nj-pat nj-pat--plaid nj-pat--red nj-pat--bold nj-pat--fade-t"
       aria-labelledby="nj-offers-title"
     >
       <div className="container">

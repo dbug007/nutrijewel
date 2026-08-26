@@ -77,7 +77,7 @@ export default function PresetHamperGrid({ occasionId, builder }) {
 
   return (
     <section
-      className="nj-presets nj-pat nj-pat--windowpane nj-pat--plum nj-pat--soft"
+      className="nj-presets nj-pat nj-pat--windowpane nj-pat--red nj-pat--soft"
       id="ready-hampers"
       aria-labelledby="nj-presets-title"
     >
@@ -114,7 +114,7 @@ export default function PresetHamperGrid({ occasionId, builder }) {
                   ) : (
                     <span className="nj-preset-media-fallback"><Package size={28} /></span>
                   )}
-                  <BakeryStamp tone="plum" frame="postage" className="nj-preset-tier">
+                  <BakeryStamp tone="red" frame="postage" className="nj-preset-tier">
                     {boxTier.name} &middot; {lines.length} items
                   </BakeryStamp>
                   {pricing.appliedOffer && (

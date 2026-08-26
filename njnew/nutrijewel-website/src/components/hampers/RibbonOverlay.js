@@ -9,9 +9,12 @@ import { motion, useReducedMotion } from 'motion/react';
  * ribbon being tied rather than just appearing.
  */
 
-const RED = '#D6273E';
-const RED_DARK = '#A81528';
-const RED_LIGHT = '#E84A5E';
+/* Deliberately brighter than --hmp-primary so the ribbon still reads as an object
+   on an indulgent-red section, with a gold edge doing the separating. */
+const RED = '#E63149';
+const RED_DARK = '#9E0F22';
+const RED_LIGHT = '#F4586C';
+const GOLD = '#E8C765';
 
 export default function RibbonOverlay({ size = 'slot' }) {
   const reduceMotion = useReducedMotion();
@@ -43,12 +46,12 @@ export default function RibbonOverlay({ size = 'slot' }) {
       animate={reduceMotion ? undefined : { opacity: 1 }}
       exit={reduceMotion ? undefined : { opacity: 0, scale: 0.7, transition: { duration: 0.18 } }}
     >
-      {/* vertical band */}
-      <motion.rect
-        x="19.5" y="0" width="9" height="48" rx="1"
-        fill={RED} style={{ transformOrigin: '24px 24px' }}
-        {...band(0)}
-      />
+      {/* vertical band, gold-piped down both edges */}
+      <motion.g style={{ transformOrigin: '24px 24px' }} {...band(0)}>
+        <rect x="19.5" y="0" width="9" height="48" rx="1" fill={RED} />
+        <rect x="19.5" y="0" width="0.9" height="48" fill={GOLD} opacity="0.85" />
+        <rect x="27.6" y="0" width="0.9" height="48" fill={GOLD} opacity="0.85" />
+      </motion.g>
       {/* horizontal band */}
       <motion.rect
         x="0" y="19.5" width="48" height="9" rx="1"
@@ -68,8 +71,9 @@ export default function RibbonOverlay({ size = 'slot' }) {
         <path d="M24 24 L37.5 13 L35 24 L37.5 35 Z" fill={RED} />
         <path d="M24 24 L10.5 13 L13 24 Z" fill={RED_DARK} opacity="0.5" />
         <path d="M24 24 L37.5 13 L35 24 Z" fill={RED_DARK} opacity="0.5" />
-        <circle cx="24" cy="24" r="5.2" fill={RED_DARK} />
-        <circle cx="22.4" cy="22.4" r="1.6" fill={RED_LIGHT} opacity="0.75" />
+        <circle cx="24" cy="24" r="5.4" fill={GOLD} />
+        <circle cx="24" cy="24" r="4.4" fill={RED_DARK} />
+        <circle cx="22.4" cy="22.4" r="1.5" fill={RED_LIGHT} opacity="0.8" />
       </motion.g>
     </motion.svg>
   );

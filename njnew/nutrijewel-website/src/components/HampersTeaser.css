@@ -3,7 +3,7 @@
 .nj-hteaser {
   position: relative;
   padding: clamp(3.5rem, 7vw, 6rem) 0;
-  background: linear-gradient(155deg, #fdfbf7 0%, #f4eefa 52%, #fdf6ee 100%);
+  background: linear-gradient(155deg, #fdfbf7 0%, #fdeef0 52%, #fdf6ee 100%);
   overflow: hidden;
 }
 .nj-hteaser-glow {
@@ -11,7 +11,7 @@
   bottom: -30%; left: -10%;
   width: 42vw; height: 42vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(107, 63, 160, 0.2), transparent 68%);
+  background: radial-gradient(circle, rgba(179, 37, 58, 0.2), transparent 68%);
   pointer-events: none;
 }
 .nj-hteaser-inner {
@@ -87,13 +87,13 @@
 .nj-hteaser-btn.primary {
   background: linear-gradient(135deg, var(--hmp-primary), var(--hmp-deep));
   color: #fff;
-  box-shadow: 0 8px 20px rgba(74, 40, 112, 0.26);
+  box-shadow: 0 8px 20px rgba(124, 21, 38, 0.26);
 }
-.nj-hteaser-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(74, 40, 112, 0.34); }
+.nj-hteaser-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(124, 21, 38, 0.34); }
 .nj-hteaser-btn.ghost {
   background: rgba(255, 255, 255, 0.8);
   color: var(--hmp-deep);
-  border: 1.5px solid rgba(74, 40, 112, 0.32);
+  border: 1.5px solid rgba(124, 21, 38, 0.32);
 }
 .nj-hteaser-btn.ghost:hover { background: #fff; border-color: var(--hmp-deep); }
 .nj-hteaser-note { margin: 1.15rem 0 0; font-size: 0.78rem; color: var(--nj-grey); }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
+import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown, MessageCircle } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import { useStore } from '../store/StoreContext';
 import { OCCASIONS } from '../data/hampers';
@@ -59,7 +59,7 @@ const Navbar = () => {
   };
 
   const handleBuyNow = () => {
-    const message = "Hi! I'm interested in NutriJewel products. Can you help me with the latest offerings?";
+    const message = "Hi NutriJewel! I have a question about your products.";
     const whatsappUrl = `https://wa.me/919960637656?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -76,8 +76,8 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <ul className="navbar-nav">
-          <li><Link to="/" className="navbar-link">Home</Link></li>
-          
+          {/* No "Home" link: the logo is the home link, which is universal. */}
+
           {/* About Dropdown */}
           <li className="navbar-dropdown">
             <Link to="/about" className="navbar-link navbar-dropdown-toggle">
@@ -114,8 +114,8 @@ const Navbar = () => {
             </div>
           </li>
 
-          <li><Link to="/services" className="navbar-link">Services</Link></li>
-          <li><Link to="/recipes-blog" className="navbar-link">Recipes & Blog</Link></li>
+          <li><Link to="/services" className="navbar-link">Workshops</Link></li>
+          <li><Link to="/recipes-blog" className="navbar-link">Recipes</Link></li>
           <li><Link to="/contact" className="navbar-link">Contact</Link></li>
         </ul>
 
@@ -141,13 +141,19 @@ const Navbar = () => {
               </motion.span>
             )}
           </motion.button>
-        </div>
 
-        {/* Buy Now Button */}
-        <button className="navbar-buy-btn" onClick={handleBuyNow}>
-          <ShoppingBag size={18} />
-          Buy Now
-        </button>
+          {/* Was a wide "Buy Now" button, but it only ever opened a general
+              WhatsApp enquiry, competing with the real cart beside it. Now an
+              icon that says what it does. */}
+          <button
+            className="nj-nav-icon nj-nav-whatsapp"
+            onClick={handleBuyNow}
+            aria-label="Ask us anything on WhatsApp"
+            title="Ask us on WhatsApp"
+          >
+            <MessageCircle size={20} />
+          </button>
+        </div>
 
         {/* Mobile Menu Toggle */}
         <button 
@@ -262,7 +268,7 @@ const Navbar = () => {
                 className="navbar-mobile-link main-link"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Services
+                Workshops
               </Link>
             </div>
 
@@ -272,7 +278,7 @@ const Navbar = () => {
                 className="navbar-mobile-link main-link" 
                 onClick={() => setIsMenuOpen(false)}
               >
-                Recipes & Blog
+                Recipes
               </Link>
             </div>
 

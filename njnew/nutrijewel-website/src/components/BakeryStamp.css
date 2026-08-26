@@ -4,7 +4,8 @@
    ========================================================================== */
 
 .nj-stamp {
-  --stamp-ink: #6B3FA0;
+  /* Default ink. Callers override with a tone class. */
+  --stamp-ink: #B3253A;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -92,9 +93,10 @@
 }
 
 /* ---- ink colours ---- */
-.nj-stamp--plum  { --stamp-ink: #6B3FA0; }
-.nj-stamp--gold  { --stamp-ink: #A8811A; }
 .nj-stamp--red   { --stamp-ink: #B3253A; }
+.nj-stamp--plum  { --stamp-ink: #6B3FA0; }
+.nj-stamp--pink  { --stamp-ink: #C75A8C; }
+.nj-stamp--gold  { --stamp-ink: #A8811A; }
 .nj-stamp--green { --stamp-ink: var(--nj-olive); }
 .nj-stamp--ink   { --stamp-ink: var(--nj-charcoal); }
 

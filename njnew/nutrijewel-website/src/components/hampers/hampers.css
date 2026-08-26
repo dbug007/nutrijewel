@@ -54,7 +54,7 @@
 .nj-hfaq { padding: clamp(3rem, 6vw, 5rem) 0; }
 
 .nj-presets { background: #fff; }
-.nj-offers { background: linear-gradient(180deg, #fff, #faf6fd); }
+.nj-offers { background: linear-gradient(180deg, #fff, #fdf5f6); }
 
 /* ==========================================================================
    HERO
@@ -62,7 +62,7 @@
 .nj-hero-hampers {
   position: relative;
   padding: clamp(6rem, 12vw, 9rem) 0 clamp(3rem, 6vw, 5rem);
-  background: linear-gradient(160deg, #fdfbf7 0%, #f4eefa 46%, #fdf6ee 100%);
+  background: linear-gradient(160deg, #fdfbf7 0%, #fdeef0 46%, #fdf6ee 100%);
   overflow: hidden;
 }
 .nj-hero-hampers-glow {
@@ -70,7 +70,7 @@
   top: -22%; right: -12%;
   width: 46vw; height: 46vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(107, 63, 160, 0.24), transparent 68%);
+  background: radial-gradient(circle, rgba(179, 37, 58, 0.24), transparent 68%);
   pointer-events: none;
 }
 .nj-hero-hampers-inner {
@@ -121,13 +121,13 @@
 .nj-hero-hampers-btn.primary {
   background: linear-gradient(135deg, var(--hmp-primary), var(--hmp-deep));
   color: #fff;
-  box-shadow: 0 8px 22px rgba(74, 40, 112, 0.26);
+  box-shadow: 0 8px 22px rgba(124, 21, 38, 0.26);
 }
-.nj-hero-hampers-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(74, 40, 112, 0.34); }
+.nj-hero-hampers-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(124, 21, 38, 0.34); }
 .nj-hero-hampers-btn.ghost {
   background: rgba(255, 255, 255, 0.75);
   color: var(--hmp-deep);
-  border: 1.5px solid rgba(74, 40, 112, 0.35);
+  border: 1.5px solid rgba(124, 21, 38, 0.35);
 }
 .nj-hero-hampers-btn.ghost:hover { background: #fff; border-color: var(--hmp-deep); }
 .nj-hero-hampers-points {
@@ -330,7 +330,7 @@
 .nj-preset-save {
   padding: 0.16rem 0.45rem;
   border-radius: 5px;
-  background: rgba(107, 63, 160, 0.16);
+  background: rgba(179, 37, 58, 0.16);
   color: var(--hmp-deep);
   font-size: 0.7rem;
   font-weight: 700;
@@ -387,7 +387,7 @@
 
 /* ---- steps ---- */
 .nj-hb-step { border-radius: var(--nj-card-radius); transition: background-color 0.25s var(--ease-smooth); }
-.nj-hb-step.is-collapsed { background: #faf8fc; }
+.nj-hb-step.is-collapsed { background: #fdf7f8; }
 
 .nj-hb-step-head {
   display: flex;
@@ -653,7 +653,7 @@
   color: #fff;
   font-size: 0.72rem;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(74, 40, 112, 0.4);
+  box-shadow: 0 2px 8px rgba(124, 21, 38, 0.4);
 }
 .nj-pick-grip {
   position: absolute;
@@ -762,8 +762,8 @@
 .nj-finish-style.is-active {
   border-color: var(--hmp-primary);
   border-width: 2px;
-  background: rgba(107, 63, 160, 0.18);
-  box-shadow: 0 10px 24px rgba(74, 40, 112, 0.14);
+  background: rgba(179, 37, 58, 0.18);
+  box-shadow: 0 10px 24px rgba(124, 21, 38, 0.14);
 }
 .nj-finish-style-emoji { font-size: 1.55rem; line-height: 1; }
 .nj-finish-style-name { font-weight: 700; font-size: 0.92rem; color: var(--nj-charcoal); }
@@ -801,7 +801,7 @@
   transition: border-color 0.2s var(--ease-smooth), background-color 0.2s var(--ease-smooth);
 }
 .nj-finish-note:hover { border-color: var(--hmp-primary); }
-.nj-finish-note.is-active { border-color: var(--hmp-primary); background: rgba(107, 63, 160, 0.2); }
+.nj-finish-note.is-active { border-color: var(--hmp-primary); background: rgba(179, 37, 58, 0.2); }
 .nj-finish-note-emoji { grid-row: span 2; font-size: 1.15rem; line-height: 1; }
 .nj-finish-note-name { font-size: 0.79rem; font-weight: 600; color: var(--nj-charcoal); line-height: 1.25; }
 .nj-finish-note-price { font-size: 0.7rem; font-weight: 700; color: var(--nj-grey); }
@@ -897,7 +897,7 @@
 .nj-basket.is-over {
   border-color: var(--hmp-primary);
   border-style: dashed;
-  box-shadow: 0 14px 34px rgba(74, 40, 112, 0.22);
+  box-shadow: 0 14px 34px rgba(124, 21, 38, 0.22);
 }
 .nj-basket.is-full { border-color: var(--hmp-primary); }
 .nj-basket-head { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-bottom: 1rem; }
@@ -946,7 +946,7 @@
   line-height: 1;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
-.nj-basket.is-over .nj-slot.is-empty { border-color: var(--hmp-primary); background: rgba(107, 63, 160, 0.28); }
+.nj-basket.is-over .nj-slot.is-empty { border-color: var(--hmp-primary); background: rgba(179, 37, 58, 0.28); }
 
 .nj-basket-count {
   display: flex; align-items: center; gap: 0.45rem;
@@ -1078,7 +1078,7 @@
   transition: border-color 0.18s var(--ease-smooth), background-color 0.18s var(--ease-smooth);
 }
 .nj-packing-option:hover { border-color: var(--hmp-primary); }
-.nj-packing-option.is-active { border-color: var(--hmp-primary); background: rgba(107, 63, 160, 0.24); }
+.nj-packing-option.is-active { border-color: var(--hmp-primary); background: rgba(179, 37, 58, 0.24); }
 .nj-packing-option-emoji { font-size: 0.9rem; line-height: 1; }
 .nj-packing-option-name {
   font-size: 0.73rem;
@@ -1213,7 +1213,7 @@
   cursor: pointer;
   transition: transform 0.24s var(--ease-entrance), box-shadow 0.24s var(--ease-entrance), opacity 0.2s;
 }
-.nj-basket-cta:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(74, 40, 112, 0.34); }
+.nj-basket-cta:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(124, 21, 38, 0.34); }
 .nj-basket-cta:disabled { opacity: 0.45; cursor: not-allowed; }
 /* ---- ways back out ---- */
 .nj-basket-escape { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
@@ -1235,7 +1235,7 @@
   transition: border-color 0.2s var(--ease-smooth), color 0.2s var(--ease-smooth),
               background-color 0.2s var(--ease-smooth);
 }
-.nj-basket-undo:hover:not(:disabled) { border-color: var(--hmp-primary); color: var(--hmp-deep); background: rgba(107, 63, 160, 0.22); }
+.nj-basket-undo:hover:not(:disabled) { border-color: var(--hmp-primary); color: var(--hmp-deep); background: rgba(179, 37, 58, 0.22); }
 .nj-basket-undo:disabled { opacity: 0.4; cursor: not-allowed; }
 .nj-basket-clear:hover { border-color: #e05555; color: #e05555; }
 
@@ -1346,7 +1346,7 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--hmp-primary), var(--hmp-deep));
   color: #fff;
-  box-shadow: 0 4px 14px rgba(74, 40, 112, 0.36);
+  box-shadow: 0 4px 14px rgba(124, 21, 38, 0.36);
 }
 
 /* ---- bottom sheet chrome ---- */
@@ -1411,7 +1411,7 @@
   gap: 1.6rem;
   padding: clamp(1.7rem, 4vw, 2.6rem);
   border-radius: calc(var(--nj-card-radius) + 6px);
-  background: linear-gradient(135deg, #2A1F35, #462C5C);
+  background: linear-gradient(135deg, #2E1418, #5C1C28);
   color: #fff;
 }
 .nj-bulk-icon {
@@ -1420,7 +1420,7 @@
   justify-content: center;
   width: 3.6rem; height: 3.6rem;
   border-radius: 50%;
-  background: rgba(107, 63, 160, 0.22);
+  background: rgba(179, 37, 58, 0.22);
   color: var(--hmp-soft);
   flex: 0 0 auto;
 }

@@ -16,7 +16,7 @@ const BOX_TIERS = [
     slots: 3,
     boxPrice: 149,
     blurb: 'A thoughtful little box. Perfect for a thank-you or a first hello.',
-    accent: '#A47FD0',
+    accent: '#DC7185',
   },
   {
     id: 'classic',
@@ -24,7 +24,7 @@ const BOX_TIERS = [
     slots: 5,
     boxPrice: 249,
     blurb: 'Our most-gifted size. Generous without being showy.',
-    accent: '#6B3FA0',
+    accent: '#B3253A',
     isPopular: true,
   },
   {
@@ -33,7 +33,7 @@ const BOX_TIERS = [
     slots: 8,
     boxPrice: 399,
     blurb: 'For the people you really want to impress.',
-    accent: '#4A2870',
+    accent: '#7C1526',
   },
   {
     id: 'royale',
@@ -194,7 +194,7 @@ const OCCASIONS = [
     presetIds: ['corporate-classic', 'wedding-grandeur'],
   },
   {
-    id: 'christmas', slug: 'christmas-new-year', name: 'Christmas & New Year', emoji: '🎄', accent: '#C0392B',
+    id: 'christmas', slug: 'christmas-new-year', name: 'Christmas & New Year', emoji: '🎄', accent: '#1E6B4F',
     blurb: 'Plum cake, warm spices, and a box that looks like the season.',
     presetIds: ['christmas-warmth', 'diwali-delight'],
   },
@@ -209,7 +209,7 @@ const OCCASIONS = [
     presetIds: ['new-mom-nourish', 'rakhi-sweet-box'],
   },
   {
-    id: 'housewarming', slug: 'housewarming', name: 'Housewarming', emoji: '🏡', accent: '#4A2870',
+    id: 'housewarming', slug: 'housewarming', name: 'Housewarming', emoji: '🏡', accent: '#C86A42',
     blurb: 'Griha pravesh gifting that stocks their new kitchen properly.',
     presetIds: ['diwali-delight', 'thank-you-petite'],
   },
@@ -219,7 +219,7 @@ const OCCASIONS = [
     presetIds: ['birthday-bloom', 'christmas-warmth'],
   },
   {
-    id: 'thank-you', slug: 'thank-you', name: 'Thank You', emoji: '💌', accent: '#A47FD0',
+    id: 'thank-you', slug: 'thank-you', name: 'Thank You', emoji: '💌', accent: '#6B8CAE',
     blurb: 'Small, sincere, and far better than a gift card.',
     presetIds: ['thank-you-petite', 'rakhi-sweet-box'],
   },
@@ -249,7 +249,7 @@ const OCCASIONS = [
     presetIds: ['diwali-delight', 'rakhi-sweet-box'],
   },
   {
-    id: 'just-because', slug: 'just-because', name: 'Just Because', emoji: '✨', accent: '#6B3FA0',
+    id: 'just-because', slug: 'just-because', name: 'Just Because', emoji: '✨', accent: '#7A6E8F',
     blurb: 'No occasion needed. Build whatever you like.',
     presetIds: ['fit-and-fabulous', 'thank-you-petite'],
   },

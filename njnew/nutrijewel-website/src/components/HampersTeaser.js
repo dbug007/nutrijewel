@@ -42,7 +42,7 @@ const HampersTeaser = () => {
 
   return (
     <section
-      className="nj-hteaser nj-pat nj-pat--gingham nj-pat--plum nj-pat--bold nj-pat--fade-edges"
+      className="nj-hteaser nj-pat nj-pat--gingham nj-pat--red nj-pat--bold nj-pat--fade-edges"
       aria-labelledby="nj-hteaser-title"
     >
       <div className="nj-hteaser-glow" aria-hidden="true" />
@@ -54,7 +54,7 @@ const HampersTeaser = () => {
           {...getRevealProps(reduceMotion)}
         >
           <span className="nj-hteaser-eyebrow">
-            <BakeryStamp tone="plum">New &middot; Gifting</BakeryStamp>
+            <BakeryStamp tone="red">New &middot; Gifting</BakeryStamp>
           </span>
 
           <h2 className="nj-hteaser-title" id="nj-hteaser-title">

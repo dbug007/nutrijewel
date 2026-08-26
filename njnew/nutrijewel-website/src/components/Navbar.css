@@ -52,7 +52,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 2.5rem;
+  gap: 1.75rem;
   align-items: center;
 }
 
@@ -247,32 +247,6 @@
   font-family: inherit;
   text-align: left;
   width: 100%;
-}
-
-/* Buy Now Button */
-.navbar-buy-btn {
-  background: linear-gradient(45deg, var(--nj-green), var(--nj-olive));
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: var(--nj-btn-radius);
-  font-weight: 600;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
-  text-decoration: none;
-}
-
-.navbar-buy-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(147, 181, 89, 0.3);
-}
-
-.navbar-buy-btn:active {
-  transform: translateY(0);
 }
 
 /* ===================================
@@ -645,6 +619,35 @@
     transform: translateY(calc(-100% - var(--nj-marquee-height, 2.15rem) - 6px));
     box-shadow: none;
   }
+}
+
+/* WhatsApp enquiry. Replaced the wide "Buy Now" button, which opened a general
+   WhatsApp message while competing with the real cart next to it. */
+.nj-nav-whatsapp {
+  margin-left: 0.2rem;
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(109, 138, 60, 0.28);
+}
+.nj-nav-whatsapp:hover {
+  background: linear-gradient(135deg, var(--nj-olive), var(--nj-green));
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(109, 138, 60, 0.38);
+}
+/* On the transparent homepage header the outline icons go white; this one is
+   already filled, so it just needs to keep its own background. */
+.navbar.navbar--home.is-minimal .nj-nav-whatsapp {
+  color: #fff;
+  background: linear-gradient(135deg, var(--nj-green), var(--nj-olive));
+}
+
+/* Narrow laptops and large tablets: close the gaps and step the type down a
+   notch rather than letting six items collide. */
+@media (max-width: 1080px) {
+  .navbar-nav { gap: 1.1rem; }
+  .navbar-link { font-size: 0.9rem; }
+  .navbar-new-pill { font-size: 0.54rem; padding: 0.08rem 0.28rem; }
 }
 
 @media (max-width: 768px) {
