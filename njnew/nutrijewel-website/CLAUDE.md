@@ -123,6 +123,12 @@ The web versions the site actually loads are the compressed files in
   a stub at `src/test/numberFlowMock.js`.
 - One rail pattern only: the native scroll-snap `Shelf` (`src/components/Shelf.js`).
   Do not reintroduce a carousel library.
+- **The mobile menu overlay lives inside `.navbar`**, and `.navbar` is
+  `position: sticky; z-index: 1000`, which **creates a stacking context**. So no
+  z-index on the overlay can ever beat something outside the navbar. The homepage
+  marquee is `position: fixed; z-index: 1001` and kept painting over the open menu.
+  The fix is `.navbar.menu-open { z-index: 1300 }`, lifting the whole context. If
+  anything ever appears on top of the mobile menu again, look here first.
 - All scrolling goes through `src/lib/smoothScroll.js`. It is the only module that
   knows Lenis exists. Do not call `scrollIntoView` or `window.scrollTo` directly.
 

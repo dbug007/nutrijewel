@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ShoppingBag, ShoppingCart, Heart, ChevronDown, MessageCircle } from 'lucide-react';
+import { Menu, X, ShoppingCart, Heart, ChevronDown, MessageCircle } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import { useStore } from '../store/StoreContext';
 import { OCCASIONS } from '../data/hampers';
@@ -191,11 +191,13 @@ const Navbar = () => {
           {/* The overlay sits above the navbar (it must, to clear the fixed
               homepage marquee), so the panel carries its own close button. */}
           <div className="navbar-mobile-header">
-            <img
-              src={`${process.env.PUBLIC_URL}/njlogonav.svg`}
-              alt="NutriJewel"
-              className="navbar-mobile-header-logo"
-            />
+            <Link to="/" onClick={() => setIsMenuOpen(false)} aria-label="NutriJewel home">
+              <img
+                src={`${process.env.PUBLIC_URL}/njlogonav.svg`}
+                alt="NutriJewel"
+                className="navbar-mobile-header-logo"
+              />
+            </Link>
             <button
               className="navbar-mobile-close"
               onClick={toggleMenu}
@@ -207,16 +209,6 @@ const Navbar = () => {
 
           {/* Mobile Navigation Links */}
           <nav className="navbar-mobile-nav">
-            <div className="navbar-mobile-section">
-              <Link 
-                to="/" 
-                className="navbar-mobile-link main-link" 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-            </div>
-
             {/* About Section with Submenu */}
             <div className="navbar-mobile-section">
               <div className="navbar-mobile-row">
@@ -352,11 +344,33 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* Mobile CTA Button */}
+          {/* The menu covers the top bar, so cart and wishlist need a way in
+              from here rather than making people close the menu first. */}
+          <div className="navbar-mobile-quick">
+            <button
+              className="navbar-mobile-quick-btn"
+              onClick={() => { setIsMenuOpen(false); openCart(); }}
+            >
+              <ShoppingCart size={18} />
+              <span>Cart</span>
+              {cartCount > 0 && <em>{cartCount}</em>}
+            </button>
+            <button
+              className="navbar-mobile-quick-btn"
+              onClick={() => { setIsMenuOpen(false); openWishlist(); }}
+            >
+              <Heart size={18} />
+              <span>Saved</span>
+              {wishlistCount > 0 && <em>{wishlistCount}</em>}
+            </button>
+          </div>
+
+          {/* Was "Buy Now", which only opened a general WhatsApp enquiry. Named
+              for what it actually does, matching the desktop header. */}
           <div className="navbar-mobile-cta">
             <button className="navbar-mobile-buy-btn" onClick={handleBuyNow}>
-              <ShoppingBag size={20} />
-              <span>Buy Now</span>
+              <MessageCircle size={20} />
+              <span>Chat on WhatsApp</span>
             </button>
           </div>
 
