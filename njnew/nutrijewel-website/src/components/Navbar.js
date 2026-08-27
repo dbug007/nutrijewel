@@ -5,7 +5,7 @@ import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import { useStore } from '../store/StoreContext';
 import { OCCASIONS } from '../data/hampers';
 import { scrollToId } from '../lib/smoothScroll';
-import { motion, useAnimationControls } from 'motion/react';
+import { AnimatePresence, motion, useAnimationControls } from 'motion/react';
 import './store/store.css';
 import './Navbar.css';
 
@@ -18,6 +18,9 @@ const NAV_OCCASIONS = NAV_OCCASION_IDS
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  /* Which mobile submenu is expanded. Both start closed so the seven top-level
+     destinations fit one phone screen instead of being buried under 11 sublinks. */
+  const [openSection, setOpenSection] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   // const isSpin = location.pathname === '/spin'; // birthday spin campaign disabled
@@ -44,6 +47,17 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    setOpenSection(null); // reopen the menu clean rather than mid-browse
+  };
+
+  const toggleSection = (id) => setOpenSection((prev) => (prev === id ? null : id));
+
+  /* One row: the label navigates, the chevron reveals that page's sections. */
+  const submenuReveal = {
+    initial: { height: 0, opacity: 0 },
+    animate: { height: 'auto', opacity: 1 },
+    exit: { height: 0, opacity: 0 },
+    transition: { duration: 0.26, ease: [0.22, 1, 0.36, 1] },
   };
 
   const scrollToAboutSection = (sectionId) => {
@@ -188,14 +202,26 @@ const Navbar = () => {
 
             {/* About Section with Submenu */}
             <div className="navbar-mobile-section">
-              <Link 
-                to="/about" 
-                className="navbar-mobile-link main-link" 
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About NutriJewel
-              </Link>
-              <div className="navbar-mobile-submenu">
+              <div className="navbar-mobile-row">
+                <Link
+                  to="/about"
+                  className="navbar-mobile-link main-link"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <button
+                  className={`navbar-mobile-expand${openSection === 'about' ? ' is-open' : ''}`}
+                  onClick={() => toggleSection('about')}
+                  aria-expanded={openSection === 'about'}
+                  aria-label="Show About sections"
+                >
+                  <ChevronDown size={18} />
+                </button>
+              </div>
+              <AnimatePresence initial={false}>
+              {openSection === 'about' && (
+              <motion.div className="navbar-mobile-submenu" {...submenuReveal}>
                 <button 
                   onClick={() => scrollToAboutSection('aboutpage-story')} 
                   className="navbar-mobile-sublink"
@@ -226,7 +252,9 @@ const Navbar = () => {
                 >
                   Customer Reviews
                 </button>
-              </div>
+              </motion.div>
+              )}
+              </AnimatePresence>
             </div>
 
             <div className="navbar-mobile-section">
@@ -241,14 +269,26 @@ const Navbar = () => {
 
             {/* Hampers Section with Submenu */}
             <div className="navbar-mobile-section">
-              <Link
-                to="/hampers"
-                className="navbar-mobile-link main-link"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Hampers <span className="navbar-new-pill">New</span>
-              </Link>
-              <div className="navbar-mobile-submenu">
+              <div className="navbar-mobile-row">
+                <Link
+                  to="/hampers"
+                  className="navbar-mobile-link main-link"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Hampers <span className="navbar-new-pill">New</span>
+                </Link>
+                <button
+                  className={`navbar-mobile-expand${openSection === 'hampers' ? ' is-open' : ''}`}
+                  onClick={() => toggleSection('hampers')}
+                  aria-expanded={openSection === 'hampers'}
+                  aria-label="Show hamper occasions"
+                >
+                  <ChevronDown size={18} />
+                </button>
+              </div>
+              <AnimatePresence initial={false}>
+              {openSection === 'hampers' && (
+              <motion.div className="navbar-mobile-submenu" {...submenuReveal}>
                 {NAV_OCCASIONS.map((occasion) => (
                   <Link
                     key={occasion.id}
@@ -259,7 +299,9 @@ const Navbar = () => {
                     {occasion.emoji} {occasion.name}
                   </Link>
                 ))}
-              </div>
+              </motion.div>
+              )}
+              </AnimatePresence>
             </div>
 
             <div className="navbar-mobile-section">
