@@ -381,13 +381,19 @@
   display: flex;
   align-items: center;
   min-width: 0;
+  /* Takes the space left after the close button, so the logo below can simply
+     fill it. Same approach as the top bar rather than guessing a percentage. */
+  flex: 1 1 auto;
 }
 .navbar-mobile-header-logo {
   height: auto;
   width: auto;
-  max-height: 34px;
-  max-width: 58%;
+  max-width: 100%;
+  /* Deliberately below the top bar's cap (52px, 46px under 480px) so the menu
+     logo never outsizes the real navbar logo. */
+  max-height: 44px;
   object-fit: contain;
+  object-position: left center;
 }
 .navbar-mobile-close {
   display: flex;
@@ -872,6 +878,10 @@
 
   .navbar-logo-icon {
     max-height: 46px;
+  }
+
+  .navbar-mobile-header-logo {
+    max-height: 40px;
   }
 
   .navbar-mobile-cta {
