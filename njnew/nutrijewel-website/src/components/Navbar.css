@@ -321,7 +321,9 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  z-index: 1000;
+  /* Above the homepage marquee, which is fixed at 1001. At 1000 the marquee was
+     painting over the open menu. */
+  z-index: 1200;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s var(--ease-smooth), visibility 0.3s;
@@ -354,6 +356,43 @@
 
 .navbar-mobile-menu.active {
   transform: translateX(0);
+}
+
+/* Panel header: small logo plus the close button. Gives the menu a top edge of
+   its own instead of its first link sitting under the navbar strip. */
+.navbar-mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem 0.85rem 1.5rem;
+  border-bottom: 1px solid rgba(147, 181, 89, 0.16);
+  flex: 0 0 auto;
+}
+.navbar-mobile-header-logo {
+  height: auto;
+  width: auto;
+  max-height: 34px;
+  max-width: 58%;
+  object-fit: contain;
+}
+.navbar-mobile-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 50%;
+  background: rgba(147, 181, 89, 0.12);
+  color: var(--nj-charcoal);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-smooth), color 0.25s var(--ease-smooth);
+}
+.navbar-mobile-close:hover {
+  background: var(--nj-green);
+  color: #fff;
 }
 
 /* Mobile Navigation */
@@ -696,7 +735,12 @@
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0 1rem;
-    gap: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .nj-nav-actions {
+    gap: 0.15rem;
+    margin-right: 0.15rem;
   }
 
   .navbar-toggle {
@@ -724,9 +768,16 @@
     height: 2.1rem;
   }
 
-  /* The logo is the only flexible thing in the row, so it is what gives way. */
+  /* Brand takes the leftover space; actions and toggle keep theirs. */
   .navbar-brand {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .navbar-brand > a {
+    display: flex;
+    align-items: center;
     min-width: 0;
   }
 
@@ -734,13 +785,14 @@
     font-size: 1.6rem;
   }
 
-  /* Bound by BOTH axes. Aspect ratio is 4.54:1, so a bare height of 55px was
-     rendering 250px wide and pushing the row off screen. */
+  /* The logo is a 4.54:1 wordmark, so a bare height ran it to 250px wide and off
+     the screen. Bounding max-width to the flex space instead of a guessed vw means
+     it is always as large as will fit and never overflows. */
   .navbar-logo-icon {
     height: auto;
     width: auto;
-    max-height: 46px;
-    max-width: 46vw;
+    max-width: 100%;
+    max-height: 52px;
   }
 }
 
@@ -758,8 +810,7 @@
   }
 
   .navbar-logo-icon {
-    max-height: 40px;
-    max-width: 44vw;
+    max-height: 46px;
   }
 
   .navbar-mobile-cta {

@@ -188,6 +188,23 @@ const Navbar = () => {
           className={`navbar-mobile-menu ${isMenuOpen ? 'active' : ''}`}
           onClick={(e) => e.stopPropagation()}
         >
+          {/* The overlay sits above the navbar (it must, to clear the fixed
+              homepage marquee), so the panel carries its own close button. */}
+          <div className="navbar-mobile-header">
+            <img
+              src={`${process.env.PUBLIC_URL}/njlogonav.svg`}
+              alt="NutriJewel"
+              className="navbar-mobile-header-logo"
+            />
+            <button
+              className="navbar-mobile-close"
+              onClick={toggleMenu}
+              aria-label="Close menu"
+            >
+              <X size={22} />
+            </button>
+          </div>
+
           {/* Mobile Navigation Links */}
           <nav className="navbar-mobile-nav">
             <div className="navbar-mobile-section">

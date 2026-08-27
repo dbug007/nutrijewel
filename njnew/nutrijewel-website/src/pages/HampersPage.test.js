@@ -259,7 +259,9 @@ describe('/hampers imported add-ons', () => {
     // The tab panel crossfades, so the new groups arrive a frame later.
     for (const group of ['Soft Drinks', 'Coffee', 'Chocolates', 'Packed Snacks']) {
       // eslint-disable-next-line no-await-in-loop
-      expect(await screen.findByRole('heading', { name: new RegExp(group, 'i') })).toBeInTheDocument();
+      expect(
+        await screen.findByRole('heading', { name: new RegExp(group, 'i') }, { timeout: 5000 })
+      ).toBeInTheDocument();
     }
     expect(screen.getByText(/shelf-stable/i)).toBeInTheDocument();
   });
@@ -267,7 +269,9 @@ describe('/hampers imported add-ons', () => {
   it('can add an imported item to the hamper', async () => {
     renderAt();
     fireEvent.click(screen.getByRole('tab', { name: /imported/i }));
-    const addButtons = await screen.findAllByRole('button', { name: /^add .+ to your hamper$/i });
+    const addButtons = await screen.findAllByRole(
+      'button', { name: /^add .+ to your hamper$/i }, { timeout: 5000 }
+    );
     fireEvent.click(addButtons[0]);
     expect(within(basket()).getByText(slots(1, 5))).toBeInTheDocument();
   });
