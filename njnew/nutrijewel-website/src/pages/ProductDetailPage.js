@@ -214,7 +214,7 @@ export default function ProductDetailPage() {
       description: desc,
       brand: { '@type': 'Brand', name: 'NutriJewel' },
       category: product.category,
-      ...(product.comingSoon
+      ...(product.comingSoon || product.outOfSeason || product.priceOnRequest
         ? {}
         : {
             offers: {
@@ -267,7 +267,18 @@ export default function ProductDetailPage() {
   const weight = selectedVariant?.weight ?? product.weight;
   const discount =
     originalPrice && originalPrice > price ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
+  const askPriceOnWhatsApp = () => {
+    const msg = `Hi! Could you tell me the price for ${product.displayName || product.name}? I'd like to order one.`;
+    window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
   const comingSoon = !!product.comingSoon;
+  /* Parked for the season: real product, real price, just not sold today.
+     Quoted per order: sold, but the price depends on the order. Neither can go
+     through the cart, so both take the same path as coming-soon here. */
+  const outOfSeason = !!product.outOfSeason;
+  const quoteOnly = !!product.priceOnRequest;
+  const notBuyable = comingSoon || outOfSeason || quoteOnly;
   const displayTitle = product.displayName || product.name;
   const multiImage = images.length > 1;
 
@@ -381,7 +392,7 @@ export default function ProductDetailPage() {
             <h1 className="pdp-title">{displayTitle}</h1>
             {product.name !== displayTitle && <p className="pdp-fullname">{product.name}</p>}
 
-            {!comingSoon && (
+            {!notBuyable && (
               <div className="pdp-rating">
                 <span className="pdp-stars">
                   {[...Array(5)].map((_, i) => <Star key={i} size={15} fill="currentColor" />)}
@@ -391,7 +402,7 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {!comingSoon ? (
+            {!notBuyable ? (
               <div className="pdp-price-row">
                 <span className="pdp-price">₹{price}</span>
                 {discount > 0 && <span className="pdp-original">₹{originalPrice}</span>}
@@ -399,19 +410,32 @@ export default function ProductDetailPage() {
                 <span className="pdp-weight">/ {weight}</span>
               </div>
             ) : (
-              <div className="pdp-price-row"><span className="pdp-comingsoon-label">Coming Soon</span></div>
+              <div className="pdp-price-row">
+                <span className="pdp-comingsoon-label">
+                  {quoteOnly ? 'Price on request' : outOfSeason ? 'Back in season soon' : 'Coming Soon'}
+                </span>
+              </div>
             )}
 
-            {!comingSoon && (
+            {!notBuyable && (
               <WeightSelector product={product} onVariantChange={setSelectedVariant} variant="default" />
             )}
 
             <div className="pdp-actions" ref={actionsRef}>
-              {comingSoon ? (
+              {quoteOnly ? (
+                <>
+                  <button className="pdp-buy" onClick={askPriceOnWhatsApp}>
+                    <ShoppingBag size={18} /> Ask price on WhatsApp
+                  </button>
+                  <WishlistHeart productId={product.id} className="pdp-wish-inline" />
+                </>
+              ) : notBuyable ? (
                 <div className="pdp-soon-row">
                   <WishlistHeart productId={product.id} className="pdp-wish-inline" />
                   <span className="pdp-soon-note">
-                    Save it to your wishlist — we'll let you know the moment it launches.
+                    {outOfSeason
+                      ? "Not available right now. Save it and we'll tell you when it is back."
+                      : "Save it to your wishlist and we'll let you know the moment it launches."}
                   </span>
                 </div>
               ) : (
@@ -542,7 +566,15 @@ export default function ProductDetailPage() {
                     <div className="pdp-rel-body">
                       <span className="pdp-rel-cat">{rel.category}</span>
                       <h3 className="pdp-rel-name">{rel.displayName || rel.name}</h3>
-                      <span className="pdp-rel-price">{rel.comingSoon ? 'Coming soon' : `₹${rp}`}</span>
+                      <span className="pdp-rel-price">
+                        {rel.priceOnRequest
+                          ? 'Price on request'
+                          : rel.outOfSeason
+                            ? 'Back soon'
+                            : rel.comingSoon
+                              ? 'Coming soon'
+                              : `₹${rp}`}
+                      </span>
                     </div>
                   </Link>
                 );
@@ -552,8 +584,9 @@ export default function ProductDetailPage() {
         )}
       </div>
 
-      {/* Mobile sticky add-to-cart bar */}
-      {!comingSoon && (
+      {/* Mobile sticky add-to-cart bar. Same guard as the main button, or a parked
+          product could still be bought from here on a phone. */}
+      {!notBuyable && (
         <div className={`pdp-sticky${showSticky ? ' show' : ''}`}>
           <div className="pdp-sticky-price">
             <span className="pdp-sticky-amount">₹{price}</span>

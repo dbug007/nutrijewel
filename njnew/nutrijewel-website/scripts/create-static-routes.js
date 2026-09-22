@@ -148,7 +148,7 @@ function buildProductHtml(sourceHtml, product) {
     category: product.category,
     // No Offer block without a real price: coming-soon and quote-on-request
     // products would otherwise publish "price: 0" as structured data.
-    ...(product.comingSoon || product.priceOnRequest
+    ...(product.comingSoon || product.priceOnRequest || product.outOfSeason
       ? {}
       : {
           offers: {
