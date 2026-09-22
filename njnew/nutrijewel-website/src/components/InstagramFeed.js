@@ -107,7 +107,7 @@ const InstagramFeed = () => {
                   alt="NutriJewel Instagram Post"
                   className="instagram-image"
                   onError={(e) => {
-                    e.target.src = '/images/granola.png';
+                    e.target.src = '/images/granola.jpg';
                   }}
                 />
                 <div className="instagram-overlay">

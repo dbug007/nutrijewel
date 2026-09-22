@@ -1,9 +1,15 @@
 import rawProducts from './products.data';
 
-const normalizeProductImages = (product) => ({
-  ...product,
-  images: product.image ? [product.image, product.image] : product.images
-});
+/* Gallery images. This used to return [image, image], which threw away every
+   authored gallery array and made every product show the same photo twice with
+   a second dot that went nowhere. Honour what the product actually declares,
+   and fall back to the single hero image, so a product with one photo gets a
+   one-image gallery and no phantom dot. */
+const normalizeProductImages = (product) => {
+  const authored = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
+  const images = authored.length ? authored : (product.image ? [product.image] : []);
+  return { ...product, images };
+};
 
 /* Allergen "Contains" info per product. ⚠️ OWNER: please review and complete these,
    only clearly-evident allergens are pre-filled. A shared-kitchen cross-contamination

@@ -15,6 +15,11 @@
 # loads are the compressed files in public/reels/, which are committed.
 /video
 
+# Working notes kept inside the project on purpose (plans, memory, originals of
+# photos that were resized). This repo is PUBLIC, so the whole folder is ignored:
+# keeping these files local is the point, publishing them would defeat it.
+.claude/
+
 # misc
 .DS_Store
 
