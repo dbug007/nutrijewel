@@ -17,10 +17,18 @@
 
 # misc
 .DS_Store
+
+# Secrets. This repo is public, so anything matching these must never be
+# committed. `.env` itself is ignored deliberately: it used to be tracked, and a
+# tracked .env is how a payment key ends up on GitHub. Machine-local settings go
+# in .env.local; committed build config that contains no secrets goes in
+# .env.production.
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.dev.vars
 
 npm-debug.log*
 yarn-debug.log*
