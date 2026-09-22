@@ -183,13 +183,25 @@ Ok "main updated"
 
 # ---- 5. publish --------------------------------------------------------------
 Step 5 "Publishing build to '$TargetBranch'"
+$stamp = "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 Push-Location $AppDir
-& npx gh-pages -d build -b $TargetBranch -m "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+& npx gh-pages -d build -b $TargetBranch -m $stamp
 $pubExit = $LASTEXITCODE
+
+# gh-pages keeps a cached clone of the target branch under node_modules/.cache.
+# Publishing to two different branches, or any push from elsewhere, leaves that
+# cache behind the remote and the push is rejected with "fetch first". Clearing
+# it and retrying once fixes it, so do that rather than making you do it by hand.
+if ($pubExit -ne 0) {
+  Write-Host "    Push rejected, clearing the gh-pages cache and retrying once..." -ForegroundColor Yellow
+  & npx gh-pages-clean
+  & npx gh-pages -d build -b $TargetBranch -m $stamp
+  $pubExit = $LASTEXITCODE
+  if ($pubExit -eq 0) { Info "succeeded after clearing the cache" }
+}
 Pop-Location
 if ($pubExit -ne 0) {
-  Write-Host "    If it mentions a stale cache, run:  npx gh-pages-clean" -ForegroundColor Yellow
-  Die "Publish failed. Source is on main, but the build did not go out."
+  Die "Publish failed twice. Source is on main, but the build did not go out."
 }
 Ok "published to $TargetBranch"
 
