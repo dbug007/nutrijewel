@@ -291,7 +291,7 @@ const ProductsPage = () => {
                         }}
                       >
                         {/* Image band with pastel background */}
-                        <div className={`card-image-band${product.comingSoon || product.outOfSeason ? ' is-coming-soon' : ''}`}>
+                        <div className={`card-image-band${product.comingSoon ? ' is-coming-soon' : ''}`}>
                           <AnimatePresence initial={false} custom={1} mode="sync">
                             <motion.img
                               key={`${product.id}-${getProductImageIndex(product)}`}
@@ -322,7 +322,7 @@ const ProductsPage = () => {
                             {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                           </div>
                           {product.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
-                          {product.outOfSeason && <div className="coming-soon-overlay"><span>Off Season</span></div>}
+                          {product.outOfSeason && <span className="off-season-tag">Off Season</span>}
                           <WishlistHeart productId={product.id} className="on-image" />
                         </div>
 

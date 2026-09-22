@@ -510,6 +510,28 @@
   border-radius: 999px;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
 }
+/* Off season keeps its photo: the product is real and we still want people to
+   want it, so this is a corner tag rather than the full-cover Coming Soon scrim.
+   Bottom-left, because badges own the top-left and the heart the top-right. */
+.off-season-tag {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(26, 26, 26, 0.72);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
 .card-image-band.is-coming-soon .card-img,
 .products-modal-image-wrap.is-coming-soon .products-modal-image {
   filter: blur(5px) brightness(0.85);

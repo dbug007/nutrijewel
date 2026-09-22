@@ -129,6 +129,7 @@ const PACKING_OPTIONS = {
 /* Product id → packing category. Only for products whose product category
    would otherwise send them to the wrong packing (e.g. focaccia sits in "Cakes"). */
 const PACKING_CATEGORY_BY_PRODUCT_ID = {
+  // Moved to Seasonal, which maps to cake packing. It is still a bread.
   'focaccia-bread': 'bread',
   'granola-cookies': 'cookie',
   // Sits in Seasonal, which otherwise maps to cake packing. It is a dip.
