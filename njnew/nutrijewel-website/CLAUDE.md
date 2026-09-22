@@ -194,7 +194,8 @@ The web versions the site actually loads are the compressed files in
   back. `priceOnRequest: true` (focaccia) shows "Price on request" with a WhatsApp
   button, no Add to Cart, and publishes no Offer structured data.
   `imagePlaceholder: true` marks a product wearing another product's photo.
-- Struck-through prices follow one rule: about 18% above `price`, rounded to end in 9.
+- Struck-through prices follow one rule: about 22% above `price`, rounded to end in 9.
+  Maharaja cake (30%) and plum cake (14%) predate the rule and still sit outside it.
 - `ScrollToTop.css` used to reference `--primary-green` / `--secondary-green`, which
   are defined nowhere. Fixed, but other files may have similar dangling vars. An
   audit of every `var(--...)` against `index.css` is worth doing.

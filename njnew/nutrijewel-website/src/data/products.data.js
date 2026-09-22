@@ -2,7 +2,9 @@
    This is the single source of truth for product data, edit products here.
 
    Pricing convention: `price` is what the customer pays, `originalPrice` is the
-   struck-through figure, set at roughly 18% above and rounded to end in 9.
+   struck-through figure, set at roughly 22% above and rounded to end in 9.
+   Two legacy entries sit outside that band (maharaja cake at 30%, plum cake at
+   14%); bring them in line whenever their prices are next reviewed.
 
    Availability flags, all optional:
      comingSoon      not yet on sale, shown as a teaser, no price
