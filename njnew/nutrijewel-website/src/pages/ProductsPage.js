@@ -12,9 +12,11 @@ import './ProductsPage.css';
 
 const CATEGORIES = [
   { id: 'cakes',              name: 'Cakes',              emoji: '🎂' },
+  { id: 'muffins',            name: 'Muffins',            emoji: '🧁' },
   { id: 'traditional-sweets', name: 'Traditional Sweets', emoji: '🍡' },
   { id: 'healthy-snacks',     name: 'Healthy Snacks',     emoji: '🌿' },
   { id: 'energy-bars',        name: 'Energy Bars',        emoji: '⚡' },
+  { id: 'breads',             name: 'Breads',             emoji: '🍞' },
   { id: 'dips-spreads',       name: 'Dips & Spreads',     emoji: '🥑' },
   { id: 'seasonal',           name: 'Seasonal',           emoji: '🎊' },
 ];
@@ -106,7 +108,9 @@ const ProductsPage = () => {
   };
 
   const getProductsForCategory = (categoryName) => {
-    let prods = products.filter(p => p.category === categoryName);
+    // Out-of-season stock (plum cake, thandai) keeps its data but leaves the shop
+    // until it is back. Flip outOfSeason in products.data.js to bring it back.
+    let prods = products.filter(p => p.category === categoryName && !p.outOfSeason);
     if (activeFilters.includes('bestSeller'))   prods = prods.filter(p => p.isBestSeller);
     if (activeFilters.includes('chefsSpecial')) prods = prods.filter(p => p.isChefsSpecial);
 
@@ -132,6 +136,12 @@ const ProductsPage = () => {
   const handleVariantChange = useCallback((productId, variant) => {
     setSelectedVariants(prev => ({ ...prev, [productId]: variant }));
   }, []);
+
+  /* Quoted per order, so ask rather than state a price. */
+  const handleAskPrice = (product) => {
+    const msg = `Hi! Could you tell me the price for ${product.name}? I'd like to order one.`;
+    window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
+  };
 
   const handlePurchase = (product) => {
     const sv = selectedVariants[product.id];
@@ -313,9 +323,11 @@ const ProductsPage = () => {
                         {/* Card content */}
                         <div className="card-content">
                           <h3 className="card-name">{product.name}</h3>
-                          {product.comingSoon ? (
+                          {product.comingSoon || product.priceOnRequest ? (
                             <div className="card-pricing">
-                              <span className="card-coming-soon">Coming Soon</span>
+                              <span className="card-coming-soon">
+                                {product.priceOnRequest ? 'Price on request' : 'Coming Soon'}
+                              </span>
                             </div>
                           ) : (
                             <>
@@ -340,6 +352,10 @@ const ProductsPage = () => {
                               {product.comingSoon ? (
                                 <button className="product-buy-btn product-buy-btn--soon" disabled>
                                   Coming Soon
+                                </button>
+                              ) : product.priceOnRequest ? (
+                                <button className="product-buy-btn" onClick={() => handleAskPrice(product)}>
+                                  Ask price on WhatsApp
                                 </button>
                               ) : (
                                 <>

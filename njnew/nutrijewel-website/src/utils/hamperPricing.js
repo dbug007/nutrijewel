@@ -157,18 +157,24 @@ function resolvePresetLines(preset, products, resolvePacking) {
   return preset.items
     .map((item) => {
       const product = products.find((p) => p.id === item.productId);
-      if (!product || product.comingSoon) return null;
+      if (!isHamperable(product)) return null;
       const packing = typeof resolvePacking === 'function' ? resolvePacking(product) : null;
       return makeHamperLine(product, item.weight, item.qty, { packing });
     })
     .filter(Boolean);
 }
 
-/* Products that are allowed into a hamper: in stock, and not on the excluded list. */
+/* Products allowed into a hamper. Anything without a firm price would break the
+   builder's running total, so coming-soon, out-of-season and quote-on-request
+   items are all kept out. */
+function isHamperable(p) {
+  return !!p && !p.comingSoon && !p.outOfSeason && !p.priceOnRequest;
+}
+
 function getHamperEligibleProducts(products, excludedIds) {
   if (!Array.isArray(products)) return [];
   const excluded = Array.isArray(excludedIds) ? excludedIds : [];
-  return products.filter((p) => p && !p.comingSoon && !excluded.includes(p.id));
+  return products.filter((p) => isHamperable(p) && !excluded.includes(p.id));
 }
 
 /* Indian-format currency for display: 1616 -> "₹1,616" */
@@ -178,6 +184,7 @@ function formatINR(amount) {
 }
 
 module.exports = {
+  isHamperable,
   resolveVariant,
   makeHamperLine,
   linePackingUnitCost,

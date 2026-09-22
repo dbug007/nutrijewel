@@ -36,9 +36,11 @@ export const hamperCatalog = [...hamperProducts, ...IMPORTED_PRODUCTS];
 /* Gifting-first category order for the product picker. */
 export const HAMPER_CATEGORY_ORDER = [
   'Cakes',
+  'Muffins',
   'Traditional Sweets',
   'Healthy Snacks',
   'Energy Bars',
+  'Breads',
   'Seasonal',
   'Dips & Spreads',
 ];

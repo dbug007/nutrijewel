@@ -120,6 +120,8 @@ const PACKING_OPTIONS = {
 const PACKING_CATEGORY_BY_PRODUCT_ID = {
   'focaccia-bread': 'bread',
   'granola-cookies': 'cookie',
+  // Sits in Seasonal, which otherwise maps to cake packing. It is a dip.
+  'hummus': 'dip',
 };
 
 /* Product category → packing category. The general rule. */
@@ -127,6 +129,8 @@ const PACKING_CATEGORY_BY_PRODUCT_CATEGORY = {
   'Traditional Sweets': 'ladoo',
   'Cakes': 'cake',
   'Seasonal': 'cake',
+  'Muffins': 'muffin',
+  'Breads': 'bread',
   'Dips & Spreads': 'dip',
   'Healthy Snacks': 'snack',
   'Energy Bars': 'snack',
@@ -166,7 +170,7 @@ const OFFER_TIERS = [
  * transit. Remove an id from this list if you're happy to ship it in a hamper.
  * (comingSoon products are excluded automatically, no need to list them.)
  * ------------------------------------------------------------------ */
-const HAMPER_EXCLUDED_PRODUCT_IDS = ['hummus', 'guac-quack'];
+const HAMPER_EXCLUDED_PRODUCT_IDS = [];
 
 /* ------------------------------------------------------------------ *
  * Occasions. `presetIds` points at PRESET_HAMPERS below.

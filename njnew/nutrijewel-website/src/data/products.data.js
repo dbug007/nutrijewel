@@ -1,9 +1,19 @@
 /* Shared product catalog (CommonJS) so the SEO prerender script can require it.
-   This is the single source of truth for product data — edit products here. */
+   This is the single source of truth for product data, edit products here.
+
+   Pricing convention: `price` is what the customer pays, `originalPrice` is the
+   struck-through figure, set at roughly 18% above and rounded to end in 9.
+
+   Availability flags, all optional:
+     comingSoon      not yet on sale, shown as a teaser, no price
+     outOfSeason     real product, temporarily not sold (plum cake, thandai).
+                     Hidden from the shop and hampers; flip to false to bring back.
+     priceOnRequest  sold, but quoted per order. Not addable to cart or hampers.
+     imagePlaceholder  the photo is a stand-in from another product, swap it. */
 module.exports = [
   {
     id: 'amrit-bites',
-    name: 'NJ Amrit Bites (Dink/Gond Ladoo)',
+    name: 'NJ Amrit Bites (Wheat Dink/Gond Ladoo)',
     displayName: 'NJ Amrit Bites',
     category: 'Traditional Sweets',
     image: '/images/amritbites.jpg',
@@ -30,15 +40,14 @@ module.exports = [
     images: ['/images/granola.jpg', '/images/granola.png'],
     description: 'Gourmet blend with cinnamon, dark chocolate, and mocha hints. High in fiber, great for breakfast or snacking.',
     price: 999,
-    originalPrice: 1119,
+    originalPrice: 1219,
     weight: '500g',
     variants: [
-      { weight: '250g', price: 549, originalPrice: 615 },
-      { weight: '500g', price: 999, originalPrice: 1200 },
-      { weight: '1kg', price: 1998, originalPrice: 2400 }
+      { weight: '250g', price: 550, originalPrice: 669 },
+      { weight: '500g', price: 999, originalPrice: 1219 },
+      { weight: '1kg', price: 1998, originalPrice: 2439 }
     ],
     features: ['High Fiber', 'Cinnamon & Dark Chocolate', 'Breakfast Perfect', 'Gourmet Blend'],
-    discountPercent: 12,
     isTopSeller: true,
     isBestSeller: true,
     isChefsSpecial: true
@@ -52,7 +61,7 @@ module.exports = [
     images: ['/images/granolacookies.jpg', '/images/granolacookies.png'],
     description: 'Wholesome cookies made from granola, free from refined sugar, preservatives, and artificial additives.',
     price: 499,
-    originalPrice: 600,
+    originalPrice: 609,
     weight: '5 big cookies',
     features: ['No Preservatives', 'Refined Sugar Free', 'Wholesome Granola', 'Artificial Free'],
     isTopSeller: false,
@@ -88,7 +97,7 @@ module.exports = [
     images: ['/images/foxnutmilletcrunch.jpg', '/images/foxnutmilletcrunch.png'],
     description: 'Roasted foxnuts and millet blend for a crunchy, guilt-free snack full of minerals and light on calories.',
     price: 299,
-    originalPrice: 350,
+    originalPrice: 369,
     weight: '250g',
     features: ['Low Calorie', 'Mineral Rich', 'Crunchy Texture', 'Guilt-Free'],
     isTopSeller: false,
@@ -97,7 +106,7 @@ module.exports = [
   },
   {
     id: 'ragi-sattva',
-    name: 'NJ Ragi Sattva (Nachani Ladoo)',
+    name: 'NJ Ragi Sattva (Nachani Dink/Gond Ladoo)',
     displayName: 'NJ Ragi Sattva',
     category: 'Traditional Sweets',
     image: '/images/ragisattva.jpg',
@@ -116,17 +125,21 @@ module.exports = [
     isChefsSpecial: false
   },
   {
-    id: 'sattu-ladoo',
-    name: 'Sattu Ladoo',
-    displayName: 'Sattu Ladoo',
+    id: 'golden-bites',
+    name: 'NJ Golden Bites (Sattu Ghee Ladoo)',
+    displayName: 'NJ Golden Bites',
     category: 'Traditional Sweets',
     image: '/images/ragisattva.jpg',
-    description: 'Coming soon.',
-    price: 0,
-    originalPrice: 0,
-    weight: 'Coming soon',
-    features: [],
-    comingSoon: true,
+    imagePlaceholder: true,
+    description: 'Sattu and ghee ladoos, refined sugar free. Slow energy and everyday strength.',
+    price: 1199,
+    originalPrice: 1459,
+    weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 1199, originalPrice: 1459 },
+      { weight: '500g', price: 599, originalPrice: 729 }
+    ],
+    features: ['Refined Sugar Free', 'Sattu & Ghee', 'Slow Energy', 'Traditional Recipe'],
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
@@ -140,11 +153,11 @@ module.exports = [
     images: ['/images/nutribars.jpg', '/images/nutribars.png'],
     description: 'Dark chocolate-flavored bars packed with nutrients. Ideal for healthy snacking and sustained energy.',
     price: 599,
-    originalPrice: 699,
+    originalPrice: 729,
     weight: '250g',
     variants: [
-      { weight: '250g', price: 599, originalPrice: 699 },
-      { weight: '500g', price: 1099, originalPrice: 1299 }
+      { weight: '250g', price: 599, originalPrice: 729 },
+      { weight: '500g', price: 1099, originalPrice: 1339 }
     ],
     features: ['Dark Chocolate', 'Nutrient Packed', 'Sustained Energy', 'Healthy Snack'],
     isTopSeller: true,
@@ -194,7 +207,7 @@ module.exports = [
     images: ['/images/peanutbutter.jpg', '/images/peanutbutter.png'],
     description: 'Pure, refined sugar free peanut butter made with 100% peanuts. No additives, rich in protein and healthy fats.',
     price: 299,
-    originalPrice: 350,
+    originalPrice: 369,
     weight: '200g',
     features: ['100% Peanuts', 'No Additives', 'High Protein', 'Healthy Fats'],
     isTopSeller: false,
@@ -202,49 +215,17 @@ module.exports = [
     isChefsSpecial: false
   },
   {
-    id: 'hummus',
-    name: 'NJ Special Low Fat Hummus',
-    displayName: 'Low Fat Hummus',
-    category: 'Dips & Spreads',
-    image: '/images/hummus.jpg',
-    images: ['/images/hummus.jpg', '/images/hummuspitabread.jpg'],
-    description: 'High-protein, fiber-rich hummus with no added oil. Smooth, savory, and gut-friendly.',
-    price: 250,
-    originalPrice: 300,
-    weight: '200g',
-    features: ['Low Fat', 'High Protein', 'No Added Oil', 'Gut Friendly'],
-    isTopSeller: false,
-    isBestSeller: false,
-    isChefsSpecial: false
-  },
-  {
-    id: 'guac-quack',
-    name: 'Jewel\'s Avo Guac Quack',
-    displayName: 'Jewel\'s Avo Guac Quack',
-    category: 'Dips & Spreads',
-    image: '/images/guac.jpg',
-    images: ['/images/guac.jpg', '/images/guac.png'],
-    description: 'Creamy avocado dip made fresh. Best paired with crackers or used as a sandwich spread.',
-    price: 299,
-    originalPrice: 399,
-    weight: '~180 to 200g',
-    features: ['Fresh Avocado', 'Creamy Texture', 'Sandwich Spread', 'Made Fresh'],
-    isTopSeller: false,
-    isBestSeller: false,
-    isChefsSpecial: false
-  },
-  {
-    id: 'nj-nutella',
-    name: 'NJ Nutella',
-    displayName: 'NJ Nutella',
+    id: 'liquid-gold',
+    name: 'NJ Liquid Gold (Healthy Nutella)',
+    displayName: 'NJ Liquid Gold',
     category: 'Dips & Spreads',
     image: '/images/peanutbutter.jpg',
-    description: 'Coming soon.',
-    price: 0,
-    originalPrice: 0,
-    weight: 'Coming soon',
-    features: [],
-    comingSoon: true,
+    imagePlaceholder: true,
+    description: 'Our take on chocolate hazelnut spread, refined sugar free and made in small batches.',
+    price: 699,
+    originalPrice: 849,
+    weight: '1 jar',
+    features: ['Refined Sugar Free', 'Small Batch', 'No Palm Oil', 'Chocolate Hazelnut'],
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
@@ -267,16 +248,35 @@ module.exports = [
   },
   {
     id: 'focaccia-bread',
-    name: 'Focaccia Bread',
+    name: 'Focaccia Bread (Made in EVOO)',
     displayName: 'Focaccia Bread',
-    category: 'Cakes',
-    image: '/images/plumcake.jpg',
-    description: 'Coming soon.',
+    category: 'Breads',
+    image: '/images/hummuspitabread.jpg',
+    imagePlaceholder: true,
+    description: 'Soft focaccia made in extra virgin olive oil. Baked to order, so the price depends on size and toppings.',
     price: 0,
     originalPrice: 0,
-    weight: 'Coming soon',
-    features: [],
-    comingSoon: true,
+    weight: 'Made to order',
+    features: ['Extra Virgin Olive Oil', 'Baked to Order', 'No Preservatives', 'Small Batch'],
+    priceOnRequest: true,
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'hummus',
+    name: 'NJ Special Low Fat Hummus',
+    displayName: 'Low Fat Hummus',
+    category: 'Seasonal',
+    image: '/images/hummus.jpg',
+    images: ['/images/hummus.jpg', '/images/hummuspitabread.jpg'],
+    description: 'High-protein, fiber-rich hummus with no added oil and homemade tahini. Smooth, savoury and gut-friendly.',
+    price: 250,
+    originalPrice: 309,
+    weight: '1 pack',
+    features: ['Low Fat', 'High Protein', 'No Added Oil', 'Homemade Tahini'],
+    // A fresh dip, so it sells in the cool months. Back for winter: set false.
+    outOfSeason: true,
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
@@ -297,6 +297,7 @@ module.exports = [
       { weight: '1kg', price: 999, originalPrice: 1300 }
     ],
     features: ['Thandai Spice', 'No Refined Flour', 'Refined Sugar Free', 'Celebratory'],
+    outOfSeason: true,
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
@@ -309,13 +310,13 @@ module.exports = [
     image: '/images/fresh cambridge of chocolate cake.jpg',
     images: ['/images/fresh cambridge of chocolate cake.jpg', '/images/packed cambridge of love cake.jpg'],
     description: 'Luxurious dark chocolate cake with walnut crunch. Clean, eggless, preservative-free indulgence.',
-    price: 1599,
-    originalPrice: 1880,
+    price: 1799,
+    originalPrice: 2199,
     weight: '1kg',
     variants: [
-      { weight: '1kg', price: 1599, originalPrice: 1880 },
-      { weight: '750g', price: 1199, originalPrice: 1410 },
-      { weight: '500g', price: 850, originalPrice: 1000 }
+      { weight: '1kg', price: 1799, originalPrice: 2199 },
+      { weight: '750g', price: 1299, originalPrice: 1589 },
+      { weight: '500g', price: 899, originalPrice: 1099 }
     ],
     features: ['Dark Chocolate', 'Walnut Crunch', 'Eggless', 'Preservative Free'],
     isTopSeller: true,
@@ -337,6 +338,7 @@ module.exports = [
       { weight: '500g', price: 850, originalPrice: 966 }
     ],
     features: ['Eggless', 'Preservative Free', 'Festive Special', 'Dried Fruits & Spices'],
+    outOfSeason: true,
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
@@ -376,4 +378,94 @@ module.exports = [
     isChefsSpecial: true
   }
   */
+  /* ---- New, Sept 2026. Every photo below is a stand-in from another product
+     (imagePlaceholder: true). Swap them and drop the flag once shots arrive. ---- */
+  {
+    id: 'millet-midnight-muffin',
+    name: 'Millet Midnight Muffin (Ragi Dark Chocolate Muffin)',
+    displayName: 'Millet Midnight Muffin',
+    category: 'Muffins',
+    image: '/images/hero-chocolate-cake.jpg',
+    imagePlaceholder: true,
+    description: 'Ragi and dark chocolate muffins, refined sugar free. Deep, not sweet.',
+    price: 599,
+    originalPrice: 729,
+    weight: 'Box of 6',
+    features: ['Ragi Base', 'Dark Chocolate', 'Refined Sugar Free', 'Box of 6'],
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'walnana-muffin',
+    name: 'Chocolate Wal-Nana Muffin (Chocolate Walnut Banana Muffin)',
+    displayName: 'Chocolate Wal-Nana Muffin',
+    category: 'Muffins',
+    image: '/images/new cambridge of love double chocolate cake.jpg',
+    imagePlaceholder: true,
+    description: 'Chocolate, walnut and banana muffins. Naturally sweetened with ripe banana.',
+    price: 599,
+    originalPrice: 729,
+    weight: 'Box of 6',
+    features: ['Walnut & Banana', 'Dark Chocolate', 'Refined Sugar Free', 'Box of 6'],
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'panchamrit-muffin',
+    name: 'Panchamrit Muffin (Panchamrit Rawa Muffin)',
+    displayName: 'Panchamrit Muffin',
+    category: 'Muffins',
+    image: '/images/granolacookies.jpg',
+    imagePlaceholder: true,
+    description: 'Rawa muffins built on the five panchamrit ingredients. Gentle, traditional, not too sweet.',
+    price: 499,
+    originalPrice: 609,
+    weight: 'Box of 6',
+    features: ['Panchamrit Five', 'Rawa Base', 'Refined Sugar Free', 'Box of 6'],
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'panchamrit-cake',
+    name: 'Panchamrit Cake (Rawa Cake)',
+    displayName: 'Panchamrit Cake',
+    category: 'Cakes',
+    image: '/images/oxford of love cake.jpg',
+    imagePlaceholder: true,
+    description: 'A rawa celebration cake on the five panchamrit ingredients. Eggless and refined sugar free.',
+    price: 999,
+    originalPrice: 1219,
+    weight: '1kg',
+    variants: [
+      { weight: '1kg', price: 999, originalPrice: 1219 },
+      { weight: '500g', price: 499, originalPrice: 609 }
+    ],
+    features: ['Panchamrit Five', 'Rawa Base', 'Eggless', 'Refined Sugar Free'],
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  },
+  {
+    id: 'rustic-ragi-bread',
+    name: 'Rustic Ragi Super Seeds Bread',
+    displayName: 'Rustic Ragi Super Seeds Bread',
+    category: 'Breads',
+    image: '/images/hummuspitabread.jpg',
+    imagePlaceholder: true,
+    description: 'Gluten free ragi loaf packed with super seeds, made in extra virgin olive oil.',
+    price: 299,
+    originalPrice: 369,
+    weight: 'Single loaf',
+    variants: [
+      { weight: 'Single loaf', price: 299, originalPrice: 369 },
+      { weight: 'Double loaf', price: 599, originalPrice: 729 }
+    ],
+    features: ['Gluten Free', 'Super Seeds', 'Extra Virgin Olive Oil', 'Ragi Base'],
+    isTopSeller: false,
+    isBestSeller: false,
+    isChefsSpecial: false
+  }
 ];

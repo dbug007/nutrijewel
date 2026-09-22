@@ -145,7 +145,9 @@ function buildProductHtml(sourceHtml, product) {
     description,
     brand: { '@type': 'Brand', name: 'NutriJewel' },
     category: product.category,
-    ...(product.comingSoon
+    // No Offer block without a real price: coming-soon and quote-on-request
+    // products would otherwise publish "price: 0" as structured data.
+    ...(product.comingSoon || product.priceOnRequest
       ? {}
       : {
           offers: {

@@ -11,7 +11,8 @@ const normalizeProductImages = (product) => ({
 const ALLERGENS = {
   'peanut-butter':    ['Peanuts'],
   'nj-almond-butter': ['Tree nuts (almond)'],
-  'nj-nutella':       ['Tree nuts', 'Dairy'],
+  'liquid-gold':      ['Tree nuts', 'Dairy'],
+  'golden-bites':     ['Dairy (ghee)'],
   'cambridge-cake':   ['Tree nuts (walnut)', 'Wheat (gluten)', 'Dairy'],
   'bliss-bites':      ['Tree nuts'],
   'amrit-bites':      ['Tree nuts', 'Dairy (ghee)'],
@@ -22,6 +23,12 @@ const ALLERGENS = {
   'granola-cookies':  ['Tree nuts', 'Wheat (gluten)'],
   'nutri-bars':       ['Tree nuts'],
   'focaccia-bread':   ['Wheat (gluten)'],
+  'hummus':           ['Sesame (tahini)'],
+  'panchamrit-cake':  ['Wheat (gluten)', 'Dairy'],
+  'panchamrit-muffin':['Wheat (gluten)', 'Dairy'],
+  'millet-midnight-muffin': ['Dairy'],
+  'walnana-muffin':   ['Tree nuts (walnut)', 'Dairy'],
+  'rustic-ragi-bread':['Sesame (seeds)'],
 };
 
 /* Nutrition facts per product. ⚠️ OWNER: share real values and I'll fill these in (or edit here).
