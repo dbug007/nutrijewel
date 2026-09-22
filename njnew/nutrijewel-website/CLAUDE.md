@@ -70,6 +70,28 @@ Three branches with three different jobs. They are **not** interchangeable.
 Local branch `nutrijewel-test` is the **source** working branch, despite sharing a
 name with the remote deploy branch. Push it to `main`.
 
+Use `deploy.ps1`, which runs the whole sequence and handles the Node PATH and the
+credential-manager flag for you:
+
+```powershell
+cd d:\Downloads\VS-W\nutrijewel\njnew\nutrijewel-website
+
+.\deploy.ps1 -Message "what changed"     # commit, test, build, push, staging
+.\deploy.ps1                             # same, if already committed
+.\deploy.ps1 -Production -Message "..."  # to nutrijewel.com, asks you to type SHIP IT
+.\deploy.ps1 -WhatIf                     # show the plan, change nothing
+.\deploy.ps1 -SkipTests                  # faster, use sparingly
+```
+
+It refuses to run with uncommitted changes unless you pass `-Message`, and stops
+before pushing anything if the tests or the build fail.
+
+Anyone editing `deploy.ps1`: do not name a helper function `Git`. PowerShell
+resolves functions before executables and ignores case, so it shadows git inside
+its own body and recurses forever. The script calls `git.exe` for that reason.
+
+By hand, if you ever need to:
+
 ```powershell
 # 1. source to main
 cd d:\Downloads\VS-W\nutrijewel
@@ -156,6 +178,12 @@ The web versions the site actually loads are the compressed files in
 - Desktop nav squeezes between 769px and 900px. The real fix is raising the
   hamburger threshold, which means untangling five interlocking media queries in
   `Navbar.css`.
+- `outOfSeason: true` parks a product (hummus, thandai, plum kiss) without deleting
+  it: hidden from the shop and from hampers, all data intact, one word brings it
+  back. `priceOnRequest: true` (focaccia) shows "Price on request" with a WhatsApp
+  button, no Add to Cart, and publishes no Offer structured data.
+  `imagePlaceholder: true` marks a product wearing another product's photo.
+- Struck-through prices follow one rule: about 18% above `price`, rounded to end in 9.
 - `ScrollToTop.css` used to reference `--primary-green` / `--secondary-green`, which
   are defined nowhere. Fixed, but other files may have similar dangling vars. An
   audit of every `var(--...)` against `index.css` is worth doing.
