@@ -169,8 +169,10 @@ The web versions the site actually loads are the compressed files in
 
 ## Known outstanding
 
-- **GA4 is still `G-XXXXXXXXXX`** in `public/index.html`. The site collects zero
-  analytics. Nothing built is measurable until this is a real ID.
+- GA4 is live as `G-DH75XWLB6H` in `public/index.html` (two places, keep them in step).
+  It only collects from nutrijewel.com, so staging builds report nothing. The
+  WhatsApp checkout leaves the site, so orders are still not counted as
+  conversions: that needs a gtag event on the checkout button.
 - Imported hamper products are placeholder pricing, all flagged `isPlaceholder: true`.
   Confirm sourcing and set real prices before they can be ordered.
 - Hamper box prices and discount tiers are invented placeholders in
