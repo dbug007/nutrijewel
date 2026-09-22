@@ -79,9 +79,32 @@ cd d:\Downloads\VS-W\nutrijewel\njnew\nutrijewel-website
 .\deploy.ps1 -Message "what changed"     # commit, test, build, push, staging
 .\deploy.ps1                             # same, if already committed
 .\deploy.ps1 -Production -Message "..."  # to nutrijewel.com, asks you to type SHIP IT
+.\deploy.ps1 -Cloudflare -Message "..."  # to Cloudflare Pages, nutrijewel.pages.dev
 .\deploy.ps1 -WhatIf                     # show the plan, change nothing
 .\deploy.ps1 -SkipTests                  # faster, use sparingly
 ```
+
+## Cloudflare
+
+Full detail in [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md). The short version:
+
+- **The Cloudflare account hosts other brands' domains.** Only create or change
+  things named `nutrijewel*`, always pass `--project-name nutrijewel`, and never
+  run an unscoped delete or bulk command. Wrangler defaults to the account.
+- Pages project `nutrijewel` serves `https://nutrijewel.pages.dev` by direct
+  upload (not a git integration). Every deploy also gets a permanent unique URL,
+  which is the browsable staging that `nutrijewel-test` never had.
+- D1 database `nutrijewel-orders` exists but is **empty and unused**, waiting on
+  the checkout work.
+- `public/_redirects` and `public/_headers` configure SPA fallback and security
+  headers. They replaced `public/404.html`, `public/CNAME` and the SPA decoder
+  that used to sit in `public/index.html`.
+- **nutrijewel.com still resolves to GitHub Pages.** The nameservers are
+  Hostinger's (`ns1/ns2.dns-parking.com`), so Cloudflare is not authoritative
+  yet. `-Production` therefore still means `gh-pages`.
+- **Email lives on this domain** (`mx1/mx2.hostinger.com` plus an SPF record).
+  Moving nameservers without recreating those in Cloudflare first silently breaks
+  `hello@nutrijewel.com`. The runbook in `docs/INFRASTRUCTURE.md` covers it.
 
 It refuses to run with uncommitted changes unless you pass `-Message`, and stops
 before pushing anything if the tests or the build fail.

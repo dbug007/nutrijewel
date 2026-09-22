@@ -36,6 +36,7 @@
 param(
   [string]$Message,
   [switch]$Production,
+  [switch]$Cloudflare,
   [switch]$Yes,
   [switch]$SkipTests,
   [switch]$WhatIf
@@ -52,7 +53,15 @@ $RepoRoot = (Resolve-Path (Join-Path $AppDir '..\..')).Path
 # staging branch, which holds a BUILD. See CLAUDE.md.
 $SourceBranch = 'nutrijewel-test'
 
-if ($Production) {
+# Three publish targets. Cloudflare Pages is the destination we are migrating to,
+# but nutrijewel.com still resolves to GitHub Pages until the nameservers move at
+# the registrar, so gh-pages remains what -Production means for now. See
+# docs/INFRASTRUCTURE.md for the cutover runbook.
+$CfProject = 'nutrijewel'
+if ($Cloudflare) {
+  $TargetBranch = 'cloudflare-pages'
+  $TargetLabel  = 'Cloudflare Pages (https://nutrijewel.pages.dev)'
+} elseif ($Production) {
   $TargetBranch = 'gh-pages'
   $TargetLabel  = 'PRODUCTION (nutrijewel.com)'
 } else {
@@ -128,7 +137,7 @@ if ($WhatIf) {
   if (-not $SkipTests) { Write-Host "    npx react-scripts test --watchAll=false" }
   Write-Host "    npm run build"
   Write-Host "    git push origin ${SourceBranch}:main"
-  Write-Host "    npx gh-pages -d build -b $TargetBranch"
+  Write-Host "    $(if ($Cloudflare) { "npx wrangler pages deploy build --project-name $CfProject" } else { "npx gh-pages -d build -b $TargetBranch" })"
   Write-Host ""
   exit 0
 }
@@ -185,6 +194,22 @@ Ok "main updated"
 Step 5 "Publishing build to '$TargetBranch'"
 $stamp = "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 Push-Location $AppDir
+
+if ($Cloudflare) {
+  # Direct upload. Always name the project: this Cloudflare account hosts other
+  # brands, and an unscoped command reaches all of them.
+  $env:WRANGLER_SEND_METRICS = 'false'
+  & npx wrangler pages deploy build --project-name $CfProject --branch main --commit-dirty=true
+  $pubExit = $LASTEXITCODE
+  Pop-Location
+  if ($pubExit -ne 0) { Die "Cloudflare Pages deploy failed. Source is on main, but the build did not go out." }
+  Ok "published to Cloudflare Pages"
+  Write-Host "`n=====  Done: $TargetLabel  =====" -ForegroundColor Green
+  Write-Host "  https://nutrijewel.pages.dev"
+  Write-Host "  Note: nutrijewel.com still points at GitHub Pages until DNS moves.`n"
+  exit 0
+}
+
 & npx gh-pages -d build -b $TargetBranch -m $stamp
 $pubExit = $LASTEXITCODE
 
