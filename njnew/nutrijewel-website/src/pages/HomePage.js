@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import TopSellers from '../components/TopSellers';
 import HampersTeaser from '../components/HampersTeaser';
+import { HAMPERS_ENABLED } from '../data/hampers';
 import MissionVision from '../components/MissionVision';
 import TestimonialsSection from '../components/TestimonialsSection';
 // import InstagramFeed from '../components/InstagramFeed'; // replaced by ReelsSection
@@ -18,7 +19,7 @@ const HomePage = () => {
     <div className="home-page">
       <HeroSection />
       <TopSellers />
-      <HampersTeaser />
+      {HAMPERS_ENABLED && <HampersTeaser />}
       <AboutSection />
       <MissionVision />
       <JoinCommunity />

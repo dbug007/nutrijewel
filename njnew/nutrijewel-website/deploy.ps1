@@ -25,6 +25,7 @@
 .EXAMPLE
   .\deploy.ps1 -Production -Message "September prices live"
   Publishes to nutrijewel.com. Asks you to type a confirmation first.
+  Add -Yes to skip that prompt.
 
 .EXAMPLE
   .\deploy.ps1 -WhatIf
@@ -35,6 +36,7 @@
 param(
   [string]$Message,
   [switch]$Production,
+  [switch]$Yes,
   [switch]$SkipTests,
   [switch]$WhatIf
 )
@@ -131,11 +133,15 @@ if ($WhatIf) {
   exit 0
 }
 
-# Production is the live shop. Make it deliberate.
-if ($Production) {
+# Production is the live shop. Make it deliberate. -Yes skips the prompt, for when
+# you have already decided or are running this from a script.
+if ($Production -and -not $Yes) {
   Write-Host "`n  This publishes to nutrijewel.com, seen by real customers." -ForegroundColor Yellow
   $typed = Read-Host "  Type SHIP IT to continue"
   if ($typed -ne 'SHIP IT') { Die "Not confirmed, nothing was published." }
+}
+if ($Production -and $Yes) {
+  Write-Host "`n  Publishing to nutrijewel.com (-Yes given, no prompt)." -ForegroundColor Yellow
 }
 
 # ---- 1. commit ---------------------------------------------------------------

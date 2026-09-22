@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingCart, Heart, ChevronDown, MessageCircle } from 'lucide-react';
 import { useHeaderReveal } from '../hooks/useHeaderReveal';
 import { useStore } from '../store/StoreContext';
-import { OCCASIONS } from '../data/hampers';
+import { OCCASIONS, HAMPERS_ENABLED } from '../data/hampers';
 import { scrollToId } from '../lib/smoothScroll';
 import { AnimatePresence, motion, useAnimationControls } from 'motion/react';
 import './store/store.css';
@@ -109,7 +109,8 @@ const Navbar = () => {
           
           <li><Link to="/products" className="navbar-link">Products</Link></li>
 
-          {/* Hampers Dropdown */}
+          {/* Hampers dropdown. Hidden while HAMPERS_ENABLED is false. */}
+          {HAMPERS_ENABLED && (
           <li className="navbar-dropdown">
             <Link to="/hampers" className="navbar-link navbar-dropdown-toggle">
               Hampers <span className="navbar-new-pill">New</span> <ChevronDown size={16} />
@@ -127,6 +128,7 @@ const Navbar = () => {
               ))}
             </div>
           </li>
+          )}
 
           <li><Link to="/services" className="navbar-link">Workshops</Link></li>
           <li><Link to="/recipes-blog" className="navbar-link">Recipes</Link></li>
@@ -276,7 +278,8 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Hampers Section with Submenu */}
+            {/* Hampers section. Hidden while HAMPERS_ENABLED is false. */}
+            {HAMPERS_ENABLED && (
             <div className="navbar-mobile-section">
               <div className="navbar-mobile-row">
                 <Link
@@ -312,6 +315,7 @@ const Navbar = () => {
               )}
               </AnimatePresence>
             </div>
+            )}
 
             <div className="navbar-mobile-section">
               <Link

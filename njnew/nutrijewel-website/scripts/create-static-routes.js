@@ -33,13 +33,14 @@ const routeSeo = {
       'Explore NutriJewel top sellers including clean cakes, granola, ladoos, and energy bites crafted with premium ingredients and no artificial preservatives.',
     canonical: `${siteUrl}/products/`
   },
-  hampers: {
+  // Only generated while the gifting section is switched on.
+  ...(hamperData.HAMPERS_ENABLED ? { hampers: {
     title: 'Gift Hampers | Build Your Own Healthy Hamper | NutriJewel',
     description:
       'Build your own NutriJewel gift hamper for Diwali, weddings, corporate gifting and more. Pick a box, add ladoos, granola, cakes and imported treats, and save up to 15%.',
     canonical: `${siteUrl}/hampers/`,
     jsonLd: hamperFaqJsonLd
-  },
+  } } : {}),
   services: {
     title: 'NutriJewel Services | Workshops, Nutrition & Healthy Baking',
     description:

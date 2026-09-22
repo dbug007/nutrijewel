@@ -15,6 +15,7 @@ import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import HampersPage from './pages/HampersPage';
+import { HAMPERS_ENABLED } from './data/hampers';
 import ServicesPage from './pages/ServicesPage';
 import RecipesBlogPage from './pages/RecipesBlogPage';
 import ContactPage from './pages/ContactPage';
@@ -38,13 +39,24 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:slug" element={<ProductDetailPage />} />
-          <Route path="/hampers" element={<HampersPage />} />
-          {/* Occasion slug only preselects an occasion — same page, deep-linkable. */}
-          <Route path="/hampers/:occasionSlug" element={<HampersPage />} />
+          {/* Gifting sits behind HAMPERS_ENABLED in src/data/hampers.data.js. While
+              it is off, old hamper links land on the shop rather than nothing. */}
+          {HAMPERS_ENABLED ? (
+            <>
+              <Route path="/hampers" element={<HampersPage />} />
+              {/* Occasion slug only preselects an occasion, same page, deep-linkable. */}
+              <Route path="/hampers/:occasionSlug" element={<HampersPage />} />
+            </>
+          ) : (
+            <>
+              <Route path="/hampers" element={<Navigate to="/products" replace />} />
+              <Route path="/hampers/:occasionSlug" element={<Navigate to="/products" replace />} />
+            </>
+          )}
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/recipes-blog" element={<RecipesBlogPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          {/* Birthday "Spin & Win" campaign — disabled. Old campaign links redirect home. */}
+          {/* Birthday "Spin & Win" campaign disabled. Old campaign links redirect home. */}
           {/* Re-enable: un-comment the SpinWheelPage + CAMPAIGN_LIVE imports above and restore:
               <Route path="/spin" element={CAMPAIGN_LIVE ? <SpinWheelPage /> : <Navigate to="/" replace />} /> */}
           <Route path="/birthday" element={<Navigate to="/" replace />} />

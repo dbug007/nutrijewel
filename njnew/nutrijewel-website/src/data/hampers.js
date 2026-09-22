@@ -5,6 +5,7 @@ import hamperData from './hampers.data';
 import { products } from './products';
 import { getHamperEligibleProducts } from '../utils/hamperPricing';
 
+export const HAMPERS_ENABLED = hamperData.HAMPERS_ENABLED;
 export const BOX_TIERS = hamperData.BOX_TIERS;
 export const CONTAINER_STYLES = hamperData.CONTAINER_STYLES;
 export const OFFER_TIERS = hamperData.OFFER_TIERS;

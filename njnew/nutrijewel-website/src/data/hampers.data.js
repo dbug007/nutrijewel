@@ -5,6 +5,17 @@
    src/utils/hamperPricing.js from the live product catalog, so a price change in
    products.data.js can never leave a stale hamper price behind. */
 
+/* ==================================================================== *
+ * MASTER SWITCH for the whole gifting section.
+ *
+ * false: no /hampers route, no nav entry, no homepage teaser, no static
+ *        page generated. The code and data below stay intact and tested.
+ * true:  the section is live again.
+ *
+ * Turning it back on is this one word. Nothing else to remember.
+ * ==================================================================== */
+const HAMPERS_ENABLED = false;
+
 /* ------------------------------------------------------------------ *
  * Box tiers, "size" is a slot count. One slot = one product unit.
  * boxPrice covers the gift box, wrap, ribbon and card.
@@ -498,6 +509,7 @@ const HAMPER_FAQS = [
 ];
 
 module.exports = {
+  HAMPERS_ENABLED,
   BOX_TIERS,
   CONTAINER_STYLES,
   OFFER_TIERS,
