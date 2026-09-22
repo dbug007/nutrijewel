@@ -63,7 +63,7 @@ export const categories = [
   'Best Sellers',
   'Chef\'s Specials',
   'Cakes',
-  'Traditional Sweets',
+  'Ladoos',
   'Energy Bars',
   'Healthy Snacks',
   'Dips & Spreads',

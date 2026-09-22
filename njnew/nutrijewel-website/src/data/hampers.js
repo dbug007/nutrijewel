@@ -38,7 +38,7 @@ export const hamperCatalog = [...hamperProducts, ...IMPORTED_PRODUCTS];
 export const HAMPER_CATEGORY_ORDER = [
   'Cakes',
   'Muffins',
-  'Traditional Sweets',
+  'Ladoos',
   'Healthy Snacks',
   'Energy Bars',
   'Breads',

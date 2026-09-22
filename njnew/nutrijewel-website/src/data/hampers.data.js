@@ -138,7 +138,7 @@ const PACKING_CATEGORY_BY_PRODUCT_ID = {
 
 /* Product category → packing category. The general rule. */
 const PACKING_CATEGORY_BY_PRODUCT_CATEGORY = {
-  'Traditional Sweets': 'ladoo',
+  'Ladoos': 'ladoo',
   'Cakes': 'cake',
   'Seasonal': 'cake',
   'Muffins': 'muffin',

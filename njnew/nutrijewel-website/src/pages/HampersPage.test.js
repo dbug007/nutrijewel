@@ -349,7 +349,7 @@ describe('/hampers shelves', () => {
 
   it('gives each product category its own shelf', () => {
     renderAt();
-    ['Cakes', 'Traditional Sweets', 'Healthy Snacks'].forEach((category) => {
+    ['Cakes', 'Ladoos', 'Healthy Snacks'].forEach((category) => {
       expect(screen.getByRole('group', { name: new RegExp(`^${category}$`, 'i') })).toBeInTheDocument();
     });
   });

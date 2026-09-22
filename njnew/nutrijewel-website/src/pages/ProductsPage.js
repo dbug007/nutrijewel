@@ -13,7 +13,7 @@ import './ProductsPage.css';
 const CATEGORIES = [
   { id: 'cakes',              name: 'Cakes',              emoji: '🎂' },
   { id: 'muffins',            name: 'Muffins',            emoji: '🧁' },
-  { id: 'traditional-sweets', name: 'Traditional Sweets', emoji: '🍡' },
+  { id: 'ladoos',             name: 'Ladoos',             emoji: '🍡' },
   { id: 'healthy-snacks',     name: 'Healthy Snacks',     emoji: '🌿' },
   { id: 'energy-bars',        name: 'Energy Bars',        emoji: '⚡' },
   { id: 'breads',             name: 'Breads',             emoji: '🍞' },
