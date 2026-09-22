@@ -143,6 +143,15 @@ The web versions the site actually loads are the compressed files in
 - CRA's Jest 27 cannot parse ESM-only packages. `package.json` carries a
   `transformIgnorePatterns` exception for `lenis` and maps `@number-flow/react` to
   a stub at `src/test/numberFlowMock.js`.
+- **Three flags take a product off sale**, all in `products.data.js`: `comingSoon`
+  (not launched), `outOfSeason` (parked until its season) and `priceOnRequest`
+  (quoted per order). They mean the same thing at the till: **readable and
+  enquirable, never buyable**. The rule lives in `src/utils/productAvailability.js`
+  (`isBuyable`, `availabilityLabel`); import it rather than re-testing the flags.
+  `AddToCartButton` and `StoreContext.addToCart` both refuse, so a page cannot
+  reintroduce a buy button by accident. These shipped live once with a working
+  Add to Cart, one of them at zero, so `productAvailability.test.js` pins the
+  parked ids and asserts every buyable product has a price above zero.
 - One rail pattern only: the native scroll-snap `Shelf` (`src/components/Shelf.js`).
   Do not reintroduce a carousel library.
 - **The mobile menu overlay lives inside `.navbar`**, and `.navbar` is

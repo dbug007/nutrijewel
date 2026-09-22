@@ -100,7 +100,7 @@
   border-radius: 1rem;
   margin-bottom: 1rem;
 }
-/* "Completed" badge for past workshops — muted, not the green "Open" pill */
+/* "Completed" badge for past workshops, muted, not the green "Open" pill */
 .workshop-badge--past {
   background: rgba(47, 47, 47, 0.08);
   color: var(--nj-olive);

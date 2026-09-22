@@ -1,4 +1,4 @@
-/* HeroSection — Cinematic Plate
+/* HeroSection: Cinematic Plate
    Full-bleed product photo + scrim + grain + gallery frame, content lower-left. */
 
 .hero-section {
@@ -11,7 +11,7 @@
   isolation: isolate;
 }
 
-/* Layer 0 — full-bleed image (LCP), Ken-Burns via framer-motion on the element */
+/* Layer 0: full-bleed image (LCP), Ken-Burns via framer-motion on the element */
 .hero-cinematic-img {
   position: absolute;
   inset: 0;
@@ -24,7 +24,7 @@
   z-index: 0;
 }
 
-/* Layer 1 — legibility scrim (warm charcoal-olive) anchored bottom + left */
+/* Layer 1: legibility scrim (warm charcoal-olive) anchored bottom + left */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -36,7 +36,7 @@
     radial-gradient(140% 120% at 50% 38%, rgba(0, 0, 0, 0) 58%, rgba(109, 138, 60, 0.22) 100%);
 }
 
-/* Layer 2 — subtle film grain for cinematic texture */
+/* Layer 2: subtle film grain for cinematic texture */
 .hero-grain {
   position: absolute;
   inset: 0;
@@ -47,7 +47,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Content — lower-left third */
+/* Content: lower-left third */
 .hero-content {
   position: absolute;
   z-index: 4;
@@ -121,7 +121,7 @@
   outline-offset: 3px;
 }
 
-/* Slide progress — segmented "story" bar */
+/* Slide progress: segmented "story" bar */
 .hero-progress {
   position: absolute;
   z-index: 4;
@@ -164,7 +164,7 @@
 .hero-progress-seg.is-active .hero-progress-fill {
   animation: heroProgressFill 2.5s linear forwards;
 }
-/* Hovering the hero pauses the slideshow — keep the fill in sync */
+/* Hovering the hero pauses the slideshow, keep the fill in sync */
 .hero-section:hover .hero-progress-seg.is-active .hero-progress-fill {
   animation-play-state: paused;
 }
@@ -210,7 +210,7 @@
   50%      { transform: translateY(5px); opacity: 1; }
 }
 
-/* Desktop — full-screen, centered single-CTA hero */
+/* Desktop: full-screen, centered single-CTA hero */
 @media (min-width: 768px) {
   .hero-section { max-height: none; }
   .hero-content {
@@ -237,7 +237,7 @@
   }
 }
 
-/* Mobile: drop the scroll cue — it collides with the bottom-anchored CTA,
+/* Mobile: drop the scroll cue, it collides with the bottom-anchored CTA,
    and on a phone it's obvious the page scrolls. */
 @media (max-width: 767px) {
   .hero-scrollcue { display: none; }
@@ -245,7 +245,7 @@
   .hero-progress { bottom: 1.15rem; }
 }
 
-/* Mobile — keep the food cluster framed, content sits in the bottom third */
+/* Mobile: keep the food cluster framed, content sits in the bottom third */
 @media (max-width: 480px) {
   .hero-content { padding: 2rem 1.25rem 3.25rem; gap: 0.85rem; }
   .hero-cinematic-img { object-position: 50% 50%; }

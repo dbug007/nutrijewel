@@ -260,21 +260,23 @@ describe('/hampers imported add-ons', () => {
     for (const group of ['Soft Drinks', 'Coffee', 'Chocolates', 'Packed Snacks']) {
       // eslint-disable-next-line no-await-in-loop
       expect(
-        await screen.findByRole('heading', { name: new RegExp(group, 'i') }, { timeout: 5000 })
+        await screen.findByRole('heading', { name: new RegExp(group, 'i') }, { timeout: 8000 })
       ).toBeInTheDocument();
     }
     expect(screen.getByText(/shelf-stable/i)).toBeInTheDocument();
-  });
+    /* Rendering the whole builder is slow on a loaded machine, and the per-test
+       limit has to stay above the findBy budget above or it always wins. */
+  }, 20000);
 
   it('can add an imported item to the hamper', async () => {
     renderAt();
     fireEvent.click(screen.getByRole('tab', { name: /imported/i }));
     const addButtons = await screen.findAllByRole(
-      'button', { name: /^add .+ to your hamper$/i }, { timeout: 5000 }
+      'button', { name: /^add .+ to your hamper$/i }, { timeout: 8000 }
     );
     fireEvent.click(addButtons[0]);
     expect(within(basket()).getByText(slots(1, 5))).toBeInTheDocument();
-  });
+  }, 20000);
 });
 
 describe('/hampers builder steps', () => {

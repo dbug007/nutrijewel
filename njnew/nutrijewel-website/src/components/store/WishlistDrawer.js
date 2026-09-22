@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useStore } from '../../store/StoreContext';
 import { products } from '../../data/products';
 import './store.css';
+import { isBuyable, availabilityLabel } from '../../utils/productAvailability';
 
 const img = (src) => `${process.env.PUBLIC_URL}${src || ''}`;
 
@@ -94,9 +95,9 @@ export default function WishlistDrawer() {
                     <div className="nj-cart-mid">
                       <p className="nj-cart-name">{product.displayName || product.name}</p>
                       <p className="nj-cart-weight">
-                        {product.comingSoon ? 'Coming soon' : `from ₹${priceOf(product)}`}
+                        {availabilityLabel(product) || `from ₹${priceOf(product)}`}
                       </p>
-                      {!product.comingSoon && (
+                      {isBuyable(product) && (
                         <button className="nj-wish-add" onClick={() => handleAdd(product)}>
                           <ShoppingCart size={14} /> Add to cart
                         </button>

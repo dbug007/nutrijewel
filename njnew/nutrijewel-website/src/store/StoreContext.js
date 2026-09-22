@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { getDefaultPacking, findHamperProduct } from '../data/hampers';
 import { buildOrderMessage } from '../utils/orderMessage';
+import { isBuyable } from '../utils/productAvailability';
 
 /*
  * Cart + Wishlist store. No backend, everything lives in the browser:
@@ -173,7 +174,9 @@ export function StoreProvider({ children }) {
 
   /* ---------- public actions ---------- */
   const addToCart = (product, variant, qty = 1) => {
-    if (!product || product.comingSoon) return;
+    // Enforced at the store too, so a direct call cannot slip a product that
+    // is not on sale into the cart behind the button's back.
+    if (!isBuyable(product)) return;
     const weight = (variant && variant.weight) || product.weight || 'one size';
     const unitPrice = (variant && variant.price) != null ? variant.price : product.price;
     const originalPrice = (variant && variant.originalPrice) != null ? variant.originalPrice : product.originalPrice;

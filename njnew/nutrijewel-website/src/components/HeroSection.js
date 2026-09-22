@@ -5,10 +5,10 @@ import { smoothEase, imageCrossfade } from './motionPresets';
 import { scrollToId } from '../lib/smoothScroll';
 import './HeroSection.css';
 
-/* Cinematic Plate hero — full-bleed food, near-zero words.
+/* Cinematic Plate hero: full-bleed food, near-zero words.
    One product photo carries the brand; a kinetic word + signature + single CTA. */
 const ROTATING_WORDS = ['Pure.', 'Joyful.', 'Crafted.'];
-/* Soft crossfade slideshow — used on all breakpoints for now;
+/* Soft crossfade slideshow: used on all breakpoints for now;
    desktop-specific art can be swapped in later. */
 /* hero-mobile-5 intentionally excluded (not a released product). */
 const HERO_IMAGES = [1, 2, 3, 4].map(
@@ -45,7 +45,7 @@ const HeroSection = () => {
     return () => clearInterval(slideTimer.current);
   }, [reduceMotion, startAutoplay]);
 
-  // Manual slide select — jump + restart the autoplay clock so the next
+  // Manual slide select: jump + restart the autoplay clock so the next
   // auto-advance is a full interval away (no jarring quick-skip).
   const selectSlide = (i) => {
     setHeroImg(i);
@@ -111,8 +111,8 @@ const HeroSection = () => {
       };
 
   return (
-    <section className="hero-section" ref={heroRef} aria-label="NutriJewel — handcrafted, guilt-free sweets and snacks">
-      {/* Layer 0 — full-bleed hero: soft crossfade slideshow (all breakpoints). */}
+    <section className="hero-section" ref={heroRef} aria-label="NutriJewel, handcrafted guilt-free sweets and snacks">
+      {/* Layer 0: full-bleed hero: soft crossfade slideshow (all breakpoints). */}
       <AnimatePresence initial={false} mode="sync">
         <motion.img
           key={heroImg}
@@ -127,11 +127,11 @@ const HeroSection = () => {
         />
       </AnimatePresence>
 
-      {/* Layers 1-2 — legibility scrim + subtle film grain (both decorative) */}
+      {/* Layers 1-2: legibility scrim + subtle film grain (both decorative) */}
       <div className="hero-overlay" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
 
-      {/* Content — lower-left */}
+      {/* Content: lower-left */}
       <motion.div className="hero-content" variants={stagger} initial="hidden" animate="visible">
         <motion.h1 className="hero-word" variants={fadeUp} aria-label="Pure, joyful, crafted.">
           <span className="hero-word-mask">
@@ -160,7 +160,7 @@ const HeroSection = () => {
         </motion.button>
       </motion.div>
 
-      {/* Slide progress — segmented "story" bar; active segment fills over the
+      {/* Slide progress: segmented "story" bar; active segment fills over the
           2.5s interval and pauses on hover. Each segment is a jump control. */}
       <div className="hero-progress" role="tablist" aria-label="Hero images">
         {HERO_IMAGES.map((_, i) => (

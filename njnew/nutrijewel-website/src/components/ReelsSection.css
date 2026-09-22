@@ -141,7 +141,7 @@
 .nj-reel:hover .nj-reel-expand,
 .nj-reel:focus-visible .nj-reel-expand { opacity: 1; transform: scale(1); }
 
-/* Mute / sound badge — muted by default, flips to sound-on when hovered */
+/* Mute / sound badge: muted by default, flips to sound-on when hovered */
 .nj-reel-badge {
   position: absolute;
   bottom: 0.6rem;

@@ -1,4 +1,4 @@
-/* ProductsPage — Soft Minimal */
+/* ProductsPage: Soft Minimal */
 
 /* ── Base ── */
 .products-page {
@@ -97,7 +97,7 @@
 }
 .filter-chip-icon { line-height: 1; font-size: 0.95rem; }
 
-/* Mobile: show emoji only — labels take too much space.
+/* Mobile: show emoji only, labels take too much space.
    No hover exists on touch, so reveal the label when the chip is tapped (active). */
 @media (max-width: 767px) {
   .filter-chip-label { display: none; }
@@ -329,7 +329,7 @@
   }
 }
 
-/* Image band — always 1:1 */
+/* Image band: always 1:1 */
 .card-image-band {
   position: relative;
   aspect-ratio: 1 / 1;

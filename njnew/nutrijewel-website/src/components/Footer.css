@@ -197,7 +197,7 @@
   box-shadow: 0 8px 25px rgba(147, 181, 89, 0.3);
 }
 
-/* WhatsApp CTA — sits under the contact cards */
+/* WhatsApp CTA: sits under the contact cards */
 .contact-cta {
   display: flex;
   flex-direction: column;
@@ -483,7 +483,7 @@
   }
 
   /* Brand spans the top; Quick Links · Products · Legal share one row;
-     Contact spans the bottom — everything centered.
+     Contact spans the bottom, everything centered.
      The grid is capped + auto-margined so the 3 columns cluster in the centre
      instead of stretching edge-to-edge (which read as left/right, not centred). */
   .footer-content {

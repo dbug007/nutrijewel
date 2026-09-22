@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-/* Self-contained canvas confetti — no external library.
+/* Self-contained canvas confetti, no external library.
    Fire a burst by changing `fireKey` to a new value (e.g. increment a counter).
    Respects prefers-reduced-motion (renders an inert canvas, no animation). */
 

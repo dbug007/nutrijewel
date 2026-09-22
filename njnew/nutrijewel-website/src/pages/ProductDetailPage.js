@@ -30,11 +30,11 @@ function buildFaqs(product) {
     },
     {
       q: 'How fresh is it, and what about shelf life?',
-      a: "Everything is handcrafted in small batches and preservative-free, so we make it as fresh as possible. The best-before date is on every pack — we're happy to confirm it on WhatsApp before you order.",
+      a: "Everything is handcrafted in small batches and preservative-free, so we make it as fresh as possible. The best-before date is on every pack, and we're happy to confirm it on WhatsApp before you order.",
     },
     {
       q: 'How do I order and pay?',
-      a: 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly — no payment is taken on the website.',
+      a: 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly. No payment is taken on the website.',
     },
     {
       q: 'Do you deliver to my city?',
@@ -272,6 +272,11 @@ export default function ProductDetailPage() {
     window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
+  const askAvailabilityOnWhatsApp = () => {
+    const msg = `Hi! Is ${product.displayName || product.name} available, or when does it come back? I'd like to order some.`;
+    window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
   const comingSoon = !!product.comingSoon;
   /* Parked for the season: real product, real price, just not sold today.
      Quoted per order: sold, but the price depends on the order. Neither can go
@@ -412,7 +417,7 @@ export default function ProductDetailPage() {
             ) : (
               <div className="pdp-price-row">
                 <span className="pdp-comingsoon-label">
-                  {quoteOnly ? 'Price on request' : outOfSeason ? 'Back in season soon' : 'Coming Soon'}
+                  {quoteOnly ? 'Price on request' : outOfSeason ? 'Off season, ask us' : 'Coming Soon'}
                 </span>
               </div>
             )}
@@ -429,13 +434,18 @@ export default function ProductDetailPage() {
                   </button>
                   <WishlistHeart productId={product.id} className="pdp-wish-inline" />
                 </>
+              ) : outOfSeason ? (
+                <>
+                  <button className="pdp-buy" onClick={askAvailabilityOnWhatsApp}>
+                    <ShoppingBag size={18} /> Ask about availability
+                  </button>
+                  <WishlistHeart productId={product.id} className="pdp-wish-inline" />
+                </>
               ) : notBuyable ? (
                 <div className="pdp-soon-row">
                   <WishlistHeart productId={product.id} className="pdp-wish-inline" />
                   <span className="pdp-soon-note">
-                    {outOfSeason
-                      ? "Not available right now. Save it and we'll tell you when it is back."
-                      : "Save it to your wishlist and we'll let you know the moment it launches."}
+                    Save it to your wishlist and we'll let you know the moment it launches.
                   </span>
                 </div>
               ) : (
@@ -480,7 +490,7 @@ export default function ProductDetailPage() {
                 <AlertTriangle size={15} />
                 <span>
                   Handcrafted in small batches in a shared kitchen that also handles nuts, dairy, gluten,
-                  sesame &amp; soy — traces may be present. If you have a specific allergy, please confirm
+                  sesame &amp; soy, so traces may be present. If you have a specific allergy, please confirm
                   with us on WhatsApp before ordering.
                 </span>
               </p>

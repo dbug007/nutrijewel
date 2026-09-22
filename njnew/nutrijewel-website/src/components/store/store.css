@@ -372,7 +372,7 @@
 .nj-heart:hover { color: #e05a7a; }
 .nj-heart.is-active { color: #e0426a; }
 
-/* heart overlaid on a card image (top-right) — above badges + coming-soon overlay */
+/* heart overlaid on a card image (top-right), above badges + coming-soon overlay */
 .nj-heart.on-image {
   position: absolute;
   top: 0.6rem;
@@ -380,7 +380,7 @@
   z-index: 4;
 }
 
-/* Inside product modals the close ✕ owns the top-right corner — move the
+/* Inside product modals the close ✕ owns the top-right corner, move the
    wishlist heart to the top-left so the two controls never overlap. */
 .nj-heart.on-image.on-modal { left: 0.7rem; right: auto; }
 

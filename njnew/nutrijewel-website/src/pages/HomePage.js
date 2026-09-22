@@ -10,7 +10,7 @@ import TestimonialsSection from '../components/TestimonialsSection';
 import ReelsSection from '../components/ReelsSection';
 import JoinCommunity from '../components/JoinCommunity';
 import WorkshopUpdates from '../components/WorkshopUpdates';
-// Birthday "Spin & Win" campaign — disabled. Un-comment the import + the render below to re-enable.
+// Birthday "Spin & Win" campaign, disabled. Un-comment the import + the render below to re-enable.
 // import BirthdayOfferPopup from '../components/birthday/BirthdayOfferPopup';
 // import { CAMPAIGN_LIVE } from '../data/birthdayOffers';
 
@@ -27,7 +27,7 @@ const HomePage = () => {
       {/* <InstagramFeed /> replaced by ReelsSection */}
       <ReelsSection />
       <WorkshopUpdates />
-      {/* Birthday "Spin & Win" campaign — disabled. Re-enable by un-commenting the import above and the line below. */}
+      {/* Birthday "Spin & Win" campaign, disabled. Re-enable by un-commenting the import above and the line below. */}
       {/* {CAMPAIGN_LIVE && <BirthdayOfferPopup />} */}
     </div>
   );

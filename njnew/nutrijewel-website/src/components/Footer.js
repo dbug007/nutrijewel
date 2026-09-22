@@ -76,7 +76,7 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* Contact Form — removed per request; {false &&} guard keeps the markup for easy re-enable */}
+              {/* Contact Form: removed per request; {false &&} guard keeps the markup for easy re-enable */}
               {false && (
               <div className="contact-form-container">
                 <form className="contact-form">

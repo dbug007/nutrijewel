@@ -1,7 +1,7 @@
 export const smoothEase = [0.22, 1, 0.36, 1];
 
 /* Shared elegant crossfade for auto-rotating / swappable images.
-   Pure opacity dissolve (no lateral motion) — calm and premium. */
+   Pure opacity dissolve (no lateral motion), calm and premium. */
 export const imageCrossfade = {
   enter: { opacity: 0 },
   center: { opacity: 1 },

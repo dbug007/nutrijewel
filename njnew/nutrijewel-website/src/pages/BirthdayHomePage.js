@@ -9,7 +9,7 @@ import JoinCommunity from '../components/JoinCommunity';
 import WorkshopUpdates from '../components/WorkshopUpdates';
 import BirthdayOfferPopup from '../components/birthday/BirthdayOfferPopup';
 
-/* Test clone of HomePage — identical sections + the birthday "spin to win"
+/* Test clone of HomePage: identical sections + the birthday "spin to win"
    notification and a persistent floating "Spin & Win" badge. */
 const BirthdayHomePage = () => {
   return (

@@ -108,15 +108,13 @@ const ProductsPage = () => {
   };
 
   const getProductsForCategory = (categoryName) => {
-    // Out-of-season stock (plum cake, thandai) keeps its data but leaves the shop
-    // until it is back. Flip outOfSeason in products.data.js to bring it back.
-    let prods = products.filter(p => p.category === categoryName && !p.outOfSeason);
+    let prods = products.filter(p => p.category === categoryName);
     if (activeFilters.includes('bestSeller'))   prods = prods.filter(p => p.isBestSeller);
     if (activeFilters.includes('chefsSpecial')) prods = prods.filter(p => p.isChefsSpecial);
 
-    // "Coming Soon" items always sit at the end of every category.
-    const available  = prods.filter(p => !p.comingSoon);
-    const comingSoon = prods.filter(p => p.comingSoon);
+    // Anything you cannot buy today sits at the end of its category.
+    const available  = prods.filter(p => !p.comingSoon && !p.outOfSeason);
+    const comingSoon = prods.filter(p => p.comingSoon || p.outOfSeason);
 
     if (sortBy === 'price-asc')       available.sort((a, b) => getProductPrice(a) - getProductPrice(b));
     else if (sortBy === 'price-desc') available.sort((a, b) => getProductPrice(b) - getProductPrice(a));
@@ -136,6 +134,13 @@ const ProductsPage = () => {
   const handleVariantChange = useCallback((productId, variant) => {
     setSelectedVariants(prev => ({ ...prev, [productId]: variant }));
   }, []);
+
+  /* Not sold today, but people still ask. Give them a way to, rather than a
+     dead end. */
+  const handleAskSeasonal = (product) => {
+    const msg = `Hi! Is ${product.displayName || product.name} available, or when does it come back? I'd like to order some.`;
+    window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
+  };
 
   /* Quoted per order, so ask rather than state a price. */
   const handleAskPrice = (product) => {
@@ -286,7 +291,7 @@ const ProductsPage = () => {
                         }}
                       >
                         {/* Image band with pastel background */}
-                        <div className={`card-image-band${product.comingSoon ? ' is-coming-soon' : ''}`}>
+                        <div className={`card-image-band${product.comingSoon || product.outOfSeason ? ' is-coming-soon' : ''}`}>
                           <AnimatePresence initial={false} custom={1} mode="sync">
                             <motion.img
                               key={`${product.id}-${getProductImageIndex(product)}`}
@@ -317,16 +322,21 @@ const ProductsPage = () => {
                             {product.isChefsSpecial && <span className="product-card-flag chef" title="Chef's Special">🧑‍🍳</span>}
                           </div>
                           {product.comingSoon && <div className="coming-soon-overlay"><span>Coming Soon</span></div>}
+                          {product.outOfSeason && <div className="coming-soon-overlay"><span>Off Season</span></div>}
                           <WishlistHeart productId={product.id} className="on-image" />
                         </div>
 
                         {/* Card content */}
                         <div className="card-content">
                           <h3 className="card-name">{product.name}</h3>
-                          {product.comingSoon || product.priceOnRequest ? (
+                          {product.comingSoon || product.priceOnRequest || product.outOfSeason ? (
                             <div className="card-pricing">
                               <span className="card-coming-soon">
-                                {product.priceOnRequest ? 'Price on request' : 'Coming Soon'}
+                                {product.priceOnRequest
+                                  ? 'Price on request'
+                                  : product.outOfSeason
+                                    ? 'Off season, ask us'
+                                    : 'Coming Soon'}
                               </span>
                             </div>
                           ) : (
@@ -356,6 +366,10 @@ const ProductsPage = () => {
                               ) : product.priceOnRequest ? (
                                 <button className="product-buy-btn" onClick={() => handleAskPrice(product)}>
                                   Ask price on WhatsApp
+                                </button>
+                              ) : product.outOfSeason ? (
+                                <button className="product-buy-btn" onClick={() => handleAskSeasonal(product)}>
+                                  Ask about availability
                                 </button>
                               ) : (
                                 <>

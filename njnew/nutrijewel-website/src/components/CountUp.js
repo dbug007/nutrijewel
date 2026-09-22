@@ -4,7 +4,7 @@ import { useReducedMotion } from 'motion/react';
 /**
  * Animated number that counts from 0 up to `value` once it scrolls into view
  * (fires once). Respects prefers-reduced-motion by showing the final value
- * immediately. Keeps the surrounding markup/classes intact — drop it in place
+ * immediately. Keeps the surrounding markup/classes intact, drop it in place
  * of a static stat number.
  *
  * <CountUp value={100} suffix="%" />        -> 100%

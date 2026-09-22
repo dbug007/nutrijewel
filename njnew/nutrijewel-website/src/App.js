@@ -19,7 +19,7 @@ import { HAMPERS_ENABLED } from './data/hampers';
 import ServicesPage from './pages/ServicesPage';
 import RecipesBlogPage from './pages/RecipesBlogPage';
 import ContactPage from './pages/ContactPage';
-// Birthday "Spin & Win" campaign — disabled. Un-comment to re-enable the wheel route.
+// Birthday "Spin & Win" campaign, disabled. Un-comment to re-enable the wheel route.
 // import SpinWheelPage from './pages/SpinWheelPage';
 // import { CAMPAIGN_LIVE } from './data/birthdayOffers';
 // import ThandaiCakePopup from './components/ThandaiCakePopup';

@@ -1,4 +1,4 @@
-/* Birthday "Spin & Win" — single source of truth for the promo wheel.
+/* Birthday "Spin & Win": single source of truth for the promo wheel.
    Tweak prizes, odds (weight = slice size = win probability), colors, coupon
    codes, and birthday details here. The wheel, the popup, the win modal and
    the page all read from this file, so nothing else needs editing to rebrand

@@ -97,7 +97,7 @@ const MissionVision = () => {
           </motion.div>
         </motion.div>
 
-        {/* Core Values — interactive pyramid */}
+        {/* Core Values: interactive pyramid */}
         <motion.div className="core-values" variants={cardVariants}>
           <h3 className="core-values-title">Our Core Values</h3>
           <p className="core-values-hint">Hover or tap a value to reveal what it means to us</p>

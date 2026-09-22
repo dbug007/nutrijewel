@@ -203,7 +203,7 @@
   background-color: rgba(147, 181, 89, 0.12);
 }
 
-/* "New" badge — used on the Hampers nav entry (desktop + mobile) */
+/* "New" badge: used on the Hampers nav entry (desktop + mobile) */
 .navbar-new-pill {
   display: inline-block;
   margin-left: 0.3rem;
@@ -619,7 +619,7 @@
                 box-shadow 0.35s var(--ease-smooth);
   }
 
-  /* minimal — at the very top: transparent, logo only */
+  /* minimal: at the very top: transparent, logo only */
   .navbar.navbar--home.is-minimal {
     transform: translateY(0);
     background-color: transparent;
@@ -635,7 +635,7 @@
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
   }
 
-  /* revealed — scrolling up: solid navbar, sits just below the marquee */
+  /* revealed: scrolling up: solid navbar, sits just below the marquee */
   .navbar.navbar--home.is-revealed {
     transform: translateY(var(--nj-marquee-height, 1.95rem));
     background-color: var(--nj-cream);
@@ -643,7 +643,7 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   }
 
-  /* hidden — scrolling down: slide the whole bar away */
+  /* hidden: scrolling down: slide the whole bar away */
   .navbar.navbar--home.is-hidden {
     transform: translateY(-110%);
     background-color: var(--nj-cream);
@@ -678,7 +678,7 @@
                 border-color 0.4s var(--ease-smooth),
                 box-shadow 0.4s var(--ease-smooth);
   }
-  /* minimal — transparent over the hero, light contents */
+  /* minimal: transparent over the hero, light contents */
   .navbar.navbar--home.is-minimal {
     transform: translateY(0);
     background-color: transparent;
@@ -694,14 +694,14 @@
   .navbar.navbar--home.is-minimal .navbar-logo-icon {
     filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
   }
-  /* revealed — solid cream, just below the marquee */
+  /* revealed: solid cream, just below the marquee */
   .navbar.navbar--home.is-revealed {
     transform: translateY(var(--nj-marquee-height, 2.15rem));
     background-color: var(--nj-cream);
     border-bottom-color: rgba(147, 181, 89, 0.1);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   }
-  /* hidden — slide away on scroll down */
+  /* hidden: slide away on scroll down */
   .navbar.navbar--home.is-hidden {
     transform: translateY(-110%);
     background-color: var(--nj-cream);
@@ -744,7 +744,7 @@
 }
 
 /* ── Desktop inner pages (Products, About, Services, …): solid sticky bar that
-   auto-hides on scroll-down and reveals on scroll-up — same instinct as the
+   auto-hides on scroll-down and reveals on scroll-up, same instinct as the
    homepage, minus the transparent-over-hero treatment. ── */
 @media (min-width: 768px) {
   .navbar.navbar--scroll {

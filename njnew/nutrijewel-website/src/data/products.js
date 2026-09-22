@@ -5,7 +5,7 @@ const normalizeProductImages = (product) => ({
   images: product.image ? [product.image, product.image] : product.images
 });
 
-/* Allergen "Contains" info per product. ⚠️ OWNER: please review and complete these —
+/* Allergen "Contains" info per product. ⚠️ OWNER: please review and complete these,
    only clearly-evident allergens are pre-filled. A shared-kitchen cross-contamination
    advisory is shown on every product page regardless of this map. */
 const ALLERGENS = {

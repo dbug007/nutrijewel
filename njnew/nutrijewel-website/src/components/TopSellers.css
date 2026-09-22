@@ -11,7 +11,7 @@
   );
 }
 
-/* Mobile: the shelf is shorter than the old carousel — tighten the trailing gap */
+/* Mobile: the shelf is shorter than the old carousel, tighten the trailing gap */
 @media (max-width: 767px) {
   .top-sellers-section { padding: 1.5rem 0 2.5rem; }
   .view-all-container { margin-top: 1.5rem; }
