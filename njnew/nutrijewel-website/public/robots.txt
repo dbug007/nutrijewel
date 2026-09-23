@@ -2,7 +2,9 @@
 # https://nutrijewel.com
 User-agent: *
 Allow: /
+Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
 Disallow: /private/
 
 # Sitemap

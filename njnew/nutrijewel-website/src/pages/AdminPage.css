@@ -1,0 +1,207 @@
+/* Order desk. Phone layout first, desktop as the adaptation.
+   Every tap target is at least 44px, per the site's standing rule. */
+
+.njad {
+  --ad-bg: #f7f7f5;
+  --ad-card: #ffffff;
+  --ad-line: #e6e5e0;
+  --ad-ink: #1f2420;
+  --ad-mute: #6b7169;
+  min-height: 100dvh;
+  min-height: 100vh; /* fallback for browsers without dvh */
+  background: var(--ad-bg);
+  color: var(--ad-ink);
+  padding: 1rem 1rem 4rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- sign in ---------- */
+.njad-signin {
+  max-width: 24rem;
+  margin: 12vh auto 0;
+  background: var(--ad-card);
+  border: 1px solid var(--ad-line);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.njad-signin h1 { font-size: 1.25rem; margin: 0; font-family: 'Playfair Display', serif; }
+
+.njad-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--ad-line);
+  border-radius: 10px;
+  font-size: 16px; /* under 16px iOS zooms the whole page on focus */
+  background: #fff;
+  color: var(--ad-ink);
+}
+.njad-input:focus-visible { outline: 2px solid var(--nj-green, #93B559); outline-offset: 1px; }
+
+/* ---------- header ---------- */
+.njad-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.njad-head h1 { font-size: 1.4rem; margin: 0; font-family: 'Playfair Display', serif; }
+.njad-head-actions { display: flex; gap: 0.5rem; }
+
+.njad-icon-btn {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border: 1px solid var(--ad-line);
+  background: var(--ad-card);
+  border-radius: 10px;
+  color: var(--ad-ink);
+  cursor: pointer;
+}
+.njad-icon-btn:disabled { opacity: 0.5; }
+
+@keyframes njad-rotate { to { transform: rotate(360deg); } }
+.njad-spin { animation: njad-rotate 0.9s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .njad-spin { animation: none; } }
+
+/* ---------- stats ---------- */
+.njad-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.njad-stat {
+  background: var(--ad-card);
+  border: 1px solid var(--ad-line);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.njad-stat-n { font-size: 1.35rem; font-weight: 700; line-height: 1.1; }
+.njad-stat-l { font-size: 0.75rem; color: var(--ad-mute); }
+
+/* ---------- filters: a scrolling rail on a phone ---------- */
+.njad-filters {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 -1rem 1rem;
+  padding: 0 1rem 0.25rem;
+  scroll-snap-type: x proximity;
+}
+.njad-filters::-webkit-scrollbar { display: none; }
+.njad-chip {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 0.95rem;
+  border-radius: 999px;
+  border: 1px solid var(--ad-line);
+  background: var(--ad-card);
+  color: var(--ad-ink);
+  font-size: 0.875rem;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+.njad-chip.is-on { background: var(--ad-ink); color: #fff; border-color: var(--ad-ink); }
+
+/* ---------- order cards ---------- */
+.njad-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+
+.njad-card {
+  background: var(--ad-card);
+  border: 1px solid var(--ad-line);
+  border-radius: 14px;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.njad-card-top { display: flex; justify-content: space-between; gap: 0.75rem; align-items: flex-start; }
+.njad-card-right { text-align: right; display: grid; gap: 0.3rem; justify-items: end; }
+.njad-num { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.njad-total { margin: 0; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+
+.njad-pill {
+  display: inline-block;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: #eceae4;
+  color: #4a4f47;
+}
+.njad-pill--paid      { background: #e4f2dc; color: #3d5c2a; }
+.njad-pill--confirmed { background: #dbeaf6; color: #23506f; }
+.njad-pill--packed    { background: #f6ecd8; color: #715321; }
+.njad-pill--shipped   { background: #e6e2f5; color: #443a72; }
+.njad-pill--delivered { background: #d9efe2; color: #21573c; }
+.njad-pill--failed,
+.njad-pill--cancelled { background: #f7dedc; color: #7a2f28; }
+
+.njad-who { display: grid; gap: 0.25rem; }
+.njad-name { margin: 0; font-weight: 600; }
+.njad-addr { margin: 0; font-size: 0.85rem; color: var(--ad-mute); display: flex; gap: 0.3rem; align-items: flex-start; }
+.njad-link {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  min-height: 32px;
+  color: var(--ad-ink); text-decoration: none; font-size: 0.9rem;
+}
+.njad-link:hover { text-decoration: underline; }
+
+/* ---------- buttons ---------- */
+.njad-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.njad-btn {
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--ad-line);
+  background: var(--ad-card);
+  color: var(--ad-ink);
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
+}
+.njad-btn:disabled { opacity: 0.55; cursor: default; }
+.njad-btn-primary { background: var(--nj-green, #93B559); border-color: var(--nj-green, #93B559); color: #12200a; }
+.njad-btn-danger  { background: #fff; border-color: #d8b4b0; color: #8a3128; flex: 0 0 auto; }
+
+/* ---------- misc ---------- */
+.njad-muted { color: var(--ad-mute); margin: 0; }
+.njad-small { font-size: 0.8rem; }
+.njad-empty { text-align: center; color: var(--ad-mute); padding: 2.5rem 0; }
+.njad-error {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: #fdeceb; border: 1px solid #f0c8c4; color: #8a3128;
+  padding: 0.6rem 0.75rem; border-radius: 10px; font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+}
+
+/* ---------- desktop ---------- */
+@media (min-width: 768px) {
+  .njad { padding: 2rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+  .njad-stats { grid-template-columns: repeat(4, 1fr); }
+  .njad-list { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); align-items: start; }
+  .njad-head h1 { font-size: 1.75rem; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .njad {
+    --ad-bg: #141714;
+    --ad-card: #1d211d;
+    --ad-line: #2e332d;
+    --ad-ink: #eceee9;
+    --ad-mute: #9aa197;
+  }
+  .njad-input, .njad-chip, .njad-icon-btn, .njad-btn { background: var(--ad-card); color: var(--ad-ink); }
+  .njad-chip.is-on { background: var(--ad-ink); color: #141714; }
+  .njad-btn-danger { background: var(--ad-card); color: #f0a49c; border-color: #5c3a36; }
+}

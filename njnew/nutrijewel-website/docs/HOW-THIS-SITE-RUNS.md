@@ -5,7 +5,7 @@ detail. Last updated 2026-09-23.
 
 - [Where the code lives](#where-the-code-lives)
 - [Where we are right now](#where-we-are-right-now)
-- [DNS: exactly what to change](#dns-exactly-what-to-change)
+- [DNS: what actually needs to change](#dns-what-actually-needs-to-change)
 - [Razorpay KYC and the website audit](#razorpay-kyc-and-the-website-audit)
 - [How an order will work](#how-an-order-will-work)
 - [Where you get notified](#where-you-get-notified)
@@ -29,9 +29,10 @@ lives:
 | What the public sees | nutrijewel.com from GitHub Pages | **still GitHub Pages** |
 
 Cloudflare Pages is running at `https://nutrijewel.pages.dev` as a second copy.
-`nutrijewel.com` has not moved and will not until you change the nameservers.
-Both exist at once on purpose, so the switch is a decision rather than an
-accident.
+Cloudflare already runs your DNS, and `nutrijewel.com` is already proxied through
+Cloudflare, but its origin is still the old GitHub Pages build. Switching it to
+the Pages project is one action in the dashboard. Both exist at once on purpose,
+so the switch is a decision rather than an accident.
 
 ---
 
@@ -40,7 +41,7 @@ accident.
 | Phase | State |
 |---|---|
 | 0. Security and payload cleanup | **done** |
-| 1. Cloudflare Pages hosting | **done**, but DNS not switched |
+| 1. Cloudflare Pages hosting | **done**. One dashboard click left to point the domain at it |
 | 2. Checkout, pricing, database | **in progress** |
 | 3. Live payments and order tracking | not started, blocked on Razorpay KYC |
 | 4. Admin dashboard | not started |
@@ -65,108 +66,111 @@ Not done: the checkout page, the payment endpoints, the tracking page, the admin
 | Doc | What it covers |
 |---|---|
 | **this file** | the overview, and the answers to your questions |
-| [INFRASTRUCTURE.md](INFRASTRUCTURE.md) | Cloudflare account, resources, config files, DNS runbook |
+| [INFRASTRUCTURE.md](INFRASTRUCTURE.md) | Cloudflare account, resources, config files |
 | [../CLAUDE.md](../CLAUDE.md) | working rules for the repo, commands, traps |
 | `.claude/plans/` | the approved plan for this whole project |
 
 ---
 
-## DNS: exactly what to change
+## DNS: what actually needs to change
 
-**Read this whole section before touching anything.** There is one step that can
-break your email, and it fails silently.
+**Correction, 2026-09-23.** An earlier version of this doc said the nameservers
+were still Hostinger's and that moving them risked breaking your email. That was
+wrong: the first lookup hit a stale local DNS cache. The authoritative answer,
+checked against the `.com` delegation and against Cloudflare's own nameserver, is
+below. Nothing in the old runbook needs doing.
 
-### Where things stand
+### Where things actually stand
 
-Your domain is registered at **Hostinger**. Its nameservers are
-`ns1.dns-parking.com` and `ns2.dns-parking.com`, which are Hostinger's. So
-Cloudflare is **not** in charge of your DNS yet, even though the domain appears
-in your Cloudflare dashboard.
+**Cloudflare is already your nameserver.** The `.com` delegation points to
+`lila.ns.cloudflare.com` and `tosana.ns.cloudflare.com`, and the zone is active.
 
-Current live records:
-
-| Type | Value | What it does |
+| Record | Value | State |
 |---|---|---|
-| A | `185.199.108.153`, `.109`, `.110`, `.111` | points the site at GitHub Pages |
-| MX | `mx1.hostinger.com` (priority 5) | **receives your email** |
-| MX | `mx2.hostinger.com` (priority 10) | **backup mail server** |
-| TXT | `v=spf1 include:_spf.mail.hostinger.com ~all` | stops your email being marked spam |
+| NS | `lila` / `tosana.ns.cloudflare.com` | **already Cloudflare** |
+| A (apex) | `104.21.64.212`, `172.67.187.224` | Cloudflare proxy IPs, origin is GitHub Pages |
+| MX | `mx1.hostinger.com` (5), `mx2.hostinger.com` (10) | **already in Cloudflare** |
+| TXT | `v=spf1 include:_spf.mail.hostinger.com ~all` | **already in Cloudflare** |
 
-### The thing that can go wrong
+**Your email is not at risk.** The MX and SPF records are already served by
+Cloudflare, which is exactly what the old runbook was trying to achieve. There is
+nothing to copy across and no nameserver change to make at Hostinger.
 
-Changing nameservers moves **all** DNS for the domain to Cloudflare, not just the
-website. If the MX and TXT records above are not already in Cloudflare when you
-flip the nameservers, `hello@nutrijewel.com` stops receiving email immediately.
+`nutrijewel.com` and `www.nutrijewel.com` both answer with `server: cloudflare`
+and a CF-Ray header, but neither carries our Content-Security-Policy, which
+proves they are still being proxied through to the old GitHub Pages build rather
+than served from the Pages project.
 
-It fails quietly. You will not get an error. People emailing you get a bounce you
-never see, and you will assume nobody is writing to you.
+### Broken right now: DKIM is proxied
 
-### Step 1: add the email records to Cloudflare (safe, changes nothing yet)
+Found 2026-09-23 from the exported zone file. Five mail records are flagged
+`cf-proxied:true` (the orange cloud), and three of them must not be.
 
-Cloudflare is not authoritative yet, so nothing you add here goes live. This is
-staging the records so they are ready.
+| Record | Should be |
+|---|---|
+| `hostingermail-a._domainkey` | **DNS only** |
+| `hostingermail-b._domainkey` | **DNS only** |
+| `hostingermail-c._domainkey` | **DNS only** |
+| `autoconfig` | **DNS only** |
+| `autodiscover` | **DNS only** |
 
-1. Log in to Cloudflare, click the **nutrijewel.com** zone, then **DNS** in the
-   left menu.
-2. Check whether these already exist. Cloudflare often imports them
-   automatically when a domain is added. Add only what is missing.
-3. Add the first mail record: **Add record** → Type **MX**, Name `@`, Mail server
-   `mx1.hostinger.com`, Priority `5`, TTL Auto. Save.
-4. Add the second: Type **MX**, Name `@`, Mail server `mx2.hostinger.com`,
-   Priority `10`, TTL Auto. Save.
-5. Add the SPF record: Type **TXT**, Name `@`, Content exactly
-   `v=spf1 include:_spf.mail.hostinger.com ~all`. Save.
-6. Also check your Hostinger DNS panel for any other records you use: a DKIM TXT
-   record (often named something like `hostingermail._domainkey`), a DMARC TXT
-   record at `_dmarc`, or `autodiscover`. Copy across anything you find. If in
-   doubt, copy it: an extra record is harmless, a missing one is not.
+A proxied CNAME makes Cloudflare answer with its own IP addresses instead of
+resolving the target. That is the whole point of the orange cloud for web
+traffic, and it is wrong for mail records.
 
-> MX and TXT records are never proxied. If you see an orange cloud toggle, it
-> does not apply to these types.
+Verified: `hostingermail-a._domainkey.nutrijewel.com` currently resolves to
+`104.21.64.212` and `172.67.187.224`, which are Cloudflare proxy IPs. The record
+it is supposed to reach, `hostingermail-a.dkim.mail.hostinger.com`, holds
+`v=DKIM1;k=rsa;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...`.
 
-### Step 2: point the website at Cloudflare Pages
+**Consequence:** every email sent from `@nutrijewel.com` fails DKIM verification,
+because receiving servers cannot fetch the public key. Combined with the SPF
+record's `~all` softfail, that pushes mail towards spam folders. This has nothing
+to do with the payments work and is worth fixing today.
 
-Still in the Cloudflare dashboard:
+`autoconfig` and `autodiscover` being proxied breaks automatic mailbox setup in
+Outlook and Apple Mail for the same reason.
 
-1. Go to **Workers & Pages** → the **nutrijewel** project → **Custom domains**.
-2. **Set up a custom domain** → enter `nutrijewel.com` → Activate.
+**Fix:** Cloudflare dashboard → **nutrijewel.com** → **DNS** → **Records**. For
+each of the five, click the orange cloud so it turns grey and reads **DNS only**.
+Save. Nothing else changes; the records keep their values.
+
+Afterwards, send an email to a Gmail address, open it, choose "Show original" and
+confirm `DKIM: PASS`.
+
+> Rule of thumb: only records that serve web traffic on ports 80 and 443 should be
+> proxied. Mail records (MX, DKIM, SPF, DMARC, autoconfig, autodiscover) are
+> always DNS only. MX records cannot be proxied at all, which is why those two are
+> already correct.
+
+### The only step left
+
+One action, in the dashboard, because the API token here has `zone (read)` but not
+write, so this cannot be automated from the repo.
+
+1. Cloudflare dashboard → **Workers & Pages** → the **nutrijewel** project →
+   **Custom domains**.
+2. **Set up a custom domain**, enter `nutrijewel.com`, activate.
 3. Repeat for `www.nutrijewel.com`.
 
-Cloudflare creates the records and issues the TLS certificate itself. Because
-Cloudflare is not authoritative yet, these will sit as **pending** until step 3.
-That is expected and correct.
+Cloudflare updates the apex record to point at the Pages project and issues the
+certificate. Because Cloudflare already runs the DNS, this takes effect in
+seconds, not hours.
 
-### Step 3: switch the nameservers at Hostinger
+### Verify
 
-This is the live cutover and the only irreversible-feeling step.
+1. `https://nutrijewel.com` loads.
+2. It carries a `Content-Security-Policy` header. That is the proof it is being
+   served by the Pages project and not the old GitHub Pages origin, since that
+   header only exists in `public/_headers`.
+3. Send a test email to `hello@nutrijewel.com`. The MX records are untouched by
+   this change, but confirm anyway.
 
-1. Cloudflare will have given you two nameservers on the zone's overview page,
-   something like `lila.ns.cloudflare.com` and a second one. Copy both exactly.
-2. Log in to **Hostinger**, find the domain `nutrijewel.com`, open its DNS or
-   nameserver settings, choose **Use custom nameservers**, and replace what is
-   there with the two from Cloudflare.
-3. Save.
+### Rollback
 
-Propagation is usually a few minutes, occasionally up to 24 to 48 hours. During
-the change some visitors see the old host and some the new one. Both work, so
-there is no outage as long as step 1 was done.
-
-### Step 4: verify, in this order
-
-1. `https://nutrijewel.com` loads and looks right.
-2. `https://www.nutrijewel.com` reaches the same site.
-3. **Send an email from your phone to `hello@nutrijewel.com` and confirm it
-   arrives.** Do not skip this. Do it again a few hours later.
-4. Place a test order through the WhatsApp flow to confirm nothing else broke.
-
-### If something goes wrong
-
-Put the Hostinger nameservers back (`ns1.dns-parking.com`,
-`ns2.dns-parking.com`). Everything returns to how it is today. Keep those two
-names written down before you start.
-
-Only once email and the site are both confirmed working should the `gh-pages`
-branch be retired.
+The old GitHub Pages deployment is untouched on the `gh-pages` branch. Removing
+the custom domain from the Pages project restores the previous record. Keep
+`gh-pages` until the Pages version has run for a few days.
 
 ---
 
@@ -175,18 +179,49 @@ branch be retired.
 Razorpay does review the live website before approving payments, and they do
 reject sites. Here is what they look for and where you stand.
 
+### You do not need a company, and you do not need a business PAN
+
+NutriJewel is early and unregistered, and that is a normal way to start taking
+payments in India. Razorpay's business types include **Individual** and **Sole
+Proprietorship**, and both are onboarded on a **personal PAN**. There is no
+requirement to register a company first.
+
+Pick **Sole Proprietorship** if asked, since you trade under the name NutriJewel
+and hold a licence in that name. **Individual** also works and is sometimes
+quicker, but tends to carry lower transaction limits.
+
 ### Documents they will ask for
 
 | Item | Status |
 |---|---|
-| Business PAN card | you have this |
-| Bank account details plus a cancelled cheque | in your name or the business's |
-| Address proof for the business | |
+| **Personal PAN** | you have this. A business PAN is not needed |
+| Bank account plus a cancelled cheque or statement | see the note below |
+| Address proof (Aadhaar, utility bill, rent agreement) | personal address is fine |
 | **FSSAI licence** (required for food) | **21524037004182**, already published on the site |
-| GST certificate | only if you are registered. Tell me either way, it changes invoices |
+| GST certificate | **only if registered.** Not required below the turnover threshold |
 
-The name on the PAN, the bank account and the website must match. Mismatches are
-the most common rejection.
+**Your FSSAI licence is the strongest document you have.** It is government-issued
+proof that a real, inspected food business exists, which is exactly the doubt an
+underwriter is trying to resolve for a new unregistered merchant. It is already
+published on the site and in the structured data, which helps.
+
+**On the bank account:** Individual accounts can often settle to a personal
+savings account. Proprietorship usually wants a current account in the business
+name. If you only have a personal savings account today, start as Individual,
+get live, and upgrade later. Do not delay the application over this.
+
+**On GST:** not being registered is not a problem and is not a rejection reason.
+GST registration is only compulsory above the turnover threshold. Answer honestly
+that you are not registered. It also keeps invoices simpler: no tax line, no HSN
+codes.
+
+The name on the PAN, the bank account and the site's contact details should
+agree. Mismatches are the most common rejection, and that is within your control.
+
+**If Razorpay does decline an unregistered merchant**, Cashfree and Instamojo
+both onboard individuals, and Instamojo in particular is aimed at small sellers.
+The code does not care which gateway is used; only the payment endpoints would
+change. Do not go looking for an alternative before trying Razorpay, though.
 
 ### What they check on the website
 

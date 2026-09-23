@@ -28,8 +28,16 @@ Check with `npx wrangler whoami`. If it ever says logged out, run
 
 Nothing else in the account was touched.
 
-The D1 database is created but **empty and unused**. It exists for the orders
-work; no schema has been applied and nothing reads or writes it yet.
+The D1 database has its schema applied: `orders`, `order_items`, `webhook_events`
+and `order_events`. Money columns are INTEGER paise, and `orders` carries a CHECK
+constraint that `total_paise = items_paise + shipping_paise`, so a wrong total
+cannot be written even by buggy code. Schema lives in `migrations/0001_init.sql`.
+
+Apply or re-apply it with:
+
+```powershell
+npx wrangler d1 execute nutrijewel-orders --remote --file migrations/0001_init.sql
+```
 
 ## Hosting
 
@@ -82,56 +90,53 @@ does not need editing when payments land.
 - `public/CNAME`, which is how GitHub Pages learned the custom domain.
   Cloudflare takes the domain from its own dashboard instead.
 
-## DNS: not migrated, and why
+## DNS
 
-As of 2026-09-23 the domain is in a **split state**:
+Cloudflare is **already authoritative** for nutrijewel.com. The `.com` delegation
+points to `lila.ns.cloudflare.com` and `tosana.ns.cloudflare.com`, the zone is
+active, and the MX and SPF records for Hostinger email are already served from
+there.
 
-| Record | Value | Meaning |
-|---|---|---|
-| NS | `ns1.dns-parking.com`, `ns2.dns-parking.com` | Hostinger is authoritative, not Cloudflare |
-| A (apex) | `185.199.108-111.153` | GitHub Pages is still serving nutrijewel.com |
-| www | a `2606:4700:…` address | already resolving through Cloudflare |
-| MX | `mx1.hostinger.com` (5), `mx2.hostinger.com` (10) | **email is on Hostinger** |
-| TXT | `v=spf1 include:_spf.mail.hostinger.com ~all` | SPF for that email |
+An earlier version of this file claimed the nameservers were still Hostinger's
+and that a migration risked breaking email. That came from a stale local DNS
+cache and was wrong. There is no nameserver change to make.
 
-**The live site is still served by GitHub Pages.** Cloudflare Pages is deployed
-and working, but nothing points at it yet.
+`nutrijewel.com` answers with `server: cloudflare` but without our
+Content-Security-Policy header, so it is still proxying to the old GitHub Pages
+origin rather than serving the Pages project.
 
-### The email trap
-
-Moving nameservers to Cloudflare moves **all** DNS for the domain, not just the
-website. If the MX and SPF records above are not recreated in Cloudflare before
-the nameservers change, `hello@nutrijewel.com` stops receiving mail, and the
-failure is silent: senders get bounces you never see.
-
-### Cutover runbook
-
-Do these in order. Steps 1 and 2 are at Cloudflare, step 3 is at the registrar.
-
-1. In the Cloudflare dashboard, open the `nutrijewel.com` zone and confirm every
-   record above exists there, especially both MX records and the SPF TXT. Add
-   anything missing. Changing nothing yet is safe: Cloudflare is not
-   authoritative until step 3.
-2. Add `nutrijewel.com` and `www.nutrijewel.com` as custom domains on the
-   `nutrijewel` Pages project. Cloudflare creates the records and issues a
-   certificate.
-3. At **Hostinger**, where the domain is registered, replace the nameservers with
-   the two Cloudflare gave you. This is the only irreversible-feeling step and
-   the only one with downtime risk. Propagation is usually minutes, worst case
-   24 to 48 hours.
-4. Verify: `nutrijewel.com` loads from Pages, `www` redirects to it, and **send a
-   test email to `hello@nutrijewel.com` and confirm it arrives**.
-5. Only once all of that is confirmed, retire the `gh-pages` branch.
-
-Rollback at any point before step 5 is to put the Hostinger nameservers back.
+**One step remains**, in the dashboard, because the wrangler token here has
+`zone (read)` and no write: add `nutrijewel.com` and `www.nutrijewel.com` as
+custom domains on the `nutrijewel` Pages project. The full walkthrough and the
+verification are in [HOW-THIS-SITE-RUNS.md](HOW-THIS-SITE-RUNS.md).
 
 ## Deploying
 
 See `deploy.ps1` and the Commands section of `CLAUDE.md`.
 
+## API
+
+Pages Functions live in `functions/`, deployed with the site by the same
+`wrangler pages deploy`. Live now:
+
+| Endpoint | Method | Job |
+|---|---|---|
+| `/api/serviceability` | GET | pincode to zone, rate and delivery window |
+| `/api/checkout/quote` | POST | cart to authoritative totals |
+
+Both import `src/utils/serverPricing.js`. That file is CommonJS and the Functions
+runtime imports it cleanly, which was the main technical risk in this design:
+it means the shop, the prerender script and the API all price from one file
+instead of three implementations that drift.
+
+**The client never sends a price.** It sends `{productId, weight, qty}` and the
+server recomputes. Verified in production: the same cart with `unitPrice: 1`
+injected returns the same total as the honest one.
+
 ## Still to do
 
-- Apply a schema to `nutrijewel-orders`; it is empty
-- Pages Functions under `functions/api/` for checkout, none exist yet
+- Payment endpoints: create-order, verify, and the Razorpay webhook
+- `/checkout` page and `/orders/track`
+- Admin dashboard behind Cloudflare Access
 - Razorpay keys as Cloudflare encrypted environment variables, never in
   `REACT_APP_*`, because CRA inlines those into the public bundle

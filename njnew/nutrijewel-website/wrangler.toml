@@ -1,0 +1,23 @@
+# Cloudflare Pages project config.
+#
+# This account hosts other brands. Everything here is scoped to `nutrijewel` by
+# name, and `deploy.ps1` also passes --project-name explicitly. Do not remove
+# either safeguard.
+
+name = "nutrijewel"
+pages_build_output_dir = "build"
+compatibility_date = "2024-11-01"
+
+# The orders database. `env.DB` inside functions/ is this.
+[[d1_databases]]
+binding = "DB"
+database_name = "nutrijewel-orders"
+database_id = "40fa6476-cc41-4d5f-b264-8cbeb420e80b"
+
+# Secrets are NOT declared here. RAZORPAY_KEY_SECRET, RAZORPAY_WEBHOOK_SECRET and
+# ADMIN_TOKEN are set as encrypted environment variables on the Pages project:
+#
+#   npx wrangler pages secret put ADMIN_TOKEN --project-name nutrijewel
+#
+# They must never appear in this file, in .env, or in any REACT_APP_* variable,
+# because CRA inlines REACT_APP_* into the public bundle.
