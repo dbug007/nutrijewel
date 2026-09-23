@@ -130,13 +130,16 @@ npx gh-pages -d build -b nutrijewel-test
 `npm run deploy` targets `gh-pages`, which is **production**. Only run it on an
 explicit instruction.
 
-GitHub Pages serves one branch per repo, currently `gh-pages`. So a build pushed to
-`nutrijewel-test` is a reviewable snapshot with **no browsable URL**. Phone testing
-happens against the dev server.
+GitHub Pages serves one branch per repo, currently `gh-pages`. A build pushed to
+`nutrijewel-test` is a reviewable snapshot with **no browsable URL**. For phone
+testing prefer `.\deploy.ps1 -Cloudflare`, which publishes to
+`https://nutrijewel.pages.dev` and gives every deploy its own permanent URL. The
+dev server on 3366 still works for fast iteration.
 
-`public/CNAME` (`nutrijewel.com`) is copied into every build, so it lands on
-`nutrijewel-test` too. Inert while Pages points at `gh-pages`, but two branches
-claiming one custom domain would bite if Pages is ever repointed.
+`public/CNAME` has been **deleted**. GitHub Pages learned the custom domain from
+it; Cloudflare takes the domain from its own dashboard. Until the nameservers move
+(see the Cloudflare section), nutrijewel.com is still served by `gh-pages`, which
+keeps its own CNAME from the last build pushed there.
 
 There is no CI (`.github/workflows` does not exist), so pushing `main` does not
 deploy anything.
@@ -153,16 +156,19 @@ The web versions the site actually loads are the compressed files in
 
 ## Stack facts worth knowing
 
-- Create React App (`react-scripts` 5.0.1, unmaintained) + React 19. Static host,
-  **no backend**. Checkout is a prefilled WhatsApp message.
+- Create React App (`react-scripts` 5.0.1, unmaintained) + React 19. Checkout is
+  still a prefilled WhatsApp message. A backend is being added: Cloudflare Pages
+  Functions under `functions/`, with D1 for orders. Until that ships, treat the
+  site as static with no backend.
 - `products.data.js` and `hampers.data.js` are CommonJS so
   `scripts/create-static-routes.js` can `require` them at build time. The ESM
   wrappers `products.js` / `hampers.js` are what components import.
 - Several products are commented out inside `/* */` in `products.data.js`. The live
   catalogue is smaller than the file looks.
-- SPA routing on a static host works via the `404.html` redirect trick plus a
-  decoder in `index.html`, so deep links like `/hampers/diwali` resolve without
-  per-route files.
+- SPA routing: on Cloudflare Pages this is `public/_redirects` (`/* /index.html 200`).
+  The old GitHub Pages `404.html` trick and its `index.html` decoder are **gone**.
+  Deep links to products still hit real prerendered files from
+  `scripts/create-static-routes.js`; only unknown paths fall through to React.
 - CRA's Jest 27 cannot parse ESM-only packages. `package.json` carries a
   `transformIgnorePatterns` exception for `lenis` and maps `@number-flow/react` to
   a stub at `src/test/numberFlowMock.js`.
