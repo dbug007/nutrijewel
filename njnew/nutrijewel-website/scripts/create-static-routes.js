@@ -182,10 +182,13 @@ function main() {
   /* Hidden products get no prerendered page. Writing one would publish a
      Product JSON-LD Offer, so a ₹1 internal test item would be advertised to
      search engines. They still resolve at /products/<id> through the SPA. */
-  productCatalog.filter((p) => !p.hidden).forEach((product) => writeProductPage(product, sourceHtml));
+  const listed = productCatalog.filter((p) => !p.hidden);
+  listed.forEach((product) => writeProductPage(product, sourceHtml));
 
   console.log(`Created static route index files with SEO metadata for: ${routes.join(', ')}`);
-  console.log(`Created ${productCatalog.length} product detail pages with SEO + Product JSON-LD.`);
+  const skipped = productCatalog.length - listed.length;
+  console.log(`Created ${listed.length} product detail pages with SEO + Product JSON-LD`
+    + (skipped ? ` (${skipped} hidden product${skipped === 1 ? '' : 's'} skipped).` : '.'));
 }
 
 main();
