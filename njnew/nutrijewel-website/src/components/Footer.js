@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Instagram, MessageCircle } from 'lucide-react';
 import './Footer.css';
+import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
 
 const Footer = () => {
   const location = useLocation();
@@ -66,12 +67,16 @@ const Footer = () => {
                 </div>
 
                 <div className="contact-cta">
+                  {/* With online payment on, WhatsApp is for questions and custom
+                      orders, not the checkout. Same switch as the cart button. */}
                   <p className="contact-cta-text">
-                    Prefer to chat? Place your order and get instant answers on WhatsApp.
+                    {ONLINE_PAYMENTS_ENABLED
+                      ? 'Questions, custom orders or bulk gifting? Chat with us on WhatsApp.'
+                      : 'Prefer to chat? Place your order and get instant answers on WhatsApp.'}
                   </p>
                   <button className="whatsapp-btn" onClick={handleWhatsApp}>
                     <MessageCircle size={20} />
-                    <span>Order on WhatsApp</span>
+                    <span>{ONLINE_PAYMENTS_ENABLED ? 'Chat on WhatsApp' : 'Order on WhatsApp'}</span>
                   </button>
                 </div>
               </div>

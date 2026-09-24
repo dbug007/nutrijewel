@@ -11,6 +11,7 @@ import AddToCartButton from '../components/store/AddToCartButton';
 import WishlistHeart from '../components/store/WishlistHeart';
 import './ProductDetailPage.css';
 import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
+import useBuyNow from '../hooks/useBuyNow';
 
 const WHATSAPP = '919960637656';
 const SITE = 'https://nutrijewel.com';
@@ -41,7 +42,7 @@ function buildFaqs(product) {
     },
     {
       q: 'Do you deliver to my city?',
-      a: "We ship across India through trusted courier partners, and deliver fresh items locally around Pune. Share your pincode on WhatsApp and we'll confirm options and timing.",
+      a: "We ship across India through trusted courier partners, and deliver fresh items locally around Pune. Enter your pincode at checkout to see the delivery charge and timing straight away.",
     },
     {
       q: 'Can I customise, gift or order in bulk?',
@@ -304,6 +305,8 @@ export default function ProductDetailPage() {
   };
   const onMainClick = () => { if (!didSwipe.current) setLightboxOpen(true); };
 
+  const buyNow = useBuyNow();
+
   const buyOnWhatsApp = () => {
     const msg = `Hi! I'm interested in purchasing ${product.name} (${weight}) - ₹${price}. Can you please share availability and delivery details?`;
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -454,8 +457,8 @@ export default function ProductDetailPage() {
               ) : (
                 <>
                   <AddToCartButton product={product} variant={selectedVariant} className="full pdp-add" />
-                  <button className="pdp-buy" onClick={buyOnWhatsApp}>
-                    <ShoppingBag size={18} /> Buy on WhatsApp
+                  <button className="pdp-buy" onClick={() => buyNow(product, selectedVariant, buyOnWhatsApp)}>
+                    <ShoppingBag size={18} /> {ONLINE_PAYMENTS_ENABLED ? 'Buy now' : 'Buy on WhatsApp'}
                   </button>
                 </>
               )}

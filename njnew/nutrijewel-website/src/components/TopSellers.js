@@ -10,6 +10,7 @@ import { useAutoScroll } from '../hooks/useAutoScroll';
 import WishlistHeart from './store/WishlistHeart';
 import AddToCartButton from './store/AddToCartButton';
 import './TopSellers.css';
+import useBuyNow from '../hooks/useBuyNow';
 
 const TopSellers = () => {
   const navigate = useNavigate();
@@ -83,6 +84,8 @@ const TopSellers = () => {
     }
     return product.weight;
   };
+
+  const buyNow = useBuyNow();
 
   const handleWhatsApp = (product) => {
     const selectedVariant = selectedVariants[product.id];
@@ -229,7 +232,7 @@ const TopSellers = () => {
 
                   <div className="nj-cta-row">
                     <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
-                    <motion.button className="product-buy-btn" onClick={(e) => { e.stopPropagation(); handleWhatsApp(product); }} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
+                    <motion.button className="product-buy-btn" onClick={(e) => { e.stopPropagation(); buyNow(product, selectedVariants[product.id], () => handleWhatsApp(product)); }} whileHover={reduceMotion ? undefined : { scale: 1.02 }} whileTap={tapShrink}>
                       <ShoppingBag size={18} />
                       Buy Now
                     </motion.button>

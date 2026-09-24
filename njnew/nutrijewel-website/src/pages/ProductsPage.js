@@ -9,6 +9,7 @@ import { scrollToId } from '../lib/smoothScroll';
 import WishlistHeart from '../components/store/WishlistHeart';
 import AddToCartButton from '../components/store/AddToCartButton';
 import './ProductsPage.css';
+import useBuyNow from '../hooks/useBuyNow';
 
 const CATEGORIES = [
   { id: 'cakes',              name: 'Cakes',              emoji: '🎂' },
@@ -147,6 +148,8 @@ const ProductsPage = () => {
     const msg = `Hi! Could you tell me the price for ${product.name}? I'd like to order one.`;
     window.open(`https://wa.me/919960637656?text=${encodeURIComponent(msg)}`, '_blank');
   };
+
+  const buyNow = useBuyNow();
 
   const handlePurchase = (product) => {
     const sv = selectedVariants[product.id];
@@ -385,7 +388,7 @@ const ProductsPage = () => {
                                   </div>
                                   <div className="nj-cta-row">
                                     <AddToCartButton product={product} variant={selectedVariants[product.id]} className="full" />
-                                    <button className="product-buy-btn" onClick={() => handlePurchase(product)}>
+                                    <button className="product-buy-btn" onClick={() => buyNow(product, selectedVariants[product.id], () => handlePurchase(product))}>
                                       <ShoppingBag size={17} />
                                       Buy Now
                                     </button>

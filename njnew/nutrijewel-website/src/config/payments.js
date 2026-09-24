@@ -19,4 +19,6 @@
  * /checkout works regardless of this flag, reachable by typing the URL, so the
  * payment path can be tested before customers are pointed at it.
  */
-export const ONLINE_PAYMENTS_ENABLED = false;
+/* ON since 2026-09-24: KYC approved, live keys (rzp_live_) set on Cloudflare,
+   and a complete payment verified end to end in a real browser on test keys. */
+export const ONLINE_PAYMENTS_ENABLED = true;
