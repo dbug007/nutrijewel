@@ -30,15 +30,25 @@ describe('availabilityLabel', () => {
   });
 });
 
-/* These four were live on nutrijewel.com with a working Add to Cart, one of them
-   at zero. Pinned by id so they cannot quietly become buyable again. */
+/* These were live on nutrijewel.com with a working Add to Cart, one of them at
+   zero. Pinned by id so they cannot quietly become buyable again. */
 describe('the parked products stay unbuyable', () => {
-  it.each(['plum-cake', 'hummus', 'maharaja-cake', 'focaccia-bread'])('%s', (id) => {
+  it.each(['plum-cake', 'maharaja-cake', 'focaccia-bread'])('%s', (id) => {
     const product = byId(id);
     expect(product).toBeDefined();
     expect(isBuyable(product)).toBe(false);
     expect(availabilityLabel(product)).not.toBeNull();
   });
+});
+
+/* Hummus came off the seasonal shelf on the owner's word, at the price it last
+   sold for. Pinned so a stray edit to the price or the flag is noticed. */
+it('hummus is back in Dips & Spreads at Rs 250 for 200g', () => {
+  const hummus = byId('hummus');
+  expect(isBuyable(hummus)).toBe(true);
+  expect(hummus.category).toBe('Dips & Spreads');
+  expect(hummus.price).toBe(250);
+  expect(hummus.weight).toBe('200g');
 });
 
 /* Anything still buyable needs a real price, or it reaches the cart at zero. */

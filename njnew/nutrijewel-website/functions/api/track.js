@@ -1,11 +1,11 @@
-/* POST /api/track   { type: 'pageview' | 'event', path, ref, sid, event }
+/* POST /api/track   { type: 'pageview', path, ref, entry }  |  { type: 'event', event }
 
-   First-party analytics, sent by the browser only after the visitor accepted
-   analytics in the consent banner.
-
-   Designed so nothing identifying is ever written:
+   Cookie-free visitor counts, for every visitor. No consent is needed because
+   nothing written here is personal data (see migrations/0004_cookieless_visits.sql):
+     - no cookie, no session id, no identifier: rows cannot be linked together
+     - no IP address is stored. The rate limiter sees a keyed hash of it, and
+       that expires within a day (see _shared/rateLimit.js)
      - the user-agent is read to classify the device, then discarded
-     - no IP address is stored (it is used only for rate limiting, in memory)
      - the path loses its query string and fragment
      - the referrer is reduced to its host
    Bots and crawlers are dropped so they do not inflate the owner's numbers.
@@ -15,12 +15,9 @@
 
 import { rateLimit, clientIp } from '../_shared/rateLimit.js';
 
-/* `purchase` is here so conversion can be measured within ONE population. Paid
-   orders come from everyone, including people who declined analytics, while
-   visits come only from people who accepted. Dividing one by the other would
-   overstate conversion badly. Counting purchases from consenting visits keeps
-   every stage of the funnel on the same footing. */
-const EVENTS = ['add_to_cart', 'begin_checkout', 'purchase'];
+/* Paid orders are not an event here: they come from the orders table, which
+   covers everyone, as these counts now do too. */
+const EVENTS = ['add_to_cart', 'begin_checkout'];
 const BOT = /bot|crawl|spider|slurp|facebookexternalhit|embedly|preview|headless|lighthouse|pingdom|monitor|curl|wget|python|httpclient|axios/i;
 const SELF_HOSTS = ['nutrijewel.com', 'www.nutrijewel.com', 'nutrijewel.pages.dev'];
 const noContent = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
@@ -45,14 +42,17 @@ function cleanPath(p) {
   return trimmed || '/';
 }
 
-function referrerHost(ref) {
-  if (!ref) return null;
+/* The referring host, or null for "direct". `self` is true when the visitor came
+   from one of this site's own pages, which is never the start of a visit. */
+function referrer(ref) {
+  if (!ref) return { host: null, self: false };
   try {
     const host = new URL(ref).hostname.replace(/^www\./, '').toLowerCase();
-    if (!host || SELF_HOSTS.includes(host) || SELF_HOSTS.includes(`www.${host}`)) return null;
-    return host.slice(0, 80);
+    if (!host) return { host: null, self: false };
+    if (SELF_HOSTS.includes(host) || SELF_HOSTS.includes(`www.${host}`)) return { host: null, self: true };
+    return { host: host.slice(0, 80), self: false };
   } catch (_) {
-    return null;
+    return { host: null, self: false };
   }
 }
 
@@ -62,8 +62,10 @@ export async function onRequestPost({ request, env }) {
   const ua = request.headers.get('user-agent') || '';
   if (!ua || BOT.test(ua)) return noContent();
 
-  // Generous for people, tight for anything flooding the stats.
-  const limited = await rateLimit(env, { action: 'track', key: clientIp(request), limit: 150, windowSeconds: 600 });
+  /* Generous for people, tight for anything flooding the stats. Its own bucket:
+     sharing 'track' with /api/orders/track meant a shopper who browsed twenty
+     pages was then refused when they looked up their order. */
+  const limited = await rateLimit(env, { action: 'beacon', key: clientIp(request), limit: 150, windowSeconds: 600 });
   if (limited) return noContent();
 
   let body;
@@ -74,9 +76,7 @@ export async function onRequestPost({ request, env }) {
   } catch (_) {
     return noContent();
   }
-
-  const sid = String(body.sid || '');
-  if (!/^[a-f0-9]{24,40}$/.test(sid)) return noContent();
+  if (!body || typeof body !== 'object') return noContent();
 
   const day = istDay();
 
@@ -84,20 +84,23 @@ export async function onRequestPost({ request, env }) {
     if (body.type === 'pageview') {
       const path = cleanPath(body.path);
       if (!path) return noContent();
+      /* The browser says whether this is the first page of the load; the server
+         still refuses to call it the start of a visit if it came from our own
+         pages. The source is only kept on entries, so it is first-touch. */
+      const ref = referrer(body.ref);
+      const entry = body.entry === true && !ref.self ? 1 : 0;
       const country = (request.cf && request.cf.country) ? String(request.cf.country).slice(0, 2) : null;
       await env.DB.prepare(
-        'INSERT INTO page_views (day, path, session_id, referrer, device, country) VALUES (?,?,?,?,?,?)'
-      ).bind(day, path, sid, referrerHost(body.ref), device(ua), country).run();
+        'INSERT INTO hits (day, path, entry, referrer, device, country) VALUES (?,?,?,?,?,?)'
+      ).bind(day, path, entry, entry ? ref.host : null, device(ua), country).run();
 
       // Keep about 13 months, then let it go. Housekeeping on roughly 1 hit in 200.
       if (Math.random() < 0.005) {
-        env.DB.prepare("DELETE FROM page_views WHERE day < date('now', '-400 days')").run().catch(() => {});
-        env.DB.prepare("DELETE FROM analytics_events WHERE day < date('now', '-400 days')").run().catch(() => {});
+        env.DB.prepare("DELETE FROM hits WHERE day < date('now', '-400 days')").run().catch(() => {});
+        env.DB.prepare("DELETE FROM hit_events WHERE day < date('now', '-400 days')").run().catch(() => {});
       }
     } else if (body.type === 'event' && EVENTS.includes(body.event)) {
-      await env.DB.prepare(
-        'INSERT INTO analytics_events (day, session_id, event) VALUES (?,?,?)'
-      ).bind(day, sid, body.event).run();
+      await env.DB.prepare('INSERT INTO hit_events (day, event) VALUES (?,?)').bind(day, body.event).run();
     }
   } catch (_) {
     // Analytics must never break the site. A write that fails is simply lost.

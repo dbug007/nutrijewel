@@ -353,6 +353,10 @@
   max-width: 90vw;
 }
 .nj-toast svg { color: var(--nj-mint); flex: 0 0 auto; }
+/* It only informs, nothing in it is tappable, so taps go straight through it.
+   With Add and Buy now on every card, it appeared exactly where the next tap
+   (Buy now, or + on the stepper) was about to land, and swallowed it. */
+.nj-toast { pointer-events: none; }
 
 /* ---- Wishlist heart (on product cards/modals) ---- */
 .nj-heart {

@@ -1,20 +1,33 @@
 /* GET /api/admin/traffic?days=30
 
-   Visitor figures for the dashboard, from the site's own consented analytics.
+   Visitor figures for the dashboard, from the site's own cookie-free counts
+   (migrations/0004_cookieless_visits.sql), which cover every visitor.
 
-   Every stage of the funnel is counted from the SAME population: visitors who
-   accepted analytics. Paid orders from the orders table are deliberately not
-   used here, because they include people who declined, and dividing them by
-   consenting visits would overstate conversion.
+   Because visits now come from everyone, they can be set against the real paid
+   orders in the orders table. The earlier consent-only counts could not be: they
+   saw a small, self-selected slice of visitors, and dividing everyone's orders by
+   that slice overstated conversion badly.
 
-   Returns ok:false when the period has no visits at all, so the dashboard shows
-   nothing rather than a row of confident zeros. */
+   A visit is a page load that arrived from outside the site. With no identifier
+   there is no way to tell one person's two visits apart, so this is visits, not
+   unique people, and the dashboard says so.
+
+   Returns ok:false when the period has no page views at all, so the dashboard
+   shows an empty state rather than a row of confident zeros. */
 
 import { json, fail } from '../../_shared/http.js';
 import { requireAdmin, requireDb } from '../../_shared/admin.js';
 
 const ALLOWED_DAYS = [7, 30, 90];
 const IST_TODAY = "date('now', '+330 minutes')";
+/* The definition analytics.js uses for the "Paid orders" tile. */
+const PAID = "('paid','confirmed','packed','shipped','delivered')";
+const ORDER_DAY = "date(paid_at, '+330 minutes')";
+/* Orders only count from the first day visits were counted. Without this, the
+   first month after the counter went live divided a whole month of orders by a
+   few days of visits and reported conversion far too high. Once the counter has
+   run a full period, this changes nothing and the funnel's Paid matches the tile. */
+const SINCE_COUNTING = `${ORDER_DAY} >= (SELECT MIN(day) FROM hits)`;
 
 function istDays(days) {
   const t = new Date(Date.now() + 330 * 60000);
@@ -39,58 +52,65 @@ export async function onRequestGet(ctx) {
   const prevSince = `-${days * 2 - 1} days`;
   const inPeriod = `day >= date(${IST_TODAY}, ?)`;
   const inPrev = `day >= date(${IST_TODAY}, ?) AND day < date(${IST_TODAY}, ?)`;
+  const orderInPeriod = `${ORDER_DAY} >= date(${IST_TODAY}, ?)`;
+  const orderInPrev = `${ORDER_DAY} >= date(${IST_TODAY}, ?) AND ${ORDER_DAY} < date(${IST_TODAY}, ?)`;
 
-  let daily, pages, refs, devs, funnel, prevFunnel;
+  let daily, pages, refs, devs, countries, funnel, prev;
   try {
-    [daily, pages, refs, devs, funnel, prevFunnel] = await Promise.all([
-      DB.prepare(`SELECT day, COUNT(DISTINCT session_id) AS sessions, COUNT(*) AS views
-                    FROM page_views WHERE ${inPeriod} GROUP BY day ORDER BY day`).bind(since).all(),
-      DB.prepare(`SELECT path, COUNT(*) AS views FROM page_views WHERE ${inPeriod}
+    [daily, pages, refs, devs, countries, funnel, prev] = await Promise.all([
+      DB.prepare(`SELECT day, SUM(entry) AS visits, COUNT(*) AS views
+                    FROM hits WHERE ${inPeriod} GROUP BY day ORDER BY day`).bind(since).all(),
+      DB.prepare(`SELECT path, COUNT(*) AS views FROM hits WHERE ${inPeriod}
                    GROUP BY path ORDER BY views DESC LIMIT 8`).bind(since).all(),
-      /* First-touch: a visit belongs to wherever it ARRIVED from, its first page.
-         Grouping every page view by referrer instead counted one visit under
-         several sources (Instagram, then "Direct" for each page after), so the
-         sources added up to more visits than there were. */
-      DB.prepare(`SELECT COALESCE(referrer, 'Direct') AS source, COUNT(*) AS sessions FROM (
-                    SELECT referrer, ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY id) AS rn
-                      FROM page_views WHERE ${inPeriod}
-                  ) WHERE rn = 1 GROUP BY source ORDER BY sessions DESC LIMIT 6`).bind(since).all(),
-      DB.prepare(`SELECT COALESCE(device, 'unknown') AS device, COUNT(DISTINCT session_id) AS sessions
-                    FROM page_views WHERE ${inPeriod} GROUP BY device ORDER BY sessions DESC`).bind(since).all(),
+      // Only entries carry a source, so each visit is counted once, where it arrived from.
+      DB.prepare(`SELECT COALESCE(referrer, 'Direct') AS source, COUNT(*) AS visits
+                    FROM hits WHERE entry = 1 AND ${inPeriod}
+                   GROUP BY source ORDER BY visits DESC LIMIT 6`).bind(since).all(),
+      DB.prepare(`SELECT COALESCE(device, 'unknown') AS device, COUNT(*) AS visits
+                    FROM hits WHERE entry = 1 AND ${inPeriod}
+                   GROUP BY device ORDER BY visits DESC`).bind(since).all(),
+      DB.prepare(`SELECT COALESCE(country, '??') AS country, COUNT(*) AS visits
+                    FROM hits WHERE entry = 1 AND ${inPeriod}
+                   GROUP BY country ORDER BY visits DESC LIMIT 6`).bind(since).all(),
       DB.prepare(`SELECT
-           (SELECT COUNT(DISTINCT session_id) FROM page_views WHERE ${inPeriod}) AS sessions,
-           (SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE event='begin_checkout' AND ${inPeriod}) AS checkouts,
-           (SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE event='purchase' AND ${inPeriod}) AS paid`)
-        .bind(since, since, since).first(),
+           (SELECT COUNT(*) FROM hits WHERE entry = 1 AND ${inPeriod}) AS visits,
+           (SELECT COUNT(*) FROM hits WHERE ${inPeriod}) AS views,
+           (SELECT COUNT(*) FROM hit_events WHERE event = 'add_to_cart' AND ${inPeriod}) AS carts,
+           (SELECT COUNT(*) FROM hit_events WHERE event = 'begin_checkout' AND ${inPeriod}) AS checkouts,
+           (SELECT COUNT(*) FROM orders WHERE status IN ${PAID} AND paid_at IS NOT NULL AND ${orderInPeriod} AND ${SINCE_COUNTING}) AS paid`)
+        .bind(since, since, since, since, since).first(),
       DB.prepare(`SELECT
-           (SELECT COUNT(DISTINCT session_id) FROM page_views WHERE ${inPrev}) AS sessions,
-           (SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE event='purchase' AND ${inPrev}) AS paid`)
-        .bind(prevSince, since, prevSince, since).first(),
+           (SELECT COUNT(*) FROM hits WHERE entry = 1 AND ${inPrev}) AS visits,
+           (SELECT COUNT(*) FROM hits WHERE ${inPrev}) AS views,
+           (SELECT COUNT(*) FROM orders WHERE status IN ${PAID} AND paid_at IS NOT NULL AND ${orderInPrev} AND ${SINCE_COUNTING}) AS paid`)
+        .bind(prevSince, since, prevSince, since, prevSince, since).first(),
     ]);
   } catch (_) {
-    // The analytics tables are optional; without them there is simply no data yet.
+    // The tables arrive with migration 0004; without them there is simply no data yet.
     return json({ ok: false, reason: 'Visitor analytics is not set up yet.' });
   }
 
-  if (!funnel || !funnel.sessions) return json({ ok: false, reason: 'No visitor data in this period yet.' });
+  if (!funnel || !funnel.views) return json({ ok: false, reason: 'No visitor data in this period yet.' });
 
   const byDay = Object.fromEntries((daily.results || []).map((r) => [r.day, r]));
-  const totalDev = (devs.results || []).reduce((n, r) => n + r.sessions, 0) || 1;
+  const totalDev = (devs.results || []).reduce((n, r) => n + r.visits, 0) || 1;
 
   return json({
     ok: true,
     days,
     series: istDays(days).map((day) => ({
       day,
-      sessions: byDay[day] ? byDay[day].sessions : 0,
+      visits: byDay[day] ? byDay[day].visits || 0 : 0,
       views: byDay[day] ? byDay[day].views : 0,
     })),
+    totals: { visits: funnel.visits, views: funnel.views },
+    previous: { visits: prev.visits, views: prev.views },
     topPages: pages.results || [],
     referrers: refs.results || [],
-    devices: (devs.results || []).map((r) => ({ device: r.device, pct: Math.round((r.sessions / totalDev) * 100) })),
-    funnel: { sessions: funnel.sessions, checkouts: funnel.checkouts, paid: funnel.paid },
-    conversionPct: pct(funnel.paid, funnel.sessions),
-    previousConversionPct: pct(prevFunnel.paid, prevFunnel.sessions),
-    note: 'Counts only visitors who accepted analytics.',
+    countries: countries.results || [],
+    devices: (devs.results || []).map((r) => ({ device: r.device, pct: Math.round((r.visits / totalDev) * 100) })),
+    funnel: { visits: funnel.visits, carts: funnel.carts, checkouts: funnel.checkouts, paid: funnel.paid },
+    conversionPct: pct(funnel.paid, funnel.visits),
+    previousConversionPct: pct(prev.paid, prev.visits),
   });
 }

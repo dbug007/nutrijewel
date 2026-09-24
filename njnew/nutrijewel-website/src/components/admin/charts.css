@@ -6,8 +6,11 @@
  *                                                   only 2.33:1, too faint for a mark)
  *               dark  #7a9c3f  5.17:1 on #1d211d   (inside the dark lightness band,
  *                                                   where #93B559 is too bright)
- *   funnel      light #9dba66 > #6b8c34 > #3f5a1b  ordinal: one hue, monotone,
- *               dark  #3f5a1b > #6b8c34 > #9dba66  light end clears the surface
+ *   funnel      light #9dba66 > #7c9c45 > #5c7a2c > #3f5a1b  ordinal: one hue,
+ *               dark  #3f5a1b > #5c7a2c > #7c9c45 > #9dba66  monotone (every channel
+ *               steps down), endpoints unchanged from the validated 3-step ramp.
+ *               Each stage carries its label and value as text, so no step has
+ *               to be told from its neighbour by colour.
  *
  * Dark mode is its own set of steps from the same ramp, not an automatic flip.
  */
@@ -23,8 +26,9 @@
   --viz-area: rgba(107, 140, 52, 0.10);
   --viz-deemph: #b9bab2;
   --viz-f1: #9dba66;
-  --viz-f2: #6b8c34;
-  --viz-f3: #3f5a1b;
+  --viz-f2: #7c9c45;
+  --viz-f3: #5c7a2c;
+  --viz-f4: #3f5a1b;
   --viz-good: #2e7d32;
   --viz-bad: #b3261e;
 }
@@ -41,8 +45,9 @@
     --viz-area: rgba(122, 156, 63, 0.14);
     --viz-deemph: #525850;
     --viz-f1: #3f5a1b;
-    --viz-f2: #6b8c34;
-    --viz-f3: #9dba66;
+    --viz-f2: #5c7a2c;
+    --viz-f3: #7c9c45;
+    --viz-f4: #9dba66;
     --viz-good: #6fbf73;
     --viz-bad: #f2b8b5;
   }
@@ -114,6 +119,7 @@
 .viz-fstep-1 { background: var(--viz-f1); }
 .viz-fstep-2 { background: var(--viz-f2); }
 .viz-fstep-3 { background: var(--viz-f3); }
+.viz-fstep-4 { background: var(--viz-f4); }
 .viz-barvalue { font-size: 0.82rem; font-weight: 600; color: var(--viz-text-2); white-space: nowrap; }
 .viz-barsub { font-size: 0.74rem; color: var(--viz-text-3); }
 

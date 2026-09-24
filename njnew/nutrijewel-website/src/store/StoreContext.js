@@ -82,6 +82,12 @@ const initialState = {
 
 const clampQty = (q) => Math.max(1, Math.min(MAX_QTY, Math.round(q || 1)));
 
+const lineWeight = (product, variant) => (variant && variant.weight) || product.weight || 'one size';
+
+/* The cart line a product and size land in. One definition, so a card can ask
+   "is this already in the cart?" and get the same answer addToCart would. */
+export const cartLineKey = (product, variant) => `${product.id}__${lineWeight(product, variant)}`;
+
 function reducer(state, action) {
   switch (action.type) {
     case 'HYDRATE':
@@ -180,15 +186,15 @@ export function StoreProvider({ children }) {
     // Enforced at the store too, so a direct call cannot slip a product that
     // is not on sale into the cart behind the button's back.
     if (!isBuyable(product)) return;
-    trackAddToCart(product, variant, qty); // no-op without analytics consent
-    const weight = (variant && variant.weight) || product.weight || 'one size';
+    trackAddToCart(product, variant, qty); // counted without cookies; sent to GA only with consent
+    const weight = lineWeight(product, variant);
     const unitPrice = (variant && variant.price) != null ? variant.price : product.price;
     const originalPrice = (variant && variant.originalPrice) != null ? variant.originalPrice : product.originalPrice;
     const image = (product.images && product.images[0]) || product.image;
     dispatch({
       type: 'ADD_TO_CART',
       line: {
-        key: `${product.id}__${weight}`,
+        key: cartLineKey(product, variant),
         productId: product.id,
         name: product.displayName || product.name,
         image,

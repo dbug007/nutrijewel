@@ -68,6 +68,21 @@ describe('Buy Now', () => {
     expect(screen.getByTestId('cart')).toHaveTextContent('empty');
   });
 
+  /* Add then Buy now on the same card is a common double tap. It meant one
+     jar, and used to leave two in the cart. */
+  it('does not add a second one when that item is already in the cart', async () => {
+    window.localStorage.setItem('nj_store_v1', JSON.stringify({ cart: [{
+      key: `peanut-butter__${buyable.weight}`, productId: 'peanut-butter', name: 'PB',
+      weight: buyable.weight, unitPrice: buyable.price, qty: 1,
+    }], wishlist: [] }));
+    renderAt(buyable, jest.fn());
+    expect(screen.getByTestId('cart')).toHaveTextContent('peanut-butterx1');
+    fireEvent.click(screen.getByRole('button', { name: /buy now/i }));
+    await screen.findByText('CHECKOUT PAGE');
+    const saved = JSON.parse(window.localStorage.getItem('nj_store_v1'));
+    expect(saved.cart.find((l) => l.productId === 'peanut-butter').qty).toBe(1);
+  });
+
   it('never sends an off-season product to checkout, even with payments on', () => {
     const whatsapp = jest.fn();
     renderAt(offSeason, whatsapp);

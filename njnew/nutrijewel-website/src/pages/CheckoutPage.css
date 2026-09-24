@@ -4,7 +4,7 @@
 .njco {
   max-width: 62rem;
   margin: 0 auto;
-  padding: 1.25rem 1rem 7rem;   /* bottom room for the docked pay bar */
+  padding: 1.25rem 1rem 3rem;
   color: var(--nj-ink, #1f2420);
 }
 .njco h1 {
@@ -87,16 +87,11 @@
   font-size: 0.78rem; color: #6b7169; margin: 0.5rem 0 0;
 }
 
-/* On a phone the pay button is docked, so it is always reachable with a thumb. */
-@media (max-width: 767px) {
-  .njco-pay {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
-    background: rgba(255,255,255,0.97);
-    border-top: 1px solid #e6e5e0;
-    padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
-    backdrop-filter: blur(6px);
-  }
-}
+/* The pay button sits in the page, straight after the details it needs. It used
+   to be docked to the bottom of a phone screen, where the back-to-top button sat
+   on top of it and it covered the fields being typed into. Paying now comes at
+   the natural end of the form, once everything above it is filled in. */
+.njco-pay { margin-top: 0.4rem; }
 
 @keyframes njco-rotate { to { transform: rotate(360deg); } }
 .njco-spin { animation: njco-rotate 0.9s linear infinite; }

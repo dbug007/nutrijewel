@@ -737,6 +737,11 @@
 
 /* ── Mobile-specific page adjustments ── */
 @media (max-width: 767px) {
+  /* Cards in a row share a height; this keeps their Add / Buy now buttons on
+     one line across the row even when one name wraps to two lines. */
+  .product-card-new { display: flex; flex-direction: column; }
+  .product-card-new .card-content { flex: 1 1 auto; display: flex; flex-direction: column; }
+  .product-card-new .card-content .njqa { margin-top: auto; padding-top: 0.8rem; }
   .products-header { padding: 3.5rem 0 2.5rem; }
   .products-controls { padding: 1.1rem 0 0.9rem; }
   .category-pill-nav { padding: 0.85rem 0; }

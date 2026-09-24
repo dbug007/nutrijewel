@@ -7,6 +7,11 @@
   display: grid; gap: 0.7rem;
   box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
 }
+/* On the homepage it appears mid-scroll, so it eases in rather than popping. */
+.njcb { animation: njcb-in 0.28s ease-out; }
+@keyframes njcb-in { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .njcb { animation: none; } }
+
 .njcb-text { margin: 0; font-size: 0.88rem; line-height: 1.45; }
 .njcb-text a { color: #cfe3a8; text-decoration: underline; text-underline-offset: 2px; }
 

@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { products, allProducts } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
 import AddToCartButton from '../components/store/AddToCartButton';
+import QuickActions from '../components/store/QuickActions';
 import WishlistHeart from '../components/store/WishlistHeart';
 import './ProductDetailPage.css';
 import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
@@ -579,25 +580,31 @@ export default function ProductDetailPage() {
             <div className="pdp-related-grid">
               {related.map((rel) => {
                 const rp = lowestVariant(rel)?.price ?? rel.price;
+                /* The link and the buttons are siblings, not nested: a button
+                   inside a link is invalid HTML and screen readers read it as
+                   one confusing control. */
                 return (
-                  <Link key={rel.id} to={`/products/${rel.id}`} className="pdp-rel-card">
-                    <div className="pdp-rel-img">
-                      <img src={rel.image} alt={rel.name} loading="lazy" />
-                    </div>
-                    <div className="pdp-rel-body">
-                      <span className="pdp-rel-cat">{rel.category}</span>
-                      <h3 className="pdp-rel-name">{rel.displayName || rel.name}</h3>
-                      <span className="pdp-rel-price">
-                        {rel.priceOnRequest
-                          ? 'Price on request'
-                          : rel.outOfSeason
-                            ? 'Back soon'
-                            : rel.comingSoon
-                              ? 'Coming soon'
-                              : `₹${rp}`}
-                      </span>
-                    </div>
-                  </Link>
+                  <article key={rel.id} className="pdp-rel-card">
+                    <Link to={`/products/${rel.id}`} className="pdp-rel-link">
+                      <div className="pdp-rel-img">
+                        <img src={rel.image} alt={rel.name} loading="lazy" />
+                      </div>
+                      <div className="pdp-rel-body">
+                        <span className="pdp-rel-cat">{rel.category}</span>
+                        <h3 className="pdp-rel-name">{rel.displayName || rel.name}</h3>
+                        <span className="pdp-rel-price">
+                          {rel.priceOnRequest
+                            ? 'Price on request'
+                            : rel.outOfSeason
+                              ? 'Back soon'
+                              : rel.comingSoon
+                                ? 'Coming soon'
+                                : `₹${rp}`}
+                        </span>
+                      </div>
+                    </Link>
+                    <QuickActions product={rel} variant={lowestVariant(rel)} className="pdp-rel-qa" />
+                  </article>
                 );
               })}
             </div>

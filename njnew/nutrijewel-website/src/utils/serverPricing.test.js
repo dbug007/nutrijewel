@@ -24,7 +24,7 @@ describe('the client cannot set the price', () => {
 });
 
 describe('products that are not for sale', () => {
-  it.each(['plum-cake', 'hummus', 'maharaja-cake', 'focaccia-bread'])('refuses %s', (id) => {
+  it.each(['plum-cake', 'maharaja-cake', 'focaccia-bread'])('refuses %s', (id) => {
     const p = products.find((x) => x.id === id);
     const r = repriceCart([{ productId: id, weight: p.weight, qty: 1 }], { pincode: PIN_PUNE });
     expect(r.ok).toBe(false);
@@ -38,7 +38,8 @@ describe('products that are not for sale', () => {
   });
 
   it('rejects the whole basket, not just the bad line', () => {
-    const r = repriceCart([line(), { productId: 'hummus', weight: '1 pack', qty: 1 }], { pincode: PIN_PUNE });
+    const parked = products.find((x) => x.id === 'plum-cake');
+    const r = repriceCart([line(), { productId: parked.id, weight: parked.weight, qty: 1 }], { pincode: PIN_PUNE });
     expect(r.ok).toBe(false);
     expect(r.totalPaise).toBe(0);
   });

@@ -18,12 +18,26 @@ export function clientIp(request) {
   return request.headers.get('cf-connecting-ip') || 'unknown';
 }
 
+/* The key (an IP address, usually) is never written as it is. It goes in as an
+   HMAC under RATE_LIMIT_SECRET, which counts the same address the same way but
+   cannot be turned back into it, and the row is deleted within a day. Without
+   the secret it is still hashed, just with a public key, which only raises the
+   bar rather than closing it; production sets the secret. */
+async function hashedKey(env, key) {
+  const secret = (env && env.RATE_LIMIT_SECRET) || 'nutrijewel-rate-limit';
+  const enc = new TextEncoder();
+  const k = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode(String(key))));
+  return Array.from(sig.slice(0, 16), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 /* Returns null if the request may proceed, or a 429 Response. */
 export async function rateLimit(env, { action, key, limit, windowSeconds }) {
   if (!env || !env.DB) return null;
   const now = Math.floor(Date.now() / 1000);
   const windowStart = now - (now % windowSeconds);
-  const bucket = `${action}:${key}`;
+  let bucket;
+  try { bucket = `${action}:${await hashedKey(env, key)}`; } catch (_) { return null; } // fail open, see above
 
   let count;
   try {

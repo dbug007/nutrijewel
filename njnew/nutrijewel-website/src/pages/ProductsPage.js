@@ -8,6 +8,7 @@ import { imageCrossfade, imageFadeTransition } from '../components/motionPresets
 import { scrollToId } from '../lib/smoothScroll';
 import WishlistHeart from '../components/store/WishlistHeart';
 import AddToCartButton from '../components/store/AddToCartButton';
+import QuickActions from '../components/store/QuickActions';
 import './ProductsPage.css';
 import useBuyNow from '../hooks/useBuyNow';
 
@@ -358,6 +359,10 @@ const ProductsPage = () => {
                               <span className="card-weight">{getProductWeight(product)}</span>
                             </>
                           )}
+
+                          {/* Phone: buy straight from the card. Desktop has the fuller
+                              block below, with the size picker. */}
+                          {isMobile && <QuickActions product={product} variant={selectedVariants[product.id]} />}
 
                           {!isMobile && (
                             <div className="card-desktop-extra" onClick={(e) => e.stopPropagation()}>

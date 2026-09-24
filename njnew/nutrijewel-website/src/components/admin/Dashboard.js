@@ -8,10 +8,22 @@ import {
  * The owner's dashboard. One filter row above everything it scopes; every chart
  * and tile re-renders against the same period, so the numbers always agree.
  *
- * Sales come from real orders. Visitor figures come from the site's own consented
- * analytics and are shown only once there is data, so a new install does not
- * pretend to know something it does not.
+ * Sales come from real orders. Visitor figures come from the site's own
+ * cookie-free counts, which cover every visitor (see functions/api/track.js).
+ * With no identifier, a visit is a page load that arrived from outside the site:
+ * visits, not unique people, and the cards say so rather than overclaiming.
  */
+
+/* "IN" -> "India". Falls back to the code where the browser has no names. */
+let regionNames = null;
+try { regionNames = new Intl.DisplayNames(['en'], { type: 'region' }); } catch (_) { /* older browser */ }
+const countryName = (code) => {
+  if (!code || code === '??') return 'Unknown';
+  try { return (regionNames && regionNames.of(code)) || code; } catch (_) { return code; }
+};
+
+const DEVICE_LABEL = { mobile: 'Phone', tablet: 'Tablet', desktop: 'Computer', unknown: 'Unknown' };
+const oneDecimal = (n) => (Math.round(n * 10) / 10).toFixed(1);
 
 const RANGES = [
   { days: 7, label: 'Last 7 days', short: '7 days' },
@@ -130,21 +142,54 @@ export default function Dashboard({ api }) {
             </ChartCard>
           </div>
 
+          <h2 className="njdash-h">Visitors</h2>
+          {!traffic && (
+            <p className="njad-muted njdash-note">
+              No visits recorded in the {range.label.toLowerCase()} yet. Every visitor is counted, without
+              cookies, from the moment this counter went live.
+            </p>
+          )}
           {traffic && (
             <>
+              <section className="viz-stats" aria-label="Visitor figures">
+                <StatTile label="Visits" value={intFull(traffic.totals.visits)}
+                  current={traffic.totals.visits} previous={traffic.previous.visits}
+                  periodName={period} spark={traffic.series.map((d) => d.visits)} />
+                <StatTile label="Page views" value={intFull(traffic.totals.views)}
+                  current={traffic.totals.views} previous={traffic.previous.views}
+                  periodName={period} spark={traffic.series.map((d) => d.views)} />
+                <StatTile label="Pages per visit"
+                  value={traffic.totals.visits ? oneDecimal(traffic.totals.views / traffic.totals.visits) : 'n/a'}
+                  current={traffic.totals.visits ? traffic.totals.views / traffic.totals.visits : 0}
+                  previous={traffic.previous.visits ? traffic.previous.views / traffic.previous.visits : 0}
+                  periodName={period} />
+                <div className="viz-stat">
+                  <span className="viz-stat-label">On a phone</span>
+                  <span className="viz-stat-value">
+                    {`${(traffic.devices.find((d) => d.device === 'mobile') || { pct: 0 }).pct}%`}
+                  </span>
+                  <span className="viz-delta-vs">of visits</span>
+                </div>
+              </section>
+
               <div className="viz-grid-2">
                 <ChartCard
-                  title="Visitors" subtitle={`Unique visits per day. ${range.label}.`}
-                  table={{ columns: ['Day', 'Visits', 'Page views'], rows: traffic.series.map((d) => [shortDate(d.day), d.sessions, d.views]) }}
+                  title="Visits" subtitle={`Per day, India time. ${range.label}. Counted without cookies, so visits rather than unique people.`}
+                  table={{ columns: ['Day', 'Visits', 'Page views'], rows: traffic.series.map((d) => [shortDate(d.day), d.visits, d.views]) }}
                 >
-                  <AreaChart data={traffic.series} valueKey="sessions" formatAxis={(v) => intFull(v)}
+                  <AreaChart data={traffic.series} valueKey="visits" formatAxis={(v) => intFull(v)}
                     formatValue={(v) => `${intFull(v)} visit${v === 1 ? '' : 's'}`} label={`Visits per day, ${range.label}`}
                     emptyText="No visits recorded yet." />
                 </ChartCard>
 
-                <ChartCard title="From visit to paid order" subtitle="Where people drop off">
+                <ChartCard title="From visit to paid order" subtitle="Where people drop off"
+                  table={{ columns: ['Step', 'Count'], rows: [
+                    ['Visited', traffic.funnel.visits], ['Added to cart', traffic.funnel.carts],
+                    ['Started checkout', traffic.funnel.checkouts], ['Paid', traffic.funnel.paid],
+                  ] }}>
                   <Funnel stages={[
-                    { label: 'Visited', value: traffic.funnel.sessions },
+                    { label: 'Visited', value: traffic.funnel.visits },
+                    { label: 'Added to cart', value: traffic.funnel.carts },
                     { label: 'Started checkout', value: traffic.funnel.checkouts },
                     { label: 'Paid', value: traffic.funnel.paid },
                   ]} />
@@ -156,12 +201,22 @@ export default function Dashboard({ api }) {
                   table={{ columns: ['Page', 'Views'], rows: traffic.topPages.map((p) => [p.path, p.views]) }}>
                   <BarList rows={traffic.topPages} labelKey="path" valueKey="views" formatValue={intFull} />
                 </ChartCard>
-                <ChartCard title="Where visitors come from" subtitle="Referring site, and device"
-                  table={{ columns: ['Source', 'Visits'], rows: traffic.referrers.map((r) => [r.source, r.sessions]) }}>
-                  <BarList rows={traffic.referrers} labelKey="source" valueKey="sessions" formatValue={intFull} />
-                  <p className="njdash-devices">
-                    {traffic.devices.map((d) => `${d.device} ${d.pct}%`).join(' · ')}
-                  </p>
+                <ChartCard title="Where visitors come from" subtitle="The site each visit arrived from"
+                  table={{ columns: ['Source', 'Visits'], rows: traffic.referrers.map((r) => [r.source, r.visits]) }}>
+                  <BarList rows={traffic.referrers} labelKey="source" valueKey="visits" formatValue={intFull} />
+                </ChartCard>
+              </div>
+
+              <div className="viz-grid-2">
+                <ChartCard title="Countries" subtitle="Where visits come from, by country"
+                  table={{ columns: ['Country', 'Visits'], rows: traffic.countries.map((c) => [countryName(c.country), c.visits]) }}>
+                  <BarList rows={traffic.countries.map((c) => ({ ...c, name: countryName(c.country) }))}
+                    valueKey="visits" formatValue={intFull} />
+                </ChartCard>
+                <ChartCard title="Devices" subtitle="Share of visits"
+                  table={{ columns: ['Device', 'Share'], rows: traffic.devices.map((d) => [DEVICE_LABEL[d.device] || d.device, `${d.pct}%`]) }}>
+                  <BarList rows={traffic.devices.map((d) => ({ ...d, name: DEVICE_LABEL[d.device] || d.device }))}
+                    valueKey="pct" formatValue={(v) => `${v}%`} />
                 </ChartCard>
               </div>
             </>

@@ -1,0 +1,96 @@
+/* Quick Add / Buy now on product cards. Phone first.
+   Each control is at least 44px tall. The two sit side by side and wrap to a
+   stack when the card is too narrow for both (flex-basis does it, no media
+   query), which is what the two-up related-products grid needs at 375px. */
+
+.njqa {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.njqa > * { flex: 1 1 6.25rem; min-width: 0; }
+
+.njqa-btn {
+  min-height: 44px;
+  padding: 0 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: var(--nj-btn-radius, 12px);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;          /* no double-tap zoom delay on a quick tap */
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s var(--ease-smooth, ease), color 0.2s var(--ease-smooth, ease), transform 0.12s ease;
+}
+.njqa-btn:active { transform: scale(0.97); }
+
+/* Add is the main quick action: it keeps the shopper on the page. */
+.njqa-add {
+  background: var(--nj-olive);
+  color: #fff;
+  border: 1.5px solid var(--nj-olive);
+}
+.njqa-buy,
+.njqa-ask {
+  background: #fff;
+  color: var(--nj-olive);
+  border: 1.5px solid var(--nj-green);
+}
+
+@media (hover: hover) {
+  .njqa-add:hover { background: #5d7733; border-color: #5d7733; }
+  .njqa-buy:hover,
+  .njqa-ask:hover { background: var(--nj-mint); }
+}
+
+/* The stepper takes Add's place once the item is in the cart. */
+.njqa-stepper {
+  min-height: 44px;
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--nj-olive);
+  border-radius: var(--nj-btn-radius, 12px);
+  background: #fff;
+  overflow: hidden;
+}
+.njqa-step {
+  flex: 0 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: var(--nj-olive);
+  color: #fff;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.njqa-step:disabled { opacity: 0.45; cursor: default; }
+.njqa-qty {
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--nj-olive);
+  font-variant-numeric: tabular-nums;
+}
+
+.njqa-btn:focus-visible,
+.njqa-step:focus-visible {
+  outline: 2px solid var(--nj-olive);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .njqa-btn { transition: none; }
+  .njqa-btn:active { transform: none; }
+}

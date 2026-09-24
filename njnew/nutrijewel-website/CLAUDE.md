@@ -233,19 +233,31 @@ The web versions the site actually loads are the compressed files in
 
 ## Known outstanding
 
-- **Analytics is consent-gated (India's DPDP Act).** GA4 (`G-DH75XWLB6H`) no
+- **GA4 is consent-gated (India's DPDP Act).** GA4 (`G-DH75XWLB6H`) no
   longer loads from `public/index.html`; that file only sets Google Consent Mode
   to "denied". Everything lives in `src/lib/analytics.js`, the one place the
-  Measurement ID appears, and nothing is sent until the visitor clicks Accept in
-  `ConsentBanner`. **Never put a GA script tag back in `index.html`**: it would
-  track people who never agreed. Decline and Accept must stay the same size.
-- **First-party analytics** feeds the admin dashboard: `/api/track` writes to the
-  D1 tables `page_views` and `analytics_events`. It stores no IP, no user-agent,
-  no name, phone or email; query strings are stripped and referrers cut to their
-  host. Verified against the stored rows. Visitor sources are first-touch.
-- **Conversion uses one population.** Visits come only from consenting visitors,
-  so conversion is `purchase` events over visits from that same group, never all
-  paid orders over consenting visits (which would overstate it).
+  Measurement ID appears, and nothing goes to Google until the visitor clicks
+  Accept in `ConsentBanner`. **Never put a GA script tag back in `index.html`**:
+  it would track people who never agreed. Decline and Accept must stay the same
+  size. On the homepage the banner waits until the hero has scrolled clear.
+- **The site's own visit counter runs for everyone, with no consent**, because it
+  collects nothing personal: `/api/track` writes to D1 tables `hits` and
+  `hit_events` (migration 0004) with no cookie, no session id, no IP, no
+  user-agent. A visit is a page load arriving from outside the site, as
+  Cloudflare Web Analytics counts it, so the dashboard shows visits, not unique
+  people. **Never add an identifier to these tables**: the moment rows can be
+  linked, it is personal data and needs consent again. The older consent-only
+  tables `page_views` and `analytics_events` are no longer written.
+- **Headless browsers are dropped as bots** (`HeadlessChrome` matches the BOT
+  pattern in `functions/api/track.js`). Any Playwright test of analytics must set
+  a real phone user-agent, or it passes on stale rows.
+- **Conversion is paid orders over visits**, both covering everyone, counted only
+  from the first day `hits` has rows, so orders from before the counter existed
+  never inflate it.
+- **Rate-limit keys are HMAC-hashed** under the `RATE_LIMIT_SECRET` Pages secret,
+  so no raw IP is written to `rate_limits`. Each endpoint needs its own action
+  name: the beacon and `/api/orders/track` once shared `'track'`, so browsing
+  twenty pages locked a customer out of order tracking.
 - Imported hamper products are placeholder pricing, all flagged `isPlaceholder: true`.
   Confirm sourcing and set real prices before they can be ordered.
 - Hamper box prices and discount tiers are invented placeholders in
@@ -253,7 +265,7 @@ The web versions the site actually loads are the compressed files in
 - Desktop nav squeezes between 769px and 900px. The real fix is raising the
   hamburger threshold, which means untangling five interlocking media queries in
   `Navbar.css`.
-- `outOfSeason: true` parks a product (hummus, thandai, plum kiss) without deleting
+- `outOfSeason: true` parks a product (thandai, plum kiss) without deleting
   it: hidden from the shop and from hampers, all data intact, one word brings it
   back. `priceOnRequest: true` (focaccia) shows "Price on request" with a WhatsApp
   button, no Add to Cart, and publishes no Offer structured data.

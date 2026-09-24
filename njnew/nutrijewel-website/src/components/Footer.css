@@ -563,8 +563,14 @@
   }
 }
 /* "Cookie settings" is a button (it acts, it does not navigate), styled to sit
-   with the links around it. */
+   with the links around it. Only the button chrome is removed here. This used to
+   say `font: inherit; color: inherit`, which, coming after .footer-link, undid
+   its grey, its size and its light weight, so it stood out from its neighbours. */
 .footer-link-btn {
   background: none; border: 0; padding: 0; margin: 0;
-  font: inherit; color: inherit; cursor: pointer; text-align: left;
+  line-height: inherit; letter-spacing: inherit;
+  cursor: pointer; text-align: left;
+  -webkit-appearance: none; appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
+.footer-link-btn:focus-visible { outline: 2px solid var(--nj-green); outline-offset: 3px; border-radius: 2px; }

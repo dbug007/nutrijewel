@@ -4,24 +4,56 @@ import { getConsent, setConsent, onConsentChange } from '../lib/analytics';
 import './ConsentBanner.css';
 
 /*
- * Analytics consent, as India's DPDP Act expects.
+ * Consent for Google Analytics, as India's DPDP Act expects.
  *
- * Two rules this is held to, because they are where banners usually go wrong:
+ * Rules this is held to, because they are where banners usually go wrong:
  *   - Declining is exactly as easy as accepting: same size, side by side. A tiny
  *     grey "decline" beside a big green "accept" is not freely given consent.
  *   - It never blocks buying. It is not shown on /checkout, where it could cover
  *     the Pay button, nor on /admin.
+ *   - It never covers the homepage hero, the first thing anyone sees. There it
+ *     waits until the hero has scrolled clear of the bottom of the screen.
  *
- * Nothing is tracked until "Accept". The cart and admin sign-in are essential
- * and work either way.
+ * Google Analytics does not load until "Accept". The site's own visit counter
+ * runs either way because it uses no cookies and records nothing personal (see
+ * src/lib/analytics.js), and the banner says so rather than implying otherwise.
  */
 
 const HIDDEN_ON = ['/checkout', '/admin'];
+const HERO = '.hero-section';
+
+/* True while the homepage hero reaches into the bottom 30% of the screen, which
+   is where the banner docks. Waits for the hero to render, and gives up (showing
+   the banner) rather than hiding consent for good if it never appears. */
+function useHeroCoversDock(active) {
+  const [covers, setCovers] = useState(active);
+  useEffect(() => {
+    if (!active) { setCovers(false); return undefined; }
+    setCovers(true);
+    let io;
+    let timer;
+    let tries = 0;
+    const attach = () => {
+      const hero = document.querySelector(HERO);
+      if (!hero) {
+        if (tries < 20) { tries += 1; timer = setTimeout(attach, 250); } else setCovers(false);
+        return;
+      }
+      if (typeof IntersectionObserver === 'undefined') { setCovers(false); return; }
+      io = new IntersectionObserver(([e]) => setCovers(e.isIntersecting), { rootMargin: '-70% 0px 0px 0px' });
+      io.observe(hero);
+    };
+    attach();
+    return () => { clearTimeout(timer); if (io) io.disconnect(); };
+  }, [active]);
+  return covers;
+}
 
 export default function ConsentBanner() {
   const { pathname } = useLocation();
   const [choice, setChoice] = useState(() => getConsent());
   const ref = useRef(null);
+  const heroCovers = useHeroCoversDock(pathname === '/' && choice == null);
 
   useEffect(() => onConsentChange(setChoice), []);
 
@@ -32,7 +64,7 @@ export default function ConsentBanner() {
     return () => window.removeEventListener('nj:consent-reopen', reopen);
   }, []);
 
-  const visible = choice == null && !HIDDEN_ON.some((p) => pathname.startsWith(p));
+  const visible = choice == null && !heroCovers && !HIDDEN_ON.some((p) => pathname.startsWith(p));
 
   /* Lift the back-to-top button above the banner by exactly the banner's height,
      using the --nj-dock-h hook ScrollToTop already reads. */
@@ -51,8 +83,9 @@ export default function ConsentBanner() {
   return (
     <section ref={ref} className="njcb" role="dialog" aria-live="polite" aria-label="Cookie choice">
       <p className="njcb-text">
-        We use cookies to see which pages people visit, so we can make the shop better.
-        Your cart works either way. <a href="/privacy-policy">Privacy policy</a>
+        May we use Google Analytics? It sets cookies and helps us see how people shop,
+        so we can make the shop better. Our own visit count uses no cookies and runs
+        either way, and so does your cart. <a href="/privacy-policy">Privacy policy</a>
       </p>
       <div className="njcb-actions">
         <button type="button" className="njcb-btn" onClick={() => setConsent('denied')}>Decline</button>

@@ -9,6 +9,7 @@ import TiltCard from './TiltCard';
 import { useAutoScroll } from '../hooks/useAutoScroll';
 import WishlistHeart from './store/WishlistHeart';
 import AddToCartButton from './store/AddToCartButton';
+import QuickActions from './store/QuickActions';
 import './TopSellers.css';
 import useBuyNow from '../hooks/useBuyNow';
 
@@ -161,6 +162,7 @@ const TopSellers = () => {
                       <span className="original-price">₹{getProductOriginalPrice(product)}</span>
                     )}
                   </div>
+                  <QuickActions product={product} variant={selectedVariants[product.id]} />
                 </div>
               </article>
             ))}

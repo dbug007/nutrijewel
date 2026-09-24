@@ -206,20 +206,25 @@ sign in.
 
 | Piece | Where | What it does |
 |---|---|---|
-| Consent banner | `src/components/ConsentBanner.js` | Accept and Decline, same size; hidden on `/checkout` and `/admin` |
+| Consent banner | `src/components/ConsentBanner.js` | asks about **GA4 only**. Accept and Decline, same size. Hidden on `/checkout` and `/admin`; on the homepage it waits until the hero has scrolled away |
 | GA4 | `src/lib/analytics.js` | loads **only after Accept**, only on nutrijewel.com |
-| Own analytics | `/api/track`, tables `page_views`, `analytics_events` | visits, pages, sources, devices, funnel |
+| Own visit counter | `/api/track`, tables `hits`, `hit_events` (migration 0004) | visits, page views, pages, sources, countries, devices, funnel. **Every visitor, no cookies, no consent needed** |
 | Dashboard | `/admin`, Dashboard tab | sales and visitor graphs, India time |
 
-Verified in a real browser on the live site: declining sends **zero** requests
-to Google and records nothing; accepting loads GA4 and starts counting.
+The counter needs no consent because nothing it keeps is personal data: no
+cookie, no session id, no IP address, no user-agent string, no name, phone or
+email, no query strings, no full referrer URLs. Rows cannot be linked to each
+other, let alone to a person. A visit is a page load that arrived from outside
+the site (the Cloudflare Web Analytics definition), so the figures are visits,
+not unique people. Rows older than about 13 months are deleted.
 
-What is never stored: IP address, browser user-agent, name, phone, email, query
-strings, full referrer URLs. Visits expire after 30 minutes of inactivity. Rows
-older than about 13 months are deleted.
+Rate limiting stores a keyed hash of the IP (secret `RATE_LIMIT_SECRET`), never
+the IP itself, and deletes it within a day.
 
-A visitor who declines is not counted at all, so visitor figures are a sample
-of the people who agreed. Conversion is measured inside that same sample.
+Declining sends **zero** requests to Google (verified in a real browser). The
+tables from migration 0003 (`page_views`, `analytics_events`) belonged to the
+earlier consent-only counter, which saw so few visitors that the dashboard was
+nearly empty. They are no longer written and were left in place, not dropped.
 
 ## Still to do
 

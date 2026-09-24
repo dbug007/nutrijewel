@@ -259,7 +259,9 @@
 .njdash-status li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.9rem; padding: 0.3rem 0; border-bottom: 1px solid var(--ad-line); }
 .njdash-status li:last-child { border-bottom: 0; }
 .njdash-status strong { font-variant-numeric: tabular-nums; }
-.njdash-devices { margin: 0.75rem 0 0; font-size: 0.8rem; color: var(--ad-mute); }
+/* Separates the visitor figures from the sales ones above them. */
+.njdash-h { margin: 0.75rem 0 0; font-size: 1.05rem; font-weight: 700; }
+.njdash-note { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .njdash { transition: none; } }
 
 /* Google renders its own button; this only gives it room and centres it. */

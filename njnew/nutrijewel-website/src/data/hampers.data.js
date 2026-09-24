@@ -132,8 +132,6 @@ const PACKING_CATEGORY_BY_PRODUCT_ID = {
   // Moved to Seasonal, which maps to cake packing. It is still a bread.
   'focaccia-bread': 'bread',
   'granola-cookies': 'cookie',
-  // Sits in Seasonal, which otherwise maps to cake packing. It is a dip.
-  'hummus': 'dip',
 };
 
 /* Product category → packing category. The general rule. */
@@ -182,7 +180,11 @@ const OFFER_TIERS = [
  * transit. Remove an id from this list if you're happy to ship it in a hamper.
  * (comingSoon products are excluded automatically, no need to list them.)
  * ------------------------------------------------------------------ */
-const HAMPER_EXCLUDED_PRODUCT_IDS = [];
+const HAMPER_EXCLUDED_PRODUCT_IDS = [
+  // Fresh, needs the fridge. While it was parked as seasonal this list could be
+  // empty; back on sale, it would otherwise be offered in a gift box.
+  'hummus',
+];
 
 /* ------------------------------------------------------------------ *
  * Occasions. `presetIds` points at PRESET_HAMPERS below.

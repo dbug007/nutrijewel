@@ -1,23 +1,21 @@
 /*
- * Analytics and consent, in one place.
+ * Analytics and consent, in one place. Two destinations, held to different rules
+ * because they are different things:
  *
- * Nothing here runs until the visitor accepts analytics in the consent banner,
- * which is what India's DPDP Act expects for tracking. Declining is honoured
- * completely: no Google Analytics script is loaded, no first-party visit is
- * recorded, and the visit cookie is deleted.
+ *   1. The site's own /api/track, which feeds the admin dashboard. Runs for every
+ *      visitor, with no consent needed, because it collects nothing personal: no
+ *      cookie, no identifier, no IP, nothing that links one page view to another.
+ *      It counts visits the way Cloudflare Web Analytics does.
+ *   2. Google Analytics 4, which sets cookies and sends data to Google. Nothing
+ *      of it loads until the visitor taps Accept, which is what India's DPDP Act
+ *      expects. Declining is honoured completely.
  *
- * Two destinations, both gated on the same consent:
- *   1. Google Analytics 4, for the owner's GA dashboard and ecommerce funnel.
- *   2. The site's own /api/track, which feeds the admin dashboard's graphs.
- *
- * Essential things (the cart, the admin sign-in) do not depend on consent and
- * do not go through this file.
+ * Essential things (the cart, the admin sign-in) do not go through this file.
  */
 
 const GA_ID = 'G-DH75XWLB6H'; // the only place the Measurement ID lives now
 const CONSENT_KEY = 'nj_consent';
-const SID_COOKIE = 'nj_sid';
-const VISIT_SECONDS = 30 * 60; // a "visit" ends after 30 minutes of inactivity
+const OLD_SID_COOKIE = 'nj_sid'; // set by the earlier, consent-based counter; now only ever deleted
 
 // Only the real site is measured. Preview deployments on *.pages.dev share the
 // production database, so counting them would pollute the owner's real figures.
@@ -49,7 +47,6 @@ export function setConsent(value) {
   if (v === 'granted') {
     startGa();
   } else {
-    clearSid();
     if (hasWindow && window.gtag) {
       window.gtag('consent', 'update', { analytics_storage: 'denied' });
     }
@@ -59,27 +56,20 @@ export function setConsent(value) {
 
 const granted = () => getConsent() === 'granted';
 
-/* ---------- the visit cookie ---------- */
+/* ---------- what makes a visit ---------- */
 
-function randomSid() {
-  const b = new Uint8Array(16);
-  (window.crypto || window.msCrypto).getRandomValues(b);
-  return Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
-}
+/* The first page of a page load is the start of a visit, unless the visitor came
+   from one of this site's own pages (a link opened in a new tab, say). Every page
+   after it, in this single-page app, is a page view within the same visit. The
+   server checks the referrer again rather than trusting this. */
+let firstPageOfLoad = true;
 
-/* A first-party session cookie. Random, linked to no person, and it expires after
-   30 minutes without activity, so it counts visits rather than following anyone.
-   Refreshed on every hit, which is what makes those 30 minutes a rolling window. */
-function sid() {
-  const m = document.cookie.match(/(?:^|;\s*)nj_sid=([a-f0-9]{24,40})/);
-  const id = m ? m[1] : randomSid();
-  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-  document.cookie = `${SID_COOKIE}=${id}; Max-Age=${VISIT_SECONDS}; Path=/; SameSite=Lax${secure}`;
-  return id;
-}
+/* The shopping steps count once per page load, so a visitor tapping Add to Cart
+   five times is still one visit that added to cart. */
+const sentThisLoad = new Set();
 
-function clearSid() {
-  if (hasWindow) document.cookie = `${SID_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+function clearOldSid() {
+  if (hasWindow) document.cookie = `${OLD_SID_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
 }
 
 /* ---------- Google Analytics 4 ---------- */
@@ -105,9 +95,11 @@ function ga(...args) {
 
 /* ---------- first-party beacon ---------- */
 
+/* No consent check here, on purpose: see the top of this file. Nothing sent
+   identifies anyone. */
 function beacon(payload) {
-  if (!granted() || !measured()) return;
-  const body = JSON.stringify({ ...payload, sid: sid() });
+  if (!hasWindow || !measured()) return;
+  const body = JSON.stringify(payload);
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }));
@@ -122,12 +114,23 @@ function beacon(payload) {
 
 /* Resume a previous "yes" on the next visit, without asking again. */
 export function initAnalytics() {
+  clearOldSid();
   if (granted()) startGa();
+}
+
+function stepOncePerLoad(event) {
+  if (sentThisLoad.has(event)) return;
+  sentThisLoad.add(event);
+  beacon({ type: 'event', event });
 }
 
 export function trackPageview(path) {
   if (isAdminPath(path)) return; // the owner's own admin visits are not traffic
-  beacon({ type: 'pageview', path, ref: document.referrer || '' });
+  const entry = firstPageOfLoad;
+  firstPageOfLoad = false;
+  // Only the first page carries the referrer: after an in-app navigation,
+  // document.referrer still names wherever the visit began.
+  beacon({ type: 'pageview', path, entry, ref: entry ? (document.referrer || '') : '' });
   ga('event', 'page_view', { page_path: path, page_location: window.location.href });
 }
 
@@ -150,12 +153,12 @@ export function trackViewItem(product, variant) {
 export function trackAddToCart(product, variant, qty = 1) {
   if (!product) return;
   const item = gaItem(product, variant, qty);
-  beacon({ type: 'event', event: 'add_to_cart' });
+  stepOncePerLoad('add_to_cart');
   ga('event', 'add_to_cart', { currency: 'INR', value: item.price * qty, items: [item] });
 }
 
 export function trackBeginCheckout(lines, totalPaise) {
-  beacon({ type: 'event', event: 'begin_checkout' });
+  stepOncePerLoad('begin_checkout');
   ga('event', 'begin_checkout', {
     currency: 'INR',
     value: (totalPaise || 0) / 100,
@@ -164,8 +167,9 @@ export function trackBeginCheckout(lines, totalPaise) {
 }
 
 /* Amounts come from the server's quote, never recomputed in the browser. */
+/* Only to GA. The dashboard's paid orders come from the orders table itself,
+   which is exact and covers everyone. */
 export function trackPurchase({ orderNumber, amountPaise, shippingPaise, lines }) {
-  beacon({ type: 'event', event: 'purchase' });
   ga('event', 'purchase', {
     transaction_id: orderNumber,
     currency: 'INR',

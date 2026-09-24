@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import { scrollToTop as smoothScrollToTop } from '../lib/smoothScroll';
 import './ScrollToTop.css';
 
+/* Checkout is one short form ending in the Pay button; a floating button there
+   only ever sits on top of it. */
+const HIDDEN_ON = ['/checkout'];
+
 const ScrollToTop = () => {
+  const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -21,6 +27,8 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => smoothScrollToTop();
+
+  if (HIDDEN_ON.some((p) => pathname.startsWith(p))) return null;
 
   return (
     <>
