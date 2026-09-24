@@ -118,27 +118,75 @@ See `deploy.ps1` and the Commands section of `CLAUDE.md`.
 
 ## API
 
-Pages Functions live in `functions/`, deployed with the site by the same
-`wrangler pages deploy`. Live now:
+Pages Functions in `functions/`, deployed with the site by `wrangler pages deploy`.
 
-| Endpoint | Method | Job |
-|---|---|---|
-| `/api/serviceability` | GET | pincode to zone, rate and delivery window |
-| `/api/checkout/quote` | POST | cart to authoritative totals |
+| Endpoint | Method | Guarded by | Job |
+|---|---|---|---|
+| `/api/serviceability` | GET | none | pincode to zone, rate, delivery window |
+| `/api/checkout/quote` | POST | none | cart to authoritative totals |
+| `/api/checkout/create-order` | POST | rate limit, Turnstile* | reprice, create Razorpay order, write D1 row |
+| `/api/checkout/verify` | POST | Razorpay signature | browser reports a payment |
+| `/api/webhooks/razorpay` | POST | webhook signature | Razorpay reports a payment, authoritative |
+| `/api/orders/track` | POST | rate limit, phone match | customer order status |
+| `/api/admin/orders` | GET, POST | token, Access* | list orders, move status |
+| `/api/admin/stats` | GET | token, Access* | counts, revenue, alerts |
+| `/api/admin/refund` | POST | token, Access* | full refund through Razorpay |
+| `/api/admin/sweep` | POST | token, Access* | mark stale unpaid orders failed |
 
-Both import `src/utils/serverPricing.js`. That file is CommonJS and the Functions
-runtime imports it cleanly, which was the main technical risk in this design:
-it means the shop, the prerender script and the API all price from one file
-instead of three implementations that drift.
+\* only once configured, see below.
 
-**The client never sends a price.** It sends `{productId, weight, qty}` and the
-server recomputes. Verified in production: the same cart with `unitPrice: 1`
-injected returns the same total as the honest one.
+**The client never sends a price.** It sends `{productId, weight, qty}` and
+`src/utils/serverPricing.js` reprices. Verified in production: a cart with
+`unitPrice: 1` injected is charged in full.
+
+## Security layers, and what each was proven to do
+
+Each of these was tested for real, not mocked. Where a claim could be falsified
+it was: the code was sabotaged and the test confirmed it went red.
+
+| Layer | Proven |
+|---|---|
+| Server pricing | tampered prices ignored, off-season and zero-priced items refused |
+| Payment signature | genuine accepted; one changed character, forged, and empty all refused |
+| Refunds | refunded via Razorpay's real API; a second refund refused by us **and** by Razorpay when our check is bypassed |
+| Rate limit | exactly 20 tracking lookups allowed, 429 from the 21st with `Retry-After`; fails open when its table is missing |
+| Turnstile | enforced only when both keys are set; half-configured cannot break checkout |
+| Access JWT | 11 of 11 cases correct, including `alg: none`, HS256 confusion, and edited claims; removing the algorithm check lets HS256 confusion through |
+
+## Switching on the two optional layers
+
+Both are free and both stay off until configured. Neither can break checkout or
+the admin by being half set up.
+
+### Turnstile (bot check on checkout)
+
+1. Cloudflare dashboard, **Turnstile**, add a widget for `nutrijewel.com`.
+2. Set both as secrets, then redeploy:
+   ```powershell
+   npx wrangler pages secret put TURNSTILE_SITE_KEY --project-name nutrijewel
+   npx wrangler pages secret put TURNSTILE_SECRET --project-name nutrijewel
+   ```
+It only enforces when **both** exist. The page learns the site key from the
+server, so no rebuild is needed beyond the redeploy.
+
+### Google sign in for the admin (Cloudflare Access)
+
+1. Cloudflare **Zero Trust**, Access, Applications, add a self-hosted app covering
+   `nutrijewel.com/admin` and `nutrijewel.com/api/admin`.
+2. Add Google as the login method and allow only your own email.
+3. Copy the app's **Application Audience (AUD) tag**, then set:
+   ```powershell
+   npx wrangler pages secret put ACCESS_TEAM_DOMAIN --project-name nutrijewel   # e.g. nutrijewel.cloudflareaccess.com
+   npx wrangler pages secret put ACCESS_AUD --project-name nutrijewel
+   ```
+4. Redeploy. From then on the admin token alone gets a 401; a genuine Google
+   sign-in is also required.
 
 ## Still to do
 
-- Payment endpoints: create-order, verify, and the Razorpay webhook
-- `/checkout` page and `/orders/track`
-- Admin dashboard behind Cloudflare Access
-- Razorpay keys as Cloudflare encrypted environment variables, never in
-  `REACT_APP_*`, because CRA inlines those into the public bundle
+- **Register the Razorpay webhook** (Live mode): URL
+  `https://nutrijewel.com/api/webhooks/razorpay`, secret from
+  `.claude/WEBHOOK-SECRET.txt`, events `payment.captured`, `payment.failed`,
+  `order.paid`. The endpoint and secret are live; only the registration is missing.
+- Real delivery zones. Everything in `src/data/shippingZones.js` is a placeholder.
+- Partial refunds. Only full refunds exist today.
