@@ -65,30 +65,35 @@ function useWidth(fallback = 320) {
   return [ref, w];
 }
 
+/* ---------- touch vs mouse ---------- */
+
+const clearOnMouseLeave = (set) => (e) => { if (e.pointerType === 'mouse') set(null); };
+
 /* ---------- tooltip ---------- */
 
-function Tooltip({ x, y, width, lines }) {
+/* One line in a band reserved above the plot. It used to sit on top of the plot
+   and overflowed upward, covering the card's subtitle on a phone. The band is
+   part of the chart's own height, so it can never reach the header. */
+const TIP_BAND = 34;
+
+function Tooltip({ x, width, lines }) {
   if (!lines) return null;
-  // Keep it inside the card on a narrow phone.
-  const left = Math.min(Math.max(x, 70), width - 70);
+  const left = Math.min(Math.max(x, 78), width - 78); // stay inside a narrow card
   return (
-    <div className="viz-tip" style={{ left, top: y }} role="status">
-      {lines.map((l, i) => (
-        <div key={i} className={i === 0 ? 'viz-tip-value' : 'viz-tip-label'}>
-          {i === 0 && <span className="viz-tip-key" aria-hidden="true" />}
-          {l}
-        </div>
-      ))}
+    <div className="viz-tip" style={{ left }} role="status">
+      <span className="viz-tip-key" aria-hidden="true" />
+      <span className="viz-tip-value">{lines[0]}</span>
+      <span className="viz-tip-label">{lines[1]}</span>
     </div>
   );
 }
 
 /* ---------- area chart: one series over time, crosshair + tooltip ---------- */
 
-export function AreaChart({ data, valueKey, formatAxis, formatValue, label, height = 200 }) {
+export function AreaChart({ data, valueKey, formatAxis, formatValue, label, height = 200, emptyText = 'Nothing yet in this period.' }) {
   const [ref, width] = useWidth();
   const [active, setActive] = useState(null);
-  const pad = { top: 14, right: 14, bottom: 26, left: 48 };
+  const pad = { top: TIP_BAND + 8, right: 14, bottom: 26, left: 48 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
 
@@ -101,6 +106,11 @@ export function AreaChart({ data, valueKey, formatAxis, formatValue, label, heig
 
   const line = data.map((d, i) => `${i ? 'L' : 'M'}${xAt(i).toFixed(1)},${yAt(d[valueKey] || 0).toFixed(1)}`).join(' ');
   const area = n ? `${line} L${xAt(n - 1).toFixed(1)},${yAt(0)} L${xAt(0).toFixed(1)},${yAt(0)} Z` : '';
+
+  /* With nothing to plot, the scale would top out at 1 paisa, which also formats
+     as "₹0", so the axis read ₹0 at the top and the bottom, and a flat line
+     looked confident while saying nothing. Say so in words instead. */
+  if (!values.some((v) => v > 0)) return <div className="viz-wrap" ref={ref}><p className="viz-empty">{emptyText}</p></div>;
 
   const pick = (clientX) => {
     const box = ref.current.getBoundingClientRect();
@@ -125,7 +135,7 @@ export function AreaChart({ data, valueKey, formatAxis, formatValue, label, heig
         width={width} height={height} className="viz-svg" role="img" aria-label={label}
         tabIndex={0} onKeyDown={onKey}
         onPointerMove={(e) => pick(e.clientX)} onPointerDown={(e) => pick(e.clientX)}
-        onPointerLeave={() => setActive(null)} onBlur={() => setActive(null)}
+        onPointerLeave={clearOnMouseLeave(setActive)} onBlur={() => setActive(null)}
       >
         {ticks.map((t) => (
           <g key={t}>
@@ -149,17 +159,17 @@ export function AreaChart({ data, valueKey, formatAxis, formatValue, label, heig
           </g>
         )}
       </svg>
-      {a && <Tooltip x={xAt(active)} y={pad.top} width={width} lines={[formatValue(a[valueKey] || 0), shortDate(a.day)]} />}
+      {a && <Tooltip x={xAt(active)} width={width} lines={[formatValue(a[valueKey] || 0), shortDate(a.day)]} />}
     </div>
   );
 }
 
 /* ---------- column chart: one bar per day, per-bar hit target ---------- */
 
-export function ColumnChart({ data, valueKey, formatAxis, formatValue, label, height = 170 }) {
+export function ColumnChart({ data, valueKey, formatAxis, formatValue, label, height = 170, emptyText = 'Nothing yet in this period.' }) {
   const [ref, width] = useWidth();
   const [active, setActive] = useState(null);
-  const pad = { top: 14, right: 14, bottom: 26, left: 40 };
+  const pad = { top: TIP_BAND + 8, right: 14, bottom: 26, left: 40 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
   const n = data.length;
@@ -181,10 +191,12 @@ export function ColumnChart({ data, valueKey, formatAxis, formatValue, label, he
   const xLabelIdx = n <= 1 ? [0] : [0, Math.floor((n - 1) / 2), n - 1];
   const a = active != null ? data[active] : null;
 
+  if (!values.some((v) => v > 0)) return <div className="viz-wrap" ref={ref}><p className="viz-empty">{emptyText}</p></div>;
+
   return (
     <div className="viz-wrap" ref={ref}>
       <svg width={width} height={height} className="viz-svg" role="img" aria-label={label}
-        onPointerLeave={() => setActive(null)}>
+        onPointerLeave={clearOnMouseLeave(setActive)}>
         {ticks.map((t) => (
           <g key={t}>
             <line className="viz-grid" x1={pad.left} x2={width - pad.right} y1={yAt(t)} y2={yAt(t)} />
@@ -211,7 +223,7 @@ export function ColumnChart({ data, valueKey, formatAxis, formatValue, label, he
             textAnchor={i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}>{shortDate(data[i].day)}</text>
         ))}
       </svg>
-      {a && <Tooltip x={pad.left + active * slot + slot / 2} y={pad.top} width={width}
+      {a && <Tooltip x={pad.left + active * slot + slot / 2} width={width}
         lines={[formatValue(a[valueKey] || 0), shortDate(a.day)]} />}
     </div>
   );
@@ -272,7 +284,7 @@ export function Funnel({ stages }) {
 /* ---------- sparkline for stat tiles ---------- */
 
 export function Sparkline({ values, width = 96, height = 28 }) {
-  if (!values || values.length < 2) return null;
+  if (!values || values.length < 2 || !values.some((v) => v > 0)) return null;
   const max = Math.max(...values, 1);
   const n = values.length;
   const xAt = (i) => 2 + (i / (n - 1)) * (width - 4);
@@ -293,7 +305,9 @@ export function Sparkline({ values, width = 96, height = 28 }) {
 export function StatTile({ label, value, current, previous, periodName, upIsGood = true, spark }) {
   let delta = null;
   if (previous > 0) {
-    const pct = Math.round(((current - previous) / previous) * 1000) / 10;
+    const raw = ((current - previous) / previous) * 100;
+    // One decimal is useful at +4.3%; at +3569.3% it is noise.
+    const pct = Math.abs(raw) >= 100 ? Math.round(raw) : Math.round(raw * 10) / 10;
     const good = pct === 0 ? null : (pct > 0) === upIsGood;
     delta = { pct, good };
   }

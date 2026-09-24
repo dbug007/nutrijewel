@@ -68,6 +68,10 @@
 /* ---------- svg charts ---------- */
 .viz-wrap { position: relative; width: 100%; }
 .viz-svg { display: block; overflow: visible; touch-action: pan-y; }
+/* A tap focuses the chart, and browsers then draw a thick default outline around
+   the whole thing. Suppress it for pointer focus; keyboard users still get the
+   green ring below, which is the one that actually helps them. */
+.viz-svg:focus { outline: none; }
 .viz-svg:focus-visible { outline: 2px solid var(--viz-series); outline-offset: 4px; border-radius: 6px; }
 .viz-grid { stroke: var(--viz-grid); stroke-width: 1; shape-rendering: crispEdges; }
 .viz-axis {
@@ -84,17 +88,20 @@
 .viz-hit:focus-visible { fill: var(--viz-area); }
 
 /* ---------- tooltip ---------- */
+/* Sits in a band reserved at the top of the chart (TIP_BAND in charts.js), so it
+   never overflows into the card header. Value leads, date follows. */
 .viz-tip {
-  position: absolute; transform: translate(-50%, -100%);
-  margin-top: -6px; padding: 0.45rem 0.6rem;
+  position: absolute; top: 2px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
   background: var(--viz-surface); border: 1px solid var(--viz-grid); border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
   pointer-events: none; white-space: nowrap; z-index: 2;
 }
-.viz-tip-value { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.9rem; color: var(--viz-text-1); }
-.viz-tip-label { font-size: 0.75rem; color: var(--viz-text-3); padding-left: 1rem; }
+.viz-tip-value { font-weight: 700; font-size: 0.88rem; color: var(--viz-text-1); }
+.viz-tip-label { font-size: 0.76rem; color: var(--viz-text-3); }
 /* A short stroke of the series colour, not a filled box. */
-.viz-tip-key { width: 10px; height: 2px; border-radius: 1px; background: var(--viz-series); }
+.viz-tip-key { width: 10px; height: 2px; border-radius: 1px; background: var(--viz-series); flex: 0 0 auto; }
 
 /* ---------- horizontal bars and funnel ---------- */
 .viz-barlist, .viz-funnel { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
@@ -144,3 +151,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .viz-bar { transition: none; } }
+
+/* An empty period says so in words, at roughly the chart's height so the card
+   does not jump when data arrives. */
+.viz-empty {
+  margin: 0; min-height: 120px;
+  display: grid; place-items: center; text-align: center;
+  color: var(--viz-text-3); font-size: 0.88rem;
+}
+
+/* The tile footer wraps rather than squeezing "no earlier data" into a narrow
+   three-line column beside the sparkline on a phone. */
+.viz-stat-foot { flex-wrap: wrap; row-gap: 0.25rem; }
+.viz-stat-foot > .viz-delta, .viz-stat-foot > .viz-delta-vs { flex: 1 1 8rem; }

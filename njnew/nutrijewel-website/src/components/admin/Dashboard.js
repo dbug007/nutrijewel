@@ -95,7 +95,8 @@ export default function Dashboard({ api }) {
               table={{ columns: ['Day', 'Revenue', 'Orders'], rows: sales.series.map((d) => [shortDate(d.day), inrFull(d.revenuePaise), d.orders]) }}
             >
               <AreaChart data={sales.series} valueKey="revenuePaise" formatAxis={(v) => inrCompact(v)}
-                formatValue={inrFull} label={`Revenue per day, ${range.label}`} />
+                formatValue={inrFull} label={`Revenue per day, ${range.label}`}
+                emptyText={`No paid orders in the ${range.label.toLowerCase()} yet.`} />
             </ChartCard>
 
             <ChartCard
@@ -103,7 +104,8 @@ export default function Dashboard({ api }) {
               table={{ columns: ['Day', 'Orders'], rows: sales.series.map((d) => [shortDate(d.day), d.orders]) }}
             >
               <ColumnChart data={sales.series} valueKey="orders" formatAxis={(v) => intFull(v)}
-                formatValue={(v) => `${intFull(v)} order${v === 1 ? '' : 's'}`} label={`Paid orders per day, ${range.label}`} />
+                formatValue={(v) => `${intFull(v)} order${v === 1 ? '' : 's'}`} label={`Paid orders per day, ${range.label}`}
+                emptyText={`No paid orders in the ${range.label.toLowerCase()} yet.`} />
             </ChartCard>
           </div>
 
@@ -136,7 +138,8 @@ export default function Dashboard({ api }) {
                   table={{ columns: ['Day', 'Visits', 'Page views'], rows: traffic.series.map((d) => [shortDate(d.day), d.sessions, d.views]) }}
                 >
                   <AreaChart data={traffic.series} valueKey="sessions" formatAxis={(v) => intFull(v)}
-                    formatValue={(v) => `${intFull(v)} visit${v === 1 ? '' : 's'}`} label={`Visits per day, ${range.label}`} />
+                    formatValue={(v) => `${intFull(v)} visit${v === 1 ? '' : 's'}`} label={`Visits per day, ${range.label}`}
+                    emptyText="No visits recorded yet." />
                 </ChartCard>
 
                 <ChartCard title="From visit to paid order" subtitle="Where people drop off">

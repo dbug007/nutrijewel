@@ -169,18 +169,57 @@ the admin by being half set up.
 It only enforces when **both** exist. The page learns the site key from the
 server, so no rebuild is needed beyond the redeploy.
 
-### Google sign in for the admin (Cloudflare Access)
+### Google sign in for the admin
 
-1. Cloudflare **Zero Trust**, Access, Applications, add a self-hosted app covering
-   `nutrijewel.com/admin` and `nutrijewel.com/api/admin`.
-2. Add Google as the login method and allow only your own email.
-3. Copy the app's **Application Audience (AUD) tag**, then set:
+Built into the admin directly, so there is no Cloudflare Zero Trust to set up.
+`SESSION_SECRET` is **already set** on Cloudflare. Two values are left, and both
+come from you:
+
+1. **Create a Google OAuth client.** Google Cloud Console, APIs & Services,
+   Credentials, Create credentials, OAuth client ID, type **Web application**.
+   Under **Authorised JavaScript origins** add `https://nutrijewel.com` and
+   `https://www.nutrijewel.com`. No redirect URI is needed. Copy the Client ID,
+   which looks like `1234-abc.apps.googleusercontent.com`. It is public.
+2. **Set both, then redeploy:**
    ```powershell
-   npx wrangler pages secret put ACCESS_TEAM_DOMAIN --project-name nutrijewel   # e.g. nutrijewel.cloudflareaccess.com
-   npx wrangler pages secret put ACCESS_AUD --project-name nutrijewel
+   npx wrangler pages secret put GOOGLE_CLIENT_ID --project-name nutrijewel
+   npx wrangler pages secret put ADMIN_EMAILS --project-name nutrijewel   # your Gmail; comma-separate several
    ```
-4. Redeploy. From then on the admin token alone gets a 401; a genuine Google
-   sign-in is also required.
+From then on `/admin` shows a Google button, and **the old token stops working**:
+Google replaces it, so it cannot be used to get round Google's two-step
+verification. Removing an email from `ADMIN_EMAILS` locks that person out at
+once, even mid-session.
+
+**Break glass:** if Google ever locks you out, delete the `GOOGLE_CLIENT_ID`
+secret and redeploy. The admin falls back to the token in `.claude/ADMIN-TOKEN.txt`.
+
+Proven with real keys and a real server: 12 of 12 Google token cases (unverified
+email, a token issued to another app, a look-alike issuer and a look-alike
+allowlist entry all refused), 11 of 11 session forgeries refused, the old token
+refused in Google mode, and an admin action from another site refused with 403.
+
+Cloudflare Access (the JWT check in `functions/_shared/access.js`) remains
+available as an optional extra layer on top; it is no longer needed for Google
+sign in.
+
+## Analytics and consent
+
+| Piece | Where | What it does |
+|---|---|---|
+| Consent banner | `src/components/ConsentBanner.js` | Accept and Decline, same size; hidden on `/checkout` and `/admin` |
+| GA4 | `src/lib/analytics.js` | loads **only after Accept**, only on nutrijewel.com |
+| Own analytics | `/api/track`, tables `page_views`, `analytics_events` | visits, pages, sources, devices, funnel |
+| Dashboard | `/admin`, Dashboard tab | sales and visitor graphs, India time |
+
+Verified in a real browser on the live site: declining sends **zero** requests
+to Google and records nothing; accepting loads GA4 and starts counting.
+
+What is never stored: IP address, browser user-agent, name, phone, email, query
+strings, full referrer URLs. Visits expire after 30 minutes of inactivity. Rows
+older than about 13 months are deleted.
+
+A visitor who declines is not counted at all, so visitor figures are a sample
+of the people who agreed. Conversion is measured inside that same sample.
 
 ## Still to do
 

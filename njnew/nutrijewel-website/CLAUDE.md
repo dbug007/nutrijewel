@@ -196,6 +196,17 @@ The web versions the site actually loads are the compressed files in
   reintroduce a buy button by accident. These shipped live once with a working
   Add to Cart, one of them at zero, so `productAvailability.test.js` pins the
   parked ids and asserts every buyable product has a price above zero.
+- **Admin sign-in has two modes.** Token mode (`ADMIN_TOKEN`) is the default. Once
+  `GOOGLE_CLIENT_ID`, `ADMIN_EMAILS` and `SESSION_SECRET` are all set, Google
+  sign-in **replaces** the token, so it cannot be used to bypass Google's MFA. The
+  session cookie is HttpOnly, Secure, SameSite=Strict, `Path=/api/admin`, HMAC
+  signed, 12 hours. Break glass: delete `GOOGLE_CLIENT_ID` to fall back to the token.
+- Admin charts are hand-drawn SVG in `src/components/admin/charts.js`, measured
+  at real pixel width so labels stay 11px on a phone. Colours were computed with
+  the data-viz validator, not picked: the brand green `#93B559` is only 2.33:1 on
+  white, too faint for a chart mark, so marks use `#6b8c34` (light) and `#7a9c3f`
+  (dark). Touch trap: browsers fire `pointerleave` when a finger lifts, so only a
+  *mouse* leaving may close a tooltip.
 - One rail pattern only: the native scroll-snap `Shelf` (`src/components/Shelf.js`).
   Do not reintroduce a carousel library.
 - **The mobile menu overlay lives inside `.navbar`**, and `.navbar` is
@@ -222,10 +233,19 @@ The web versions the site actually loads are the compressed files in
 
 ## Known outstanding
 
-- GA4 is live as `G-DH75XWLB6H` in `public/index.html` (two places, keep them in step).
-  It only collects from nutrijewel.com, so staging builds report nothing. The
-  WhatsApp checkout leaves the site, so orders are still not counted as
-  conversions: that needs a gtag event on the checkout button.
+- **Analytics is consent-gated (India's DPDP Act).** GA4 (`G-DH75XWLB6H`) no
+  longer loads from `public/index.html`; that file only sets Google Consent Mode
+  to "denied". Everything lives in `src/lib/analytics.js`, the one place the
+  Measurement ID appears, and nothing is sent until the visitor clicks Accept in
+  `ConsentBanner`. **Never put a GA script tag back in `index.html`**: it would
+  track people who never agreed. Decline and Accept must stay the same size.
+- **First-party analytics** feeds the admin dashboard: `/api/track` writes to the
+  D1 tables `page_views` and `analytics_events`. It stores no IP, no user-agent,
+  no name, phone or email; query strings are stripped and referrers cut to their
+  host. Verified against the stored rows. Visitor sources are first-touch.
+- **Conversion uses one population.** Visits come only from consenting visitors,
+  so conversion is `purchase` events over visits from that same group, never all
+  paid orders over consenting visits (which would overstate it).
 - Imported hamper products are placeholder pricing, all flagged `isPlaceholder: true`.
   Confirm sourcing and set real prices before they can be ordered.
 - Hamper box prices and discount tiers are invented placeholders in
