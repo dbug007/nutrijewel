@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Package, AlertCircle, Loader2 } from 'lucide-react';
 import './TrackOrderPage.css';
 
@@ -18,7 +18,11 @@ const STEP_LABEL = { paid: 'Paid', confirmed: 'Confirmed', packed: 'Packed', shi
 const rupees = (paise) => `₹${((paise || 0) / 100).toLocaleString('en-IN')}`;
 
 export default function TrackOrderPage() {
-  const [orderNumber, setOrderNumber] = useState('');
+  // Arriving from the confirmation screen carries the order number, so the
+  // customer only has to type their phone. Uppercased and trimmed the same way
+  // the input does, so a pasted lowercase number still matches.
+  const [params] = useSearchParams();
+  const [orderNumber, setOrderNumber] = useState(() => (params.get('n') || '').trim().toUpperCase().slice(0, 20));
   const [phone, setPhone] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');

@@ -5,7 +5,7 @@ import { json } from '../../_shared/http.js';
 import { requireAdmin, requireDb } from '../../_shared/admin.js';
 
 export async function onRequestGet(ctx) {
-  const denied = requireAdmin(ctx) || requireDb(ctx.env);
+  const denied = (await requireAdmin(ctx)) || requireDb(ctx.env);
   if (denied) return denied;
 
   const paidStates = "('paid','confirmed','packed','shipped','delivered')";
@@ -19,7 +19,12 @@ export async function onRequestGet(ctx) {
        (SELECT COUNT(*) FROM orders WHERE status IN ${paidStates}
           AND date(created_at) = date('now'))                                                       AS today_orders,
        (SELECT COALESCE(SUM(total_paise),0) FROM orders WHERE status IN ${paidStates}
-          AND date(created_at) = date('now'))                                                       AS today_paise`
+          AND date(created_at) = date('now'))                                                       AS today_paise,
+       -- Things that were recorded but never shown to anyone until now. Each
+       -- is written by the webhook, verify or refund endpoints on the spot.
+       (SELECT COUNT(*) FROM order_events WHERE detail LIKE 'amount mismatch%')                     AS amount_mismatches,
+       (SELECT COUNT(*) FROM order_events WHERE detail = 'signature mismatch')                      AS signature_failures,
+       (SELECT COUNT(*) FROM order_events WHERE detail LIKE 'refund failed%')                       AS refund_failures`
   ).first();
 
   return json({ ok: true, stats: row || {} });

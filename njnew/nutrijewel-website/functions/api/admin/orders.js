@@ -24,7 +24,7 @@ const MANUAL_TRANSITIONS = {
 };
 
 export async function onRequestGet(ctx) {
-  const denied = requireAdmin(ctx) || requireDb(ctx.env);
+  const denied = (await requireAdmin(ctx)) || requireDb(ctx.env);
   if (denied) return denied;
 
   const url = new URL(ctx.request.url);
@@ -76,7 +76,7 @@ export async function onRequestGet(ctx) {
 }
 
 export async function onRequestPost(ctx) {
-  const denied = requireAdmin(ctx) || requireDb(ctx.env);
+  const denied = (await requireAdmin(ctx)) || requireDb(ctx.env);
   if (denied) return denied;
 
   const read = await readJson(ctx.request);

@@ -17,6 +17,7 @@
  */
 
 import { json } from './http.js';
+import { accessConfigured, verifyAccessRequest } from './access.js';
 
 /* Constant-time string compare. A plain === leaks how much of the token matched
    through timing, which is enough to recover a secret given enough attempts.
@@ -32,8 +33,10 @@ function timingSafeEqual(a, b) {
   return diff === 0;
 }
 
-/* Returns null when the request may proceed, or a Response to return as-is. */
-export function requireAdmin({ request, env }) {
+/* Returns null when the request may proceed, or a Response to return as-is.
+   Async because, once Cloudflare Access is configured, the Access JWT has to be
+   verified against Cloudflare's published keys. Every caller must await it. */
+export async function requireAdmin({ request, env }) {
   const expected = env && env.ADMIN_TOKEN;
 
   if (!expected) {
@@ -49,13 +52,24 @@ export function requireAdmin({ request, env }) {
     return json({ ok: false, errors: ['Not authorised.'] }, 401);
   }
 
+  /* Second lock: Google sign in through Cloudflare Access, once configured.
+     A failure here returns no detail on purpose; the reason only helps an
+     attacker work out which part of a forged token to fix. */
+  if (accessConfigured(env)) {
+    try {
+      await verifyAccessRequest(request, env);
+    } catch (_) {
+      return json({ ok: false, errors: ['Not authorised.'] }, 401);
+    }
+  }
+
   return null;
 }
 
-/* Cloudflare Access, when enabled, sets this header on every request it lets
-   through. Presence is not proof on its own (the JWT would need verifying
-   against the Access public keys), so it is recorded for the audit trail rather
-   than trusted for authorisation. */
+/* The signed-in email Cloudflare Access puts on each request, for the audit
+   trail. Used only for logging who did what. It is not the authorisation check:
+   requireAdmin() verifies the Access JWT itself, and only a request that passed
+   that check reaches the code that reads this. */
 export function accessIdentity(request) {
   return request.headers.get('cf-access-authenticated-user-email') || null;
 }

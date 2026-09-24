@@ -8,6 +8,8 @@
 import { json, fail, methodNotAllowed, readJson } from '../../_shared/http.js';
 import { createRazorpayOrder, razorpayConfigured } from '../../_shared/razorpay.js';
 import pricing from '../../../src/utils/serverPricing.js';
+import { rateLimit, clientIp } from '../../_shared/rateLimit.js';
+import { turnstileEnabled, verifyTurnstile } from '../../_shared/turnstile.js';
 
 const { repriceCart } = pricing;
 
@@ -52,10 +54,22 @@ export async function onRequestPost({ request, env }) {
   if (!razorpayConfigured(env)) return fail('Payments are not configured yet.', 503);
   if (!env.DB) return fail('Order storage is unavailable.', 503);
 
+  /* A real customer places an order or two. A script testing stolen cards
+     against your Razorpay account places hundreds, and every attempt costs you
+     reputation with the card networks. 10 per 10 minutes per address. */
+  const limited = await rateLimit(env, { action: 'create-order', key: clientIp(request), limit: 10, windowSeconds: 600 });
+  if (limited) return limited;
+
   const read = await readJson(request);
   if (!read.ok) return read.response;
 
-  const { lines, customer } = read.body || {};
+  const { lines, customer, turnstileToken } = read.body || {};
+
+  // Bot check, only once the owner has configured both Turnstile keys.
+  if (turnstileEnabled(env)) {
+    const human = await verifyTurnstile(env, turnstileToken, clientIp(request));
+    if (!human) return json({ ok: false, errors: ['Please complete the security check and try again.'] });
+  }
 
   const who = validateCustomer(customer);
   if (who.errors.length) return json({ ok: false, errors: who.errors });

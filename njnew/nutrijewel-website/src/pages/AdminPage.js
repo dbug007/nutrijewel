@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2 } from 'lucide-react';
+import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2, RotateCcw } from 'lucide-react';
 import './AdminPage.css';
 
 /*
@@ -34,6 +34,9 @@ const ACTION_ICON = {
   delivered: CheckCircle2,
   cancelled: XCircle,
 };
+
+/* Orders that have taken money, and so have money that can be given back. */
+const REFUNDABLE = ['paid', 'confirmed', 'packed', 'shipped', 'delivered'];
 
 const FILTERS = [
   { id: 'paid', label: 'New' },
@@ -127,6 +130,29 @@ export default function AdminPage() {
     } catch (e) { setError(e.message); }
   };
 
+  /* Refunds go through Razorpay and only then change the status here. The
+     confirm names the exact amount and the customer, because this one moves
+     real money and cannot be undone from this screen. */
+  const refund = async (order) => {
+    const ok = window.confirm(
+      `Refund ${rupees(order.total_paise)} to ${order.customer_name} for ${order.order_number}?
+
+` +
+      'This returns the money through Razorpay and cannot be undone here.'
+    );
+    if (!ok) return;
+    setBusyId(order.id); setError('');
+    try {
+      const out = await api('/api/admin/refund', { method: 'POST', body: JSON.stringify({ orderId: order.id }) });
+      await load();
+      setError(`Refunded ${rupees(out.amountPaise)} for ${out.orderNumber}. Razorpay reference ${out.refundId}.`);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   const move = async (order, toStatus) => {
     setBusyId(order.id); setError('');
     try {
@@ -194,6 +220,24 @@ export default function AdminPage() {
         </section>
       )}
 
+      {stats && (stats.amount_mismatches > 0 || stats.signature_failures > 0 || stats.refund_failures > 0) && (
+        <section className="njad-alert" role="alert">
+          <AlertCircle size={18} />
+          <div>
+            <strong>Needs your attention</strong>
+            {stats.amount_mismatches > 0 && (
+              <p>{stats.amount_mismatches} payment{stats.amount_mismatches === 1 ? '' : 's'} arrived for a different amount than was charged. Those orders were not marked paid. Check them in the Razorpay dashboard.</p>
+            )}
+            {stats.signature_failures > 0 && (
+              <p>{stats.signature_failures} payment confirmation{stats.signature_failures === 1 ? '' : 's'} failed the signature check. That is either a bug or someone forging a success.</p>
+            )}
+            {stats.refund_failures > 0 && (
+              <p>{stats.refund_failures} refund{stats.refund_failures === 1 ? '' : 's'} failed at Razorpay. The customer has not been refunded.</p>
+            )}
+          </div>
+        </section>
+      )}
+
       <nav className="njad-filters" aria-label="Filter by status">
         {FILTERS.map((f) => (
           <button
@@ -203,6 +247,9 @@ export default function AdminPage() {
             aria-pressed={filter === f.id}
           >
             {f.label}
+            {f.id === 'paid' && stats && stats.needs_action > 0 && (
+              <span className="njad-badge" aria-label={`${stats.needs_action} waiting`}>{stats.needs_action}</span>
+            )}
           </button>
         ))}
       </nav>
@@ -248,9 +295,9 @@ export default function AdminPage() {
               </ul>
             )}
 
-            {o.nextStatuses && o.nextStatuses.length > 0 && (
+            {(o.nextStatuses && o.nextStatuses.length > 0) || (REFUNDABLE.includes(o.status) && o.razorpay_payment_id) ? (
               <div className="njad-actions">
-                {o.nextStatuses.map((next) => {
+                {(o.nextStatuses || []).map((next) => {
                   const Icon = ACTION_ICON[next] || CheckCircle2;
                   const danger = next === 'cancelled';
                   return (
@@ -264,8 +311,17 @@ export default function AdminPage() {
                     </button>
                   );
                 })}
+                {REFUNDABLE.includes(o.status) && o.razorpay_payment_id && (
+                  <button
+                    className="njad-btn njad-btn-danger"
+                    onClick={() => refund(o)}
+                    disabled={busyId === o.id}
+                  >
+                    <RotateCcw size={16} /> Refund
+                  </button>
+                )}
               </div>
-            )}
+            ) : null}
           </li>
         ))}
       </ul>

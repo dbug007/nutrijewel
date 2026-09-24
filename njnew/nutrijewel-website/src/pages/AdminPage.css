@@ -215,3 +215,25 @@
 .njad-items li { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem; }
 .njad-items em { font-style: normal; color: var(--ad-mute); font-size: 0.88em; }
 .njad-qty { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* Alerts that must not be missed: a payment for the wrong amount, a forged
+   confirmation, a refund that did not happen. */
+.njad-alert {
+  display: flex; gap: 0.6rem; align-items: flex-start;
+  background: #fdeceb; border: 1px solid #f0c8c4; color: #7a2f28;
+  border-radius: 12px; padding: 0.8rem 0.9rem; margin: 0 0 1rem;
+}
+.njad-alert strong { display: block; margin-bottom: 0.2rem; }
+.njad-alert p { margin: 0.2rem 0 0; font-size: 0.88rem; }
+
+.njad-badge {
+  display: inline-grid; place-items: center;
+  min-width: 20px; height: 20px; padding: 0 6px; margin-left: 0.4rem;
+  border-radius: 999px; background: #c0392b; color: #fff;
+  font-size: 0.72rem; font-weight: 700;
+}
+.njad-chip.is-on .njad-badge { background: #fff; color: var(--ad-ink); }
+
+@media (prefers-color-scheme: dark) {
+  .njad-alert { background: #3a1f1c; border-color: #5c3a36; color: #f0b8b0; }
+}

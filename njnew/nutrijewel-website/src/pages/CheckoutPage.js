@@ -57,6 +57,43 @@ export default function CheckoutPage() {
   const [done, setDone] = useState(null);
   const quoteSeq = useRef(0);
 
+  /* Turnstile bot check. Off unless the server hands us a site key, which it only
+     does once both Turnstile keys are configured on Cloudflare. Tokens are
+     single-use, so the widget is reset after every order attempt. */
+  const tsKey = quote && quote.turnstileSiteKey;
+  const tsBox = useRef(null);
+  const tsWidget = useRef(null);
+  const [tsToken, setTsToken] = useState('');
+
+  useEffect(() => {
+    if (!tsKey || !tsBox.current || tsWidget.current !== null) return undefined;
+    let cancelled = false;
+    const draw = () => {
+      if (cancelled || !window.turnstile || !tsBox.current || tsWidget.current !== null) return;
+      tsWidget.current = window.turnstile.render(tsBox.current, {
+        sitekey: tsKey,
+        callback: (t) => setTsToken(t),
+        'expired-callback': () => setTsToken(''),
+        'error-callback': () => setTsToken(''),
+      });
+    };
+    if (window.turnstile) draw();
+    else {
+      const src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      let tag = document.querySelector(`script[src="${src}"]`);
+      if (!tag) { tag = document.createElement('script'); tag.src = src; tag.async = true; document.body.appendChild(tag); }
+      tag.addEventListener('load', draw);
+    }
+    return () => { cancelled = true; };
+  }, [tsKey]);
+
+  const resetTurnstile = () => {
+    setTsToken('');
+    if (window.turnstile && tsWidget.current !== null) {
+      try { window.turnstile.reset(tsWidget.current); } catch (_) { /* ignore */ }
+    }
+  };
+
   // Only the parts of the cart the server is willing to hear about.
   const lines = cart
     .filter((l) => l.kind !== 'hamper')
@@ -98,9 +135,11 @@ export default function CheckoutPage() {
       const res = await fetch('/api/checkout/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lines, customer: form }),
+        body: JSON.stringify({ lines, customer: form, turnstileToken: tsToken || undefined }),
       });
       const order = await res.json();
+      // Spent either way: a Turnstile token cannot be used twice.
+      if (tsKey) resetTurnstile();
       if (!order.ok) { setErrors(order.errors || ['Could not start the payment.']); return; }
 
       const rzp = new window.Razorpay({
@@ -121,6 +160,25 @@ export default function CheckoutPage() {
             });
             const out = await v.json();
             if (out.ok) {
+              /* GA4 purchase. The first time revenue has ever been measurable:
+                 WhatsApp checkout left the site, so orders never reached analytics.
+                 Skipped in test mode so fake orders do not pollute real figures.
+                 Amounts come from the server's quote, never recomputed here. */
+              if (window.gtag && !(quote && quote.testMode)) {
+                window.gtag('event', 'purchase', {
+                  transaction_id: out.orderNumber,
+                  value: out.amountPaise / 100,
+                  currency: 'INR',
+                  shipping: quote ? quote.shippingPaise / 100 : 0,
+                  items: (quote ? quote.lines : []).map((l) => ({
+                    item_id: l.productId,
+                    item_name: l.name,
+                    item_variant: l.weight,
+                    price: l.unitPaise / 100,
+                    quantity: l.qty,
+                  })),
+                });
+              }
               clearCart();
               setDone({ orderNumber: out.orderNumber, amountPaise: out.amountPaise, testMode: quote && quote.testMode });
             } else {
@@ -164,7 +222,8 @@ export default function CheckoutPage() {
           Paid {rupees(done.amountPaise)}. We will message you on WhatsApp to confirm delivery.
           Keep this order number.
         </p>
-        <Link className="njco-btn njco-btn-primary" to="/products">Continue shopping</Link>
+        <Link className="njco-btn njco-btn-primary" to={`/orders/track?n=${encodeURIComponent(done.orderNumber)}`}>Track this order</Link>
+        <Link className="njco-link" to="/products">Continue shopping</Link>
       </main>
     );
   }
@@ -180,7 +239,8 @@ export default function CheckoutPage() {
   }
 
   const pincodeValid = /^[1-9][0-9]{5}$/.test(form.pincode);
-  const canPay = !paying && quote && quote.ok && pincodeValid && form.name.trim() && form.phone.trim() && form.address.trim() && form.city.trim();
+  const canPay = !paying && quote && quote.ok && pincodeValid && form.name.trim() && form.phone.trim() && form.address.trim() && form.city.trim()
+    && (!tsKey || !!tsToken);
 
   return (
     <main className="njco">
@@ -248,6 +308,8 @@ export default function CheckoutPage() {
             {errors.map((e, i) => <p key={i}><AlertCircle size={15} /> {e}</p>)}
           </div>
         )}
+
+        {tsKey && <div ref={tsBox} className="njco-turnstile" aria-label="Security check" />}
 
         <div className="njco-pay">
           <button type="button" onClick={pay} className="njco-btn njco-btn-primary njco-btn-pay" disabled={!canPay}>

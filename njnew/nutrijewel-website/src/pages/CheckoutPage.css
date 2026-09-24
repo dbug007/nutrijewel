@@ -127,3 +127,13 @@
   margin: 0 0 1rem;
 }
 @media (min-width: 768px) { .njco-testmode { grid-column: 1 / -1; } }
+
+.njco-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0 1rem;
+  color: #4a5048; text-decoration: underline; text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+/* Turnstile draws its own 300px widget; keep it from overflowing a 375px phone. */
+.njco-turnstile { min-height: 65px; max-width: 100%; overflow: hidden; }

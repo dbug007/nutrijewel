@@ -200,6 +200,7 @@ const Footer = () => {
                 <li><a href="/terms-and-conditions" className="footer-link">Terms & Conditions</a></li>
                 <li><a href="/privacy-policy" className="footer-link">Privacy Policy</a></li>
                 <li><a href="/refund-policy" className="footer-link">Refund Policy</a></li>
+                <li><a href="/orders/track" className="footer-link">Track your order</a></li>
                 <li><a href="/shipping-policy" className="footer-link">Shipping Policy</a></li>
               </ul>
             </div>

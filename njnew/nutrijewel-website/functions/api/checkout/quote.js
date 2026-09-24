@@ -9,6 +9,7 @@
 
 import { json, fail, methodNotAllowed, readJson, formatPaise } from '../../_shared/http.js';
 import pricing from '../../../src/utils/serverPricing.js';
+import { turnstileSiteKey } from '../../_shared/turnstile.js';
 
 const { repriceCart } = pricing;
 
@@ -30,6 +31,7 @@ export async function onRequestPost({ request, env }) {
     /* So the page can say plainly that no real money will move. A test key is
        exactly the situation where a confirmation screen is most misleading. */
     testMode: !!(env && env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_ID.startsWith('rzp_test_')),
+    turnstileSiteKey: turnstileSiteKey(env),
     lines: result.lines.map((l) => ({
       productId: l.productId,
       name: l.name,

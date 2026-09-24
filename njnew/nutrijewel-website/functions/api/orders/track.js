@@ -10,6 +10,7 @@
    is what limits the damage if someone gets past it. */
 
 import { json, fail, methodNotAllowed, readJson } from '../../_shared/http.js';
+import { rateLimit, clientIp } from '../../_shared/rateLimit.js';
 
 const STATUS_TEXT = {
   created: { label: 'Awaiting payment', detail: 'We have not received payment for this order yet.' },
@@ -36,6 +37,11 @@ function sameDigits(a, b) {
 
 export async function onRequestPost({ request, env }) {
   if (!env.DB) return fail('Order lookup is unavailable.', 503);
+
+  /* Order numbers are short enough to guess eventually. This is what makes
+     "eventually" impractical: 20 lookups per 10 minutes per address. */
+  const limited = await rateLimit(env, { action: 'track', key: clientIp(request), limit: 20, windowSeconds: 600 });
+  if (limited) return limited;
 
   const read = await readJson(request);
   if (!read.ok) return read.response;

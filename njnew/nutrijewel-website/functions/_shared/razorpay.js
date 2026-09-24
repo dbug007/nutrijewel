@@ -110,3 +110,35 @@ export async function fetchPayment(env, paymentId) {
   if (!res.ok) return null;
   return res.json().catch(() => null);
 }
+
+/* Refund a captured payment in full.
+
+   The amount is passed explicitly rather than left for Razorpay to default, so
+   the refund always matches what our own record says was charged. Razorpay
+   refuses a refund larger than what remains refundable, which is also what stops
+   two simultaneous clicks from refunding the same order twice: the second one
+   is rejected by Razorpay, not just by us. */
+export async function createRefund(env, { paymentId, amountPaise, orderNumber }) {
+  if (!paymentId) throw new Error('No payment to refund.');
+  if (!Number.isInteger(amountPaise) || amountPaise < 100) {
+    throw new Error('Refund amount must be a whole number of paise, at least 100.');
+  }
+  const res = await fetch(`${API}/payments/${encodeURIComponent(paymentId)}/refund`, {
+    method: 'POST',
+    headers: { Authorization: authHeader(env), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      amount: amountPaise,
+      speed: 'normal',
+      notes: { order_number: String(orderNumber || '') },
+      receipt: `refund-${String(orderNumber || '').slice(0, 30)}`,
+    }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error((body.error && body.error.description) || 'Razorpay rejected the refund.');
+    err.status = res.status === 401 ? 401 : 502;
+    err.razorpayCode = body.error && body.error.code;
+    throw err;
+  }
+  return body; // { id: 'rfnd_...', amount, status, ... }
+}
