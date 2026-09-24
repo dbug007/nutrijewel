@@ -12,7 +12,10 @@
   # Send the origin to other sites, never the full path a customer was on.
   Referrer-Policy: strict-origin-when-cross-origin
   # We ask for none of these, so deny them all up front.
-  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()
+  # `payment` is allowed for this site and Razorpay. It used to be `payment=()`,
+  # which disables the Payment Request API that Android uses for tap-to-pay UPI
+  # (GPay, PhonePe). Found by a real browser test; do not put it back.
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), usb=(), interest-cohort=(), payment=(self "https://api.razorpay.com" "https://checkout.razorpay.com")
   # Cross-origin isolation for the payment window, without breaking embeds.
   X-DNS-Prefetch-Control: off
 
@@ -28,7 +31,7 @@
   #
   # checkout.razorpay.com and api.razorpay.com are listed now so the policy does
   # not have to change when payments land.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.razorpay.com https://lumberjack.razorpay.com; frame-src https://www.google.com https://api.razorpay.com https://checkout.razorpay.com; form-action 'self' https://api.razorpay.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://checkout.razorpay.com https://*.razorpay.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://*.razorpay.com; media-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.razorpay.com https://lumberjack.razorpay.com https://*.razorpay.com https://cloudflareinsights.com; frame-src https://www.google.com https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com; form-action 'self' https://api.razorpay.com https://*.razorpay.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # Hashed build assets never change under the same name, so cache them hard.
 /static/*
