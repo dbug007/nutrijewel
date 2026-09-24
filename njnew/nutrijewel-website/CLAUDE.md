@@ -156,10 +156,23 @@ The web versions the site actually loads are the compressed files in
 
 ## Stack facts worth knowing
 
-- Create React App (`react-scripts` 5.0.1, unmaintained) + React 19. Checkout is
-  still a prefilled WhatsApp message. A backend is being added: Cloudflare Pages
-  Functions under `functions/`, with D1 for orders. Until that ships, treat the
-  site as static with no backend.
+- Create React App (`react-scripts` 5.0.1, unmaintained) + React 19, with a real
+  backend: Cloudflare Pages Functions under `functions/` and D1 for orders.
+- **Payments are LIVE on Razorpay** (since 2026-09-24, `rzp_live_` keys). One
+  switch, `ONLINE_PAYMENTS_ENABLED` in `src/config/payments.js`, decides whether
+  the cart, every Buy Now, the footer and the product FAQ point at Razorpay or
+  WhatsApp. Never change those surfaces individually; flip the switch. WhatsApp
+  stays for support and for off-season "ask about availability", by design.
+- **The server decides every price.** The client sends only
+  `{productId, weight, qty}`; `src/utils/serverPricing.js` reprices from the
+  catalogue. Verified in production that a cart claiming `unitPrice: 1` is still
+  charged in full. Never read a price from a request.
+- **Never complete a payment on live keys from a script.** It charges a real card.
+  Live verification stops at the Razorpay window opening; the first real purchase
+  is made by the owner. `.dev.vars` stays on TEST keys for the same reason.
+- Hooks rule, learned the hard way: `useBuyNow()` was once called after an early
+  `return` in `ProductDetailPage.js`. Tests passed because the product always
+  existed in tests; only the build's ESLint caught it. `CI=true` matters.
 - `products.data.js` and `hampers.data.js` are CommonJS so
   `scripts/create-static-routes.js` can `require` them at build time. The ESM
   wrappers `products.js` / `hampers.js` are what components import.

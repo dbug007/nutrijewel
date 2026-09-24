@@ -38,6 +38,12 @@ so the switch is a decision rather than an accident.
 
 ## Where we are right now
 
+> **Payments are live on Razorpay as of 2026-09-24.** Cart, Buy Now and the
+> footer point at Razorpay checkout. A full payment was verified end to end in a
+> real browser on test keys (order `NJ-2609-K9TG`, confirmed on both sides as
+> `pay_TfvfbOBA1qZMpy`, captured, Visa 1007), then the site was switched to live
+> keys and verified again up to the payment window, without charging a card.
+
 | Phase | State |
 |---|---|
 | 0. Security and payload cleanup | **done** |
