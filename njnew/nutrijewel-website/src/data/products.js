@@ -54,13 +54,20 @@ const NUTRITION = {
   // },
 };
 
-export const products = rawProducts
+/* Every product, including hidden ones. Only for resolving a product by its URL,
+   so a hidden test product still has a working page at /products/<id>. */
+export const allProducts = rawProducts
   .map(normalizeProductImages)
   .map((product) => ({
     ...product,
     allergens: ALLERGENS[product.id] || [],
     nutrition: NUTRITION[product.id] || null,
   }));
+
+/* What the shop shows. `hidden` products (the ₹1 payment test) never appear in a
+   listing, a shelf, related products or hampers, because everything that lists
+   products reads this, not allProducts. */
+export const products = allProducts.filter((p) => !p.hidden);
 
 export const topSellers = products.filter(product => product.isTopSeller);
 

@@ -134,3 +134,30 @@ describe('money is always whole paise', () => {
     expect(toPaise(0.1 + 0.2)).toBe(30);
   });
 });
+
+/* The ₹1 live-payment test product. Its free delivery is the part that could be
+   abused, so these pin the exact rule: waived alone, charged the moment anything
+   real joins it. */
+describe('the ₹1 test product (nj-dummy)', () => {
+  const dummy = { productId: 'nj-dummy', weight: 'test', qty: 1 };
+
+  it('charges exactly ₹1, Razorpay\'s minimum, with no delivery', () => {
+    const r = repriceCart([dummy], { pincode: PIN_PUNE });
+    expect(r.ok).toBe(true);
+    expect(r.itemsPaise).toBe(100);
+    expect(r.shippingPaise).toBe(0);
+    expect(r.totalPaise).toBe(100);
+  });
+
+  it('waives delivery nationwide too, not just in Pune', () => {
+    expect(repriceCart([dummy], { pincode: '560001' }).shippingPaise).toBe(0);
+  });
+
+  it('cannot be used to make a real order ship free', () => {
+    const alone = repriceCart([line()], { pincode: PIN_PUNE });
+    const withDummy = repriceCart([line(), dummy], { pincode: PIN_PUNE });
+    expect(withDummy.ok).toBe(true);
+    expect(withDummy.shippingPaise).toBe(alone.shippingPaise);
+    expect(withDummy.shippingPaise).toBeGreaterThan(0);
+  });
+});

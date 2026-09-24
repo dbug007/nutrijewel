@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, X, ZoomIn, AlertTriangle,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { products } from '../data/products';
+import { products, allProducts } from '../data/products';
 import WeightSelector from '../components/WeightSelector';
 import AddToCartButton from '../components/store/AddToCartButton';
 import WishlistHeart from '../components/store/WishlistHeart';
@@ -143,7 +143,8 @@ function Lightbox({ images, index, setIndex, onClose, alt }) {
 export default function ProductDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const product = useMemo(() => products.find((p) => p.id === slug), [slug]);
+  // allProducts, so a hidden product still resolves by its URL.
+  const product = useMemo(() => allProducts.find((p) => p.id === slug), [slug]);
 
   const [selectedVariant, setSelectedVariant] = useState(() => lowestVariant(product));
   const [activeImage, setActiveImage] = useState(0);

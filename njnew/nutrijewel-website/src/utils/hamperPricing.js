@@ -168,7 +168,7 @@ function resolvePresetLines(preset, products, resolvePacking) {
    builder's running total, so coming-soon, out-of-season and quote-on-request
    items are all kept out. */
 function isHamperable(p) {
-  return !!p && !p.comingSoon && !p.outOfSeason && !p.priceOnRequest;
+  return !!p && !p.hidden && !p.comingSoon && !p.outOfSeason && !p.priceOnRequest;
 }
 
 function getHamperEligibleProducts(products, excludedIds) {
