@@ -16,6 +16,10 @@ if (!normalizedTheme) {
   document.documentElement.setAttribute('data-theme', theme);
 }
 
+/* Which commit is live: <html data-build="bbfbc0b">. deploy.ps1 sets it, and
+   because it is part of the bundle, every deploy's main.js gets a fresh name. */
+document.documentElement.setAttribute('data-build', process.env.REACT_APP_BUILD_ID || 'dev');
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

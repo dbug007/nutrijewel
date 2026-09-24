@@ -187,6 +187,10 @@ if ($SkipTests) {
 # ---- 3. build ----------------------------------------------------------------
 Step 3 "Building"
 Push-Location $AppDir
+# The commit goes into the bundle (src/index.js), so every deploy's main.js has
+# a new file name. A bad copy cached under an old name can then never be served
+# to a new page. See functions/static/[[path]].js for why that matters.
+$env:REACT_APP_BUILD_ID = (& git.exe rev-parse --short HEAD).Trim()
 & npm run build
 $buildExit = $LASTEXITCODE
 Pop-Location
