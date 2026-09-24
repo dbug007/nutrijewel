@@ -1,0 +1,28 @@
+/* Consent banner. Docked to the bottom on a phone, where a thumb reaches it.
+   It sits below the cart and wishlist drawers so opening either covers it. */
+.njcb {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 950;
+  background: #1f2420; color: #eceee9;
+  padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  display: grid; gap: 0.7rem;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
+}
+.njcb-text { margin: 0; font-size: 0.88rem; line-height: 1.45; }
+.njcb-text a { color: #cfe3a8; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Equal buttons, on purpose. Declining must be as easy as accepting, or the
+   consent is not freely given. Neither is styled as the "right" answer. */
+.njcb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.njcb-btn {
+  min-height: 46px; border-radius: 10px;
+  border: 1px solid #cfe3a8; background: transparent; color: #eceee9;
+  font-size: 0.95rem; font-weight: 700; cursor: pointer;
+}
+.njcb-btn:focus-visible { outline: 2px solid #cfe3a8; outline-offset: 2px; }
+
+@media (min-width: 768px) {
+  .njcb {
+    left: 1rem; right: auto; bottom: 1rem; max-width: 26rem;
+    border-radius: 14px; padding: 1rem;
+  }
+}

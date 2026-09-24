@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import TopMarquee from './components/TopMarquee';
@@ -26,17 +26,30 @@ import TrackOrderPage from './pages/TrackOrderPage';
 // import SpinWheelPage from './pages/SpinWheelPage';
 // import { CAMPAIGN_LIVE } from './data/birthdayOffers';
 // import ThandaiCakePopup from './components/ThandaiCakePopup';
+import ConsentBanner from './components/ConsentBanner';
+import { initAnalytics, trackPageview } from './lib/analytics';
 import './App.css';
 
 /* The order desk is a private tool, not a shop page: no marquee, no navbar, no
    footer, no cart drawer. Split out so it can read the current route, which
    needs to happen inside <Router>. */
+/* One page view per route change. A single-page app never reloads between
+   pages, so without this analytics would only ever see the first page. Sends
+   nothing at all unless the visitor accepted analytics. */
+function RouteTracker() {
+  const { pathname } = useLocation();
+  useEffect(() => { trackPageview(pathname); }, [pathname]);
+  return null;
+}
+
 function AppShell() {
   const isAdmin = useLocation().pathname.startsWith('/admin');
+  useEffect(() => { initAnalytics(); }, []);
   return (
     <div className="App">
       {!isAdmin && <SmoothScroll />}
       <ScrollToTopOnRouteChange />
+      <RouteTracker />
       {!isAdmin && <TopMarquee />}
       {!isAdmin && <Navbar />}
       <Routes>
@@ -80,6 +93,7 @@ function AppShell() {
           <CartDrawer />
           <WishlistDrawer />
           <StoreToast />
+          <ConsentBanner />
         </>
       )}
     </div>

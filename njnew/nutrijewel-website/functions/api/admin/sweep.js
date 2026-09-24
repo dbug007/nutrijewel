@@ -47,7 +47,7 @@ export async function onRequestPost(ctx) {
   const stale = results || [];
   if (stale.length === 0) return json({ ok: true, swept: 0 });
 
-  const who = accessIdentity(ctx.request) || 'admin';
+  const who = ctx.adminEmail || accessIdentity(ctx.request) || 'admin';
   const statements = [];
   stale.forEach((o) => {
     statements.push(ctx.env.DB.prepare(

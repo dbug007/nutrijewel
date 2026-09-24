@@ -54,7 +54,7 @@ export async function onRequestPost(ctx) {
     return fail(`Razorpay did not accept the refund: ${e.message}`, e.status || 502);
   }
 
-  const who = accessIdentity(ctx.request) || 'admin';
+  const who = ctx.adminEmail || accessIdentity(ctx.request) || 'admin';
   await ctx.env.DB.batch([
     ctx.env.DB.prepare(
       "UPDATE orders SET status='refunded', updated_at=datetime('now') WHERE id=? AND status=?"

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useReducer, useRef } from 
 import { getDefaultPacking, findHamperProduct } from '../data/hampers';
 import { buildOrderMessage } from '../utils/orderMessage';
 import { isBuyable } from '../utils/productAvailability';
+import { trackAddToCart } from '../lib/analytics';
 
 /*
  * Cart + Wishlist store. No backend, everything lives in the browser:
@@ -179,6 +180,7 @@ export function StoreProvider({ children }) {
     // Enforced at the store too, so a direct call cannot slip a product that
     // is not on sale into the cart behind the button's back.
     if (!isBuyable(product)) return;
+    trackAddToCart(product, variant, qty); // no-op without analytics consent
     const weight = (variant && variant.weight) || product.weight || 'one size';
     const unitPrice = (variant && variant.price) != null ? variant.price : product.price;
     const originalPrice = (variant && variant.originalPrice) != null ? variant.originalPrice : product.originalPrice;

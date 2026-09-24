@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store/StoreContext';
 import './CheckoutPage.css';
+import { trackBeginCheckout, trackPurchase } from '../lib/analytics';
 
 /*
  * Checkout. Phone first: the form is one column, inputs are 16px so iOS does not
@@ -124,6 +125,15 @@ export default function CheckoutPage() {
 
   useEffect(() => { fetchQuote(form.pincode); }, [fetchQuote, form.pincode]);
 
+  /* begin_checkout once per visit to this page, as soon as there is a real priced
+     cart, not on every pincode keystroke that re-quotes it. */
+  const beganCheckout = useRef(false);
+  useEffect(() => {
+    if (beganCheckout.current || !quote || !quote.ok) return;
+    beganCheckout.current = true;
+    trackBeginCheckout(quote.lines, quote.totalPaise);
+  }, [quote]);
+
   const set = (id) => (e) => setForm((f) => ({ ...f, [id]: e.target.value }));
 
   const pay = async () => {
@@ -160,25 +170,13 @@ export default function CheckoutPage() {
             });
             const out = await v.json();
             if (out.ok) {
-              /* GA4 purchase. The first time revenue has ever been measurable:
-                 WhatsApp checkout left the site, so orders never reached analytics.
-                 Skipped in test mode so fake orders do not pollute real figures.
-                 Amounts come from the server's quote, never recomputed here. */
-              if (window.gtag && !(quote && quote.testMode)) {
-                window.gtag('event', 'purchase', {
-                  transaction_id: out.orderNumber,
-                  value: out.amountPaise / 100,
-                  currency: 'INR',
-                  shipping: quote ? quote.shippingPaise / 100 : 0,
-                  items: (quote ? quote.lines : []).map((l) => ({
-                    item_id: l.productId,
-                    item_name: l.name,
-                    item_variant: l.weight,
-                    price: l.unitPaise / 100,
-                    quantity: l.qty,
-                  })),
-                });
-              }
+              // Consent-gated: GA4 plus the site's own funnel. Server amounts only.
+              trackPurchase({
+                orderNumber: out.orderNumber,
+                amountPaise: out.amountPaise,
+                shippingPaise: quote ? quote.shippingPaise : 0,
+                lines: quote ? quote.lines : [],
+              });
               clearCart();
               setDone({ orderNumber: out.orderNumber, amountPaise: out.amountPaise, testMode: quote && quote.testMode });
             } else {

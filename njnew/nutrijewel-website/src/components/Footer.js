@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Instagram, MessageCircle } from 'lucide-react';
 import './Footer.css';
 import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
+import { reopenConsent } from './ConsentBanner';
 
 const Footer = () => {
   const location = useLocation();
@@ -202,6 +203,8 @@ const Footer = () => {
                 <li><a href="/refund-policy" className="footer-link">Refund Policy</a></li>
                 <li><a href="/orders/track" className="footer-link">Track your order</a></li>
                 <li><a href="/shipping-policy" className="footer-link">Shipping Policy</a></li>
+                {/* Consent that cannot be withdrawn is not consent. */}
+                <li><button type="button" className="footer-link footer-link-btn" onClick={reopenConsent}>Cookie settings</button></li>
               </ul>
             </div>
 

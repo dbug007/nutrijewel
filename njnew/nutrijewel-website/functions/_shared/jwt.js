@@ -57,7 +57,10 @@ export async function verifyAccessJwt(token, jwks, { audience, issuer, now, subt
 
   const auds = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
   if (!audience || !auds.includes(audience)) throw new Error('wrong audience');
-  if (!issuer || claims.iss !== issuer) throw new Error('wrong issuer');
+  // A list is accepted because Google signs with either "accounts.google.com" or
+  // "https://accounts.google.com". Exact matches only; no prefix or pattern.
+  const issuers = Array.isArray(issuer) ? issuer : [issuer];
+  if (!issuers.length || !issuers.every(Boolean) || !issuers.includes(claims.iss)) throw new Error('wrong issuer');
   if (typeof claims.exp !== 'number' || claims.exp <= at) throw new Error('expired');
   // A minute of grace for clock skew between Cloudflare and this worker.
   if (typeof claims.nbf === 'number' && claims.nbf > at + 60) throw new Error('not yet valid');

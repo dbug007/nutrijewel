@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#93B559" />
 
-    <!-- Google Analytics 4. The Measurement ID appears twice below, keep them in step.
-         Only collects from nutrijewel.com, so staging builds report nothing. -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DH75XWLB6H"></script>
+    <!-- Google Analytics 4 does NOT load here any more. It loads only after the
+         visitor accepts analytics in the consent banner (India's DPDP Act), from
+         src/lib/analytics.js, which is also the one place the Measurement ID lives.
+         This block only sets Google Consent Mode to "denied" by default, as a second
+         guard in case anything else ever tries to start Google tags. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-DH75XWLB6H');
+      gtag('consent', 'default', {
+        analytics_storage: 'denied', ad_storage: 'denied',
+        ad_user_data: 'denied', ad_personalization: 'denied'
+      });
     </script>
 
     <!-- Primary Meta Tags -->

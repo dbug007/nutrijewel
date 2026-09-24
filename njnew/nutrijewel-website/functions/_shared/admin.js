@@ -18,6 +18,19 @@
 
 import { json } from './http.js';
 import { accessConfigured, verifyAccessRequest } from './access.js';
+import { googleConfigured, adminEmails } from './google.js';
+import { verifySession, readCookie, SESSION_COOKIE } from './session.js';
+
+/* Cross-site request forgery guard. A forged request can only come from a
+   browser, and browsers always send Origin on cross-site requests, so: if an
+   Origin is present it must be this site. Absent means a non-browser client,
+   which cannot carry out CSRF in the first place. SameSite=Strict on the session
+   cookie is the first guard; this is the second. */
+export function sameOrigin(request) {
+  const origin = request.headers.get('origin');
+  if (!origin) return true;
+  try { return new URL(origin).origin === new URL(request.url).origin; } catch (_) { return false; }
+}
 
 /* Constant-time string compare. A plain === leaks how much of the token matched
    through timing, which is enough to recover a secret given enough attempts.
@@ -36,7 +49,25 @@ function timingSafeEqual(a, b) {
 /* Returns null when the request may proceed, or a Response to return as-is.
    Async because, once Cloudflare Access is configured, the Access JWT has to be
    verified against Cloudflare's published keys. Every caller must await it. */
-export async function requireAdmin({ request, env }) {
+export async function requireAdmin(ctx) {
+  const { request, env } = ctx;
+  const changes = !['GET', 'HEAD'].includes(request.method);
+  if (changes && !sameOrigin(request)) return json({ ok: false, errors: ['Not authorised.'] }, 403);
+
+  /* Google sign in, once configured, REPLACES the token rather than sitting
+     beside it. Otherwise the token would remain a way round Google's MFA. The
+     allowlist is re-checked on every request, so removing an email revokes
+     access at once, even from someone holding a valid cookie.
+     Break glass: delete the GOOGLE_CLIENT_ID secret to fall back to the token. */
+  if (googleConfigured(env)) {
+    const session = await verifySession(env.SESSION_SECRET, readCookie(request, SESSION_COOKIE));
+    if (!session || !adminEmails(env).includes(session.email)) {
+      return json({ ok: false, errors: ['Please sign in.'], signIn: true }, 401);
+    }
+    ctx.adminEmail = session.email; // for the audit trail
+    return null;
+  }
+
   const expected = env && env.ADMIN_TOKEN;
 
   if (!expected) {

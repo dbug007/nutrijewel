@@ -1,0 +1,146 @@
+/* Admin charts.
+ *
+ * Every colour here was run through the data-viz validator, not picked by eye:
+ *
+ *   series      light #6b8c34  3.87:1 on #ffffff   (the brand green #93B559 is
+ *                                                   only 2.33:1, too faint for a mark)
+ *               dark  #7a9c3f  5.17:1 on #1d211d   (inside the dark lightness band,
+ *                                                   where #93B559 is too bright)
+ *   funnel      light #9dba66 > #6b8c34 > #3f5a1b  ordinal: one hue, monotone,
+ *               dark  #3f5a1b > #6b8c34 > #9dba66  light end clears the surface
+ *
+ * Dark mode is its own set of steps from the same ramp, not an automatic flip.
+ */
+
+.viz-root,
+.njad {
+  --viz-surface: #ffffff;
+  --viz-grid: #ebebe6;
+  --viz-text-1: #1f2420;
+  --viz-text-2: #4a5048;
+  --viz-text-3: #6b7169;
+  --viz-series: #6b8c34;
+  --viz-area: rgba(107, 140, 52, 0.10);
+  --viz-deemph: #b9bab2;
+  --viz-f1: #9dba66;
+  --viz-f2: #6b8c34;
+  --viz-f3: #3f5a1b;
+  --viz-good: #2e7d32;
+  --viz-bad: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .viz-root,
+  .njad {
+    --viz-surface: #1d211d;
+    --viz-grid: #2d322c;
+    --viz-text-1: #eceee9;
+    --viz-text-2: #c3c7bf;
+    --viz-text-3: #9aa197;
+    --viz-series: #7a9c3f;
+    --viz-area: rgba(122, 156, 63, 0.14);
+    --viz-deemph: #525850;
+    --viz-f1: #3f5a1b;
+    --viz-f2: #6b8c34;
+    --viz-f3: #9dba66;
+    --viz-good: #6fbf73;
+    --viz-bad: #f2b8b5;
+  }
+}
+
+/* ---------- cards ---------- */
+.viz-card {
+  background: var(--viz-surface);
+  border: 1px solid var(--viz-grid);
+  border-radius: 14px;
+  padding: 0.9rem 0.9rem 0.6rem;
+  min-width: 0; /* lets a grid cell shrink instead of overflowing on a phone */
+}
+.viz-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem; }
+.viz-card-title { margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--viz-text-1); }
+.viz-card-sub { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--viz-text-3); }
+.viz-toggle {
+  min-height: 32px; padding: 0 0.7rem; border-radius: 8px;
+  border: 1px solid var(--viz-grid); background: transparent; color: var(--viz-text-2);
+  font-size: 0.8rem; font-weight: 600; cursor: pointer; flex: 0 0 auto;
+}
+
+/* ---------- svg charts ---------- */
+.viz-wrap { position: relative; width: 100%; }
+.viz-svg { display: block; overflow: visible; touch-action: pan-y; }
+.viz-svg:focus-visible { outline: 2px solid var(--viz-series); outline-offset: 4px; border-radius: 6px; }
+.viz-grid { stroke: var(--viz-grid); stroke-width: 1; shape-rendering: crispEdges; }
+.viz-axis {
+  fill: var(--viz-text-3); font-size: 11px;
+  font-variant-numeric: tabular-nums; /* axis ticks align in a column */
+}
+.viz-line { fill: none; stroke: var(--viz-series); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.viz-area { fill: var(--viz-area); stroke: none; }
+.viz-dot { fill: var(--viz-series); stroke: var(--viz-surface); stroke-width: 2; }
+.viz-crosshair { stroke: var(--viz-text-3); stroke-width: 1; shape-rendering: crispEdges; }
+.viz-bar { fill: var(--viz-series); transition: opacity 0.15s ease; }
+.viz-bar.is-active { opacity: 0.75; }
+.viz-hit { fill: transparent; cursor: pointer; outline: none; }
+.viz-hit:focus-visible { fill: var(--viz-area); }
+
+/* ---------- tooltip ---------- */
+.viz-tip {
+  position: absolute; transform: translate(-50%, -100%);
+  margin-top: -6px; padding: 0.45rem 0.6rem;
+  background: var(--viz-surface); border: 1px solid var(--viz-grid); border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  pointer-events: none; white-space: nowrap; z-index: 2;
+}
+.viz-tip-value { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.9rem; color: var(--viz-text-1); }
+.viz-tip-label { font-size: 0.75rem; color: var(--viz-text-3); padding-left: 1rem; }
+/* A short stroke of the series colour, not a filled box. */
+.viz-tip-key { width: 10px; height: 2px; border-radius: 1px; background: var(--viz-series); }
+
+/* ---------- horizontal bars and funnel ---------- */
+.viz-barlist, .viz-funnel { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.viz-barrow, .viz-fstage { display: grid; gap: 0.25rem; outline: none; border-radius: 6px; }
+.viz-barrow:focus-visible, .viz-fstage:focus-visible { box-shadow: 0 0 0 2px var(--viz-series); }
+.viz-barname { font-size: 0.85rem; color: var(--viz-text-1); overflow-wrap: anywhere; }
+.viz-bartrack { display: flex; align-items: center; gap: 0.45rem; min-height: 16px; }
+/* 16px thick (under the 24px cap), rounded at the data end, square at the baseline. */
+.viz-barfill { height: 16px; border-radius: 0 4px 4px 0; background: var(--viz-series); flex: 0 0 auto; }
+.viz-fstep-1 { background: var(--viz-f1); }
+.viz-fstep-2 { background: var(--viz-f2); }
+.viz-fstep-3 { background: var(--viz-f3); }
+.viz-barvalue { font-size: 0.82rem; font-weight: 600; color: var(--viz-text-2); white-space: nowrap; }
+.viz-barsub { font-size: 0.74rem; color: var(--viz-text-3); }
+
+/* ---------- stat tiles ---------- */
+.viz-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+.viz-stat {
+  background: var(--viz-surface); border: 1px solid var(--viz-grid); border-radius: 12px;
+  padding: 0.75rem 0.8rem; display: grid; gap: 0.2rem; min-width: 0;
+}
+.viz-stat-label { font-size: 0.76rem; color: var(--viz-text-3); }
+/* Proportional figures on a big standalone number, not tabular. */
+.viz-stat-value { font-size: 1.35rem; font-weight: 700; color: var(--viz-text-1); line-height: 1.15; overflow-wrap: anywhere; }
+.viz-stat-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; min-height: 28px; }
+.viz-delta { font-size: 0.74rem; font-weight: 600; color: var(--viz-text-2); }
+.viz-delta.is-good { color: var(--viz-good); }
+.viz-delta.is-bad { color: var(--viz-bad); }
+.viz-delta-vs { font-weight: 400; color: var(--viz-text-3); font-size: 0.72rem; }
+.viz-spark { flex: 0 0 auto; }
+.viz-spark-line { fill: none; stroke: var(--viz-deemph); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+.viz-spark-end { fill: var(--viz-series); }
+
+/* ---------- table view ---------- */
+.viz-table-wrap { overflow-x: auto; max-height: 320px; }
+.viz-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.viz-table th, .viz-table td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--viz-grid); color: var(--viz-text-1); }
+.viz-table th { color: var(--viz-text-3); font-weight: 600; position: sticky; top: 0; background: var(--viz-surface); }
+.viz-table td { font-variant-numeric: tabular-nums; } /* a column of numbers must align */
+
+/* ---------- layout ---------- */
+.viz-grid-2 { display: grid; gap: 0.75rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 768px) {
+  .viz-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .viz-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .viz-stat-value { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) { .viz-bar { transition: none; } }

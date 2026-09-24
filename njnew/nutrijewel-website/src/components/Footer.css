@@ -562,3 +562,9 @@
     height: 40px;
   }
 }
+/* "Cookie settings" is a button (it acts, it does not navigate), styled to sit
+   with the links around it. */
+.footer-link-btn {
+  background: none; border: 0; padding: 0; margin: 0;
+  font: inherit; color: inherit; cursor: pointer; text-align: left;
+}

@@ -237,3 +237,30 @@
 @media (prefers-color-scheme: dark) {
   .njad-alert { background: #3a1f1c; border-color: #5c3a36; color: #f0b8b0; }
 }
+
+/* ---------- tabs ---------- */
+.njad-tabs {
+  display: flex; gap: 0.25rem; margin: 0 0 1rem;
+  border-bottom: 1px solid var(--ad-line);
+}
+.njad-tab {
+  min-height: 44px; padding: 0 1rem;
+  background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  color: var(--ad-mute); font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center;
+}
+.njad-tab.is-on { color: var(--ad-ink); border-bottom-color: var(--nj-green, #93B559); }
+
+/* ---------- dashboard ---------- */
+.njdash { display: grid; gap: 0.75rem; transition: opacity 0.2s ease; }
+/* Refetch keeps the frame: the last render stays, dimmed, with no skeleton flash. */
+.njdash.is-refreshing { opacity: 0.55; }
+.njdash-status { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.njdash-status li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.9rem; padding: 0.3rem 0; border-bottom: 1px solid var(--ad-line); }
+.njdash-status li:last-child { border-bottom: 0; }
+.njdash-status strong { font-variant-numeric: tabular-nums; }
+.njdash-devices { margin: 0.75rem 0 0; font-size: 0.8rem; color: var(--ad-mute); }
+@media (prefers-reduced-motion: reduce) { .njdash { transition: none; } }
+
+/* Google renders its own button; this only gives it room and centres it. */
+.njad-google { display: flex; justify-content: center; min-height: 44px; margin: 0.5rem 0; }

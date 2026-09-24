@@ -12,6 +12,7 @@ import WishlistHeart from '../components/store/WishlistHeart';
 import './ProductDetailPage.css';
 import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
 import useBuyNow from '../hooks/useBuyNow';
+import { trackViewItem } from '../lib/analytics';
 
 const WHATSAPP = '919960637656';
 const SITE = 'https://nutrijewel.com';
@@ -157,6 +158,8 @@ export default function ProductDetailPage() {
   // Called up here with the other hooks, never after the early return below for
   // an unknown product: hooks must run in the same order on every render.
   const buyNow = useBuyNow();
+  // GA4 view_item, once per product viewed. Sends nothing without consent.
+  useEffect(() => { if (product) trackViewItem(product, lowestVariant(product)); }, [product]);
 
   useEffect(() => {
     setSelectedVariant(lowestVariant(product));

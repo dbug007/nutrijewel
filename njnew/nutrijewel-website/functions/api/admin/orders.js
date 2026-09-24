@@ -94,7 +94,7 @@ export async function onRequestPost(ctx) {
     return fail(`Cannot move an order from ${order.status} to ${toStatus}.`, 409);
   }
 
-  const who = accessIdentity(ctx.request) || 'admin';
+  const who = ctx.adminEmail || accessIdentity(ctx.request) || 'admin';
 
   await ctx.env.DB.batch([
     ctx.env.DB.prepare("UPDATE orders SET status = ?, updated_at = datetime('now') WHERE id = ?").bind(toStatus, orderId),

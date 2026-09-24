@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2, RotateCcw } from 'lucide-react';
+import Dashboard from '../components/admin/Dashboard';
+import GoogleSignIn, { googleSignOut } from '../components/admin/GoogleSignIn';
 import './AdminPage.css';
 
 /*
@@ -14,6 +16,7 @@ import './AdminPage.css';
  */
 
 const TOKEN_KEY = 'nj_admin_token';
+const TAB_KEY = 'nj_admin_tab';
 
 const STATUS_LABEL = {
   created: 'Awaiting payment',
@@ -61,17 +64,47 @@ export default function AdminPage() {
     try { return window.localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; }
   });
   const [draftToken, setDraftToken] = useState('');
+  /* 'checking' until the server says which sign in is on. In 'google' mode the
+     session lives in an HttpOnly cookie the page cannot read, so the page only
+     knows what the server tells it: signed in or not, and as whom. */
+  const [auth, setAuth] = useState({ mode: 'checking', clientId: null, signedIn: false, email: null });
   const [orders, setOrders] = useState([]);
   const [stats, setStats] = useState(null);
   const [filter, setFilter] = useState('paid');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [busyId, setBusyId] = useState(null);
+  // Dashboard for the overview, Orders for the day's work. Remembered per device.
+  const [tab, setTab] = useState(() => {
+    try { return window.localStorage.getItem(TAB_KEY) || 'dashboard'; } catch (_) { return 'dashboard'; }
+  });
+  const chooseTab = (t) => {
+    setTab(t);
+    try { window.localStorage.setItem(TAB_KEY, t); } catch (_) { /* ignore */ }
+  };
+
+  const authed = (auth.mode === 'google' && auth.signedIn) || (auth.mode === 'token' && !!token);
+
+  useEffect(() => {
+    fetch('/api/admin/session', { credentials: 'same-origin' })
+      .then((r) => r.json())
+      .then((d) => setAuth(d.googleSignIn
+        ? { mode: 'google', clientId: d.googleClientId, signedIn: !!d.signedIn, email: d.email || null }
+        : { mode: 'token', clientId: null, signedIn: false, email: null }))
+      .catch(() => setAuth({ mode: 'token', clientId: null, signedIn: false, email: null }));
+  }, []);
 
   const api = useCallback(async (path, options = {}) => {
     const res = await fetch(path, {
       ...options,
-      headers: { Authorization: `Bearer ${token}`, ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) },
+      credentials: 'same-origin', // carries the session cookie in Google mode
+      headers: {
+        // The token is only sent in token mode. In Google mode the server ignores
+        // it anyway, and it should not travel where it is not needed.
+        ...(auth.mode === 'token' ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.headers || {}),
+      },
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -80,10 +113,10 @@ export default function AdminPage() {
       throw err;
     }
     return data;
-  }, [token]);
+  }, [token, auth.mode]);
 
   const load = useCallback(async () => {
-    if (!token) return;
+    if (!authed) return;
     setLoading(true); setError('');
     try {
       const qs = filter ? `?status=${encodeURIComponent(filter)}` : '';
@@ -95,13 +128,17 @@ export default function AdminPage() {
       // A bad token is worth clearing, so the next load shows the sign-in again
       // rather than failing silently forever.
       if (e.status === 401) {
-        try { window.localStorage.removeItem(TOKEN_KEY); } catch (_) { /* ignore */ }
-        setToken('');
+        if (auth.mode === 'google') {
+          setAuth((a) => ({ ...a, signedIn: false, email: null })); // session expired, sign in again
+        } else {
+          try { window.localStorage.removeItem(TOKEN_KEY); } catch (_) { /* ignore */ }
+          setToken('');
+        }
       }
     } finally {
       setLoading(false);
     }
-  }, [api, filter, token]);
+  }, [api, filter, authed, auth.mode]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -113,9 +150,34 @@ export default function AdminPage() {
     setToken(t); setDraftToken('');
   };
 
-  const signOut = () => {
-    try { window.localStorage.removeItem(TOKEN_KEY); } catch (_) { /* ignore */ }
-    setToken(''); setOrders([]); setStats(null);
+  /* Exchange Google's signed ID token for a session cookie. The server decides
+     whether this Google account is the owner; the page does not. */
+  const onGoogleCredential = useCallback(async (credential) => {
+    setError('');
+    try {
+      const res = await fetch('/api/admin/session', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) { setError((d.errors && d.errors[0]) || 'Sign in failed.'); return; }
+      setAuth((a) => ({ ...a, signedIn: true, email: d.email }));
+    } catch (_) {
+      setError('Could not reach the server.');
+    }
+  }, []);
+
+  const signOut = async () => {
+    if (auth.mode === 'google') {
+      await fetch('/api/admin/session', { method: 'DELETE', credentials: 'same-origin' }).catch(() => {});
+      googleSignOut();
+      setAuth((a) => ({ ...a, signedIn: false, email: null }));
+    } else {
+      try { window.localStorage.removeItem(TOKEN_KEY); } catch (_) { /* ignore */ }
+      setToken('');
+    }
+    setOrders([]); setStats(null);
   };
 
   /* Abandoned orders are people who opened the payment window and left. They
@@ -165,7 +227,24 @@ export default function AdminPage() {
     }
   };
 
-  if (!token) {
+  if (auth.mode === 'checking') {
+    return <main className="njad"><p className="njad-muted njad-signin">Checking sign in…</p></main>;
+  }
+
+  if (auth.mode === 'google' && !auth.signedIn) {
+    return (
+      <main className="njad">
+        <section className="njad-signin">
+          <h1>NutriJewel orders</h1>
+          <p className="njad-muted">Sign in with the Google account that owns this shop.</p>
+          <GoogleSignIn clientId={auth.clientId} onCredential={onGoogleCredential} onError={setError} />
+          {error && <p className="njad-error"><AlertCircle size={16} /> {error}</p>}
+        </section>
+      </main>
+    );
+  }
+
+  if (auth.mode === 'token' && !token) {
     return (
       <main className="njad">
         <form className="njad-signin" onSubmit={signIn}>
@@ -191,7 +270,8 @@ export default function AdminPage() {
     <main className="njad">
       <header className="njad-head">
         <div>
-          <h1>Orders</h1>
+          <h1>NutriJewel</h1>
+          {auth.mode === 'google' && auth.email && <p className="njad-muted njad-small">Signed in as {auth.email}</p>}
           {stats && (
             <p className="njad-muted">
               {stats.today_orders || 0} today, {rupees(stats.today_paise)}
@@ -211,6 +291,17 @@ export default function AdminPage() {
         </div>
       </header>
 
+      <nav className="njad-tabs" role="tablist" aria-label="Admin sections">
+        <button type="button" role="tab" aria-selected={tab === 'dashboard'}
+          className={`njad-tab${tab === 'dashboard' ? ' is-on' : ''}`} onClick={() => chooseTab('dashboard')}>Dashboard</button>
+        <button type="button" role="tab" aria-selected={tab === 'orders'}
+          className={`njad-tab${tab === 'orders' ? ' is-on' : ''}`} onClick={() => chooseTab('orders')}>
+          Orders
+          {stats && stats.needs_action > 0 && <span className="njad-badge" aria-label={`${stats.needs_action} waiting`}>{stats.needs_action}</span>}
+        </button>
+      </nav>
+
+      {tab === 'dashboard' ? <Dashboard api={api} /> : (<>
       {stats && (
         <section className="njad-stats" aria-label="Summary">
           <div className="njad-stat"><span className="njad-stat-n">{stats.needs_action || 0}</span><span className="njad-stat-l">To action</span></div>
@@ -325,6 +416,7 @@ export default function AdminPage() {
           </li>
         ))}
       </ul>
+      </>)}
     </main>
   );
 }
