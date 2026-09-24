@@ -40,17 +40,23 @@ export async function onRequestPost({ request, env }) {
 
   if (!order) return fail('Order not found.', 404);
 
-  /* Only move forward from `created`. If the webhook got here first the order is
-     already paid, and saying so again is not an error: the customer still sees
-     their confirmation. */
-  if (order.status === 'created') {
+  /* Move forward from `created`, or from `failed`: a declined card followed by a
+     successful UPI payment reaches here with the order already marked failed by
+     the first attempt's webhook. If the webhook got here first and the order is
+     already paid, saying so again is not an error.
+
+     The webhook fires on the same payment, often within the same second. If it
+     commits between the SELECT above and this batch, the UPDATE matches nothing,
+     and `WHERE changes() > 0` stops the audit row too, so the trail never claims
+     the order was marked paid twice. */
+  if (order.status === 'created' || order.status === 'failed') {
     await env.DB.batch([
       env.DB.prepare(
-        "UPDATE orders SET status='paid', razorpay_payment_id=?, paid_at=datetime('now'), updated_at=datetime('now') WHERE id=? AND status='created'"
+        "UPDATE orders SET status='paid', razorpay_payment_id=?, paid_at=datetime('now'), updated_at=datetime('now') WHERE id=? AND status IN ('created','failed')"
       ).bind(razorpay_payment_id, order.id),
       env.DB.prepare(
-        "INSERT INTO order_events (order_id, from_status, to_status, source, detail) VALUES (?, 'created', 'paid', 'verify', ?)"
-      ).bind(order.id, razorpay_payment_id),
+        "INSERT INTO order_events (order_id, from_status, to_status, source, detail) SELECT ?, ?, 'paid', 'verify', ? WHERE changes() > 0"
+      ).bind(order.id, order.status, razorpay_payment_id),
     ]);
   }
 
