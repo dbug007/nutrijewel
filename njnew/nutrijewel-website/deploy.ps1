@@ -157,8 +157,16 @@ if ($Production -and $Yes) {
 if ($Message) {
   Step 1 "Committing"
   Invoke-Git add -A -- 'njnew/nutrijewel-website'
-  Invoke-Git commit -q -m $Message
-  Ok "committed"
+  # A clean tree is not a failure. It happens whenever the change was outside
+  # the repo, for example rotating a Cloudflare secret, and the deploy still
+  # needs to run so the new value is picked up.
+  $staged = & git.exe -C $RepoRoot diff --cached --name-only
+  if ($staged) {
+    Invoke-Git commit -q -m $Message
+    Ok "committed"
+  } else {
+    Info "nothing to commit, deploying the current source"
+  }
 } else {
   Step 1 "Nothing to commit"
 }
