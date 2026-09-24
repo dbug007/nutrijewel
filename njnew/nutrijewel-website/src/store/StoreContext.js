@@ -7,7 +7,9 @@ import { isBuyable } from '../utils/productAvailability';
  * Cart + Wishlist store. No backend, everything lives in the browser:
  *  - cart/wishlist persisted to localStorage (per device/browser), key-versioned
  *  - a stable nj_device_id cookie is set for identity (future backend/analytics)
- *  - checkout = a single prefilled WhatsApp order (no payment gateway on a static site)
+ *  - checkout = a prefilled WhatsApp order, OR the /checkout page with Razorpay,
+ *    decided by ONLINE_PAYMENTS_ENABLED in src/config/payments.js. The cart
+ *    lines here are never trusted for price: the server reprices on checkout.
  *
  * Buy Now is unchanged and lives outside this store.
  */

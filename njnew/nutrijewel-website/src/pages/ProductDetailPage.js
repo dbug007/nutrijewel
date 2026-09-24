@@ -10,6 +10,7 @@ import WeightSelector from '../components/WeightSelector';
 import AddToCartButton from '../components/store/AddToCartButton';
 import WishlistHeart from '../components/store/WishlistHeart';
 import './ProductDetailPage.css';
+import { ONLINE_PAYMENTS_ENABLED } from '../config/payments';
 
 const WHATSAPP = '919960637656';
 const SITE = 'https://nutrijewel.com';
@@ -34,7 +35,9 @@ function buildFaqs(product) {
     },
     {
       q: 'How do I order and pay?',
-      a: 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly. No payment is taken on the website.',
+      a: ONLINE_PAYMENTS_ENABLED
+        ? 'Add to cart and check out. You pay securely on the site through Razorpay, by card, UPI or netbanking, and delivery is worked out from your pincode. You can also tap “Buy on WhatsApp” if you would rather talk to us first.'
+        : 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly. No payment is taken on the website.',
     },
     {
       q: 'Do you deliver to my city?',

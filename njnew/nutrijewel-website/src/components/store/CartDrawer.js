@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { X, ShoppingCart, Minus, Plus, Trash2, Gift, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store/StoreContext';
+import { ONLINE_PAYMENTS_ENABLED } from '../../config/payments';
 import { formatINR } from '../../utils/hamperPricing';
 import './store.css';
 
@@ -14,6 +16,19 @@ export default function CartDrawer() {
   } = useStore();
   const reduceMotion = useReducedMotion();
   const [expanded, setExpanded] = useState({});
+  const navigate = useNavigate();
+
+  /* Online checkout prices plain products only. A custom hamper carries its own
+     packing and box pricing that the server does not reprice yet, so a cart
+     holding one stays on WhatsApp rather than being charged without it.
+     Hampers are switched off today, so this is a guard, not a live path. */
+  const hasHamper = cart.some((l) => l.kind === 'hamper');
+  const payOnline = ONLINE_PAYMENTS_ENABLED && !hasHamper;
+
+  const goToCheckout = () => {
+    closeCart();
+    navigate('/checkout');
+  };
 
   const toggleExpanded = (key) => setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -191,11 +206,15 @@ export default function CartDrawer() {
                     <span>Subtotal</span>
                     <strong>{formatINR(subtotal)}</strong>
                   </div>
-                  <button className="nj-checkout-btn" onClick={checkoutWhatsApp}>
-                    <span>Order on WhatsApp</span>
+                  <button className="nj-checkout-btn" onClick={payOnline ? goToCheckout : checkoutWhatsApp}>
+                    <span>{payOnline ? 'Checkout' : 'Order on WhatsApp'}</span>
                     <span className="nj-checkout-meta">{cartCount} item{cartCount !== 1 ? 's' : ''} · {formatINR(subtotal)}</span>
                   </button>
-                  <p className="nj-drawer-note">No payment now, we'll confirm your order &amp; delivery on WhatsApp.</p>
+                  <p className="nj-drawer-note">
+                    {payOnline
+                      ? 'Secure payment by Razorpay. Delivery is worked out from your pincode at checkout.'
+                      : "No payment now, we'll confirm your order & delivery on WhatsApp."}
+                  </p>
                 </footer>
               </>
             )}

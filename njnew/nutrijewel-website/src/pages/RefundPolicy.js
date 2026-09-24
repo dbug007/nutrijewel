@@ -126,7 +126,6 @@ const RefundPolicy = () => {
         <ul>
           <li>Credit/Debit Card: Refunded to the same card</li>
           <li>UPI/Net Banking: Refunded to the source account</li>
-          <li>Cash on Delivery: Bank transfer to your provided account details</li>
         </ul>
 
         <h3>Refund Timeline</h3>

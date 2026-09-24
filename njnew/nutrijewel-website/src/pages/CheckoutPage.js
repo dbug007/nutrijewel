@@ -210,7 +210,10 @@ export default function CheckoutPage() {
               <span>{quote.shippingDisplay}</span>
             </div>
             <div className="njco-grand"><span>Total</span><span>{quote.totalDisplay}</span></div>
-            {quote.zone && <p className="njco-muted njco-eta">Usually {quote.zone.minDays} to {quote.zone.maxDays} days</p>}
+            {/* "after dispatch", not "delivered in": the Shipping Policy allows up
+                to 7 days to prepare an order, so promising 1 to 2 days flat would
+                contradict it. */}
+            {quote.zone && <p className="njco-muted njco-eta">Delivered {quote.zone.minDays} to {quote.zone.maxDays} days after dispatch</p>}
           </div>
         )}
         {!quote && !quoting && <p className="njco-muted">Enter your pincode to see delivery and the total.</p>}
