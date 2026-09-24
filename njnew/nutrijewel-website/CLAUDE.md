@@ -184,6 +184,16 @@ The web versions the site actually loads are the compressed files in
   ignored, so it never did anything. Do not add a `404.html` to `public/`, or
   the fallback switches off. Deep links to products still hit real prerendered
   files from `scripts/create-static-routes.js`; only unknown paths reach React.
+- **That fallback once took the site down (2026-09-25).** Seconds after a deploy,
+  an edge served the new `index.html` before the new `main.js` had reached it.
+  The fallback answered the missing JS with HTML, `_headers` gave it the one-year
+  `immutable` cache meant for `/static/*`, and Cloudflare cached it: blank site.
+  Two guards now, **do not remove either**: `functions/static/[[path]].js` never
+  lets a `/static` file be served as HTML (retries, then an uncacheable 404), and
+  `deploy.ps1` bakes the commit into the bundle (`REACT_APP_BUILD_ID`, read in
+  `src/index.js`), so every deploy's `main.js` has a name no cache can hold. The
+  wrangler login cannot purge the cache (no `cache_purge` scope); a new file name
+  is the fix. The poisoned `main.46b7e20d.js` stays cached but nothing loads it.
 - CRA's Jest 27 cannot parse ESM-only packages. `package.json` carries a
   `transformIgnorePatterns` exception for `lenis` and maps `@number-flow/react` to
   a stub at `src/test/numberFlowMock.js`.
