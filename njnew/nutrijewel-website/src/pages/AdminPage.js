@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle } from 'lucide-react';
+import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2 } from 'lucide-react';
 import './AdminPage.css';
 
 /*
@@ -115,6 +115,18 @@ export default function AdminPage() {
     setToken(''); setOrders([]); setStats(null);
   };
 
+  /* Abandoned orders are people who opened the payment window and left. They
+     are not work, but they look like work until they are cleared. */
+  const sweep = async () => {
+    if (!window.confirm('Mark unpaid orders older than 6 hours as failed?')) return;
+    setError('');
+    try {
+      const out = await api('/api/admin/sweep', { method: 'POST', body: JSON.stringify({ hours: 6 }) });
+      await load();
+      if (out.swept === 0) setError('Nothing to clear.');
+    } catch (e) { setError(e.message); }
+  };
+
   const move = async (order, toStatus) => {
     setBusyId(order.id); setError('');
     try {
@@ -163,6 +175,9 @@ export default function AdminPage() {
         <div className="njad-head-actions">
           <button className="njad-icon-btn" onClick={load} disabled={loading} aria-label="Refresh">
             <RefreshCw size={18} className={loading ? 'njad-spin' : ''} />
+          </button>
+          <button className="njad-icon-btn" onClick={sweep} disabled={loading} aria-label="Clear abandoned orders" title="Clear abandoned orders">
+            <Trash2 size={18} />
           </button>
           <button className="njad-icon-btn" onClick={signOut} aria-label="Sign out">
             <LogOut size={18} />
@@ -221,6 +236,17 @@ export default function AdminPage() {
                 {o.shipping_paise > 0 ? `, ${rupees(o.shipping_paise)} delivery` : ', free delivery'}
               </p>
             </div>
+
+            {o.items && o.items.length > 0 && (
+              <ul className="njad-items">
+                {o.items.map((it, i) => (
+                  <li key={i}>
+                    <span>{it.product_name} <em>{it.weight}</em></span>
+                    <span className="njad-qty">x{it.qty}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {o.nextStatuses && o.nextStatuses.length > 0 && (
               <div className="njad-actions">

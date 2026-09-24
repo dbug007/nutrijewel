@@ -11,6 +11,12 @@
 # production
 /build
 
+# Wrangler's local state. Holds the LOCAL D1 database (real customer rows if
+# anyone ever tests with real details), build bundles and caches. It was once
+# swept into git by `git add -A` in deploy.ps1 and published; the content was
+# fictional test data and no secret, but it must never be tracked again.
+/.wrangler/
+
 # raw source footage (~173MB of camera MP4s). The web versions the site actually
 # loads are the compressed files in public/reels/, which are committed.
 /video

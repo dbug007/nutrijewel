@@ -205,3 +205,13 @@
   .njad-chip.is-on { background: var(--ad-ink); color: #141714; }
   .njad-btn-danger { background: var(--ad-card); color: #f0a49c; border-color: #5c3a36; }
 }
+
+/* What is actually in the order, so it can be packed from this screen. */
+.njad-items {
+  list-style: none; margin: 0; padding: 0.6rem 0 0;
+  border-top: 1px dashed var(--ad-line);
+  display: grid; gap: 0.3rem;
+}
+.njad-items li { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem; }
+.njad-items em { font-style: normal; color: var(--ad-mute); font-size: 0.88em; }
+.njad-qty { font-variant-numeric: tabular-nums; font-weight: 600; }

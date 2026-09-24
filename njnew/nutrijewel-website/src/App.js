@@ -21,6 +21,7 @@ import RecipesBlogPage from './pages/RecipesBlogPage';
 import ContactPage from './pages/ContactPage';
 import AdminPage from './pages/AdminPage';
 import CheckoutPage from './pages/CheckoutPage';
+import TrackOrderPage from './pages/TrackOrderPage';
 // Birthday "Spin & Win" campaign, disabled. Un-comment to re-enable the wheel route.
 // import SpinWheelPage from './pages/SpinWheelPage';
 // import { CAMPAIGN_LIVE } from './data/birthdayOffers';
@@ -64,6 +65,7 @@ function AppShell() {
               robots.txt, and the API behind it refuses without a token. Put
               Cloudflare Access in front of /admin and /api/admin/* as well. */}
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders/track" element={<TrackOrderPage />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* Birthday "Spin & Win" campaign disabled. Old campaign links redirect home. */}
           {/* Re-enable: un-comment the SpinWheelPage + CAMPAIGN_LIVE imports above and restore:

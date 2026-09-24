@@ -96,9 +96,9 @@ Full detail in [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md). The short versi
   which is the browsable staging that `nutrijewel-test` never had.
 - D1 database `nutrijewel-orders` exists but is **empty and unused**, waiting on
   the checkout work.
-- `public/_redirects` and `public/_headers` configure SPA fallback and security
-  headers. They replaced `public/404.html`, `public/CNAME` and the SPA decoder
-  that used to sit in `public/index.html`.
+- `public/_headers` sets the security headers. SPA fallback needs no file at
+  all (see Stack facts). Together these replaced `public/404.html`,
+  `public/CNAME` and the SPA decoder that used to sit in `public/index.html`.
 - **nutrijewel.com still resolves to GitHub Pages.** The nameservers are
   Hostinger's (`ns1/ns2.dns-parking.com`), so Cloudflare is not authoritative
   yet. `-Production` therefore still means `gh-pages`.
@@ -165,10 +165,12 @@ The web versions the site actually loads are the compressed files in
   wrappers `products.js` / `hampers.js` are what components import.
 - Several products are commented out inside `/* */` in `products.data.js`. The live
   catalogue is smaller than the file looks.
-- SPA routing: on Cloudflare Pages this is `public/_redirects` (`/* /index.html 200`).
-  The old GitHub Pages `404.html` trick and its `index.html` decoder are **gone**.
-  Deep links to products still hit real prerendered files from
-  `scripts/create-static-routes.js`; only unknown paths fall through to React.
+- SPA routing: Cloudflare Pages does it **by itself** whenever there is no
+  top-level `404.html`. There is deliberately no `_redirects` file: the obvious
+  rule, `/* /index.html 200`, is flagged by wrangler as an infinite loop and
+  ignored, so it never did anything. Do not add a `404.html` to `public/`, or
+  the fallback switches off. Deep links to products still hit real prerendered
+  files from `scripts/create-static-routes.js`; only unknown paths reach React.
 - CRA's Jest 27 cannot parse ESM-only packages. `package.json` carries a
   `transformIgnorePatterns` exception for `lenis` and maps `@number-flow/react` to
   a stub at `src/test/numberFlowMock.js`.

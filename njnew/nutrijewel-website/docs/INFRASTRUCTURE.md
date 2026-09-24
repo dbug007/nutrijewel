@@ -58,15 +58,17 @@ old `nutrijewel-test` branch could never provide.
 
 ### Config files
 
-Both live in `public/` so CRA copies them into `build/` verbatim.
+It lives in `public/` so CRA copies it into `build/` verbatim.
 
-- **`public/_redirects`** contains `/*  /index.html  200`. This is the SPA
-  fallback. Pages serves a real file when one exists, so the per-product pages
-  written by `scripts/create-static-routes.js` are still served as themselves
-  with their own title, canonical and Product JSON-LD. Only paths with no file
-  fall through to React. Verified: `/products/granola/` and
-  `/products/rustic-ragi-bread/` return different byte counts from `/`, so they
-  are the prerendered files and not the fallback.
+- **No `_redirects` file, on purpose.** Pages treats a project with no
+  top-level `404.html` as a single-page app and serves `index.html` for unmatched
+  paths automatically. A `/* /index.html 200` rule used to live here; wrangler
+  flags it as an infinite loop and ignores it, so it never did anything and was
+  removed. Pages still serves a real file first, so the per-product pages from
+  `scripts/create-static-routes.js` keep their own title, canonical and Product
+  JSON-LD. Verified: `/products/granola/` and `/products/rustic-ragi-bread/`
+  return different byte counts from `/`. **Never add a `404.html` to `public/`**,
+  or the SPA fallback turns off and every deep link 404s.
 - **`public/_headers`** sets HSTS, `X-Content-Type-Options`, `X-Frame-Options`,
   `Referrer-Policy`, `Permissions-Policy` and a Content Security Policy, plus
   cache lifetimes: one year immutable for `/static/*` (hashed filenames), one day

@@ -47,10 +47,29 @@ export async function onRequestGet(ctx) {
       LIMIT ?`
   ).bind(...binds).all();
 
+  const orders = results || [];
+
+  /* Fetch the items for this page of orders in one query rather than one per
+     order. A handful of orders is fine either way, but a busy festival week is
+     not the moment to discover an N+1. */
+  let itemsByOrder = {};
+  if (orders.length) {
+    const ids = orders.map((o) => o.id);
+    const placeholders = ids.map(() => '?').join(',');
+    const { results: items } = await ctx.env.DB.prepare(
+      `SELECT order_id, product_name, weight, qty, line_paise
+         FROM order_items WHERE order_id IN (${placeholders}) ORDER BY id`
+    ).bind(...ids).all();
+    (items || []).forEach((i) => {
+      (itemsByOrder[i.order_id] = itemsByOrder[i.order_id] || []).push(i);
+    });
+  }
+
   return json({
     ok: true,
-    orders: (results || []).map((o) => ({
+    orders: orders.map((o) => ({
       ...o,
+      items: itemsByOrder[o.id] || [],
       nextStatuses: MANUAL_TRANSITIONS[o.status] || [],
     })),
   });
