@@ -469,34 +469,5 @@ module.exports = [
     isTopSeller: false,
     isBestSeller: false,
     isChefsSpecial: false
-  },
-  /* ⚠️ INTERNAL TEST PRODUCT. Exists only to make a real ₹1 payment on the live
-     site and confirm money reaches the bank. Not a real product.
-
-       hidden: true        not in the shop, homepage, hampers, related products,
-                           the prerendered SEO pages or search. Reachable only at
-                           /products/nj-dummy.
-       freeShipping: true  so the test charges ₹1, not ₹1 plus delivery. Honoured
-                           only when this is the ONLY item in the cart, so a real
-                           order cannot dodge delivery by adding it.
-
-     ₹1 is Razorpay's minimum charge. Delete this entry once the test is done. */
-  {
-    id: 'nj-dummy',
-    name: 'NJ dummy',
-    displayName: 'NJ dummy',
-    category: 'Internal',
-    image: '/logo512.png',
-    images: ['/logo512.png'],
-    description: 'Internal test product for verifying live payments. This is not a real product and will not be shipped.',
-    price: 1,
-    originalPrice: 1,
-    weight: 'test',
-    features: ['Internal test only'],
-    hidden: true,
-    freeShipping: true,
-    isTopSeller: false,
-    isBestSeller: false,
-    isChefsSpecial: false
   }
 ];

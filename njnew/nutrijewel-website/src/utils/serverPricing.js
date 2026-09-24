@@ -117,7 +117,6 @@ function repriceCart(rawLines, { pincode } = {}) {
       linePaise,
       // carried for the order record, never used in arithmetic
       mrpPaise: variant.originalPrice != null ? toPaise(variant.originalPrice) : null,
-      freeShipping: !!product.freeShipping,
     });
   });
 
@@ -135,11 +134,7 @@ function repriceCart(rawLines, { pincode } = {}) {
     if (!zone || !zone.serviceable) {
       return { ok: false, errors: ['We do not deliver to that pincode yet. Message us on WhatsApp and we will see what we can do.'], lines, itemsPaise, shippingPaise: 0, totalPaise: 0, zone };
     }
-    /* A product flagged freeShipping (only the ₹1 payment test) waives delivery,
-       but only when EVERY line in the cart carries the flag. Otherwise adding the
-       test item to a real order would make the whole order ship free. */
-    const allFreeShipping = lines.length > 0 && lines.every((l) => l.freeShipping);
-    shippingPaise = allFreeShipping ? 0 : shippingPaiseFor(zone, itemsPaise);
+    shippingPaise = shippingPaiseFor(zone, itemsPaise);
   }
 
   const totalPaise = itemsPaise + shippingPaise;

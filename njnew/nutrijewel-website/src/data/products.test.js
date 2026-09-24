@@ -1,29 +1,26 @@
 import { products, allProducts } from './products';
-import { isBuyable } from '../utils/productAvailability';
 const { isHamperable } = require('../utils/hamperPricing');
 
-/* Hidden products must be reachable by URL and invisible everywhere else. */
+/* `hidden` keeps a product reachable by URL but out of every listing. It was
+   built for the ₹1 live-payment test and kept for the next one. These test the
+   mechanism, not any particular product. */
 describe('hidden products', () => {
-  const dummy = allProducts.find((p) => p.id === 'nj-dummy');
-
-  it('still exists, so /products/nj-dummy resolves', () => {
-    expect(dummy).toBeDefined();
+  it('the shop list is exactly the full list minus anything hidden', () => {
+    expect(products.map((p) => p.id)).toEqual(allProducts.filter((p) => !p.hidden).map((p) => p.id));
   });
 
-  it('is left out of the list every shop page reads', () => {
-    expect(products.map((p) => p.id)).not.toContain('nj-dummy');
+  it('nothing is hidden right now, so the shop shows the whole catalogue', () => {
+    expect(allProducts.filter((p) => p.hidden)).toEqual([]);
+    expect(products.length).toBe(allProducts.length);
   });
 
-  it('is left out of hampers', () => {
-    expect(isHamperable(dummy)).toBe(false);
+  it('keeps a hidden product out of hampers', () => {
+    const buyable = allProducts.find((p) => !p.outOfSeason && !p.comingSoon && !p.priceOnRequest);
+    expect(isHamperable(buyable)).toBe(true);
+    expect(isHamperable({ ...buyable, hidden: true })).toBe(false);
   });
 
-  it('is still buyable, since buying it is the whole point', () => {
-    expect(isBuyable(dummy)).toBe(true);
-  });
-
-  it('hides nothing else: every other product is still listed', () => {
-    expect(products.length).toBe(allProducts.filter((p) => !p.hidden).length);
-    expect(allProducts.filter((p) => p.hidden).map((p) => p.id)).toEqual(['nj-dummy']);
+  it('the ₹1 test product is gone', () => {
+    expect(allProducts.find((p) => p.id === 'nj-dummy')).toBeUndefined();
   });
 });
