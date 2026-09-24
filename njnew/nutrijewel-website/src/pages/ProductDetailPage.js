@@ -153,6 +153,9 @@ export default function ProductDetailPage() {
   const actionsRef = useRef(null);
   const swipeStartX = useRef(0);
   const didSwipe = useRef(false);
+  // Called up here with the other hooks, never after the early return below for
+  // an unknown product: hooks must run in the same order on every render.
+  const buyNow = useBuyNow();
 
   useEffect(() => {
     setSelectedVariant(lowestVariant(product));
@@ -304,8 +307,6 @@ export default function ProductDetailPage() {
     if (Math.abs(dx) > 45) { didSwipe.current = true; (dx > 0 ? nextImage() : prevImage()); }
   };
   const onMainClick = () => { if (!didSwipe.current) setLightboxOpen(true); };
-
-  const buyNow = useBuyNow();
 
   const buyOnWhatsApp = () => {
     const msg = `Hi! I'm interested in purchasing ${product.name} (${weight}) - ₹${price}. Can you please share availability and delivery details?`;
