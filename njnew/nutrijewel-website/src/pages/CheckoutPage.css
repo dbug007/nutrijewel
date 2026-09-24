@@ -1,0 +1,129 @@
+/* Checkout. Phone layout first; desktop puts the summary beside the form.
+   Tap targets 44px minimum, inputs 16px so iOS does not zoom on focus. */
+
+.njco {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 7rem;   /* bottom room for the docked pay bar */
+  color: var(--nj-ink, #1f2420);
+}
+.njco h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  margin: 0 0 1rem;
+}
+
+.njco-back {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  min-height: 44px; padding: 0 0.6rem 0 0;
+  background: none; border: 0; cursor: pointer;
+  color: var(--nj-ink, #1f2420); font-size: 0.95rem;
+}
+
+/* ---------- summary ---------- */
+.njco-summary {
+  background: #fbfaf7;
+  border: 1px solid #e6e5e0;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+.njco-summary ul { list-style: none; margin: 0 0 0.75rem; padding: 0; display: grid; gap: 0.5rem; }
+.njco-summary li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.95rem; }
+.njco-summary li em { font-style: normal; color: #6b7169; font-size: 0.85em; }
+
+.njco-totals { border-top: 1px solid #e6e5e0; padding-top: 0.75rem; display: grid; gap: 0.4rem; }
+.njco-totals > div { display: flex; justify-content: space-between; font-size: 0.95rem; }
+.njco-grand { font-weight: 700; font-size: 1.1rem !important; padding-top: 0.4rem; border-top: 1px dashed #e6e5e0; }
+.njco-eta { font-size: 0.82rem; margin: 0.2rem 0 0; }
+
+/* ---------- form ---------- */
+.njco-form { display: grid; gap: 0.9rem; }
+.njco-field { display: grid; gap: 0.3rem; }
+.njco-field > span { font-size: 0.85rem; font-weight: 600; color: #4a5048; }
+.njco-field input,
+.njco-field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #ddddd6;
+  border-radius: 10px;
+  font-size: 16px;            /* below 16px iOS zooms the page on focus */
+  font-family: inherit;
+  background: #fff;
+  color: inherit;
+}
+.njco-field textarea { min-height: 84px; resize: vertical; }
+.njco-field input:focus-visible,
+.njco-field textarea:focus-visible {
+  outline: 2px solid var(--nj-green, #93B559);
+  outline-offset: 1px;
+  border-color: var(--nj-green, #93B559);
+}
+
+/* ---------- errors ---------- */
+.njco-errors {
+  background: #fdeceb; border: 1px solid #f0c8c4; color: #8a3128;
+  border-radius: 10px; padding: 0.7rem 0.85rem; font-size: 0.9rem;
+  display: grid; gap: 0.35rem;
+}
+.njco-errors p { margin: 0; display: flex; gap: 0.4rem; align-items: flex-start; }
+
+/* ---------- pay ---------- */
+.njco-btn {
+  min-height: 48px;
+  padding: 0 1.1rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+  border-radius: 10px; border: 1px solid transparent;
+  font-size: 1rem; font-weight: 700; cursor: pointer;
+  text-decoration: none;
+}
+.njco-btn-primary { background: var(--nj-green, #93B559); color: #12200a; }
+.njco-btn-primary:disabled { opacity: 0.5; cursor: default; }
+.njco-btn-pay { width: 100%; }
+
+.njco-secure {
+  display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+  font-size: 0.78rem; color: #6b7169; margin: 0.5rem 0 0;
+}
+
+/* On a phone the pay button is docked, so it is always reachable with a thumb. */
+@media (max-width: 767px) {
+  .njco-pay {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+    background: rgba(255,255,255,0.97);
+    border-top: 1px solid #e6e5e0;
+    padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+    backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes njco-rotate { to { transform: rotate(360deg); } }
+.njco-spin { animation: njco-rotate 0.9s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .njco-spin { animation: none; } }
+
+/* ---------- confirmation / empty ---------- */
+.njco-done { text-align: center; padding-top: 3rem; display: grid; gap: 0.6rem; justify-items: center; }
+.njco-tick { color: var(--nj-green, #93B559); }
+.njco-num { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.03em; margin: 0; font-variant-numeric: tabular-nums; }
+.njco-muted { color: #6b7169; max-width: 30rem; margin: 0; }
+
+/* ---------- desktop ---------- */
+@media (min-width: 768px) {
+  .njco { padding: 2rem 1.5rem 4rem; display: grid; grid-template-columns: 1fr 22rem; gap: 2rem; align-items: start; }
+  .njco h1, .njco-back { grid-column: 1 / -1; }
+  .njco-form { grid-column: 1; }
+  .njco-summary { grid-column: 2; position: sticky; top: 6rem; margin-bottom: 0; }
+  .njco-done { grid-template-columns: 1fr; }
+}
+
+/* Test mode. Deliberately loud: a confirmation screen that looks real while no
+   money moved is the most misleading thing this page could do. */
+.njco-testmode {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: #fff4e0; border: 1px solid #f0d19a; color: #7a5410;
+  border-radius: 10px; padding: 0.6rem 0.8rem;
+  font-size: 0.88rem; font-weight: 600;
+  margin: 0 0 1rem;
+}
+@media (min-width: 768px) { .njco-testmode { grid-column: 1 / -1; } }
