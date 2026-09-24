@@ -216,7 +216,11 @@ export default function CheckoutPage() {
         {!quote && !quoting && <p className="njco-muted">Enter your pincode to see delivery and the total.</p>}
       </section>
 
-      <form className="njco-form" onSubmit={(e) => { e.preventDefault(); if (canPay) pay(); }}>
+      {/* Never submit on Enter. On a phone the keyboard's Go key submits the
+          form, and wiring that to pay() opened the payment window without the
+          customer deciding to pay. Paying must be a deliberate tap on the
+          button below and nothing else. */}
+      <form className="njco-form" onSubmit={(e) => e.preventDefault()}>
         {FIELDS.map((f) => (
           <label key={f.id} className="njco-field">
             <span>{f.label}</span>
@@ -243,7 +247,7 @@ export default function CheckoutPage() {
         )}
 
         <div className="njco-pay">
-          <button type="submit" className="njco-btn njco-btn-primary njco-btn-pay" disabled={!canPay}>
+          <button type="button" onClick={pay} className="njco-btn njco-btn-primary njco-btn-pay" disabled={!canPay}>
             {paying ? <><Loader2 size={18} className="njco-spin" /> Opening payment</> : <>Pay {quote ? quote.totalDisplay : ''}</>}
           </button>
           <p className="njco-secure"><ShieldCheck size={14} /> Payment handled by Razorpay. We never see your card details.</p>
