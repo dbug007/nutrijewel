@@ -31,6 +31,16 @@ deepak-instructions/
 # is still ignored for the same reason.
 .claude/
 
+# Photos dropped into the app folder to be processed. Phone originals carry
+# camera metadata, sometimes GPS, and this repo is public: originals belong in
+# deepak-instructions/originals/, web copies in public/images/products/.
+# (Only affects new files; images already tracked here stay tracked.)
+/*.jpg
+/*.jpeg
+/*.png
+/*.heic
+/*.webp
+
 # misc
 .DS_Store
 

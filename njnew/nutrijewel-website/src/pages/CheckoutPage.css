@@ -43,6 +43,13 @@
   background: #edf7ee; color: #1f5e24; font-size: 0.9rem; font-weight: 700; text-align: center;
 }
 
+/* Zero platform and convenience fee: shown only while it is true. */
+.njco-nofees {
+  margin: 0.4rem 0 0; display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+  color: #3d5220; font-size: 0.86rem; font-weight: 600; text-align: center;
+}
+.njco-nofees svg { color: var(--nj-olive, #6D8A3C); flex: 0 0 auto; }
+
 /* Fee lines: label with its (i), the amount, and the explanation on its own
    full-width line underneath when opened. */
 .njco-fee-line { flex-wrap: wrap; align-items: center; color: #4a5048; }

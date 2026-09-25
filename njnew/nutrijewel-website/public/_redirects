@@ -1,0 +1,32 @@
+# Old product photo addresses -> public/images/products/ (moved 2026-09-25).
+# Only specific 301s here. Never add a catch-all like /* /index.html 200:
+# Pages does SPA routing by itself, and that rule is flagged as a loop.
+/images/new%20cambridge%20of%20love%20double%20chocolate%20cake.jpg /images/products/cambridge-double-chocolate-cake.jpg 301
+/images/fresh%20cambridge%20of%20chocolate%20cake.jpg /images/products/cambridge-chocolate-cake.jpg 301
+/images/packed%20cambridge%20of%20love%20cake.jpg /images/products/cambridge-cake-packed.jpg 301
+/images/Chocolate-wal-nana-muffin.jpg /images/products/chocolate-walnana-muffin.jpg 301
+/images/Millet-midnight-muffin.jpg /images/products/millet-midnight-muffin.jpg 301
+/images/piece%20oxford%20of%20love.jpeg /images/products/oxford-cake-slice.jpg 301
+/images/oxford%20of%20love%20cake.jpg /images/products/oxford-cake.jpg 301
+/images/foxnutmilletcrunch.jpg /images/products/foxnut-millet-crunch.jpg 301
+/images/Panchamrit-muffin.jpg /images/products/panchamrit-muffin.jpg 301
+/images/rustic-ragi-bread.jpg /images/products/rustic-ragi-bread.jpg 301
+/images/hummuspitabread.jpg /images/products/hummus-pita-bread.jpg 301
+/images/Punchamrit-cake.jpg /images/products/panchamrit-cake.jpg 301
+/images/sattu-ladoo-box.jpg /images/products/sattu-ladoo-box.jpg 301
+/images/granolacookies.jpg /images/products/granola-cookies.jpg 301
+/images/Focaccia-bread.jpg /images/products/focaccia-bread.jpg 301
+/images/peanutbutter.jpg /images/products/peanut-butter.jpg 301
+/images/stuffeddates.jpg /images/products/stuffed-dates.jpg 301
+/images/thandaicake.jpg /images/products/thandai-cake.jpg 301
+/images/omegacrunch.jpg /images/products/omega-crunch.jpg 301
+/images/sattu-ladoo.jpg /images/products/sattu-ladoo.jpg 301
+/images/liquid-gold.jpg /images/products/liquid-gold.jpg 301
+/images/amritbites.jpg /images/products/amrit-bites.jpg 301
+/images/blissbites.jpg /images/products/bliss-bites.jpg 301
+/images/ragisattva.jpg /images/products/ragi-sattva.jpg 301
+/images/nutribars.jpg /images/products/nutri-bars.jpg 301
+/images/gunpowder.jpg /images/products/gunpowder.jpg 301
+/images/plumcake.jpg /images/products/plum-cake.jpg 301
+/images/granola.jpg /images/products/granola.jpg 301
+/images/hummus.jpg /images/products/hummus.jpg 301

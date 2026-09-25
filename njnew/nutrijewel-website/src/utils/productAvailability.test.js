@@ -43,11 +43,12 @@ describe('the parked products stay unbuyable', () => {
 
 /* Hummus came off the seasonal shelf on the owner's word, at the price it last
    sold for. Pinned so a stray edit to the price or the flag is noticed. */
-it('hummus is back in Dips & Spreads at Rs 250 for 200g', () => {
+// Rs 250 when it came back, Rs 258 after the owner's 3% rise on every product.
+it('hummus is back in Dips & Spreads at Rs 258 for 200g', () => {
   const hummus = byId('hummus');
   expect(isBuyable(hummus)).toBe(true);
   expect(hummus.category).toBe('Dips & Spreads');
-  expect(hummus.price).toBe(250);
+  expect(hummus.price).toBe(258);
   expect(hummus.weight).toBe('200g');
 });
 

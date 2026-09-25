@@ -215,12 +215,16 @@ export default function CartDrawer() {
                     <span>Subtotal</span>
                     <strong>{formatINR(subtotal)}</strong>
                   </div>
-                  {payOnline && (
+                  {payOnline && fees.feesPaise > 0 && (
                     <div className="nj-drawer-fees" data-testid="drawer-fees">
-                      <div><span>{feeRules.PLATFORM_FEE_LABEL}</span><span>{formatINR(fees.platformFeePaise / 100)}</span></div>
-                      <div><span>{feeRules.CONVENIENCE_FEE_LABEL}</span><span>{formatINR(fees.convenienceFeePaise / 100)}</span></div>
+                      {fees.platformFeePaise > 0 && <div><span>{feeRules.PLATFORM_FEE_LABEL}</span><span>{formatINR(fees.platformFeePaise / 100)}</span></div>}
+                      {fees.convenienceFeePaise > 0 && <div><span>{feeRules.CONVENIENCE_FEE_LABEL}</span><span>{formatINR(fees.convenienceFeePaise / 100)}</span></div>}
                       <div className="nj-drawer-total"><span>Total before delivery</span><strong>{formatINR(beforeDelivery)}</strong></div>
                     </div>
+                  )}
+                  {/* True only while no fee is charged on this basket. */}
+                  {payOnline && fees.feesPaise === 0 && feeRules.noFees() && (
+                    <p className="nj-drawer-nofees" data-testid="drawer-no-fees">{feeRules.NO_FEES_MESSAGE}</p>
                   )}
                   <button className="nj-checkout-btn" onClick={payOnline ? goToCheckout : checkoutWhatsApp}>
                     <span>{payOnline ? 'Checkout' : 'Order on WhatsApp'}</span>

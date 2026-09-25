@@ -3,6 +3,7 @@ import { getDefaultPacking, findHamperProduct } from '../data/hampers';
 import { buildOrderMessage } from '../utils/orderMessage';
 import { isBuyable } from '../utils/productAvailability';
 import { trackAddToCart } from '../lib/analytics';
+import { allProducts } from '../data/products';
 
 /*
  * Cart + Wishlist store. No backend, everything lives in the browser:
@@ -57,12 +58,29 @@ const loadPersisted = () => {
     if (!raw) return { cart: [], wishlist: [] };
     const data = JSON.parse(raw);
     return {
-      cart: Array.isArray(data.cart) ? data.cart.filter(validCartLine) : [],
+      cart: Array.isArray(data.cart) ? data.cart.filter(validCartLine).map(withCurrentPrice) : [],
       wishlist: Array.isArray(data.wishlist) ? data.wishlist.filter((id) => typeof id === 'string') : [],
     };
   } catch (_) {
     return { cart: [], wishlist: [] }; // corrupt/old data → reset safely
   }
+};
+
+/* A saved cart keeps the price from the day it was filled. When prices change
+   (all of them went up 3% on 2026-09-25), the drawer would show the old figure
+   while checkout charged the new one. So a saved product line takes today's
+   price from the catalogue as it loads. Checkout reprices on the server anyway;
+   this only keeps what the customer reads honest. Hampers carry their own
+   pricing and are left alone. */
+const withCurrentPrice = (l) => {
+  if (l.kind === 'hamper') return l;
+  const product = allProducts.find((p) => p.id === l.productId);
+  if (!product) return l;
+  const variant = Array.isArray(product.variants) && product.variants.length
+    ? product.variants.find((v) => v.weight === l.weight)
+    : { price: product.price, originalPrice: product.originalPrice };
+  if (!variant || typeof variant.price !== 'number') return l;
+  return { ...l, unitPrice: variant.price, originalPrice: variant.originalPrice != null ? variant.originalPrice : l.originalPrice };
 };
 
 const validCartLine = (l) =>

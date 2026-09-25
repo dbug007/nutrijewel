@@ -87,28 +87,37 @@ describe('the cart button follows the payments switch', () => {
   });
 });
 
-/* Fees shown before checkout, not sprung at the last step ("drip pricing"). */
-describe('the drawer shows the platform and convenience fees up front', () => {
+/* The owner's decision (2026-09-25): no platform or convenience fee; prices
+   went up 3% instead. The drawer says so, and only while it is true. */
+describe('the drawer and the zero-fee promise', () => {
   const feeRules = require('../../data/fees');
 
-  it('lists both fees and a total that adds up, as amounts', async () => {
+  it('adds no fee lines and says zero platform and convenience fee', async () => {
     mockPaymentsOn = true;
     renderCart();
-    const fees = await screen.findByTestId('drawer-fees');
-    const f = feeRules.feesFor(peanutButter.price * 100);
-    expect(fees).toHaveTextContent(`Platform fee₹${f.platformFeePaise / 100}`);
-    expect(fees).toHaveTextContent(`Convenience fee₹${f.convenienceFeePaise / 100}`);
-    expect(fees).toHaveTextContent(`Total before delivery₹${(peanutButter.price * 100 + f.feesPaise) / 100}`);
-    // The checkout button carries the same figure.
-    expect(screen.getByRole('button', { name: /^checkout/i })).toHaveTextContent(`₹${(peanutButter.price * 100 + f.feesPaise) / 100}`);
-    // Amounts only, never the rate.
-    expect(fees.textContent).not.toMatch(/%|percent/i);
+    expect(await screen.findByTestId('drawer-no-fees')).toHaveTextContent(feeRules.NO_FEES_MESSAGE);
+    expect(screen.queryByTestId('drawer-fees')).not.toBeInTheDocument();
+    // Nothing is added: the checkout button carries the plain subtotal.
+    expect(screen.getByRole('button', { name: /^checkout/i })).toHaveTextContent(`₹${peanutButter.price}`);
   });
 
-  it('does not show fees on a WhatsApp order, which is not paid online', async () => {
+  /* A cart saved before the 3% rise holds the old price. It must show today's,
+     or the drawer and checkout disagree. */
+  it('shows today\'s price for a cart saved at an old one', async () => {
+    mockPaymentsOn = true;
+    window.localStorage.setItem('nj_store_v1', JSON.stringify({ cart: [{ ...plainLine, unitPrice: 299, qty: 2 }], wishlist: [] }));
+    render(<StoreProvider><MemoryRouter><OpenOnMount /></MemoryRouter></StoreProvider>);
+    const button = await screen.findByRole('button', { name: /^checkout/i });
+    expect(peanutButter.price).not.toBe(299);
+    expect(button).toHaveTextContent(`₹${peanutButter.price * 2}`);
+    expect(screen.queryByText('₹598')).not.toBeInTheDocument();
+  });
+
+  it('does not make the promise on a WhatsApp order, which is not paid online', async () => {
     mockPaymentsOn = false;
     renderCart();
     await screen.findByRole('button', { name: /order on whatsapp/i });
+    expect(screen.queryByTestId('drawer-no-fees')).not.toBeInTheDocument();
     expect(screen.queryByTestId('drawer-fees')).not.toBeInTheDocument();
   });
 });

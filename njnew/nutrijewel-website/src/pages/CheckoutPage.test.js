@@ -18,12 +18,15 @@ const zones = require('../data/shippingZones');
 const feeRules = require('../data/fees');
 
 const peanut = products.find((p) => p.id === 'peanut-butter');
-const ITEMS_PAISE = 29900;
+// The jar's catalogue price, so the stand-in quote agrees with the MRP rows.
+const ITEMS_PAISE = peanut.price * 100;
 const rupees = (paise) => `₹${paise / 100}`;
 
 /* /api/checkout/quote, answered the way functions/api/checkout/quote.js does.
    `override` lets one test hand the page a misbehaving delivery. */
 let deliveryOverride = null;
+// Lets one test pretend a fee came back, to prove the zero-fee line then goes.
+let feeOverride = null;
 function quoteResponse({ fulfilment, pincode }) {
   const routed = zones.deliveryFor({ fulfilment, pincode });
   if (!routed.ok) return { ok: false, errors: [routed.error] };
@@ -31,7 +34,7 @@ function quoteResponse({ fulfilment, pincode }) {
   if (d && d.method !== 'pickup' && deliveryOverride) d = { ...d, ...deliveryOverride };
   const shippingPaise = d && d.chargedOnline ? d.feePaise : 0;
   // Fees exactly as serverPricing computes them: on items plus online delivery.
-  const f = feeRules.feesFor(ITEMS_PAISE + shippingPaise);
+  const f = feeOverride || feeRules.feesFor(ITEMS_PAISE + shippingPaise);
   const totalPaise = ITEMS_PAISE + shippingPaise + f.platformFeePaise + f.convenienceFeePaise;
   return {
     fees: [
@@ -86,6 +89,7 @@ beforeEach(() => {
     weight: peanut.weight, unitPrice: peanut.price, qty: 1,
   }], wishlist: [] }));
   deliveryOverride = null;
+  feeOverride = null;
   trackBeginCheckout.mockClear();
 
   pinReply = (pin) => (PLACES[pin] ? { ok: true, found: true, ...PLACES[pin], country: 'India' } : { ok: true, found: false });
@@ -210,7 +214,7 @@ describe('checkout: pickup or delivery', () => {
 
     const row = await rowOf('Delivery to 412101');
     expect(row).toHaveTextContent('₹66');
-    // ₹299 + ₹66 delivery + ₹7 platform fee + ₹2 convenience fee.
+    // ₹308 jar + ₹66 delivery, and no platform or convenience fee.
     expect(within(summary()).getByText('₹374')).toBeInTheDocument();
     expect(quotes()[quotes().length - 1]).toMatchObject({ fulfilment: 'delivery', pincode: '412101' });
 
@@ -354,26 +358,40 @@ describe('checkout: pickup or delivery', () => {
     expect(window.Razorpay).not.toHaveBeenCalled();
   });
 
-  it('breaks the total into items, delivery and both fees, as amounts that add up', async () => {
+  /* The owner's decision: no platform or convenience fee (prices went up 3%
+     instead). The total is the items plus delivery, nothing else, and the page
+     says zero fees. */
+  it('charges no platform or convenience fee, and says so', async () => {
     renderCheckout();
     await ready();
     choose('Delivery');
     type('Pincode', '412101');
     await rowOf('Delivery to 412101');
 
-    const platform = screen.getByTestId('fee-platform');
-    const convenience = screen.getByTestId('fee-convenience');
-    expect(platform).toHaveTextContent('Platform fee₹7');
-    expect(convenience).toHaveTextContent('Convenience fee₹2');
+    expect(screen.queryByTestId('fee-platform')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('fee-convenience')).not.toBeInTheDocument();
+    expect(screen.getByTestId('no-fees')).toHaveTextContent(feeRules.NO_FEES_MESSAGE);
     const amount = (el) => Number(el.textContent.replace(/[^0-9]/g, ''));
     const total = amount(within(summary()).getByText(/^Total/).parentElement);
-    expect(total).toBe(299 + 66 + amount(platform) + amount(convenience));
-    // The owner's call: amounts only, never the rate. (The totals block, not
-    // the whole page: a product can be called "100% Peanut Butter".)
-    const totals = platform.parentElement;
-    expect(totals).toHaveClass('njco-totals');
-    expect(totals.textContent).not.toMatch(/%|percent/i);
-    expect(screen.getByRole('button', { name: /^pay/i }).textContent).not.toMatch(/%/);
+    expect(total).toBe(peanut.price + 66);
+    expect(within(summary()).getByTestId('no-fees').parentElement.textContent).not.toMatch(/%|percent/i);
+  });
+
+  /* The line may only appear while it is true. If a fee ever comes back, the
+     row shows (with its (i)) and the zero-fees line goes. */
+  it('drops the zero-fees line the moment any fee is charged', async () => {
+    feeOverride = { platformFeePaise: 600, convenienceFeePaise: 200, feesPaise: 800 };
+    renderCheckout();
+    await ready();
+    choose('Free pickup');
+    await rowOf('Pickup at Lodha Belmondo');
+
+    expect(screen.queryByTestId('no-fees')).not.toBeInTheDocument();
+    expect(screen.getByTestId('fee-platform')).toHaveTextContent('Platform fee₹6');
+    expect(screen.getByTestId('fee-convenience')).toHaveTextContent('Convenience fee₹2');
+    const tip = screen.getByRole('button', { name: /what is the convenience fee/i });
+    fireEvent.click(tip);
+    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).toBeVisible());
   });
 
   it('shows the MRP, the discount on it, and what the customer saves', async () => {
@@ -389,26 +407,6 @@ describe('checkout: pickup or delivery', () => {
     // MRP minus the discount is what the items cost: the rows add up.
     const n = (id) => Number(screen.getByTestId(id).textContent.replace(/^[^₹]*₹/, '').replace(/[^0-9]/g, ''));
     expect(n('mrp-line') - n('discount-line')).toBe(peanut.price);
-  });
-
-  it('explains the convenience fee behind its (i), in the three owner-approved points', async () => {
-    renderCheckout();
-    await ready();
-    choose('Free pickup');
-    await rowOf('Pickup at Lodha Belmondo');
-
-    const tip = screen.getByRole('button', { name: /what is the convenience fee/i });
-    expect(tip).toHaveAttribute('aria-expanded', 'false');
-    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).not.toBeVisible());
-    fireEvent.click(tip);
-    expect(tip).toHaveAttribute('aria-expanded', 'true');
-    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).toBeVisible());
-    // Opening it must not start a payment or submit anything.
-    expect(orders()).toHaveLength(0);
-    fireEvent.click(tip);
-    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).not.toBeVisible());
-    // Only the convenience fee has one.
-    expect(screen.queryByRole('button', { name: /what is the platform fee/i })).not.toBeInTheDocument();
   });
 
   it('uses neutral placeholders and explains why to give an email', async () => {

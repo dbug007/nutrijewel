@@ -284,7 +284,7 @@ const PRESET_HAMPERS = [
     name: 'Diwali Delight',
     boxTierId: 'classic',
     occasionIds: ['diwali', 'housewarming', 'festive-indian', 'parents'],
-    image: '/images/amritbites.jpg',
+    image: '/images/products/amrit-bites.jpg',
     blurb: 'Ladoos, granola and crunch. The festive table, cleaned up.',
     items: [
       { productId: 'granola',      weight: '500g', qty: 1 },
@@ -299,7 +299,7 @@ const PRESET_HAMPERS = [
     name: 'Rakhi Sweet Box',
     boxTierId: 'petite',
     occasionIds: ['raksha-bandhan', 'thank-you', 'new-mom', 'festive-indian'],
-    image: '/images/blissbites.jpg',
+    image: '/images/products/bliss-bites.jpg',
     blurb: 'Three ladoo classics, refined-sugar free, in a compact gift box.',
     items: [
       { productId: 'bliss-bites',   weight: '500g', qty: 1 },
@@ -312,7 +312,7 @@ const PRESET_HAMPERS = [
     name: 'Corporate Classic',
     boxTierId: 'grand',
     occasionIds: ['corporate', 'diwali', 'wedding', 'fitness'],
-    image: '/images/granola.jpg',
+    image: '/images/products/granola.jpg',
     blurb: 'Eight full-size favourites. Our most-ordered client gift.',
     items: [
       { productId: 'granola',         weight: '500g', qty: 1 },
@@ -330,7 +330,7 @@ const PRESET_HAMPERS = [
     name: 'Wedding Grandeur',
     boxTierId: 'royale',
     occasionIds: ['wedding', 'corporate'],
-    image: '/images/fresh cambridge of chocolate cake.jpg',
+    image: '/images/products/cambridge-chocolate-cake.jpg',
     blurb: 'Ten items including a full chocolate cake. Our flagship gift.',
     items: [
       { productId: 'cambridge-cake',  weight: '1kg',  qty: 1 },
@@ -350,7 +350,7 @@ const PRESET_HAMPERS = [
     name: 'Christmas Warmth',
     boxTierId: 'classic',
     occasionIds: ['christmas', 'anniversary', 'valentines'],
-    image: '/images/plumcake.jpg',
+    image: '/images/products/plum-cake.jpg',
     blurb: 'Plum cake, dark chocolate and cookies. Built for cold evenings.',
     items: [
       { productId: 'plum-cake',       weight: '500g', qty: 1 },
@@ -365,7 +365,7 @@ const PRESET_HAMPERS = [
     name: 'Birthday Bloom',
     boxTierId: 'petite',
     occasionIds: ['birthday', 'anniversary', 'valentines'],
-    image: '/images/thandaicake.jpg',
+    image: '/images/products/thandai-cake.jpg',
     blurb: 'Cake, cookies and a bar. A birthday box without the sugar crash.',
     items: [
       { productId: 'cambridge-cake',  weight: '500g', qty: 1 },
@@ -378,7 +378,7 @@ const PRESET_HAMPERS = [
     name: 'New Mom Nourish',
     boxTierId: 'classic',
     occasionIds: ['new-mom', 'get-well', 'parents'],
-    image: '/images/ragisattva.jpg',
+    image: '/images/products/ragi-sattva.jpg',
     blurb: 'Gond, ragi and dates, chosen for postpartum recovery and bone health.',
     items: [
       { productId: 'amrit-bites',   weight: '1kg',  qty: 1 },
@@ -393,7 +393,7 @@ const PRESET_HAMPERS = [
     name: 'Thank You Petite',
     boxTierId: 'petite',
     occasionIds: ['thank-you', 'housewarming', 'get-well', 'just-because'],
-    image: '/images/granolacookies.jpg',
+    image: '/images/products/granola-cookies.jpg',
     blurb: 'Small and sincere. Granola, cookies and crunch.',
     items: [
       { productId: 'granola',         weight: '250g', qty: 1 },
@@ -406,7 +406,7 @@ const PRESET_HAMPERS = [
     name: 'Fit & Fabulous',
     boxTierId: 'classic',
     occasionIds: ['fitness', 'birthday', 'just-because'],
-    image: '/images/nutribars.jpg',
+    image: '/images/products/nutri-bars.jpg',
     blurb: 'High protein, clean fuel. Pre-workout to post-workout covered.',
     items: [
       { productId: 'nutri-bars',    weight: '500g', qty: 1 },

@@ -63,7 +63,7 @@ function buildFaqs(product) {
     {
       q: 'How do I order and pay?',
       a: ONLINE_PAYMENTS_ENABLED
-        ? 'Add to cart and check out. You pay securely on the site through Razorpay, by card, UPI or netbanking, and choose free pickup at Lodha Belmondo or delivery (the charges are in the next answer). A small platform fee and convenience fee are added to every order, shown as amounts in your cart and at checkout before you pay. You can also tap “Buy on WhatsApp” if you would rather talk to us first.'
+        ? 'Add to cart and check out. You pay securely on the site through Razorpay, by card, UPI or netbanking, and choose free pickup at Lodha Belmondo or delivery (the charges are in the next answer). There is no platform fee and no convenience fee. You can also tap “Buy on WhatsApp” if you would rather talk to us first.'
         : 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly. No payment is taken on the website.',
     },
     {

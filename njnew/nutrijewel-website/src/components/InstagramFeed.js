@@ -22,7 +22,7 @@ const InstagramFeed = () => {
   const instagramPosts = [
     {
       id: 1,
-      image: `${process.env.PUBLIC_URL}/images/fresh cambridge of chocolate cake.jpg`,
+      image: `${process.env.PUBLIC_URL}/images/products/cambridge-chocolate-cake.jpg`,
       caption: 'Fresh batch of Cambridge Chocolate Cake straight from our kitchen! 🍰✨',
       likes: 187,
       date: '1 day ago'
@@ -36,21 +36,21 @@ const InstagramFeed = () => {
     },
     {
       id: 3,
-      image: `${process.env.PUBLIC_URL}/images/granola.jpg`,
+      image: `${process.env.PUBLIC_URL}/images/products/granola.jpg`,
       caption: 'Crunchy signature granola bowls for your daily glow-up 🥣✨',
       likes: 121,
       date: '3 days ago'
     },
     /*{
       id: 3,
-      image: `${process.env.PUBLIC_URL}/images/piece oxford of love.jpeg`,
+      image: `${process.env.PUBLIC_URL}/images/products/oxford-cake-slice.jpg`,
       caption: 'Oxford of Love - fresh strawberry & dark chocolate perfection! 🍓🍫',
       likes: 203,
       date: '3 days ago'
     },*/
     {
       id: 4,
-      image: `${process.env.PUBLIC_URL}/images/hummuspitabread.jpg`,
+      image: `${process.env.PUBLIC_URL}/images/products/hummus-pita-bread.jpg`,
       caption: 'Low-fat hummus paired perfectly with fresh pita bread! 🥙 Healthy never tasted so good',
       likes: 92,
       date: '5 days ago'
@@ -64,7 +64,7 @@ const InstagramFeed = () => {
     },
     {
       id: 6,
-      image: `${process.env.PUBLIC_URL}/images/packed cambridge of love cake.jpg`,
+      image: `${process.env.PUBLIC_URL}/images/products/cambridge-cake-packed.jpg`,
       caption: 'Ready to ship with love! 📦 Your favorite Cambridge cake, packed fresh',
       likes: 89,
       date: '1 week ago'
@@ -107,7 +107,7 @@ const InstagramFeed = () => {
                   alt="NutriJewel Instagram Post"
                   className="instagram-image"
                   onError={(e) => {
-                    e.target.src = '/images/granola.jpg';
+                    e.target.src = '/images/products/granola.jpg';
                   }}
                 />
                 <div className="instagram-overlay">

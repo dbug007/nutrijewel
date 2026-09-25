@@ -21,11 +21,21 @@
    Refunds: refund.js refunds the whole Razorpay payment, so a full refund always
    includes both fees. The refund policy says so. */
 
+/* Later on 2026-09-25 the owner dropped both fees to zero and raised every
+   product price by 3% instead (products.data.js), so the fee is inside the
+   price and nothing is added at checkout. That makes the checkout line
+   NO_FEES_MESSAGE literally true. The machinery below stays so a fee can come
+   back by changing a number here, and fees.test.js pins today's zeros. */
 // Basis points: 100 = 1%.
-const PLATFORM_FEE_BPS = 200;              // below the threshold: 2%
-const PLATFORM_FEE_BPS_LARGE = 50;         // from the threshold up: 0.5%
+const PLATFORM_FEE_BPS = 0;                // was 2% below the threshold
+const PLATFORM_FEE_BPS_LARGE = 0;          // was 0.5% from the threshold up
 const PLATFORM_FEE_THRESHOLD_PAISE = 250000; // Rs 2,500
-const CONVENIENCE_FEE_BPS = 50;            // always: 0.5%
+const CONVENIENCE_FEE_BPS = 0;             // was 0.5%
+
+/* Shown at checkout and in the cart while both fees are zero. Must stay true:
+   if either fee ever returns, this line must go (fees.test.js checks). */
+const NO_FEES_MESSAGE = 'Zero platform fee and zero convenience fee on NutriJewel';
+const noFees = () => PLATFORM_FEE_BPS === 0 && PLATFORM_FEE_BPS_LARGE === 0 && CONVENIENCE_FEE_BPS === 0;
 
 /* The customer-facing words. Never mention the rate. */
 const PLATFORM_FEE_LABEL = 'Platform fee';
@@ -56,6 +66,8 @@ function feesFor(basePaise) {
 }
 
 module.exports = {
+  NO_FEES_MESSAGE,
+  noFees,
   PLATFORM_FEE_BPS,
   PLATFORM_FEE_BPS_LARGE,
   PLATFORM_FEE_THRESHOLD_PAISE,

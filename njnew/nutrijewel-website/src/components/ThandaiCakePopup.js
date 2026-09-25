@@ -10,7 +10,7 @@ const ThandaiCakePopup = () => {
   useEffect(() => {
     // Preload the image first
     const img = new Image();
-    img.src = `${process.env.PUBLIC_URL}/images/thandaicake.jpg`;
+    img.src = `${process.env.PUBLIC_URL}/images/products/thandai-cake.jpg`;
     img.onload = () => {
       setImageLoaded(true);
     };
@@ -73,7 +73,7 @@ const ThandaiCakePopup = () => {
 
           <div className="thandai-popup-image-wrapper">
             <img 
-              src={`${process.env.PUBLIC_URL}/images/thandaicake.jpg`}
+              src={`${process.env.PUBLIC_URL}/images/products/thandai-cake.jpg`}
               alt="Holi Special - Thandai Maharaja Cake" 
               className="thandai-popup-image"
             />

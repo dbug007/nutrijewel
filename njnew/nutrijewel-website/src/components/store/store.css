@@ -266,6 +266,7 @@
 .nj-drawer-fees > div { display: flex; justify-content: space-between; align-items: baseline; }
 .nj-drawer-fees .nj-drawer-total { padding-top: 0.35rem; border-top: 1px dashed #e2e0d8; font-size: 0.95rem; color: var(--nj-charcoal); }
 .nj-drawer-fees .nj-drawer-total strong { font-size: 1.05rem; }
+.nj-drawer-nofees { margin: -0.45rem 0 0.85rem; font-size: 0.84rem; font-weight: 600; color: var(--nj-olive); }
 .nj-checkout-btn {
   width: 100%;
   display: flex;

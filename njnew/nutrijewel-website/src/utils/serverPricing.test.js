@@ -149,8 +149,8 @@ describe('platform and convenience fees', () => {
     const expected = feesFor(r.itemsPaise + 6600);
     expect(r.platformFeePaise).toBe(expected.platformFeePaise);
     expect(r.convenienceFeePaise).toBe(expected.convenienceFeePaise);
-    expect(r.platformFeePaise).toBeGreaterThan(0);
-    expect(r.convenienceFeePaise).toBeGreaterThan(0);
+    // Both zero today (the owner folded them into prices): the plumbing stays exact.
+    expect(r.platformFeePaise + r.convenienceFeePaise).toBe(expected.feesPaise);
     expect(r.totalPaise).toBe(r.itemsPaise + r.shippingPaise + r.platformFeePaise + r.convenienceFeePaise);
   });
 
@@ -165,7 +165,7 @@ describe('platform and convenience fees', () => {
     const honest = repriceCart([line()], { fulfilment: 'pickup' });
     const cheat = repriceCart([{ ...line(), platformFeePaise: 0, convenienceFeePaise: 0, fees: 0 }], { fulfilment: 'pickup', platformFeePaise: 0 });
     expect(cheat.totalPaise).toBe(honest.totalPaise);
-    expect(cheat.platformFeePaise).toBeGreaterThan(0);
+    expect(cheat.platformFeePaise).toBe(honest.platformFeePaise);
   });
 
   it('show in the cart preview too, before any choice is made', () => {

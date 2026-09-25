@@ -169,11 +169,12 @@ The web versions the site actually loads are the compressed files in
   the catalogue. Verified in production that a cart claiming `unitPrice: 1` is still
   charged in full. Never read a price from a request.
 - **Platform and convenience fees live only in `src/data/fees.js`**, pinned by
-  `fees.test.js`: platform 2% below ₹2,500 and 0.5% from ₹2,500, convenience a
-  flat 0.5%, on items plus any delivery fee charged online (never on a
-  WhatsApp-settled fare), each rounded to a whole rupee. Customers see **amounts
-  only, never a rate** (owner's call), in the cart, checkout, admin and the
-  terms/refund/shipping pages. `total_paise` includes both fees and the orders
+  `fees.test.js`. **Both are ZERO since 2026-09-25**: the owner raised every
+  product price by 3% instead, and checkout and the cart say "Zero platform fee
+  and zero convenience fee on NutriJewel", shown only while every fee really is
+  zero (the fees machinery stays, so a fee could return by changing a number; the
+  line then disappears by itself). Policies say no fees. If a fee ever returns:
+  amounts only, never a rate (owner's call), and update the policies. `total_paise` includes both fees and the orders
   CHECK enforces it (migration 0006, a table rebuild; see its header for why the
   child rows are copied aside). The MRP discount at checkout is display only,
   from catalogue `originalPrice`. **Never show a charge nobody pays as waived or
@@ -201,9 +202,16 @@ The web versions the site actually loads are the compressed files in
 - Several products are commented out inside `/* */` in `products.data.js`. The live
   catalogue is smaller than the file looks.
 - SPA routing: Cloudflare Pages does it **by itself** whenever there is no
-  top-level `404.html`. There is deliberately no `_redirects` file: the obvious
-  rule, `/* /index.html 200`, is flagged by wrangler as an infinite loop and
-  ignored, so it never did anything. Do not add a `404.html` to `public/`, or
+  top-level `404.html`. `public/_redirects` holds **only specific 301s** (old
+  product photo addresses, see below). Never add the "obvious" rule,
+  `/* /index.html 200`: wrangler flags it as an infinite loop and ignores it.
+- **Every product photo lives in `public/images/products/`**, kebab-case names,
+  1200px, metadata stripped (moved 2026-09-25; old addresses 301 via
+  `_redirects`). Hero images, Ruchika's photos and icons stay in `public/images/`.
+  Originals of resized or enhanced photos are in `deepak-instructions/originals/`,
+  never in `public/`. New product photos: optimise from the original, gently
+  enhance (see the `enhance()` recipe used for sattu ladoo, Liquid Gold and
+  almond butter), put them in `products/`, never a second copy elsewhere. Do not add a `404.html` to `public/`, or
   the fallback switches off. Deep links to products still hit real prerendered
   files from `scripts/create-static-routes.js`; only unknown paths reach React.
 - **That fallback once took the site down (2026-09-25).** Seconds after a deploy,

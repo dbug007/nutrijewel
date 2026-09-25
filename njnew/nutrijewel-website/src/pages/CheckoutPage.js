@@ -4,6 +4,7 @@ import { ShieldCheck, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'luci
 import { useStore } from '../store/StoreContext';
 import shippingZones from '../data/shippingZones';
 import InfoTip, { useInfoTip } from '../components/InfoTip';
+import feeRules from '../data/fees';
 import './CheckoutPage.css';
 import { trackBeginCheckout, trackPurchase } from '../lib/analytics';
 
@@ -484,13 +485,21 @@ export default function CheckoutPage() {
               <span>{deliveryLine[1]}</span>
             </div>
             {/* Every rupee of the payment on its own line, as an amount. */}
-            {(quote.fees || []).map((fee) => <FeeRow key={fee.id} fee={fee} />)}
+            {/* A fee of zero is not a line: the zero-fees banner below says it. */}
+            {(quote.fees || []).filter((fee) => fee.paise > 0).map((fee) => <FeeRow key={fee.id} fee={fee} />)}
             <div className="njco-grand"><span>{fareLater ? 'Total to pay now' : 'Total'}</span><span>{quote.totalDisplay}</span></div>
             {/* The server's own words for a fare settled on WhatsApp. It says
                 the fare is not in this total, which is the point of showing it. */}
             {fareLater && d.note && <p className="njco-note">{d.note}</p>}
             {quote.discountPaise > 0 && (
               <p className="njco-saving" data-testid="saving">You save {quote.discountDisplay} on MRP with this order</p>
+            )}
+            {/* Only when the server's own quote charges no fee at all, so the
+                line can never be shown on an order that pays one. */}
+            {(quote.fees || []).every((fee) => fee.paise === 0) && (
+              <p className="njco-nofees" data-testid="no-fees">
+                <CheckCircle2 size={16} aria-hidden="true" /> {feeRules.NO_FEES_MESSAGE}
+              </p>
             )}
           </div>
         )}
