@@ -15,7 +15,9 @@ export async function onRequestGet(ctx) {
        (SELECT COUNT(*) FROM orders WHERE status IN ${paidStates})                                  AS paid_orders,
        (SELECT COALESCE(SUM(total_paise),0) FROM orders WHERE status IN ${paidStates})              AS revenue_paise,
        (SELECT COUNT(*) FROM orders WHERE status IN ('paid','confirmed'))                           AS needs_action,
-       (SELECT COUNT(*) FROM orders WHERE status = 'packed')                                        AS to_ship,
+       -- A packed pickup is waiting at Lodha Belmondo, not waiting for a rider.
+       (SELECT COUNT(*) FROM orders WHERE status = 'packed' AND fulfilment = 'delivery')             AS to_ship,
+       (SELECT COUNT(*) FROM orders WHERE status = 'packed' AND fulfilment = 'pickup')               AS ready_for_pickup,
        (SELECT COUNT(*) FROM orders WHERE status IN ${paidStates}
           AND date(created_at) = date('now'))                                                       AS today_orders,
        (SELECT COALESCE(SUM(total_paise),0) FROM orders WHERE status IN ${paidStates}

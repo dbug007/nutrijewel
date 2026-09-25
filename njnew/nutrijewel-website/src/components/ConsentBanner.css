@@ -1,33 +1,40 @@
-/* Consent banner. Docked to the bottom on a phone, where a thumb reaches it.
-   It sits below the cart and wishlist drawers so opening either covers it. */
+/* Consent banner. A slim bar docked to the bottom on a phone, where a thumb
+   reaches it: one line of text, then two equal buttons. It sits below the cart
+   and wishlist drawers so opening either covers it. */
 .njcb {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 950;
   background: #1f2420; color: #eceee9;
-  padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
-  display: grid; gap: 0.7rem;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
+  padding: 0.6rem 0.9rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+  display: grid; gap: 0.5rem;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.16);
 }
+
 /* On the homepage it appears mid-scroll, so it eases in rather than popping. */
 .njcb { animation: njcb-in 0.28s ease-out; }
 @keyframes njcb-in { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .njcb { animation: none; } }
 
-.njcb-text { margin: 0; font-size: 0.88rem; line-height: 1.45; }
-.njcb-text a { color: #cfe3a8; text-decoration: underline; text-underline-offset: 2px; }
+.njcb-text { margin: 0; font-size: 0.84rem; line-height: 1.35; }
+.njcb-text a { color: #cfe3a8; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 
 /* Equal buttons, on purpose. Declining must be as easy as accepting, or the
-   consent is not freely given. Neither is styled as the "right" answer. */
-.njcb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+   consent is not freely given. Neither is styled as the "right" answer. Still
+   44px tall: slimmer bar, same thumb-sized targets. */
+.njcb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 .njcb-btn {
-  min-height: 46px; border-radius: 10px;
+  min-height: 44px; border-radius: 10px;
   border: 1px solid #cfe3a8; background: transparent; color: #eceee9;
-  font-size: 0.95rem; font-weight: 700; cursor: pointer;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
 }
 .njcb-btn:focus-visible { outline: 2px solid #cfe3a8; outline-offset: 2px; }
 
+/* Wider screens: a small card in the corner, text and buttons on one row. */
 @media (min-width: 768px) {
   .njcb {
-    left: 1rem; right: auto; bottom: 1rem; max-width: 26rem;
-    border-radius: 14px; padding: 1rem;
+    left: 1rem; right: auto; bottom: 1rem; max-width: 30rem;
+    border-radius: 14px; padding: 0.7rem 0.8rem 0.7rem 1rem;
+    grid-template-columns: 1fr auto; align-items: center; gap: 0.8rem;
   }
+  .njcb-actions { grid-template-columns: auto auto; }
+  .njcb-btn { padding: 0 1rem; }
 }

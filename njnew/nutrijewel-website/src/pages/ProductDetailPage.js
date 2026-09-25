@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { products, allProducts } from '../data/products';
+import shippingZones from '../data/shippingZones';
 import WeightSelector from '../components/WeightSelector';
 import AddToCartButton from '../components/store/AddToCartButton';
 import QuickActions from '../components/store/QuickActions';
@@ -24,6 +25,29 @@ const lowestVariant = (p) =>
     ? p.variants.reduce((lo, v) => (v.price < lo.price ? v : lo), p.variants[0])
     : null;
 
+/* Built from src/data/shippingZones.js, the one place the owner's pickup and
+   delivery rules live, so a changed fee or the outside-Pune switch cannot leave
+   this answer (or the FAQPage JSON-LD made from it) promising something checkout
+   will not do. Only pickup is ever called free. */
+function deliveryAnswer() {
+  const { FIXED_RATES, OUTSIDE_PUNE } = shippingZones;
+  const fees = FIXED_RATES.map((r) => `₹${r.feePaise / 100} to ${r.pincodes.join(' or ')}`);
+  const feeList = fees.length > 1
+    ? `${fees.slice(0, -1).join(', ')}, and ${fees[fees.length - 1]}`
+    : fees[0];
+  return [
+    'Pickup is free at Lodha Belmondo, Pune, and we will WhatsApp you when your order is ready.',
+    `Delivery is ${feeList}.`,
+    'Anywhere else in Pune we send it by Porter or Rapido at the standard fare for the trip.',
+    ONLINE_PAYMENTS_ENABLED
+      ? 'We confirm that fare with you on WhatsApp before dispatch, and it is not part of what you pay on the site.'
+      : 'We confirm that fare with you on WhatsApp before dispatch.',
+    OUTSIDE_PUNE === 'not-served'
+      ? 'Outside Pune we do not deliver right now.'
+      : 'Outside Pune we send by courier at actual cost, confirmed the same way.',
+  ].join(' ');
+}
+
 function buildFaqs(product) {
   const name = product.displayName || product.name;
   return [
@@ -39,12 +63,12 @@ function buildFaqs(product) {
     {
       q: 'How do I order and pay?',
       a: ONLINE_PAYMENTS_ENABLED
-        ? 'Add to cart and check out. You pay securely on the site through Razorpay, by card, UPI or netbanking, and delivery is worked out from your pincode. You can also tap “Buy on WhatsApp” if you would rather talk to us first.'
+        ? 'Add to cart and check out. You pay securely on the site through Razorpay, by card, UPI or netbanking, and choose free pickup at Lodha Belmondo or delivery (the charges are in the next answer). You can also tap “Buy on WhatsApp” if you would rather talk to us first.'
         : 'Add to cart and check out on WhatsApp, or tap “Buy on WhatsApp”. We confirm availability, delivery and payment with you directly. No payment is taken on the website.',
     },
     {
-      q: 'Do you deliver to my city?',
-      a: "We ship across India through trusted courier partners, and deliver fresh items locally around Pune. Enter your pincode at checkout to see the delivery charge and timing straight away.",
+      q: 'Can I pick up, or do you deliver?',
+      a: deliveryAnswer(),
     },
     {
       q: 'Can I customise, gift or order in bulk?',

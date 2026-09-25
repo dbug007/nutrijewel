@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Package, AlertCircle, Loader2 } from 'lucide-react';
+import { Search, Package, AlertCircle, Loader2, Store } from 'lucide-react';
 import './TrackOrderPage.css';
 
 /*
@@ -12,8 +12,17 @@ import './TrackOrderPage.css';
  * somebody's home address.
  */
 
-const STEPS = ['paid', 'confirmed', 'packed', 'shipped', 'delivered'];
-const STEP_LABEL = { paid: 'Paid', confirmed: 'Confirmed', packed: 'Packed', shipped: 'On its way', delivered: 'Delivered' };
+/* A pickup never goes out on the road, so it has no "On its way" step: packed
+   means ready to collect at Lodha Belmondo, delivered means collected. The
+   server's statusLabel uses the same words, so the rail and the heading agree. */
+const STEPS = {
+  delivery: ['paid', 'confirmed', 'packed', 'shipped', 'delivered'],
+  pickup: ['paid', 'confirmed', 'packed', 'delivered'],
+};
+const STEP_LABEL = {
+  delivery: { paid: 'Paid', confirmed: 'Confirmed', packed: 'Packed', shipped: 'On its way', delivered: 'Delivered' },
+  pickup: { paid: 'Paid', confirmed: 'Confirmed', packed: 'Ready for pickup', delivered: 'Collected' },
+};
 
 const rupees = (paise) => `₹${((paise || 0) / 100).toLocaleString('en-IN')}`;
 
@@ -47,7 +56,11 @@ export default function TrackOrderPage() {
     }
   };
 
-  const stepIndex = result ? STEPS.indexOf(result.status) : -1;
+  // Anything but an explicit pickup is a delivery, including a reply from a
+  // server older than the fulfilment field.
+  const method = result && result.fulfilment === 'pickup' ? 'pickup' : 'delivery';
+  const steps = STEPS[method];
+  const stepIndex = result ? steps.indexOf(result.status) : -1;
   const isTerminalBad = result && ['failed', 'cancelled', 'refunded', 'created'].includes(result.status);
 
   return (
@@ -94,12 +107,16 @@ export default function TrackOrderPage() {
           <p className={`njtr-status${isTerminalBad ? ' is-bad' : ''}`}>{result.statusLabel}</p>
           <p className="njtr-muted">{result.statusDetail}</p>
 
+          {method === 'pickup' && (
+            <p className="njtr-method"><Store size={15} aria-hidden="true" /> Pickup at Lodha Belmondo, Pune</p>
+          )}
+
           {!isTerminalBad && stepIndex >= 0 && (
-            <ol className="njtr-steps">
-              {STEPS.map((s, i) => (
-                <li key={s} className={i <= stepIndex ? 'is-done' : ''}>
+            <ol className="njtr-steps" aria-label="Order progress">
+              {steps.map((s, i) => (
+                <li key={s} className={i <= stepIndex ? 'is-done' : ''} aria-current={i === stepIndex ? 'step' : undefined}>
                   <span className="njtr-dot" aria-hidden="true" />
-                  <span>{STEP_LABEL[s]}</span>
+                  <span>{STEP_LABEL[method][s]}</span>
                 </li>
               ))}
             </ol>

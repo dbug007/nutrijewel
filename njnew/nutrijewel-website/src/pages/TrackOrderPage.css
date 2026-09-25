@@ -55,6 +55,8 @@
 .njtr-total { margin: 0; font-weight: 700; }
 .njtr-status { margin: 0; font-size: 1.2rem; font-weight: 700; color: #2f5d3a; font-family: 'Playfair Display', serif; }
 .njtr-status.is-bad { color: #8a3128; }
+.njtr-method { margin: 0; display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 600; color: #2f3a31; }
+.njtr-method > svg { flex: 0 0 auto; color: #2f5d3a; }
 
 /* Progress rail. Vertical on a phone so long labels never squash. */
 .njtr-steps { list-style: none; margin: 0.4rem 0; padding: 0; display: grid; gap: 0.55rem; }

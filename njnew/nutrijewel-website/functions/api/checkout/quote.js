@@ -1,8 +1,14 @@
 /* POST /api/checkout/quote
-   { lines: [{productId, weight, qty}], pincode? }
+   { lines: [{productId, weight, qty}], fulfilment?: 'pickup' | 'delivery', pincode? }
 
    Returns the authoritative totals. The page displays these rather than its own
    arithmetic, so what the customer sees is what the server will charge.
+
+   `delivery` describes how the order reaches the customer. Its `display` is the
+   text for the charge line: 'Free' only ever for pickup, the rupee amount for a
+   fixed-fee pincode, and 'Actual fare' / 'At actual cost' for a Porter/Rapido or
+   courier fare that is not in the total. A delivery charge of 0 is never shown
+   as free delivery, because there is no such thing on this shop.
 
    This endpoint creates nothing and takes no money. It exists so the cart total
    and the Razorpay amount can never disagree: both come from here. */
@@ -17,8 +23,8 @@ export async function onRequestPost({ request, env }) {
   const read = await readJson(request);
   if (!read.ok) return read.response;
 
-  const { lines, pincode } = read.body || {};
-  const result = repriceCart(lines, { pincode });
+  const { lines, pincode, fulfilment } = read.body || {};
+  const result = repriceCart(lines, { fulfilment, pincode });
 
   if (!result.ok) {
     // 200, not 4xx: a cart with an out-of-season item is a normal thing for the
@@ -46,9 +52,18 @@ export async function onRequestPost({ request, env }) {
     shippingPaise: result.shippingPaise,
     totalPaise: result.totalPaise,
     itemsDisplay: formatPaise(result.itemsPaise),
-    shippingDisplay: result.shippingPaise === 0 ? 'Free' : formatPaise(result.shippingPaise),
+    // Driven by the method, never by the amount being 0.
+    shippingDisplay: result.delivery ? result.delivery.display : '',
     totalDisplay: formatPaise(result.totalPaise),
-    zone: result.zone ? { id: result.zone.id, name: result.zone.name, minDays: result.zone.minDays, maxDays: result.zone.maxDays } : null,
+    delivery: result.delivery ? {
+      id: result.delivery.id,
+      method: result.delivery.method,           // 'pickup' | 'fixed' | 'variable'
+      label: result.delivery.label,
+      display: result.delivery.display,
+      note: result.delivery.note,
+      feePaise: result.delivery.feePaise,
+      chargedOnline: result.delivery.chargedOnline,
+    } : null,
   });
 }
 

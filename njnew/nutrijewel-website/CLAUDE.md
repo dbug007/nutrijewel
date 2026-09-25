@@ -164,9 +164,20 @@ The web versions the site actually loads are the compressed files in
   WhatsApp. Never change those surfaces individually; flip the switch. WhatsApp
   stays for support and for off-season "ask about availability", by design.
 - **The server decides every price.** The client sends only
-  `{productId, weight, qty}`; `src/utils/serverPricing.js` reprices from the
-  catalogue. Verified in production that a cart claiming `unitPrice: 1` is still
+  `{productId, weight, qty}` plus its choices, `fulfilment` (pickup or delivery)
+  and pincode, never a delivery charge; `src/utils/serverPricing.js` reprices from
+  the catalogue. Verified in production that a cart claiming `unitPrice: 1` is still
   charged in full. Never read a price from a request.
+- **Pickup and delivery rules live only in `src/data/shippingZones.js`**, set by
+  the owner 2026-09-25 and pinned by `shippingZones.test.js`: free pickup only at
+  Lodha Belmondo; ₹66 to 412101; ₹149 to 411014 and 411005 (exact pincodes, not
+  prefixes); any other Pune pincode pays the Porter/Rapido fare, confirmed on
+  WhatsApp and **not** charged online. **There is no free delivery**: only pickup
+  may ever be labelled Free, and a ₹0 delivery charge must never read "Free".
+  Outside Pune is an open owner decision behind the one switch `OUTSIDE_PUNE`.
+  `create-order` requires `fulfilment` and never defaults it; a blank pincode used
+  to price delivery at ₹0 before this. Pickup orders store `''` for the address
+  and skip `shipped` (packed = ready for pickup, delivered = collected).
 - **Never complete a payment on live keys from a script.** It charges a real card.
   Live verification stops at the Razorpay window opening; the first real purchase
   is made by the owner. `.dev.vars` stays on TEST keys for the same reason.
@@ -268,6 +279,16 @@ The web versions the site actually loads are the compressed files in
   so no raw IP is written to `rate_limits`. Each endpoint needs its own action
   name: the beacon and `/api/orders/track` once shared `'track'`, so browsing
   twenty pages locked a customer out of order tracking.
+- **Delivery outside Pune has no owner decision yet.** `OUTSIDE_PUNE` defaults to
+  courier at actual cost, which keeps the "We deliver pan India" marquee true.
+  If she says Pune only, flip the switch and also remove that marquee line,
+  `CorporateBulkCTA.js` (nationwide, hampers are off) and the outside-Pune part
+  of `public/shipping-policy.html`. The birthday wheel's "Free Shipping" prize
+  (`birthdayOffers.js`, campaign off) contradicts "no free delivery" and has no
+  server support: settle it before that campaign returns.
+- The 7 day preparation window in `public/shipping-policy.html` predates the
+  delivery rules and was never confirmed by the owner; it is now also applied to
+  pickup. It is the only timeline the site states. Do not add others without her.
 - Imported hamper products are placeholder pricing, all flagged `isPlaceholder: true`.
   Confirm sourcing and set real prices before they can be ordered.
 - Hamper box prices and discount tiers are invented placeholders in

@@ -14,9 +14,11 @@ import './ConsentBanner.css';
  *   - It never covers the homepage hero, the first thing anyone sees. There it
  *     waits until the hero has scrolled clear of the bottom of the screen.
  *
- * Google Analytics does not load until "Accept". The site's own visit counter
- * runs either way because it uses no cookies and records nothing personal (see
- * src/lib/analytics.js), and the banner says so rather than implying otherwise.
+ * Google Analytics (the only thing that sets tracking cookies) does not load
+ * until "Accept". The site's own visit counter runs either way because it uses
+ * no cookies and records nothing personal (see src/lib/analytics.js). The banner
+ * itself is one short line; the privacy policy it links to names Google
+ * Analytics and explains both.
  */
 
 const HIDDEN_ON = ['/checkout', '/admin'];
@@ -82,10 +84,10 @@ export default function ConsentBanner() {
 
   return (
     <section ref={ref} className="njcb" role="dialog" aria-live="polite" aria-label="Cookie choice">
+      {/* Kept to one short line on purpose (owner's call). What the cookies are
+          and who sets them is spelled out on the privacy policy it links to. */}
       <p className="njcb-text">
-        May we use Google Analytics? It sets cookies and helps us see how people shop,
-        so we can make the shop better. Our own visit count uses no cookies and runs
-        either way, and so does your cart. <a href="/privacy-policy">Privacy policy</a>
+        We use cookies to make the shop better. <a href="/privacy-policy">Learn more</a>
       </p>
       <div className="njcb-actions">
         <button type="button" className="njcb-btn" onClick={() => setConsent('denied')}>Decline</button>

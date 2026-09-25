@@ -31,7 +31,11 @@ Nothing else in the account was touched.
 The D1 database has its schema applied: `orders`, `order_items`, `webhook_events`
 and `order_events`. Money columns are INTEGER paise, and `orders` carries a CHECK
 constraint that `total_paise = items_paise + shipping_paise`, so a wrong total
-cannot be written even by buggy code. Schema lives in `migrations/0001_init.sql`.
+cannot be written even by buggy code. Schema lives in `migrations/0001_init.sql`
+and the numbered files after it (0005 adds `orders.fulfilment`, pickup or
+delivery). A Porter/Rapido or courier fare is outside `total_paise` by design:
+it never passes through Razorpay, so the constraint holds but the total is not
+the full delivered cost for those orders.
 
 Apply or re-apply it with:
 
@@ -122,8 +126,8 @@ Pages Functions in `functions/`, deployed with the site by `wrangler pages deplo
 
 | Endpoint | Method | Guarded by | Job |
 |---|---|---|---|
-| `/api/serviceability` | GET | none | pincode to zone, rate, delivery window |
-| `/api/checkout/quote` | POST | none | cart to authoritative totals |
+| `/api/serviceability` | GET | none | pincode to delivery method: a fixed fee, or a Porter/Rapido or courier fare confirmed on WhatsApp. No free threshold, no invented delivery window |
+| `/api/checkout/quote` | POST | none | cart plus `fulfilment` (pickup or delivery) and pincode to authoritative totals; the delivery line says Free only for pickup |
 | `/api/checkout/create-order` | POST | rate limit, Turnstile* | reprice, create Razorpay order, write D1 row |
 | `/api/checkout/verify` | POST | Razorpay signature | browser reports a payment |
 | `/api/webhooks/razorpay` | POST | webhook signature | Razorpay reports a payment, authoritative |
@@ -191,7 +195,7 @@ verification. Removing an email from `ADMIN_EMAILS` locks that person out at
 once, even mid-session.
 
 **Break glass:** if Google ever locks you out, delete the `GOOGLE_CLIENT_ID`
-secret and redeploy. The admin falls back to the token in `.claude/ADMIN-TOKEN.txt`.
+secret and redeploy. The admin falls back to the token in `deepak-instructions/ADMIN-TOKEN.txt`.
 
 Proven with real keys and a real server: 12 of 12 Google token cases (unverified
 email, a token issued to another app, a look-alike issuer and a look-alike
@@ -230,7 +234,11 @@ nearly empty. They are no longer written and were left in place, not dropped.
 
 - **Register the Razorpay webhook** (Live mode): URL
   `https://nutrijewel.com/api/webhooks/razorpay`, secret from
-  `.claude/WEBHOOK-SECRET.txt`, events `payment.captured`, `payment.failed`,
+  `deepak-instructions/WEBHOOK-SECRET.txt`, events `payment.captured`, `payment.failed`,
   `order.paid`. The endpoint and secret are live; only the registration is missing.
-- Real delivery zones. Everything in `src/data/shippingZones.js` is a placeholder.
+- Delivery outside Pune: the owner has not decided. Currently courier at actual
+  cost, confirmed on WhatsApp; one switch (`OUTSIDE_PUNE` in
+  `src/data/shippingZones.js`) turns it off. The Pune rules are the owner's and
+  live: free pickup at Lodha Belmondo, ₹66 to 412101, ₹149 to 411014 and
+  411005, the Porter/Rapido fare elsewhere in Pune.
 - Partial refunds. Only full refunds exist today.

@@ -5,8 +5,17 @@
 
 import { json, fail, readJson } from '../../_shared/http.js';
 import { requireAdmin, requireDb, accessIdentity } from '../../_shared/admin.js';
+import zones from '../../../src/data/shippingZones.js';
+
+const { describeZone } = zones;
 
 const STATUSES = ['created', 'paid', 'confirmed', 'packed', 'shipped', 'delivered', 'failed', 'cancelled', 'refunded'];
+
+/* A pickup never ships: packed means ready to collect, delivered means collected. */
+const nextFor = (status, fulfilment) => {
+  if (fulfilment === 'pickup' && status === 'packed') return ['delivered', 'cancelled'];
+  return MANUAL_TRANSITIONS[status] || [];
+};
 
 /* What the owner is allowed to do by hand. Payment states are deliberately
    absent: only Razorpay's webhook may set `paid`, so a stray click can never
@@ -39,7 +48,7 @@ export async function onRequestGet(ctx) {
   const { results } = await ctx.env.DB.prepare(
     `SELECT o.id, o.order_number, o.status, o.items_paise, o.shipping_paise, o.total_paise,
             o.customer_name, o.customer_phone, o.customer_email,
-            o.address_line, o.city, o.pincode, o.shipping_zone,
+            o.address_line, o.city, o.pincode, o.shipping_zone, o.fulfilment, o.notes,
             o.razorpay_payment_id, o.paid_at, o.created_at,
             (SELECT COUNT(*) FROM order_items i WHERE i.order_id = o.id) AS item_count
        FROM orders o ${where}
@@ -70,7 +79,10 @@ export async function onRequestGet(ctx) {
     orders: orders.map((o) => ({
       ...o,
       items: itemsByOrder[o.id] || [],
-      nextStatuses: MANUAL_TRANSITIONS[o.status] || [],
+      // { method, label, fareToCollect }: so a pickup is never sent a rider, and
+      // a Porter/Rapido order is never mistaken for one with delivery paid.
+      delivery: describeZone(o.shipping_zone, o.fulfilment),
+      nextStatuses: nextFor(o.status, o.fulfilment),
     })),
   });
 }
@@ -86,10 +98,10 @@ export async function onRequestPost(ctx) {
   if (!orderId || typeof orderId !== 'string') return fail('Missing order.', 400);
   if (!STATUSES.includes(toStatus)) return fail('Unknown status.', 400);
 
-  const order = await ctx.env.DB.prepare('SELECT id, status FROM orders WHERE id = ?').bind(orderId).first();
+  const order = await ctx.env.DB.prepare('SELECT id, status, fulfilment FROM orders WHERE id = ?').bind(orderId).first();
   if (!order) return fail('Order not found.', 404);
 
-  const allowed = MANUAL_TRANSITIONS[order.status] || [];
+  const allowed = nextFor(order.status, order.fulfilment);
   if (!allowed.includes(toStatus)) {
     return fail(`Cannot move an order from ${order.status} to ${toStatus}.`, 409);
   }

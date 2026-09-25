@@ -74,35 +74,68 @@ describe('quantity', () => {
   });
 });
 
-describe('shipping', () => {
-  it('charges the Pune rate on a small order', () => {
-    const r = repriceCart([line()], { pincode: PIN_PUNE });
-    expect(r.zone.id).toBe('pune-local');
-    expect(r.shippingPaise).toBe(4000);
-    expect(r.totalPaise).toBe(r.itemsPaise + r.shippingPaise);
-  });
+describe('pickup and delivery in the total Razorpay charges', () => {
+  it.each([['412101', 6600], ['411014', 14900], ['411005', 14900]])(
+    'adds the fixed fee for %s to the total',
+    (pin, fee) => {
+      const r = repriceCart([line()], { fulfilment: 'delivery', pincode: pin });
+      expect(r.ok).toBe(true);
+      expect(r.shippingPaise).toBe(fee);
+      expect(r.totalPaise).toBe(r.itemsPaise + fee);
+    }
+  );
 
-  it('goes free once the basket clears the threshold', () => {
-    const r = repriceCart([line({ qty: MAX_QTY_PER_LINE })], { pincode: PIN_PUNE });
-    expect(r.itemsPaise).toBeGreaterThanOrEqual(80000);
+  it('pickup adds nothing and needs no pincode', () => {
+    const r = repriceCart([line()], { fulfilment: 'pickup' });
+    expect(r.ok).toBe(true);
+    expect(r.delivery.method).toBe('pickup');
     expect(r.shippingPaise).toBe(0);
+    expect(r.totalPaise).toBe(r.itemsPaise);
   });
 
-  it('picks the longest matching prefix, so Pune beats Maharashtra', () => {
-    expect(repriceCart([line()], { pincode: '411001' }).zone.id).toBe('pune-local');
-    expect(repriceCart([line()], { pincode: '431001' }).zone.id).toBe('maharashtra');
-    expect(repriceCart([line()], { pincode: '560001' }).zone.id).toBe('rest-of-india');
+  it('a Porter/Rapido fare is not in the total, and says so', () => {
+    const r = repriceCart([line()], { fulfilment: 'delivery', pincode: PIN_PUNE });
+    expect(r.ok).toBe(true);
+    expect(r.delivery.chargedOnline).toBe(false);
+    expect(r.shippingPaise).toBe(0);
+    expect(r.totalPaise).toBe(r.itemsPaise);
+  });
+
+  /* The old placeholder zones made delivery free over a basket size. The owner:
+     "free delivery is not there". A huge basket still pays the fee. */
+  it('never waives a delivery fee, however big the basket', () => {
+    const r = repriceCart([line({ qty: MAX_QTY_PER_LINE })], { fulfilment: 'delivery', pincode: '411014' });
+    expect(r.itemsPaise).toBeGreaterThan(250000);
+    expect(r.shippingPaise).toBe(14900);
+  });
+
+  /* The tampering hole this closes: create-order used to pass whatever pincode
+     came in, and a blank one priced delivery at 0. */
+  it('refuses delivery with a blank pincode instead of pricing it at 0', () => {
+    ['', '   ', undefined, null].forEach((pincode) => {
+      const r = repriceCart([line()], { fulfilment: 'delivery', pincode });
+      expect(r.ok).toBe(false);
+      expect(r.totalPaise).toBe(0);
+    });
+  });
+
+  it('refuses a method it does not know', () => {
+    expect(repriceCart([line()], { fulfilment: 'drone', pincode: '411014' }).ok).toBe(false);
+  });
+
+  it('reads a bare pincode as delivery, so an older page still quotes right', () => {
+    expect(repriceCart([line()], { pincode: '412101' }).shippingPaise).toBe(6600);
   });
 
   it.each(['1234', '0110011', 'abcdef', '012345'])('refuses invalid pincode %p', (pin) => {
-    expect(repriceCart([line()], { pincode: pin }).ok).toBe(false);
+    expect(repriceCart([line()], { fulfilment: 'delivery', pincode: pin }).ok).toBe(false);
   });
 
-  it('prices items without shipping when no pincode is given yet', () => {
+  it('prices the items alone while no choice has been made (cart preview)', () => {
     const r = repriceCart([line()]);
     expect(r.ok).toBe(true);
     expect(r.shippingPaise).toBe(0);
-    expect(r.zone).toBeNull();
+    expect(r.delivery).toBeNull();
   });
 });
 
@@ -122,7 +155,8 @@ describe('rubbish input', () => {
 
 describe('money is always whole paise', () => {
   it('never produces a fractional amount', () => {
-    const r = repriceCart([line({ qty: 3 }), { productId: withVariants.id, weight: withVariants.variants[0].weight, qty: 2 }], { pincode: '560001' });
+    // 411014 so a non-zero delivery fee is part of the arithmetic being checked.
+    const r = repriceCart([line({ qty: 3 }), { productId: withVariants.id, weight: withVariants.variants[0].weight, qty: 2 }], { fulfilment: 'delivery', pincode: '411014' });
     expect(r.ok).toBe(true);
     [r.itemsPaise, r.shippingPaise, r.totalPaise, ...r.lines.map((l) => l.unitPaise)].forEach((v) => {
       expect(Number.isInteger(v)).toBe(true);

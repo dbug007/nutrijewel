@@ -21,9 +21,14 @@
 # loads are the compressed files in public/reels/, which are committed.
 /video
 
-# Working notes kept inside the project on purpose (plans, memory, originals of
-# photos that were resized). This repo is PUBLIC, so the whole folder is ignored:
-# keeping these files local is the point, publishing them would defeat it.
+# The owner's private folder, kept inside the project on purpose: plans, memory,
+# originals of resized photos, and LIVE secrets (admin token, Razorpay keys,
+# webhook secret). This repo is PUBLIC, so the whole folder is ignored. Keeping
+# these files local is the point; one `git add -A` without this line would
+# publish every key. Renamed from .claude/ on 2026-09-25.
+deepak-instructions/
+# Claude Code's own settings (settings.local.json) must live in .claude/, which
+# is still ignored for the same reason.
 .claude/
 
 # misc

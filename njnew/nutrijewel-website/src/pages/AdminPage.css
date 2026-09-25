@@ -149,12 +149,51 @@
 .njad-who { display: grid; gap: 0.25rem; }
 .njad-name { margin: 0; font-weight: 600; }
 .njad-addr { margin: 0; font-size: 0.85rem; color: var(--ad-mute); display: flex; gap: 0.3rem; align-items: flex-start; }
+.njad-contact { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
 .njad-link {
   display: inline-flex; align-items: center; gap: 0.3rem;
-  min-height: 32px;
+  min-height: 44px;
   color: var(--ad-ink); text-decoration: none; font-size: 0.9rem;
 }
 .njad-link:hover { text-decoration: underline; }
+
+/* How the order leaves: pickup, delivery paid, or a fare still to arrange.
+   The fare one spans the card, because missing it costs real money. */
+.njad-deliv {
+  justify-self: start;
+  display: flex; align-items: flex-start; gap: 0.45rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 0.85rem; line-height: 1.35;
+}
+.njad-deliv > svg { flex: 0 0 auto; margin-top: 1px; }
+.njad-deliv strong { font-weight: 700; }
+.njad-deliv-hint { display: block; font-size: 0.8rem; font-weight: 400; margin-top: 0.15rem; }
+.njad-deliv--pickup { background: #e3f0ee; color: #1f5a52; }
+.njad-deliv--paid   { background: #eceae4; color: #3f453d; }
+.njad-deliv--plain  { border-color: var(--ad-line); color: var(--ad-mute); }
+.njad-deliv--fare {
+  justify-self: stretch;
+  padding: 0.6rem 0.75rem;
+  background: #fdf0d5; border-color: #eccb85; color: #6b4a0f;
+}
+
+/* The customer's note, kept as typed: line breaks stay, a long unbroken
+   string wraps instead of pushing the card wider than the phone. */
+.njad-notes {
+  margin: 0;
+  display: flex; align-items: flex-start; gap: 0.4rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid var(--nj-green, #93B559);
+  background: var(--ad-bg);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.88rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.njad-notes > svg { flex: 0 0 auto; margin-top: 2px; color: var(--ad-mute); }
+.njad-notes-l { font-weight: 600; }
 
 /* ---------- buttons ---------- */
 .njad-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -204,6 +243,9 @@
   .njad-input, .njad-chip, .njad-icon-btn, .njad-btn { background: var(--ad-card); color: var(--ad-ink); }
   .njad-chip.is-on { background: var(--ad-ink); color: #141714; }
   .njad-btn-danger { background: var(--ad-card); color: #f0a49c; border-color: #5c3a36; }
+  .njad-deliv--pickup { background: #173532; color: #9fd9cf; }
+  .njad-deliv--paid   { background: #262b25; color: #d5d9d2; }
+  .njad-deliv--fare   { background: #3a2e14; border-color: #6b5220; color: #f3d08a; }
 }
 
 /* What is actually in the order, so it can be packed from this screen. */

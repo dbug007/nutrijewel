@@ -2,17 +2,23 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store/StoreContext';
+import shippingZones from '../data/shippingZones';
 import './CheckoutPage.css';
 import { trackBeginCheckout, trackPurchase } from '../lib/analytics';
 
 /*
  * Checkout. Phone first: the form is one column, inputs are 16px so iOS does not
- * zoom on focus, and the pay button is docked at the bottom on small screens.
+ * zoom on focus, and the pay button sits at the end of the form.
  *
  * Every rupee shown here comes from /api/checkout/quote. The page does no money
  * arithmetic of its own, so what the customer reads is what the server will
  * charge. If the two ever disagreed, the server would win silently and the
  * customer would feel cheated; this way they cannot disagree.
+ *
+ * Pickup or delivery is a required choice with no default (the owner's rules
+ * live in src/data/shippingZones.js). Pickup at Lodha Belmondo is the only free
+ * option. A Porter/Rapido or courier fare is not in the online total: the quote
+ * says so with chargedOnline: false, and the page shows the server's note.
  */
 
 const RZP_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -35,28 +41,68 @@ function loadRazorpay() {
   });
 }
 
-const FIELDS = [
+const CONTACT_FIELDS = [
   { id: 'name', label: 'Full name', type: 'text', autoComplete: 'name', placeholder: 'Ruchika Bachwani' },
   { id: 'phone', label: 'Mobile number', type: 'tel', autoComplete: 'tel', placeholder: '98765 43210', inputMode: 'numeric' },
   { id: 'email', label: 'Email (optional)', type: 'email', autoComplete: 'email', placeholder: 'you@example.com' },
-  { id: 'address', label: 'Delivery address', type: 'textarea', autoComplete: 'street-address', placeholder: 'Flat, building, street, landmark' },
-  { id: 'city', label: 'City', type: 'text', autoComplete: 'address-level2', placeholder: 'Pune' },
-  { id: 'pincode', label: 'Pincode', type: 'text', autoComplete: 'postal-code', placeholder: '411045', inputMode: 'numeric' },
 ];
 
+/* Delivery only. Pincode leads so the charge shows up before anything else is typed. */
+const PINCODE_FIELD = { id: 'pincode', label: 'Pincode', type: 'text', autoComplete: 'postal-code', placeholder: '411045', inputMode: 'numeric', maxLength: 6 };
+const ADDRESS_FIELDS = [
+  { id: 'address', label: 'Delivery address', type: 'textarea', autoComplete: 'street-address', placeholder: 'Flat, building, street, landmark' },
+  { id: 'city', label: 'City', type: 'text', autoComplete: 'address-level2', placeholder: 'Pune' },
+];
+
+const NOTES_FIELD = {
+  id: 'notes', label: 'Note for us (optional)', type: 'textarea', maxLength: 300,
+  placeholder: 'Preferred pickup time, or delivery instructions',
+};
+
+/* Built from the rules file, so a changed fee or the outside-Pune switch can
+   never leave this line saying something checkout no longer charges. */
+const { FIXED_RATES, OUTSIDE_PUNE } = shippingZones;
+const pins = (list) => (list.length > 1 ? `${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}` : list[0]);
+const DELIVERY_SUB = [
+  ...FIXED_RATES.map((r) => `₹${r.feePaise / 100} to ${pins(r.pincodes)}`),
+  'Porter/Rapido fare elsewhere in Pune',
+  ...(OUTSIDE_PUNE === 'courier-at-cost' ? ['courier at actual cost outside Pune'] : []),
+].join(', ');
+
+const METHODS = [
+  { id: 'delivery', title: 'Delivery', sub: DELIVERY_SUB },
+  { id: 'pickup', title: 'Free pickup', sub: 'Collect from Lodha Belmondo, Pune' },
+];
+
+const PINCODE_RE = /^[1-9][0-9]{5}$/;
+
 const rupees = (paise) => `₹${((paise || 0) / 100).toLocaleString('en-IN')}`;
+
+/* The charge text for the delivery line. The server only ever says Free for
+   pickup; this makes sure a delivery charge can never read Free here even if a
+   quote ever did, because there is no free delivery on this shop. */
+const chargeText = (d) => {
+  if (d.method === 'pickup' || !/free/i.test(d.display || '')) return d.display;
+  return d.chargedOnline ? rupees(d.feePaise) : 'Confirmed on WhatsApp';
+};
 
 export default function CheckoutPage() {
   const { cart, cartCount, clearCart } = useStore();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ name: '', phone: '', email: '', address: '', city: '', pincode: '' });
+  const [form, setForm] = useState({ name: '', phone: '', email: '', address: '', city: '', pincode: '', notes: '' });
+  // '' until the customer picks. Never defaulted: the server refuses an order without it.
+  const [fulfilment, setFulfilment] = useState('');
   const [quote, setQuote] = useState(null);
   const [quoting, setQuoting] = useState(false);
   const [errors, setErrors] = useState([]);
   const [paying, setPaying] = useState(false);
   const [done, setDone] = useState(null);
   const quoteSeq = useRef(0);
+  /* A dropped request on a phone must not leave Pay disabled for good: the
+     network error offers Try again, which bumps this and re-asks. */
+  const [quoteNetFail, setQuoteNetFail] = useState(false);
+  const [quoteRetry, setQuoteRetry] = useState(0);
 
   /* Turnstile bot check. Off unless the server hands us a site key, which it only
      does once both Turnstile keys are configured on Cloudflare. Tokens are
@@ -67,7 +113,18 @@ export default function CheckoutPage() {
   const [tsToken, setTsToken] = useState('');
 
   useEffect(() => {
-    if (!tsKey || !tsBox.current || tsWidget.current !== null) return undefined;
+    if (!tsKey) {
+      /* The container unmounts whenever there is no quote (a failed or refused
+         one). A widget id pointing into it is dead, and keeping it would stop
+         the widget ever being drawn again, leaving Pay disabled for good. */
+      if (tsWidget.current !== null) {
+        try { if (window.turnstile) window.turnstile.remove(tsWidget.current); } catch (_) { /* ignore */ }
+        tsWidget.current = null;
+        setTsToken('');
+      }
+      return undefined;
+    }
+    if (!tsBox.current || tsWidget.current !== null) return undefined;
     let cancelled = false;
     const draw = () => {
       if (cancelled || !window.turnstile || !tsBox.current || tsWidget.current !== null) return;
@@ -100,7 +157,7 @@ export default function CheckoutPage() {
     .filter((l) => l.kind !== 'hamper')
     .map((l) => ({ productId: l.productId, weight: l.weight, qty: l.qty }));
 
-  const fetchQuote = useCallback(async (pincode) => {
+  const fetchQuote = useCallback(async (method, pincode) => {
     if (lines.length === 0) { setQuote(null); return; }
     const seq = ++quoteSeq.current;
     setQuoting(true);
@@ -108,22 +165,37 @@ export default function CheckoutPage() {
       const res = await fetch('/api/checkout/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lines, pincode: /^[1-9][0-9]{5}$/.test(pincode) ? pincode : undefined }),
+        body: JSON.stringify({ lines, fulfilment: method, pincode }),
       });
       const data = await res.json();
       // A slow earlier request must not overwrite a newer answer.
       if (seq !== quoteSeq.current) return;
+      setQuoteNetFail(false);
       if (data.ok) { setQuote(data); setErrors([]); }
       else { setQuote(null); setErrors(data.errors || ['Could not price your cart.']); }
     } catch (_) {
-      if (seq === quoteSeq.current) setErrors(['Could not reach the server. Check your connection.']);
+      // No answer means no confirmed price, so an older quote for a different
+      // choice must not stay on screen as something that can be paid.
+      if (seq === quoteSeq.current) {
+        setQuote(null);
+        setQuoteNetFail(true);
+        setErrors(['Could not reach the server. Check your connection.']);
+      }
     } finally {
       if (seq === quoteSeq.current) setQuoting(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(lines)]);
 
-  useEffect(() => { fetchQuote(form.pincode); }, [fetchQuote, form.pincode]);
+  /* What the quote is asked about. Pickup needs no pincode. Delivery waits for a
+     full pincode, pricing the items alone until then, so a half typed pincode is
+     not answered with an error on every keystroke. */
+  const pickup = fulfilment === 'pickup';
+  const pincodeValid = PINCODE_RE.test(form.pincode);
+  const quoteMethod = pickup ? 'pickup' : (fulfilment === 'delivery' && pincodeValid ? 'delivery' : undefined);
+  const quotePincode = quoteMethod === 'delivery' ? form.pincode : undefined;
+
+  useEffect(() => { fetchQuote(quoteMethod, quotePincode); }, [fetchQuote, quoteMethod, quotePincode, quoteRetry]);
 
   /* begin_checkout once per visit to this page, as soon as there is a real priced
      cart, not on every pincode keystroke that re-quotes it. */
@@ -138,14 +210,27 @@ export default function CheckoutPage() {
 
   const pay = async () => {
     setErrors([]); setPaying(true);
+    /* Once the Razorpay window is open, its handler and ondismiss own `paying`.
+       Until then, every way out (a refused order, a dropped request) must give
+       the button back. Keying that on window.Razorpay was wrong: the script is
+       loaded before create-order is even asked, so a refusal left Pay stuck on
+       "Opening payment" until a reload. */
+    let opened = false;
     try {
       const ok = await loadRazorpay();
       if (!ok) { setErrors(['Could not load the payment window. Check your connection and try again.']); return; }
 
+      /* A pickup sends no address. The fields stay filled on the page, in case
+         the customer switches back, but nothing typed for an earlier delivery
+         attempt travels with a pickup order. */
+      const { name, phone, email, address, city, pincode, notes } = form;
+      const customer = pickup
+        ? { name, phone, email, notes }
+        : { name, phone, email, address, city, pincode, notes };
       const res = await fetch('/api/checkout/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lines, customer: form, turnstileToken: tsToken || undefined }),
+        body: JSON.stringify({ lines, fulfilment, customer, turnstileToken: tsToken || undefined }),
       });
       const order = await res.json();
       // Spent either way: a Turnstile token cannot be used twice.
@@ -178,7 +263,7 @@ export default function CheckoutPage() {
                 lines: quote ? quote.lines : [],
               });
               clearCart();
-              setDone({ orderNumber: out.orderNumber, amountPaise: out.amountPaise, testMode: quote && quote.testMode });
+              setDone({ orderNumber: out.orderNumber, amountPaise: out.amountPaise, testMode: quote && quote.testMode, pickup });
             } else {
               // Money may well have left their account. Never imply it has not.
               setErrors([`We could not confirm payment for ${order.orderNumber}. If money has left your account, message us on WhatsApp with this order number and we will sort it out.`]);
@@ -200,12 +285,12 @@ export default function CheckoutPage() {
       });
 
       rzp.open();
+      opened = true;
       return; // handler and ondismiss own `paying` from here
     } catch (_) {
       setErrors(['Something went wrong starting the payment.']);
     } finally {
-      // Only clear here if the modal never opened.
-      if (!window.Razorpay) setPaying(false);
+      if (!opened) setPaying(false);
     }
   };
 
@@ -217,7 +302,10 @@ export default function CheckoutPage() {
         <p className="njco-num">{done.orderNumber}</p>
         {done.testMode && <p className="njco-testmode">Test mode: no money was charged.</p>}
         <p className="njco-muted">
-          Paid {rupees(done.amountPaise)}. We will message you on WhatsApp to confirm delivery.
+          Paid {rupees(done.amountPaise)}.{' '}
+          {done.pickup
+            ? 'We will WhatsApp you when it is ready to collect from Lodha Belmondo.'
+            : 'We will message you on WhatsApp to confirm delivery.'}{' '}
           Keep this order number.
         </p>
         <Link className="njco-btn njco-btn-primary" to={`/orders/track?n=${encodeURIComponent(done.orderNumber)}`}>Track this order</Link>
@@ -236,9 +324,48 @@ export default function CheckoutPage() {
     );
   }
 
-  const pincodeValid = /^[1-9][0-9]{5}$/.test(form.pincode);
-  const canPay = !paying && quote && quote.ok && pincodeValid && form.name.trim() && form.phone.trim() && form.address.trim() && form.city.trim()
+  const d = quote && quote.delivery;
+  /* A quote only answers the choice on screen when its method matches it. While
+     a re-quote for a new choice is in flight the old one is still showing, and
+     it must not be payable. */
+  const quoteFits = !!(fulfilment && quote && quote.ok && d
+    && (pickup ? d.method === 'pickup' : d.method !== 'pickup'));
+  // Porter/Rapido or courier: a real fare, but not part of what is paid now.
+  const fareLater = quoteFits && !d.chargedOnline;
+
+  const canPay = !paying && !quoting && !!fulfilment && quoteFits
+    && form.name.trim() && form.phone.trim()
+    && (pickup || (pincodeValid && form.address.trim() && form.city.trim()))
     && (!tsKey || !!tsToken);
+
+  let deliveryLine;
+  if (quoteFits) deliveryLine = [d.label, chargeText(d)];
+  else if (!fulfilment) deliveryLine = ['Delivery or pickup', 'Not chosen yet'];
+  else if (!pickup && !pincodeValid) deliveryLine = ['Delivery', 'Enter pincode'];
+  else deliveryLine = [pickup ? 'Pickup' : 'Delivery', 'Checking'];
+
+  let payHint = '';
+  if (!fulfilment) payHint = 'Choose delivery or pickup to continue.';
+  else if (!pickup && !pincodeValid) payHint = 'Enter your pincode to see the delivery charge.';
+
+  const field = (f) => (
+    <label key={f.id} className="njco-field">
+      <span>{f.label}</span>
+      {f.type === 'textarea' ? (
+        <textarea rows={3} value={form[f.id]} onChange={set(f.id)} placeholder={f.placeholder} autoComplete={f.autoComplete} maxLength={f.maxLength} />
+      ) : (
+        <input
+          type={f.type}
+          value={form[f.id]}
+          onChange={set(f.id)}
+          placeholder={f.placeholder}
+          autoComplete={f.autoComplete}
+          inputMode={f.inputMode}
+          maxLength={f.maxLength}
+        />
+      )}
+    </label>
+  );
 
   return (
     <main className="njco">
@@ -263,54 +390,96 @@ export default function CheckoutPage() {
         {quote && (
           <div className="njco-totals">
             <div><span>Items</span><span>{quote.itemsDisplay}</span></div>
-            <div>
-              <span>Delivery{quote.zone ? ` (${quote.zone.name})` : ''}</span>
-              <span>{quote.shippingDisplay}</span>
+            <div className={`njco-delivery-line${quoteFits ? '' : ' is-pending'}`} data-testid="delivery-line">
+              <span>{deliveryLine[0]}</span>
+              <span>{deliveryLine[1]}</span>
             </div>
-            <div className="njco-grand"><span>Total</span><span>{quote.totalDisplay}</span></div>
-            {/* "after dispatch", not "delivered in": the Shipping Policy allows up
-                to 7 days to prepare an order, so promising 1 to 2 days flat would
-                contradict it. */}
-            {quote.zone && <p className="njco-muted njco-eta">Delivered {quote.zone.minDays} to {quote.zone.maxDays} days after dispatch</p>}
+            <div className="njco-grand"><span>{fareLater ? 'Total to pay now' : 'Total'}</span><span>{quote.totalDisplay}</span></div>
+            {/* The server's own words for a fare settled on WhatsApp. It says
+                the fare is not in this total, which is the point of showing it. */}
+            {fareLater && d.note && <p className="njco-note">{d.note}</p>}
           </div>
         )}
-        {!quote && !quoting && <p className="njco-muted">Enter your pincode to see delivery and the total.</p>}
+        {!quote && quoting && <p className="njco-muted">Working out your total.</p>}
       </section>
 
       {/* Never submit on Enter. On a phone the keyboard's Go key submits the
           form, and wiring that to pay() opened the payment window without the
           customer deciding to pay. Paying must be a deliberate tap on the
           button below and nothing else. */}
-      <form className="njco-form" onSubmit={(e) => e.preventDefault()}>
-        {FIELDS.map((f) => (
-          <label key={f.id} className="njco-field">
-            <span>{f.label}</span>
-            {f.type === 'textarea' ? (
-              <textarea rows={3} value={form[f.id]} onChange={set(f.id)} placeholder={f.placeholder} autoComplete={f.autoComplete} />
-            ) : (
-              <input
-                type={f.type}
-                value={form[f.id]}
-                onChange={set(f.id)}
-                placeholder={f.placeholder}
-                autoComplete={f.autoComplete}
-                inputMode={f.inputMode}
-                maxLength={f.id === 'pincode' ? 6 : undefined}
-              />
-            )}
-          </label>
-        ))}
+      <form className="njco-form" aria-label="Your details" onSubmit={(e) => e.preventDefault()}>
+        {/* Native radios: arrow keys move between them and the whole card is
+            the tap target. No default, so nothing is chosen for the customer. */}
+        <fieldset className="njco-choice">
+          <legend>How would you like it?</legend>
+          <div className="njco-options">
+            {METHODS.map((m) => (
+              <label key={m.id} className={`njco-option${fulfilment === m.id ? ' is-on' : ''}`}>
+                <input
+                  type="radio"
+                  name="fulfilment"
+                  value={m.id}
+                  checked={fulfilment === m.id}
+                  onChange={() => setFulfilment(m.id)}
+                  required
+                  aria-labelledby={`njco-m-${m.id}`}
+                  aria-describedby={`njco-m-${m.id}-sub`}
+                />
+                <span className="njco-option-text">
+                  <span id={`njco-m-${m.id}`} className="njco-option-title">{m.title}</span>
+                  <span id={`njco-m-${m.id}-sub`} className="njco-option-sub">{m.sub}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        {pickup && quoteFits && d.note && <p className="njco-charge">{d.note}</p>}
+
+        {fulfilment === 'delivery' && (
+          <>
+            <div className="njco-field-group">
+              {field(PINCODE_FIELD)}
+              {/* Right under the pincode, because on a phone the summary with the
+                  same line has scrolled out of sight by now. */}
+              <p className="njco-charge" role="status">
+                {quoteFits && (
+                  <>
+                    {d.label}: <strong>{chargeText(d)}</strong>
+                    {fareLater ? ', not part of the total you pay now' : ''}
+                  </>
+                )}
+              </p>
+            </div>
+            {ADDRESS_FIELDS.map(field)}
+          </>
+        )}
+
+        {CONTACT_FIELDS.map(field)}
+        {field(NOTES_FIELD)}
 
         {errors.length > 0 && (
           <div className="njco-errors" role="alert">
             {errors.map((e, i) => <p key={i}><AlertCircle size={15} /> {e}</p>)}
+            {quoteNetFail && (
+              <button type="button" className="njco-retry" onClick={() => setQuoteRetry((n) => n + 1)} disabled={quoting}>
+                Try again
+              </button>
+            )}
           </div>
         )}
 
         {tsKey && <div ref={tsBox} className="njco-turnstile" aria-label="Security check" />}
 
         <div className="njco-pay">
-          <button type="button" onClick={pay} className="njco-btn njco-btn-primary njco-btn-pay" disabled={!canPay}>
+          {payHint && <p className="njco-hint" id="njco-pay-hint">{payHint}</p>}
+          <button
+            type="button"
+            onClick={pay}
+            className="njco-btn njco-btn-primary njco-btn-pay"
+            disabled={!canPay}
+            aria-describedby={payHint ? 'njco-pay-hint' : undefined}
+          >
             {paying ? <><Loader2 size={18} className="njco-spin" /> Opening payment</> : <>Pay {quote ? quote.totalDisplay : ''}</>}
           </button>
           <p className="njco-secure"><ShieldCheck size={14} /> Payment handled by Razorpay. We never see your card details.</p>

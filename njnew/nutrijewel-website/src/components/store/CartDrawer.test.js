@@ -73,11 +73,41 @@ describe('the cart button follows the payments switch', () => {
     // And it must stop claiming no payment is taken, which would now be false.
     expect(screen.queryByText(/no payment now/i)).not.toBeInTheDocument();
     expect(screen.getByText(/secure payment by razorpay/i)).toBeInTheDocument();
+    // Both ways to get the order. It must not promise a price for every pincode:
+    // most Pune fares are confirmed on WhatsApp, not priced at checkout.
+    expect(screen.getByText(/free pickup at lodha belmondo/i)).toBeInTheDocument();
+    expect(screen.getByText(/checkout explains the charge for your pincode/i)).toBeInTheDocument();
+    expect(screen.queryByText(/priced by pincode/i)).not.toBeInTheDocument();
   });
 
   it('keeps a cart with a hamper on WhatsApp, since checkout cannot price hampers yet', async () => {
     mockPaymentsOn = true;
     renderCart({ withHamper: true });
     expect(await screen.findByRole('button', { name: /order on whatsapp/i })).toBeInTheDocument();
+  });
+});
+
+/* The owner's rule (2026-09-25): no free delivery anywhere, at any cart size.
+   The only free option is pickup at Lodha Belmondo, so the word "free" may
+   appear in the drawer only as "free pickup". No leading \b on purpose:
+   textContent runs adjacent elements together ("DeliveryFree"). */
+describe('the drawer never offers free delivery, only free pickup', () => {
+  it.each([
+    ['online payments off', false, false],
+    ['online payments on', true, false],
+    ['a hamper in the cart', true, true],
+  ])('with %s', async (_label, paymentsOn, withHamper) => {
+    mockPaymentsOn = paymentsOn;
+    renderCart({ withHamper });
+    const drawer = await screen.findByRole('dialog', { name: /shopping cart/i });
+    const text = drawer.textContent;
+    expect(text).not.toMatch(/free\s*(delivery|shipping)/i);
+    expect(text).not.toMatch(/free(?!\s*pickup)/i);
+    // An allow-list, not a deny-list: "Free pickup and local delivery" or
+    // "Free pickup · delivery" slip past any pattern of banned phrases. Every
+    // "free" in the drawer must be the one approved phrase, word for word.
+    (text.match(/free[^.:;]*/gi) || []).forEach((phrase) => {
+      expect(phrase).toMatch(/^free pickup at lodha belmondo(, or delivery)?$/i);
+    });
   });
 });

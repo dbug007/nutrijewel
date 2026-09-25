@@ -210,10 +210,11 @@ export default function CartDrawer() {
                     <span>{payOnline ? 'Checkout' : 'Order on WhatsApp'}</span>
                     <span className="nj-checkout-meta">{cartCount} item{cartCount !== 1 ? 's' : ''} · {formatINR(subtotal)}</span>
                   </button>
+                  {/* Only pickup is ever free. Delivery is never "free", at any cart size. */}
                   <p className="nj-drawer-note">
                     {payOnline
-                      ? 'Secure payment by Razorpay. Delivery is worked out from your pincode at checkout.'
-                      : "No payment now, we'll confirm your order & delivery on WhatsApp."}
+                      ? 'Secure payment by Razorpay. Free pickup at Lodha Belmondo, or delivery: checkout explains the charge for your pincode.'
+                      : "No payment now, we'll confirm your order, pickup or delivery on WhatsApp."}
                   </p>
                 </footer>
               </>

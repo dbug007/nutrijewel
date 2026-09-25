@@ -1,7 +1,7 @@
 # How this site runs
 
 Start here. Plain answers to the questions that keep coming up, then links to the
-detail. Last updated 2026-09-23.
+detail. Last updated 2026-09-25.
 
 - [Where the code lives](#where-the-code-lives)
 - [Where we are right now](#where-we-are-right-now)
@@ -57,7 +57,7 @@ Done so far:
 - `.env` removed from git. It was tracked in a public repo, which is how a
   payment key ends up published.
 - Source maps no longer shipped to production.
-- Images cut from **183MB to 18MB**, nothing deleted (originals in `.claude/originals/`).
+- Images cut from **183MB to 18MB**, nothing deleted (originals in `deepak-instructions/originals/`).
 - Fixed a bug where every product gallery showed the same photo twice.
 - Cloudflare Pages project `nutrijewel` live, with SPA routing and six security
   headers.
@@ -74,7 +74,7 @@ Not done: the checkout page, the payment endpoints, the tracking page, the admin
 | **this file** | the overview, and the answers to your questions |
 | [INFRASTRUCTURE.md](INFRASTRUCTURE.md) | Cloudflare account, resources, config files |
 | [../CLAUDE.md](../CLAUDE.md) | working rules for the repo, commands, traps |
-| `.claude/plans/` | the approved plan for this whole project |
+| `deepak-instructions/` | private, never committed: the approved plan (`plans/`), memory, photo originals, and the live secrets (`ADMIN-TOKEN.txt`, `WEBHOOK-SECRET.txt`, `rzp-key.csv`) |
 
 ---
 
@@ -254,10 +254,10 @@ These are the reason not to submit KYC before Phase 2 finishes.
    payments is a direct contradiction. These have to be rewritten first.
 2. **There is no checkout.** Razorpay wants to see the flow a customer would
    actually use. Right now the button opens WhatsApp.
-3. **The Shipping Policy promises a 7 day processing window and nationwide
-   courier.** That has to match the delivery zones we set, or the policy is
-   inaccurate, which is itself an audit problem. Confirm your real delivery areas
-   and timelines and I will make the policy and the pricing agree.
+3. **The Shipping Policy has to match checkout.** Done 2026-09-25: the live page
+   is `public/shipping-policy.html` (the React `ShippingPolicy.js` is not
+   routed), and it now states the same rules checkout charges, listed under
+   "Pickup and delivery" below.
 
 ### Recommended order
 
@@ -273,9 +273,12 @@ These are the reason not to submit KYC before Phase 2 finishes.
 Once Phase 2 and 3 are done:
 
 1. Customer fills the cart as they do now.
-2. They open **/checkout** and enter name, phone, email, address and pincode.
-3. The pincode is checked against the delivery zones. Unserviceable means no
-   order, with an offer to message you on WhatsApp instead.
+2. They open **/checkout**, choose **free pickup at Lodha Belmondo** or
+   **delivery**, and enter name and phone. Delivery also asks for pincode,
+   address and city; pickup does not.
+3. Delivery is charged by pincode (see "Pickup and delivery" below). A
+   Porter/Rapido or courier fare is shown as "confirmed on WhatsApp" and is not
+   part of what they pay online.
 4. **The server recalculates every rupee** from the catalogue and ignores
    whatever the browser claims the prices are. An order row is written with
    status `created`.
@@ -286,7 +289,27 @@ Once Phase 2 and 3 are done:
 7. The order flips to `paid`. Customer sees a confirmation with an order number
    like `NJ-2609-4F2A`.
 8. You pack and ship it, moving the order through `confirmed`, `packed`,
-   `shipped`, `delivered`.
+   `shipped`, `delivered`. A pickup skips `shipped`: `packed` shows the customer
+   "Ready for pickup" and `delivered` shows "Collected". The admin card says
+   plainly which orders are pickups and which still need a Porter/Rapido fare
+   arranged.
+
+### Pickup and delivery
+
+Your rules, set 2026-09-25, all in `src/data/shippingZones.js` and pinned by
+`shippingZones.test.js`:
+
+| Option | Charge | Paid how |
+|---|---|---|
+| Pickup at Lodha Belmondo | free | nothing to pay for it |
+| Delivery to 412101 | ₹66 | in the online payment |
+| Delivery to 411014 or 411005 | ₹149 | in the online payment |
+| Any other Pune pincode | the Porter/Rapido fare | confirmed on WhatsApp, not online |
+| Outside Pune | courier at actual cost | confirmed on WhatsApp, not online |
+
+There is no free delivery anywhere. **Outside Pune is my assumption**, pending
+your decision: one line, `OUTSIDE_PUNE` in that file, switches it to "not
+served" (checkout then points those pincodes to pickup or WhatsApp).
 
 The webhook matters because it is what saves you when a customer pays and then
 closes the tab before the page can report back. Without it, that order is money
@@ -298,7 +321,10 @@ job is to make a repeated webhook harmless.
 Every amount is stored in **paise as whole numbers**, never rupees as decimals.
 The database refuses to store a row where the total does not equal items plus
 shipping. That check is in the schema, not just in the code, so a future bug
-cannot write a wrong total.
+cannot write a wrong total. For a pickup, shipping is genuinely 0. For a
+Porter/Rapido or courier order it is also 0 in the database, because that fare
+never passes through Razorpay; the `shipping_zone` column is what tells the two
+apart.
 
 ---
 
@@ -337,8 +363,13 @@ Cloudflare Access, free for up to 50 users, so only you can open it.
 
 1. **GST registration status.** Decides whether invoices show tax and whether
    products need HSN codes.
-2. **Your real delivery areas, charges and timelines.** The current zones are
-   placeholders: Pune ₹40, Maharashtra ₹80, rest of India ₹150. They are in
-   `src/data/shippingZones.js` and marked as such.
+2. **Delivery outside Pune, and timelines.** The Pune charges are yours and
+   live (see "Pickup and delivery"). Still open: whether to take orders from
+   outside Pune (currently courier at actual cost), how you collect a
+   Porter/Rapido fare, and any delivery times you want to promise. The only
+   timeline on the site is the 7 day preparation window your original shipping
+   policy already stated; it is now also applied to pickup ("7 days before
+   dispatch, or before your order is ready for pickup"), which is my assumption.
+   Confirm or correct it.
 3. **Razorpay account status.** Created? KYC submitted?
 4. **How you want to be notified** of a new order, from the three options above.

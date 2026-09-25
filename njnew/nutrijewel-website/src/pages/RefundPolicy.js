@@ -1,3 +1,4 @@
+// Unused: this page is not routed. The live page is public/refund-policy.html, so edit that instead.
 import React from 'react';
 import PolicyLayout from '../components/PolicyLayout';
 

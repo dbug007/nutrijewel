@@ -1,5 +1,11 @@
 /* POST /api/checkout/create-order
-   { lines: [{productId, weight, qty}], customer: {name, phone, email, address, city, pincode} }
+   { lines: [{productId, weight, qty}], fulfilment: 'pickup' | 'delivery',
+     customer: {name, phone, email, address, city, pincode, notes} }
+
+   `fulfilment` is required and never defaulted. Pickup (free, Lodha Belmondo)
+   needs only a name and phone; any address sent with it is ignored. Delivery
+   needs an address, a city and a pincode that src/data/shippingZones.js can
+   route. A blank pincode used to price delivery at 0; now it is refused.
 
    Reprices the basket from the catalogue, writes a `created` order row, asks
    Razorpay for an order id, and hands the browser only what the payment modal
@@ -28,15 +34,20 @@ function orderNumber() {
 
 const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
 
-function validateCustomer(c) {
+const FULFILMENTS = ['pickup', 'delivery'];
+
+function validateCustomer(c, fulfilment) {
   const errors = [];
+  const pickup = fulfilment === 'pickup';
   const out = {
     name: clean(c && c.name, 80),
     phone: clean(c && c.phone, 20).replace(/[\s-]/g, ''),
     email: clean(c && c.email, 120),
-    address: clean(c && c.address, 300),
-    city: clean(c && c.city, 80),
-    pincode: clean(c && c.pincode, 10),
+    // A pickup has no address. Anything left over from an earlier delivery
+    // attempt on the page is dropped rather than stored against the order.
+    address: pickup ? '' : clean(c && c.address, 300),
+    city: pickup ? '' : clean(c && c.city, 80),
+    pincode: pickup ? '' : clean(c && c.pincode, 10),
     notes: clean(c && c.notes, 300),
   };
   if (out.name.length < 2) errors.push('Enter your name.');
@@ -45,8 +56,10 @@ function validateCustomer(c) {
   if (!/^[6-9][0-9]{9}$/.test(phone)) errors.push('Enter a valid 10 digit mobile number.');
   else out.phone = phone;
   if (out.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(out.email)) errors.push('That email address does not look right.');
-  if (out.address.length < 8) errors.push('Enter your full delivery address.');
-  if (out.city.length < 2) errors.push('Enter your city.');
+  if (!pickup) {
+    if (out.address.length < 8) errors.push('Enter your full delivery address.');
+    if (out.city.length < 2) errors.push('Enter your city.');
+  }
   return { errors, customer: out };
 }
 
@@ -63,7 +76,8 @@ export async function onRequestPost({ request, env }) {
   const read = await readJson(request);
   if (!read.ok) return read.response;
 
-  const { lines, customer, turnstileToken } = read.body || {};
+  const { lines, customer, turnstileToken, fulfilment } = read.body || {};
+  if (!FULFILMENTS.includes(fulfilment)) return json({ ok: false, errors: ['Choose pickup or delivery.'] });
 
   // Bot check, only once the owner has configured both Turnstile keys.
   if (turnstileEnabled(env)) {
@@ -71,12 +85,13 @@ export async function onRequestPost({ request, env }) {
     if (!human) return json({ ok: false, errors: ['Please complete the security check and try again.'] });
   }
 
-  const who = validateCustomer(customer);
+  const who = validateCustomer(customer, fulfilment);
   if (who.errors.length) return json({ ok: false, errors: who.errors });
 
-  // The price is decided here and nowhere else.
-  const priced = repriceCart(lines, { pincode: who.customer.pincode });
+  // The price is decided here and nowhere else, fulfilment passed explicitly.
+  const priced = repriceCart(lines, { fulfilment, pincode: who.customer.pincode });
   if (!priced.ok) return json({ ok: false, errors: priced.errors });
+  if (!priced.delivery) return json({ ok: false, errors: ['Choose pickup or delivery.'] });
   if (priced.totalPaise < 100) return json({ ok: false, errors: ['That order is below the minimum we can charge.'] });
 
   const id = crypto.randomUUID();
@@ -87,7 +102,8 @@ export async function onRequestPost({ request, env }) {
     rzp = await createRazorpayOrder(env, {
       amountPaise: priced.totalPaise,
       receipt: number,
-      notes: { order_number: number, pincode: who.customer.pincode },
+      // Shown in the Razorpay dashboard, so a payment there can be read at a glance.
+      notes: { order_number: number, fulfilment, delivery: priced.delivery.id, pincode: who.customer.pincode || 'pickup' },
     });
   } catch (e) {
     // Nothing is written if Razorpay refuses, so there is no orphan order.
@@ -99,12 +115,13 @@ export async function onRequestPost({ request, env }) {
     env.DB.prepare(
       `INSERT INTO orders (id, order_number, status, items_paise, shipping_paise, total_paise,
          customer_name, customer_phone, customer_email, address_line, city, pincode, shipping_zone,
-         notes, razorpay_order_id)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+         fulfilment, notes, razorpay_order_id)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
       id, number, 'created', priced.itemsPaise, priced.shippingPaise, priced.totalPaise,
+      // Pickup stores '' for the address: the columns are NOT NULL (migration 0001).
       o.name, o.phone, o.email || null, o.address, o.city, o.pincode,
-      priced.zone ? priced.zone.id : null, o.notes || null, rzp.id
+      priced.delivery.id, fulfilment, o.notes || null, rzp.id
     ),
     env.DB.prepare(
       "INSERT INTO order_events (order_id, from_status, to_status, source, detail) VALUES (?, NULL, 'created', 'system', ?)"

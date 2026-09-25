@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2, RotateCcw } from 'lucide-react';
+import {
+  RefreshCw, Package, Truck, CheckCircle2, XCircle, LogOut, Phone, MapPin, AlertCircle, Trash2, RotateCcw,
+  Store, MessageCircle, StickyNote,
+} from 'lucide-react';
 import Dashboard from '../components/admin/Dashboard';
 import GoogleSignIn, { googleSignOut } from '../components/admin/GoogleSignIn';
 import './AdminPage.css';
@@ -30,6 +33,12 @@ const STATUS_LABEL = {
   refunded: 'Refunded',
 };
 
+/* A pickup never ships: packed means ready to collect at Lodha Belmondo and
+   delivered means collected. The server only offers packed -> delivered for a
+   pickup; these make the pill and the buttons say what that means. */
+const PICKUP_STATUS_LABEL = { packed: 'Ready for pickup', delivered: 'Collected' };
+const PICKUP_ACTION_LABEL = { packed: 'Mark ready for pickup', delivered: 'Mark collected' };
+
 const ACTION_ICON = {
   confirmed: CheckCircle2,
   packed: Package,
@@ -57,6 +66,60 @@ const when = (iso) => {
   const d = new Date(iso.replace(' ', 'T') + 'Z');
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+};
+
+const isPickup = (o) => o.fulfilment === 'pickup' || (!!o.delivery && o.delivery.method === 'pickup');
+
+/*
+ * How this order reaches the customer, as one badge. The point is that nobody
+ * books a rider for a pickup, and nobody forgets a Porter/Rapido or courier fare
+ * that was never part of the online total. `delivery` comes from the server
+ * (describeZone in src/data/shippingZones.js); the fallback covers an order list
+ * from a server older than that field.
+ */
+/* Still to go out: the only statuses where a fare can still be arranged. */
+const TO_SEND = ['paid', 'confirmed', 'packed'];
+
+function deliveryBadge(o) {
+  const d = o.delivery || { method: 'legacy', label: 'Delivery', fareToCollect: false };
+  if (isPickup(o)) return { tone: 'pickup', Icon: Store, text: 'Pickup, Lodha Belmondo' };
+  if (d.fareToCollect) {
+    // Only nag while the order can still be sent. Once it has gone, or it was
+    // never paid, or it was cancelled, "arrange a fare" is noise.
+    if (TO_SEND.includes(o.status)) {
+      return {
+        tone: 'fare', Icon: AlertCircle, text: d.label,
+        hint: 'Not in the total paid. Confirm it with the customer on WhatsApp before dispatch.',
+      };
+    }
+    return { tone: 'plain', Icon: Truck, text: d.label.includes('Courier') ? 'Delivery by courier' : 'Delivery by Porter/Rapido' };
+  }
+  // What this order actually paid, rather than today's rate for its pincode, and
+  // "paid" only when money was actually taken.
+  if (d.method === 'fixed' && o.shipping_paise > 0) {
+    return REFUNDABLE.includes(o.status)
+      ? { tone: 'paid', Icon: Truck, text: `Delivery ${rupees(o.shipping_paise)} paid` }
+      : { tone: 'plain', Icon: Truck, text: `Delivery ${rupees(o.shipping_paise)}` };
+  }
+  return { tone: 'plain', Icon: Truck, text: d.label || 'Delivery' };
+}
+
+/* The delivery part of the "3 items" line. Never "free delivery": there is no
+   such thing, and only a pickup is free. A fare to arrange says so in its badge. */
+function chargeNote(o, tone) {
+  if (tone === 'pickup') return ', free pickup';
+  // A Porter/Rapido or courier fare is settled outside the payment: its badge
+  // says so, and "no delivery charge" would be false.
+  if (tone === 'fare' || (o.delivery && o.delivery.fareToCollect)) return '';
+  if (o.shipping_paise > 0) return `, ${rupees(o.shipping_paise)} delivery`;
+  return ', no delivery charge';
+}
+
+/* wa.me wants the country code and digits only. Phones are stored as 10 digits. */
+const whatsappHref = (phone, orderNumber) => {
+  const digits = String(phone || '').replace(/\D/g, '').slice(-10);
+  if (digits.length !== 10) return null;
+  return `https://wa.me/91${digits}?text=${encodeURIComponent(`NutriJewel order ${orderNumber}`)}`;
 };
 
 export default function AdminPage() {
@@ -305,7 +368,11 @@ export default function AdminPage() {
       {stats && (
         <section className="njad-stats" aria-label="Summary">
           <div className="njad-stat"><span className="njad-stat-n">{stats.needs_action || 0}</span><span className="njad-stat-l">To action</span></div>
-          <div className="njad-stat"><span className="njad-stat-n">{stats.to_ship || 0}</span><span className="njad-stat-l">To ship</span></div>
+          {/* Pickups never ship, so they are counted apart: nobody books a rider for one. */}
+          <div className="njad-stat">
+            <span className="njad-stat-n">{stats.to_ship || 0}</span>
+            <span className="njad-stat-l">To ship{stats.ready_for_pickup > 0 ? `, ${stats.ready_for_pickup} to collect` : ''}</span>
+          </div>
           <div className="njad-stat"><span className="njad-stat-n">{stats.paid_orders || 0}</span><span className="njad-stat-l">Orders</span></div>
           <div className="njad-stat"><span className="njad-stat-n">{rupees(stats.revenue_paise)}</span><span className="njad-stat-l">Revenue</span></div>
         </section>
@@ -352,28 +419,58 @@ export default function AdminPage() {
       )}
 
       <ul className="njad-list">
-        {orders.map((o) => (
-          <li key={o.id} className="njad-card">
+        {orders.map((o) => {
+          const pickup = isPickup(o);
+          const badge = deliveryBadge(o);
+          const BadgeIcon = badge.Icon;
+          const wa = whatsappHref(o.customer_phone, o.order_number);
+          return (
+          <li key={o.id} className="njad-card" aria-labelledby={`njad-num-${o.id}`}>
             <div className="njad-card-top">
               <div>
-                <p className="njad-num">{o.order_number}</p>
+                <p className="njad-num" id={`njad-num-${o.id}`}>{o.order_number}</p>
                 <p className="njad-muted njad-small">{when(o.created_at)}</p>
               </div>
               <div className="njad-card-right">
-                <span className={`njad-pill njad-pill--${o.status}`}>{STATUS_LABEL[o.status] || o.status}</span>
+                <span className={`njad-pill njad-pill--${o.status}`}>
+                  {(pickup && PICKUP_STATUS_LABEL[o.status]) || STATUS_LABEL[o.status] || o.status}
+                </span>
                 <p className="njad-total">{rupees(o.total_paise)}</p>
               </div>
             </div>
 
             <div className="njad-who">
               <p className="njad-name">{o.customer_name}</p>
-              <a className="njad-link" href={`tel:${o.customer_phone}`}><Phone size={14} /> {o.customer_phone}</a>
-              <p className="njad-addr"><MapPin size={14} /> {o.address_line}, {o.city} {o.pincode}</p>
+              <div className="njad-contact">
+                <a className="njad-link" href={`tel:${o.customer_phone}`}><Phone size={14} /> {o.customer_phone}</a>
+                {wa && (
+                  <a className="njad-link" href={wa} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle size={14} /> WhatsApp
+                  </a>
+                )}
+              </div>
+              <div className={`njad-deliv njad-deliv--${badge.tone}`}>
+                <BadgeIcon size={16} aria-hidden="true" />
+                <div>
+                  <strong>{badge.text}</strong>
+                  {badge.hint && <span className="njad-deliv-hint">{badge.hint}</span>}
+                </div>
+              </div>
+              {/* A pickup has no address (it is stored empty), so there is none to show. */}
+              {!pickup && <p className="njad-addr"><MapPin size={14} /> {o.address_line}, {o.city} {o.pincode}</p>}
               <p className="njad-muted njad-small">
                 {o.item_count} item{o.item_count === 1 ? '' : 's'}
-                {o.shipping_paise > 0 ? `, ${rupees(o.shipping_paise)} delivery` : ', free delivery'}
+                {chargeNote(o, badge.tone)}
               </p>
             </div>
+
+            {/* The customer's own words: often a pickup time or delivery directions. */}
+            {o.notes && (
+              <p className="njad-notes">
+                <StickyNote size={14} aria-hidden="true" />
+                <span><span className="njad-notes-l">Note:</span> {o.notes}</span>
+              </p>
+            )}
 
             {o.items && o.items.length > 0 && (
               <ul className="njad-items">
@@ -398,7 +495,7 @@ export default function AdminPage() {
                       onClick={() => move(o, next)}
                       disabled={busyId === o.id}
                     >
-                      <Icon size={16} /> {danger ? 'Cancel' : `Mark ${next}`}
+                      <Icon size={16} /> {danger ? 'Cancel' : (pickup && PICKUP_ACTION_LABEL[next]) || `Mark ${next}`}
                     </button>
                   );
                 })}
@@ -414,7 +511,8 @@ export default function AdminPage() {
               </div>
             ) : null}
           </li>
-        ))}
+          );
+        })}
       </ul>
       </>)}
     </main>
