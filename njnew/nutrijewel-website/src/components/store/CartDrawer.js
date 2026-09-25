@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store/StoreContext';
 import { ONLINE_PAYMENTS_ENABLED } from '../../config/payments';
 import { formatINR } from '../../utils/hamperPricing';
+import feeRules from '../../data/fees';
 import './store.css';
 
 const img = (src) => `${process.env.PUBLIC_URL}${src || ''}`;
@@ -24,6 +25,14 @@ export default function CartDrawer() {
      Hampers are switched off today, so this is a guard, not a live path. */
   const hasHamper = cart.some((l) => l.kind === 'hamper');
   const payOnline = ONLINE_PAYMENTS_ENABLED && !hasHamper;
+
+  /* The fees, shown here too, before checkout: an extra charge that only
+     appears at the last step is "drip pricing" under India's 2023 dark patterns
+     guidelines. Same rule file the server charges from; delivery is chosen at
+     checkout, whose server total is final. Amounts only, never the rate. */
+  const itemsPaise = Math.round(subtotal * 100);
+  const fees = feeRules.feesFor(itemsPaise);
+  const beforeDelivery = (itemsPaise + fees.feesPaise) / 100;
 
   const goToCheckout = () => {
     closeCart();
@@ -206,9 +215,16 @@ export default function CartDrawer() {
                     <span>Subtotal</span>
                     <strong>{formatINR(subtotal)}</strong>
                   </div>
+                  {payOnline && (
+                    <div className="nj-drawer-fees" data-testid="drawer-fees">
+                      <div><span>{feeRules.PLATFORM_FEE_LABEL}</span><span>{formatINR(fees.platformFeePaise / 100)}</span></div>
+                      <div><span>{feeRules.CONVENIENCE_FEE_LABEL}</span><span>{formatINR(fees.convenienceFeePaise / 100)}</span></div>
+                      <div className="nj-drawer-total"><span>Total before delivery</span><strong>{formatINR(beforeDelivery)}</strong></div>
+                    </div>
+                  )}
                   <button className="nj-checkout-btn" onClick={payOnline ? goToCheckout : checkoutWhatsApp}>
                     <span>{payOnline ? 'Checkout' : 'Order on WhatsApp'}</span>
-                    <span className="nj-checkout-meta">{cartCount} item{cartCount !== 1 ? 's' : ''} · {formatINR(subtotal)}</span>
+                    <span className="nj-checkout-meta">{cartCount} item{cartCount !== 1 ? 's' : ''} · {formatINR(payOnline ? beforeDelivery : subtotal)}</span>
                   </button>
                   {/* Only pickup is ever free. Delivery is never "free", at any cart size. */}
                   <p className="nj-drawer-note">

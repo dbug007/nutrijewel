@@ -15,9 +15,11 @@
 
 import { json, fail, methodNotAllowed, readJson, formatPaise } from '../../_shared/http.js';
 import pricing from '../../../src/utils/serverPricing.js';
+import feeRules from '../../../src/data/fees.js';
 import { turnstileSiteKey } from '../../_shared/turnstile.js';
 
 const { repriceCart } = pricing;
+const { PLATFORM_FEE_LABEL, CONVENIENCE_FEE_LABEL, CONVENIENCE_FEE_INFO } = feeRules;
 
 export async function onRequestPost({ request, env }) {
   const read = await readJson(request);
@@ -51,6 +53,13 @@ export async function onRequestPost({ request, env }) {
     itemsPaise: result.itemsPaise,
     shippingPaise: result.shippingPaise,
     totalPaise: result.totalPaise,
+    /* The two fees as rupee amounts, never as rates (the owner's call). Every
+       line of the payment is here, so the page can show exactly how the total
+       is made up. */
+    fees: [
+      { id: 'platform', label: PLATFORM_FEE_LABEL, paise: result.platformFeePaise, display: formatPaise(result.platformFeePaise), info: null },
+      { id: 'convenience', label: CONVENIENCE_FEE_LABEL, paise: result.convenienceFeePaise, display: formatPaise(result.convenienceFeePaise), info: CONVENIENCE_FEE_INFO },
+    ],
     itemsDisplay: formatPaise(result.itemsPaise),
     // Driven by the method, never by the amount being 0.
     shippingDisplay: result.delivery ? result.delivery.display : '',

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store/StoreContext';
 import shippingZones from '../data/shippingZones';
+import InfoTip, { useInfoTip } from '../components/InfoTip';
 import './CheckoutPage.css';
 import { trackBeginCheckout, trackPurchase } from '../lib/analytics';
 
@@ -42,16 +43,21 @@ function loadRazorpay() {
 }
 
 const CONTACT_FIELDS = [
-  { id: 'name', label: 'Full name', type: 'text', autoComplete: 'name', placeholder: 'Ruchika Bachwani' },
-  { id: 'phone', label: 'Mobile number', type: 'tel', autoComplete: 'tel', placeholder: '98765 43210', inputMode: 'numeric' },
-  { id: 'email', label: 'Email (optional)', type: 'email', autoComplete: 'email', placeholder: 'you@example.com' },
+  { id: 'name', label: 'Full name', type: 'text', autoComplete: 'name', placeholder: 'Full name' },
+  { id: 'phone', label: 'Mobile number', type: 'tel', autoComplete: 'tel', placeholder: 'e.g. 98765 43210', inputMode: 'numeric' },
+  {
+    id: 'email', label: 'Email (optional)', type: 'email', autoComplete: 'email', placeholder: 'you@example.com',
+    // Razorpay emails the order and payment receipt here: it gets this address as prefill.
+    info: { label: 'Why give your email?', text: 'Write your email to receive your order details.' },
+  },
 ];
 
 /* Delivery only. Pincode leads so the charge shows up before anything else is typed. */
 const PINCODE_FIELD = { id: 'pincode', label: 'Pincode', type: 'text', autoComplete: 'postal-code', placeholder: '411045', inputMode: 'numeric', maxLength: 6 };
 const ADDRESS_FIELDS = [
   { id: 'address', label: 'Delivery address', type: 'textarea', autoComplete: 'street-address', placeholder: 'Flat, building, street, landmark' },
-  { id: 'city', label: 'City', type: 'text', autoComplete: 'address-level2', placeholder: 'Pune' },
+  // Filled in from the pincode where India Post knows it; still editable.
+  { id: 'city', label: 'City', type: 'text', autoComplete: 'address-level2', placeholder: 'City' },
 ];
 
 const NOTES_FIELD = {
@@ -75,6 +81,22 @@ const METHODS = [
 ];
 
 const PINCODE_RE = /^[1-9][0-9]{5}$/;
+
+/* One fee line in the summary: label and rupee amount, and for a fee that comes
+   with reasons, an (i) whose explanation opens on its own line underneath. The
+   rate is never shown, only the amount (the owner's call). */
+function FeeRow({ fee }) {
+  const tip = useInfoTip(`What is the ${fee.label.toLowerCase()}?`, fee.info && (
+    <ul>{fee.info.map((line) => <li key={line}>{line}</li>)}</ul>
+  ));
+  return (
+    <div className="njco-fee-line" data-testid={`fee-${fee.id}`}>
+      <span>{fee.label}{fee.info && tip.button}</span>
+      <span>{fee.display}</span>
+      {fee.info && tip.panel}
+    </div>
+  );
+}
 
 const rupees = (paise) => `₹${((paise || 0) / 100).toLocaleString('en-IN')}`;
 
@@ -197,6 +219,40 @@ export default function CheckoutPage() {
 
   useEffect(() => { fetchQuote(quoteMethod, quotePincode); }, [fetchQuote, quoteMethod, quotePincode, quoteRetry]);
 
+  /* City, state and country from the pincode (India Post, through /api/pincode).
+     Asked once per complete pincode, never per keystroke. Only a definite "no
+     such pincode" stops the order; if the lookup is down, the customer simply
+     types the city, because a third-party outage must never block a sale. */
+  const [pinInfo, setPinInfo] = useState({ status: 'idle' });
+  const [pinBlurred, setPinBlurred] = useState(false);
+  const cityByHand = useRef(false);
+  const pinSeq = useRef(0);
+  const lookupPin = fulfilment === 'delivery' && pincodeValid ? form.pincode : '';
+
+  useEffect(() => {
+    if (!lookupPin) { setPinInfo({ status: 'idle' }); return undefined; }
+    const seq = ++pinSeq.current;
+    setPinInfo({ status: 'loading' });
+    (async () => {
+      let data = null;
+      try {
+        const res = await fetch(`/api/pincode?pin=${encodeURIComponent(lookupPin)}`);
+        data = res.ok ? await res.json() : null; // 429 or 5xx: treat as unavailable
+      } catch (_) { data = null; }
+      if (seq !== pinSeq.current) return;
+      if (data && data.ok && data.found) {
+        setPinInfo({ status: 'found', city: data.city, state: data.state, country: data.country || 'India' });
+        // Fill the city unless the customer typed their own.
+        if (data.city && !cityByHand.current) setForm((f) => ({ ...f, city: data.city }));
+      } else if (data && data.ok && data.found === false) {
+        setPinInfo({ status: 'notfound' });
+      } else {
+        setPinInfo({ status: 'unavailable' });
+      }
+    })();
+    return undefined;
+  }, [lookupPin]);
+
   /* begin_checkout once per visit to this page, as soon as there is a real priced
      cart, not on every pincode keystroke that re-quotes it. */
   const beganCheckout = useRef(false);
@@ -206,7 +262,12 @@ export default function CheckoutPage() {
     trackBeginCheckout(quote.lines, quote.totalPaise);
   }, [quote]);
 
-  const set = (id) => (e) => setForm((f) => ({ ...f, [id]: e.target.value }));
+  const set = (id) => (e) => {
+    const { value } = e.target;
+    // A city typed (or cleared) by the customer is theirs: the lookup stops filling it.
+    if (id === 'city') cityByHand.current = value.trim() !== '';
+    setForm((f) => ({ ...f, [id]: value }));
+  };
 
   const pay = async () => {
     setErrors([]); setPaying(true);
@@ -333,9 +394,12 @@ export default function CheckoutPage() {
   // Porter/Rapido or courier: a real fare, but not part of what is paid now.
   const fareLater = quoteFits && !d.chargedOnline;
 
+  // India Post says this pincode does not exist: nothing can be delivered to it.
+  const pinNotFound = !pickup && pinInfo.status === 'notfound';
+
   const canPay = !paying && !quoting && !!fulfilment && quoteFits
     && form.name.trim() && form.phone.trim()
-    && (pickup || (pincodeValid && form.address.trim() && form.city.trim()))
+    && (pickup || (pincodeValid && !pinNotFound && form.address.trim() && form.city.trim()))
     && (!tsKey || !!tsToken);
 
   let deliveryLine;
@@ -347,10 +411,17 @@ export default function CheckoutPage() {
   let payHint = '';
   if (!fulfilment) payHint = 'Choose delivery or pickup to continue.';
   else if (!pickup && !pincodeValid) payHint = 'Enter your pincode to see the delivery charge.';
+  else if (pinNotFound) payHint = 'Check your pincode to continue.';
+
+  // Shown once the customer has left the field, not while they are still typing.
+  const pinFormatError = !pickup && pinBlurred && form.pincode !== '' && !pincodeValid;
 
   const field = (f) => (
     <label key={f.id} className="njco-field">
-      <span>{f.label}</span>
+      <span className="njco-field-label">
+        {f.label}
+        {f.info && <InfoTip label={f.info.label}>{f.info.text}</InfoTip>}
+      </span>
       {f.type === 'textarea' ? (
         <textarea rows={3} value={form[f.id]} onChange={set(f.id)} placeholder={f.placeholder} autoComplete={f.autoComplete} maxLength={f.maxLength} />
       ) : (
@@ -358,10 +429,12 @@ export default function CheckoutPage() {
           type={f.type}
           value={form[f.id]}
           onChange={set(f.id)}
+          onBlur={f.id === 'pincode' ? () => setPinBlurred(true) : undefined}
           placeholder={f.placeholder}
           autoComplete={f.autoComplete}
           inputMode={f.inputMode}
           maxLength={f.maxLength}
+          aria-invalid={f.id === 'pincode' && (pinFormatError || pinNotFound) ? true : undefined}
         />
       )}
     </label>
@@ -394,6 +467,8 @@ export default function CheckoutPage() {
               <span>{deliveryLine[0]}</span>
               <span>{deliveryLine[1]}</span>
             </div>
+            {/* Every rupee of the payment on its own line, as an amount. */}
+            {(quote.fees || []).map((fee) => <FeeRow key={fee.id} fee={fee} />)}
             <div className="njco-grand"><span>{fareLater ? 'Total to pay now' : 'Total'}</span><span>{quote.totalDisplay}</span></div>
             {/* The server's own words for a fare settled on WhatsApp. It says
                 the fare is not in this total, which is the point of showing it. */}
@@ -440,10 +515,18 @@ export default function CheckoutPage() {
           <>
             <div className="njco-field-group">
               {field(PINCODE_FIELD)}
-              {/* Right under the pincode, because on a phone the summary with the
-                  same line has scrolled out of sight by now. */}
+              {/* What India Post says about the pincode, then the delivery charge.
+                  Both right under the field, because on a phone the summary has
+                  scrolled out of sight by now. */}
+              {pinFormatError && <p className="njco-pin-error" role="alert">Enter a valid 6 digit pincode.</p>}
+              {pinNotFound && <p className="njco-pin-error" role="alert">We could not find this pincode. Please check it.</p>}
+              {pinInfo.status === 'found' && (
+                <p className="njco-pin-place" data-testid="pin-place">
+                  {[pinInfo.city, pinInfo.state].filter(Boolean).join(', ')}
+                </p>
+              )}
               <p className="njco-charge" role="status">
-                {quoteFits && (
+                {quoteFits && !pinNotFound && (
                   <>
                     {d.label}: <strong>{chargeText(d)}</strong>
                     {fareLater ? ', not part of the total you pay now' : ''}
@@ -452,6 +535,11 @@ export default function CheckoutPage() {
               </p>
             </div>
             {ADDRESS_FIELDS.map(field)}
+            {/* Every pincode this shop takes is Indian, so this is never a choice. */}
+            <label className="njco-field">
+              <span className="njco-field-label">Country</span>
+              <input type="text" value="India" readOnly aria-readonly="true" className="njco-readonly" tabIndex={-1} />
+            </label>
           </>
         )}
 

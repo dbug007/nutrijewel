@@ -15,6 +15,7 @@ const products = require('../data/products.data');
 // The owner's rules, straight from the file the server prices with, so the
 // stand-in server below cannot drift from the real one on what a pincode costs.
 const zones = require('../data/shippingZones');
+const feeRules = require('../data/fees');
 
 const peanut = products.find((p) => p.id === 'peanut-butter');
 const ITEMS_PAISE = 29900;
@@ -29,8 +30,14 @@ function quoteResponse({ fulfilment, pincode }) {
   let d = routed.delivery;
   if (d && d.method !== 'pickup' && deliveryOverride) d = { ...d, ...deliveryOverride };
   const shippingPaise = d && d.chargedOnline ? d.feePaise : 0;
-  const totalPaise = ITEMS_PAISE + shippingPaise;
+  // Fees exactly as serverPricing computes them: on items plus online delivery.
+  const f = feeRules.feesFor(ITEMS_PAISE + shippingPaise);
+  const totalPaise = ITEMS_PAISE + shippingPaise + f.platformFeePaise + f.convenienceFeePaise;
   return {
+    fees: [
+      { id: 'platform', label: feeRules.PLATFORM_FEE_LABEL, paise: f.platformFeePaise, display: rupees(f.platformFeePaise), info: null },
+      { id: 'convenience', label: feeRules.CONVENIENCE_FEE_LABEL, paise: f.convenienceFeePaise, display: rupees(f.convenienceFeePaise), info: feeRules.CONVENIENCE_FEE_INFO },
+    ],
     ok: true,
     testMode: false,
     turnstileSiteKey: null,
@@ -51,6 +58,15 @@ function quoteResponse({ fulfilment, pincode }) {
   };
 }
 
+/* What India Post knows, for the pincodes these tests type. */
+const PLACES = {
+  412101: { city: 'Pune', state: 'Maharashtra' },
+  411014: { city: 'Pune', state: 'Maharashtra' },
+  411038: { city: 'Pune', state: 'Maharashtra' },
+  560001: { city: 'Bangalore', state: 'Karnataka' },
+};
+let pinReply;
+
 const bodiesTo = (path) => global.fetch.mock.calls
   .filter(([url]) => url === path)
   .map(([, opts]) => JSON.parse(opts.body));
@@ -67,7 +83,15 @@ beforeEach(() => {
   deliveryOverride = null;
   trackBeginCheckout.mockClear();
 
+  pinReply = (pin) => (PLACES[pin] ? { ok: true, found: true, ...PLACES[pin], country: 'India' } : { ok: true, found: false });
   global.fetch = jest.fn(async (url, opts) => {
+    // GET /api/pincode?pin=..., answered like functions/api/pincode.js.
+    if (url.startsWith('/api/pincode')) {
+      const pin = new URL(url, 'http://x').searchParams.get('pin');
+      const reply = pinReply(pin);
+      if (reply instanceof Error) throw reply;
+      return { ok: true, json: async () => reply };
+    }
     const body = JSON.parse(opts.body);
     let data = { ok: false, errors: ['unexpected call'] };
     if (url === '/api/checkout/quote') data = quoteResponse(body);
@@ -181,7 +205,8 @@ describe('checkout: pickup or delivery', () => {
 
     const row = await rowOf('Delivery to 412101');
     expect(row).toHaveTextContent('₹66');
-    expect(within(summary()).getByText('₹365')).toBeInTheDocument();
+    // ₹299 + ₹66 delivery + ₹7 platform fee + ₹4 convenience fee.
+    expect(within(summary()).getByText('₹376')).toBeInTheDocument();
     expect(quotes()[quotes().length - 1]).toMatchObject({ fulfilment: 'delivery', pincode: '412101' });
 
     type('Full name', 'Asha Rao');
@@ -192,7 +217,7 @@ describe('checkout: pickup or delivery', () => {
     type('City', 'Pune');
     type('Note for us (optional)', 'Ring the bell twice');
     expect(payButton()).toBeEnabled();
-    expect(payButton()).toHaveTextContent('Pay ₹365');
+    expect(payButton()).toHaveTextContent('Pay ₹376');
 
     fireEvent.click(payButton());
     await waitFor(() => expect(orders()).toHaveLength(1));
@@ -322,6 +347,117 @@ describe('checkout: pickup or delivery', () => {
     await waitFor(() => expect(payButton()).toBeEnabled());
     expect(payButton()).not.toHaveTextContent(/opening payment/i);
     expect(window.Razorpay).not.toHaveBeenCalled();
+  });
+
+  it('breaks the total into items, delivery and both fees, as amounts that add up', async () => {
+    renderCheckout();
+    await ready();
+    choose('Delivery');
+    type('Pincode', '412101');
+    await rowOf('Delivery to 412101');
+
+    const platform = screen.getByTestId('fee-platform');
+    const convenience = screen.getByTestId('fee-convenience');
+    expect(platform).toHaveTextContent('Platform fee₹7');
+    expect(convenience).toHaveTextContent('Convenience fee₹4');
+    const amount = (el) => Number(el.textContent.replace(/[^0-9]/g, ''));
+    const total = amount(within(summary()).getByText(/^Total/).parentElement);
+    expect(total).toBe(299 + 66 + amount(platform) + amount(convenience));
+    // The owner's call: amounts only, never the rate. (The totals block, not
+    // the whole page: a product can be called "100% Peanut Butter".)
+    const totals = platform.parentElement;
+    expect(totals).toHaveClass('njco-totals');
+    expect(totals.textContent).not.toMatch(/%|percent/i);
+    expect(screen.getByRole('button', { name: /^pay/i }).textContent).not.toMatch(/%/);
+  });
+
+  it('explains the convenience fee behind its (i), in the three owner-approved points', async () => {
+    renderCheckout();
+    await ready();
+    choose('Free pickup');
+    await rowOf('Pickup at Lodha Belmondo');
+
+    const tip = screen.getByRole('button', { name: /what is the convenience fee/i });
+    expect(tip).toHaveAttribute('aria-expanded', 'false');
+    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).not.toBeVisible());
+    fireEvent.click(tip);
+    expect(tip).toHaveAttribute('aria-expanded', 'true');
+    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).toBeVisible());
+    // Opening it must not start a payment or submit anything.
+    expect(orders()).toHaveLength(0);
+    fireEvent.click(tip);
+    feeRules.CONVENIENCE_FEE_INFO.forEach((line) => expect(screen.getByText(line)).not.toBeVisible());
+    // Only the convenience fee has one.
+    expect(screen.queryByRole('button', { name: /what is the platform fee/i })).not.toBeInTheDocument();
+  });
+
+  it('uses neutral placeholders and explains why to give an email', async () => {
+    renderCheckout();
+    await ready();
+    expect(screen.getByLabelText('Full name')).toHaveAttribute('placeholder', 'Full name');
+    expect(screen.getByLabelText('Mobile number')).toHaveAttribute('placeholder', 'e.g. 98765 43210');
+    expect(document.body.innerHTML).not.toMatch(/Ruchika Bachwani/);
+    fireEvent.click(screen.getByRole('button', { name: /why give your email/i }));
+    expect(screen.getByText('Write your email to receive your order details.')).toBeVisible();
+  });
+
+  it('fills in the city and country from the pincode, without overwriting a city typed by hand', async () => {
+    renderCheckout();
+    await ready();
+    choose('Delivery');
+    type('Pincode', '412101');
+    expect(await screen.findByTestId('pin-place')).toHaveTextContent('Pune, Maharashtra');
+    expect(screen.getByLabelText('City')).toHaveValue('Pune');
+    expect(screen.getByLabelText('Country')).toHaveValue('India');
+    // Looked up once for the whole pincode, not once per keystroke.
+    expect(global.fetch.mock.calls.filter(([u]) => u.startsWith('/api/pincode'))).toHaveLength(1);
+
+    type('City', 'Dehu Road');
+    // A pincode with a different city, so we can wait for its answer to land.
+    type('Pincode', '560001');
+    await waitFor(() => expect(screen.getByTestId('pin-place')).toHaveTextContent('Bangalore, Karnataka'));
+    expect(screen.getByLabelText('City')).toHaveValue('Dehu Road');
+  });
+
+  it('refuses a pincode India Post has never heard of', async () => {
+    renderCheckout();
+    await ready();
+    choose('Delivery');
+    type('Full name', 'Asha Rao');
+    type('Mobile number', '9876543210');
+    type('Delivery address', 'Flat 4, Green Park');
+    type('City', 'Pune');
+    type('Pincode', '999999');
+    expect(await screen.findByText('We could not find this pincode. Please check it.')).toBeInTheDocument();
+    expect(payButton()).toBeDisabled();
+    fireEvent.click(payButton());
+    expect(orders()).toHaveLength(0);
+  });
+
+  it('never blocks an order because the pincode lookup is down', async () => {
+    pinReply = () => new TypeError('Failed to fetch');
+    renderCheckout();
+    await ready();
+    choose('Delivery');
+    type('Pincode', '412101');
+    await rowOf('Delivery to 412101');
+    type('Full name', 'Asha Rao');
+    type('Mobile number', '9876543210');
+    type('Delivery address', 'Flat 4, Green Park');
+    expect(screen.getByLabelText('City')).toHaveValue(''); // nothing to fill it from
+    type('City', 'Pune');
+    await waitFor(() => expect(payButton()).toBeEnabled());
+    expect(screen.queryByText(/could not find this pincode/i)).not.toBeInTheDocument();
+  });
+
+  it('says so when a pincode is left half typed', async () => {
+    renderCheckout();
+    await ready();
+    choose('Delivery');
+    type('Pincode', '4110');
+    expect(screen.queryByText('Enter a valid 6 digit pincode.')).not.toBeInTheDocument(); // not while typing
+    fireEvent.blur(screen.getByLabelText('Pincode'));
+    expect(screen.getByText('Enter a valid 6 digit pincode.')).toBeInTheDocument();
   });
 
   it('the Delivery option lists exactly what the rules file charges', async () => {

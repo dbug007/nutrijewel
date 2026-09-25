@@ -115,6 +115,15 @@ function chargeNote(o, tone) {
   return ', no delivery charge';
 }
 
+/* The two fees inside the total, so the owner sees what the total is made of.
+   Orders placed before the fees existed carry 0 and show nothing extra. */
+function feeNote(o) {
+  const parts = [];
+  if (o.platform_fee_paise > 0) parts.push(`platform fee ${rupees(o.platform_fee_paise)}`);
+  if (o.convenience_fee_paise > 0) parts.push(`convenience fee ${rupees(o.convenience_fee_paise)}`);
+  return parts.length ? `, ${parts.join(', ')}` : '';
+}
+
 /* wa.me wants the country code and digits only. Phones are stored as 10 digits. */
 const whatsappHref = (phone, orderNumber) => {
   const digits = String(phone || '').replace(/\D/g, '').slice(-10);
@@ -461,6 +470,7 @@ export default function AdminPage() {
               <p className="njad-muted njad-small">
                 {o.item_count} item{o.item_count === 1 ? '' : 's'}
                 {chargeNote(o, badge.tone)}
+                {feeNote(o)}
               </p>
             </div>
 

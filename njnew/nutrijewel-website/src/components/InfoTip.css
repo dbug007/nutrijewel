@@ -1,0 +1,27 @@
+/* (i) info button: a 44px tap target around a small visible circle. */
+.njtip-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -12px -10px -12px -6px; /* big target, no extra row height */
+  padding: 0; border: 0; background: transparent; cursor: pointer;
+  color: #6b7169; vertical-align: middle;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.njtip-btn svg { border-radius: 50%; transition: color 0.15s ease; }
+.njtip-btn:hover svg,
+.njtip-btn.is-open svg { color: var(--nj-olive, #6D8A3C); }
+.njtip-btn:focus-visible { outline: 2px solid var(--nj-olive, #6D8A3C); outline-offset: -8px; border-radius: 50%; }
+
+/* The panel sits on its own line under the row, full width. */
+.njtip-panel {
+  display: block; flex-basis: 100%; width: 100%;
+  margin: 0.35rem 0 0.2rem; padding: 0.6rem 0.75rem;
+  background: #f4f7ee; border: 1px solid #dfe8cf; border-radius: 10px;
+  color: #3d4a2a; font-size: 0.85rem; font-weight: 400; line-height: 1.45; text-align: left;
+}
+.njtip-panel[hidden] { display: none; }
+.njtip-panel ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; list-style: disc; }
+.njtip-panel li { display: list-item; }
+
+@media (prefers-reduced-motion: reduce) {
+  .njtip-btn svg { transition: none; }
+}

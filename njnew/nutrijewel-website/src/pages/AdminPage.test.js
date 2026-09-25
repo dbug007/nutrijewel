@@ -50,7 +50,10 @@ const ORDERS = [
     shipping_zone: 'delivery-412101',
     pincode: '412101',
     shipping_paise: 6600,
-    total_paise: 56600,
+    // Rs 500 items + Rs 66 delivery + Rs 11 platform + Rs 6 convenience.
+    platform_fee_paise: 1100,
+    convenience_fee_paise: 600,
+    total_paise: 58300,
     nextStatuses: ['shipped', 'cancelled'],
     delivery: { method: 'fixed', label: 'Delivery, ₹66 paid', fareToCollect: false },
   }),
@@ -143,6 +146,21 @@ describe('AdminPage order cards', () => {
     expect(c.getByText('Delivery ₹66 paid')).toBeInTheDocument();
     expect(c.getByText(/Pune 412101/)).toBeInTheDocument();
     expect(c.getByText(/1 item, ₹66 delivery/)).toBeInTheDocument();
+  });
+
+  it('shows the two fees inside the total, and they add up', async () => {
+    await openOrders();
+    const c = within(card('NJ-2609-FIXD'));
+    const o = ORDERS.find((x) => x.order_number === 'NJ-2609-FIXD');
+
+    expect(c.getByText(/platform fee ₹11, convenience fee ₹6/)).toBeInTheDocument();
+    expect(o.items_paise + o.shipping_paise + o.platform_fee_paise + o.convenience_fee_paise).toBe(o.total_paise);
+    expect(c.getByText('₹583')).toBeInTheDocument();
+  });
+
+  it('shows no fee lines on an order from before the fees', async () => {
+    await openOrders();
+    expect(within(card('NJ-2609-OLDD')).queryByText(/platform fee|convenience fee/i)).toBeNull();
   });
 
   it('flags a Porter/Rapido fare that is not in the total', async () => {

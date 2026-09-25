@@ -113,12 +113,15 @@ export async function onRequestPost({ request, env }) {
   const o = who.customer;
   const statements = [
     env.DB.prepare(
-      `INSERT INTO orders (id, order_number, status, items_paise, shipping_paise, total_paise,
+      `INSERT INTO orders (id, order_number, status, items_paise, shipping_paise,
+         platform_fee_paise, convenience_fee_paise, total_paise,
          customer_name, customer_phone, customer_email, address_line, city, pincode, shipping_zone,
          fulfilment, notes, razorpay_order_id)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
-      id, number, 'created', priced.itemsPaise, priced.shippingPaise, priced.totalPaise,
+      // The database refuses the row unless total = items + shipping + both fees.
+      id, number, 'created', priced.itemsPaise, priced.shippingPaise,
+      priced.platformFeePaise, priced.convenienceFeePaise, priced.totalPaise,
       // Pickup stores '' for the address: the columns are NOT NULL (migration 0001).
       o.name, o.phone, o.email || null, o.address, o.city, o.pincode,
       priced.delivery.id, fulfilment, o.notes || null, rzp.id

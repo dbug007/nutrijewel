@@ -1,5 +1,6 @@
 const products = require('../data/products.data');
 const { repriceCart, toPaise, MAX_QTY_PER_LINE } = require('./serverPricing');
+const { feesFor } = require('../data/fees');
 
 const buyable = products.find((p) => !p.outOfSeason && !p.comingSoon && !p.priceOnRequest && !p.variants);
 const withVariants = products.find((p) => Array.isArray(p.variants) && p.variants.length > 1);
@@ -74,6 +75,9 @@ describe('quantity', () => {
   });
 });
 
+/* The fees for a given pre-fee amount, straight from the rule file. */
+const feesOn = (base) => feesFor(base).feesPaise;
+
 describe('pickup and delivery in the total Razorpay charges', () => {
   it.each([['412101', 6600], ['411014', 14900], ['411005', 14900]])(
     'adds the fixed fee for %s to the total',
@@ -81,16 +85,16 @@ describe('pickup and delivery in the total Razorpay charges', () => {
       const r = repriceCart([line()], { fulfilment: 'delivery', pincode: pin });
       expect(r.ok).toBe(true);
       expect(r.shippingPaise).toBe(fee);
-      expect(r.totalPaise).toBe(r.itemsPaise + fee);
+      expect(r.totalPaise).toBe(r.itemsPaise + fee + feesOn(r.itemsPaise + fee));
     }
   );
 
-  it('pickup adds nothing and needs no pincode', () => {
+  it('pickup adds no delivery charge and needs no pincode', () => {
     const r = repriceCart([line()], { fulfilment: 'pickup' });
     expect(r.ok).toBe(true);
     expect(r.delivery.method).toBe('pickup');
     expect(r.shippingPaise).toBe(0);
-    expect(r.totalPaise).toBe(r.itemsPaise);
+    expect(r.totalPaise).toBe(r.itemsPaise + feesOn(r.itemsPaise));
   });
 
   it('a Porter/Rapido fare is not in the total, and says so', () => {
@@ -98,7 +102,7 @@ describe('pickup and delivery in the total Razorpay charges', () => {
     expect(r.ok).toBe(true);
     expect(r.delivery.chargedOnline).toBe(false);
     expect(r.shippingPaise).toBe(0);
-    expect(r.totalPaise).toBe(r.itemsPaise);
+    expect(r.totalPaise).toBe(r.itemsPaise + feesOn(r.itemsPaise));
   });
 
   /* The old placeholder zones made delivery free over a basket size. The owner:
@@ -139,6 +143,44 @@ describe('pickup and delivery in the total Razorpay charges', () => {
   });
 });
 
+describe('platform and convenience fees', () => {
+  it('are charged on items plus a fixed delivery fee, and the total is the sum of every part', () => {
+    const r = repriceCart([line()], { fulfilment: 'delivery', pincode: '412101' });
+    const expected = feesFor(r.itemsPaise + 6600);
+    expect(r.platformFeePaise).toBe(expected.platformFeePaise);
+    expect(r.convenienceFeePaise).toBe(expected.convenienceFeePaise);
+    expect(r.platformFeePaise).toBeGreaterThan(0);
+    expect(r.convenienceFeePaise).toBeGreaterThan(0);
+    expect(r.totalPaise).toBe(r.itemsPaise + r.shippingPaise + r.platformFeePaise + r.convenienceFeePaise);
+  });
+
+  it('are never charged on a Porter/Rapido fare, which is not in the payment', () => {
+    const fare = repriceCart([line()], { fulfilment: 'delivery', pincode: PIN_PUNE });
+    const pickup = repriceCart([line()], { fulfilment: 'pickup' });
+    expect(fare.platformFeePaise).toBe(pickup.platformFeePaise);
+    expect(fare.convenienceFeePaise).toBe(pickup.convenienceFeePaise);
+  });
+
+  it('are ignored when a client sends its own', () => {
+    const honest = repriceCart([line()], { fulfilment: 'pickup' });
+    const cheat = repriceCart([{ ...line(), platformFeePaise: 0, convenienceFeePaise: 0, fees: 0 }], { fulfilment: 'pickup', platformFeePaise: 0 });
+    expect(cheat.totalPaise).toBe(honest.totalPaise);
+    expect(cheat.platformFeePaise).toBeGreaterThan(0);
+  });
+
+  it('show in the cart preview too, before any choice is made', () => {
+    const r = repriceCart([line()]);
+    expect(r.platformFeePaise + r.convenienceFeePaise).toBe(feesOn(r.itemsPaise));
+    expect(r.totalPaise).toBe(r.itemsPaise + feesOn(r.itemsPaise));
+  });
+
+  it('are zero on every refusal, so nothing chargeable leaks out of one', () => {
+    const r = repriceCart([{ productId: 'free-cake', weight: '1kg', qty: 1 }], { fulfilment: 'pickup' });
+    expect(r.ok).toBe(false);
+    expect([r.platformFeePaise, r.convenienceFeePaise, r.totalPaise]).toEqual([0, 0, 0]);
+  });
+});
+
 describe('rubbish input', () => {
   it.each([[], null, undefined, 'cart', 42])('refuses %p', (cart) => {
     expect(repriceCart(cart, { pincode: PIN_PUNE }).ok).toBe(false);
@@ -158,7 +200,7 @@ describe('money is always whole paise', () => {
     // 411014 so a non-zero delivery fee is part of the arithmetic being checked.
     const r = repriceCart([line({ qty: 3 }), { productId: withVariants.id, weight: withVariants.variants[0].weight, qty: 2 }], { fulfilment: 'delivery', pincode: '411014' });
     expect(r.ok).toBe(true);
-    [r.itemsPaise, r.shippingPaise, r.totalPaise, ...r.lines.map((l) => l.unitPaise)].forEach((v) => {
+    [r.itemsPaise, r.shippingPaise, r.platformFeePaise, r.convenienceFeePaise, r.totalPaise, ...r.lines.map((l) => l.unitPaise)].forEach((v) => {
       expect(Number.isInteger(v)).toBe(true);
     });
   });

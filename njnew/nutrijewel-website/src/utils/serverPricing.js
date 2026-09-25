@@ -20,6 +20,7 @@
 
 const products = require('../data/products.data');
 const { deliveryFor } = require('../data/shippingZones');
+const { feesFor } = require('../data/fees');
 
 const MAX_LINES = 40;
 const MAX_QTY_PER_LINE = 99;
@@ -62,23 +63,30 @@ function resolveVariant(product, weight) {
  * older page still quotes correctly. Leaving both out prices the items only,
  * for the cart preview; create-order refuses that.
  *
- * Returns { ok, errors, lines, itemsPaise, shippingPaise, totalPaise, delivery }.
+ * Returns { ok, errors, lines, itemsPaise, shippingPaise, platformFeePaise,
+ * convenienceFeePaise, totalPaise, delivery }.
  * shippingPaise is what Razorpay charges for delivery: the fixed fee, 0 for
  * pickup, and 0 for a variable Porter/Rapido or courier fare, which is settled
  * outside the payment (delivery.chargedOnline === false says so).
+ * The two fees come from src/data/fees.js, on items plus shippingPaise.
+ * totalPaise = items + shipping + platform fee + convenience fee, always: it is
+ * what Razorpay charges, and the database refuses a row where it is not.
  * ok === false means do not create an order; `errors` says why, in terms safe to
  * show a customer.
  */
+/* Every refusal has the same shape, with every amount present and nothing
+   chargeable in it. */
+const refuse = (errors, rest = {}) => ({
+  ok: false, errors, lines: [], itemsPaise: 0, shippingPaise: 0,
+  platformFeePaise: 0, convenienceFeePaise: 0, totalPaise: 0, delivery: null, ...rest,
+});
+
 function repriceCart(rawLines, { fulfilment, pincode } = {}) {
   const errors = [];
   const lines = [];
 
-  if (!Array.isArray(rawLines) || rawLines.length === 0) {
-    return { ok: false, errors: ['Your cart is empty.'], lines: [], itemsPaise: 0, shippingPaise: 0, totalPaise: 0, delivery: null };
-  }
-  if (rawLines.length > MAX_LINES) {
-    return { ok: false, errors: [`A single order cannot have more than ${MAX_LINES} different items.`], lines: [], itemsPaise: 0, shippingPaise: 0, totalPaise: 0, delivery: null };
-  }
+  if (!Array.isArray(rawLines) || rawLines.length === 0) return refuse(['Your cart is empty.']);
+  if (rawLines.length > MAX_LINES) return refuse([`A single order cannot have more than ${MAX_LINES} different items.`]);
 
   let itemsPaise = 0;
 
@@ -129,26 +137,25 @@ function repriceCart(rawLines, { fulfilment, pincode } = {}) {
     });
   });
 
-  if (errors.length) {
-    return { ok: false, errors, lines, itemsPaise: 0, shippingPaise: 0, totalPaise: 0, delivery: null };
-  }
+  if (errors.length) return refuse(errors, { lines });
 
   const hasPincode = pincode != null && String(pincode).trim() !== '';
   const method = fulfilment == null && hasPincode ? 'delivery' : fulfilment;
   const route = deliveryFor({ fulfilment: method, pincode });
-  if (!route.ok) {
-    return { ok: false, errors: [route.error], lines, itemsPaise, shippingPaise: 0, totalPaise: 0, delivery: null };
-  }
+  if (!route.ok) return refuse([route.error], { lines, itemsPaise });
   const delivery = route.delivery;
   // Only a fee Razorpay actually collects goes into the total.
   const shippingPaise = delivery && delivery.chargedOnline ? delivery.feePaise : 0;
 
-  const totalPaise = itemsPaise + shippingPaise;
+  // On what is actually paid online, so a WhatsApp-settled fare carries no fee.
+  const { platformFeePaise, convenienceFeePaise } = feesFor(itemsPaise + shippingPaise);
+
+  const totalPaise = itemsPaise + shippingPaise + platformFeePaise + convenienceFeePaise;
   if (totalPaise > MAX_ORDER_PAISE) {
-    return { ok: false, errors: ['That order is too large to place online. Please contact us directly.'], lines, itemsPaise, shippingPaise, totalPaise: 0, delivery };
+    return refuse(['That order is too large to place online. Please contact us directly.'], { lines, itemsPaise, shippingPaise, delivery });
   }
 
-  return { ok: true, errors: [], lines, itemsPaise, shippingPaise, totalPaise, delivery };
+  return { ok: true, errors: [], lines, itemsPaise, shippingPaise, platformFeePaise, convenienceFeePaise, totalPaise, delivery };
 }
 
 module.exports = {

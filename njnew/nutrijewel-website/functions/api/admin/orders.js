@@ -46,7 +46,8 @@ export async function onRequestGet(ctx) {
   const binds = status ? [status, limit] : [limit];
 
   const { results } = await ctx.env.DB.prepare(
-    `SELECT o.id, o.order_number, o.status, o.items_paise, o.shipping_paise, o.total_paise,
+    `SELECT o.id, o.order_number, o.status, o.items_paise, o.shipping_paise,
+            o.platform_fee_paise, o.convenience_fee_paise, o.total_paise,
             o.customer_name, o.customer_phone, o.customer_email,
             o.address_line, o.city, o.pincode, o.shipping_zone, o.fulfilment, o.notes,
             o.razorpay_payment_id, o.paid_at, o.created_at,

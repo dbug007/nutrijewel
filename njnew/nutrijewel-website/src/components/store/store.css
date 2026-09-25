@@ -261,6 +261,11 @@
   font-size: 1rem;
 }
 .nj-subtotal strong { font-size: 1.25rem; color: var(--nj-charcoal); }
+/* The fees before checkout, then the total they add up to. */
+.nj-drawer-fees { margin: -0.45rem 0 0.85rem; display: grid; gap: 0.25rem; font-size: 0.88rem; color: #5a5a5a; }
+.nj-drawer-fees > div { display: flex; justify-content: space-between; align-items: baseline; }
+.nj-drawer-fees .nj-drawer-total { padding-top: 0.35rem; border-top: 1px dashed #e2e0d8; font-size: 0.95rem; color: var(--nj-charcoal); }
+.nj-drawer-fees .nj-drawer-total strong { font-size: 1.05rem; }
 .nj-checkout-btn {
   width: 100%;
   display: flex;
