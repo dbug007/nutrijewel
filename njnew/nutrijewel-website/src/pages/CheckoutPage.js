@@ -386,6 +386,7 @@ export default function CheckoutPage() {
   }
 
   const d = quote && quote.delivery;
+  const itemCount = quote ? quote.lines.reduce((n, l) => n + l.qty, 0) : 0;
   /* A quote only answers the choice on screen when its method matches it. While
      a re-quote for a new choice is in flight the old one is still showing, and
      it must not be payable. */
@@ -462,7 +463,22 @@ export default function CheckoutPage() {
         </ul>
         {quote && (
           <div className="njco-totals">
-            <div><span>Items</span><span>{quote.itemsDisplay}</span></div>
+            {/* The saving on MRP, from the same struck-through prices the product
+                pages show. Display only: the server never charges from it. */}
+            {quote.discountPaise > 0 ? (
+              <>
+                <div data-testid="mrp-line">
+                  <span>MRP ({itemCount} item{itemCount === 1 ? '' : 's'})</span>
+                  <span>{quote.mrpTotalDisplay}</span>
+                </div>
+                <div className="njco-discount" data-testid="discount-line">
+                  <span>Discount on MRP</span>
+                  <span>&minus;{quote.discountDisplay}</span>
+                </div>
+              </>
+            ) : (
+              <div><span>Items</span><span>{quote.itemsDisplay}</span></div>
+            )}
             <div className={`njco-delivery-line${quoteFits ? '' : ' is-pending'}`} data-testid="delivery-line">
               <span>{deliveryLine[0]}</span>
               <span>{deliveryLine[1]}</span>
@@ -473,6 +489,9 @@ export default function CheckoutPage() {
             {/* The server's own words for a fare settled on WhatsApp. It says
                 the fare is not in this total, which is the point of showing it. */}
             {fareLater && d.note && <p className="njco-note">{d.note}</p>}
+            {quote.discountPaise > 0 && (
+              <p className="njco-saving" data-testid="saving">You save {quote.discountDisplay} on MRP with this order</p>
+            )}
           </div>
         )}
         {!quote && quoting && <p className="njco-muted">Working out your total.</p>}

@@ -77,9 +77,15 @@ function resolveVariant(product, weight) {
 /* Every refusal has the same shape, with every amount present and nothing
    chargeable in it. */
 const refuse = (errors, rest = {}) => ({
-  ok: false, errors, lines: [], itemsPaise: 0, shippingPaise: 0,
+  ok: false, errors, lines: [], itemsPaise: 0, mrpTotalPaise: 0, discountPaise: 0, shippingPaise: 0,
   platformFeePaise: 0, convenienceFeePaise: 0, totalPaise: 0, delivery: null, ...rest,
 });
+
+/* What the basket would cost at MRP, the struck-through price the product pages
+   already show, from the catalogue and never from the request. A line sold at
+   its MRP (or with none) counts at its price, so the saving is never inflated. */
+const mrpTotalOf = (lines) => lines.reduce(
+  (sum, l) => sum + (l.mrpPaise != null && l.mrpPaise > l.unitPaise ? l.mrpPaise : l.unitPaise) * l.qty, 0);
 
 function repriceCart(rawLines, { fulfilment, pincode } = {}) {
   const errors = [];
@@ -155,7 +161,14 @@ function repriceCart(rawLines, { fulfilment, pincode } = {}) {
     return refuse(['That order is too large to place online. Please contact us directly.'], { lines, itemsPaise, shippingPaise, delivery });
   }
 
-  return { ok: true, errors: [], lines, itemsPaise, shippingPaise, platformFeePaise, convenienceFeePaise, totalPaise, delivery };
+  // Display only: the saving on MRP. Never part of any charge.
+  const mrpTotalPaise = mrpTotalOf(lines);
+  const discountPaise = mrpTotalPaise - itemsPaise;
+
+  return {
+    ok: true, errors: [], lines, itemsPaise, mrpTotalPaise, discountPaise,
+    shippingPaise, platformFeePaise, convenienceFeePaise, totalPaise, delivery,
+  };
 }
 
 module.exports = {

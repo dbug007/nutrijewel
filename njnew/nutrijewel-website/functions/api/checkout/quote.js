@@ -61,6 +61,11 @@ export async function onRequestPost({ request, env }) {
       { id: 'convenience', label: CONVENIENCE_FEE_LABEL, paise: result.convenienceFeePaise, display: formatPaise(result.convenienceFeePaise), info: CONVENIENCE_FEE_INFO },
     ],
     itemsDisplay: formatPaise(result.itemsPaise),
+    // The saving on MRP, for display only: never part of the charge.
+    mrpTotalPaise: result.mrpTotalPaise,
+    mrpTotalDisplay: formatPaise(result.mrpTotalPaise),
+    discountPaise: result.discountPaise,
+    discountDisplay: formatPaise(result.discountPaise),
     // Driven by the method, never by the amount being 0.
     shippingDisplay: result.delivery ? result.delivery.display : '',
     totalDisplay: formatPaise(result.totalPaise),

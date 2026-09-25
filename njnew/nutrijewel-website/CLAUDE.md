@@ -168,6 +168,17 @@ The web versions the site actually loads are the compressed files in
   and pincode, never a delivery charge; `src/utils/serverPricing.js` reprices from
   the catalogue. Verified in production that a cart claiming `unitPrice: 1` is still
   charged in full. Never read a price from a request.
+- **Platform and convenience fees live only in `src/data/fees.js`**, pinned by
+  `fees.test.js`: platform 2% below ₹2,500 and 0.5% from ₹2,500, convenience a
+  flat 0.5%, on items plus any delivery fee charged online (never on a
+  WhatsApp-settled fare), each rounded to a whole rupee. Customers see **amounts
+  only, never a rate** (owner's call), in the cart, checkout, admin and the
+  terms/refund/shipping pages. `total_paise` includes both fees and the orders
+  CHECK enforces it (migration 0006, a table rebuild; see its header for why the
+  child rows are copied aside). The MRP discount at checkout is display only,
+  from catalogue `originalPrice`. **Never show a charge nobody pays as waived or
+  free** (a fake crossed-out "taxes, free for loyal customers" was asked for and
+  declined): a misleading price claim under the Consumer Protection Act 2019.
 - **Pickup and delivery rules live only in `src/data/shippingZones.js`**, set by
   the owner 2026-09-25 and pinned by `shippingZones.test.js`: free pickup only at
   Lodha Belmondo; ₹66 to 412101; ₹149 to 411014 and 411005 (exact pincodes, not

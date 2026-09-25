@@ -181,6 +181,36 @@ describe('platform and convenience fees', () => {
   });
 });
 
+describe('the saving on MRP', () => {
+  it('is MRP minus what is charged, from the catalogue', () => {
+    const r = repriceCart([line({ qty: 2 })], { fulfilment: 'pickup' });
+    const mrp = toPaise(buyable.originalPrice) * 2;
+    expect(buyable.originalPrice).toBeGreaterThan(buyable.price);
+    expect(r.mrpTotalPaise).toBe(mrp);
+    expect(r.discountPaise).toBe(mrp - r.itemsPaise);
+    expect(r.discountPaise).toBeGreaterThan(0);
+  });
+
+  it('is never charged or added to anything', () => {
+    const r = repriceCart([line()], { fulfilment: 'delivery', pincode: '412101' });
+    expect(r.totalPaise).toBe(r.itemsPaise + r.shippingPaise + r.platformFeePaise + r.convenienceFeePaise);
+  });
+
+  it('ignores an MRP the browser sends', () => {
+    const honest = repriceCart([line()], { fulfilment: 'pickup' });
+    const cheat = repriceCart([{ ...line(), originalPrice: 99999, mrpPaise: 9999900 }], { fulfilment: 'pickup' });
+    expect(cheat.discountPaise).toBe(honest.discountPaise);
+  });
+
+  it('counts a product with no MRP above its price as no saving, never a negative one', () => {
+    const noMrp = products.find((p) => !p.comingSoon && !p.outOfSeason && !p.priceOnRequest && !p.variants
+      && !(p.originalPrice > p.price));
+    if (!noMrp) return; // every buyable product has an MRP today
+    const r = repriceCart([{ productId: noMrp.id, weight: noMrp.weight, qty: 1 }], { fulfilment: 'pickup' });
+    expect(r.discountPaise).toBe(0);
+  });
+});
+
 describe('rubbish input', () => {
   it.each([[], null, undefined, 'cart', 42])('refuses %p', (cart) => {
     expect(repriceCart(cart, { pincode: PIN_PUNE }).ok).toBe(false);

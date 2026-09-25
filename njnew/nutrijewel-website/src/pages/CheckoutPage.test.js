@@ -49,6 +49,11 @@ function quoteResponse({ fulfilment, pincode }) {
     shippingPaise,
     totalPaise,
     itemsDisplay: rupees(ITEMS_PAISE),
+    // The catalogue's MRP for this jar, as serverPricing reads it.
+    mrpTotalPaise: peanut.originalPrice * 100,
+    mrpTotalDisplay: rupees(peanut.originalPrice * 100),
+    discountPaise: peanut.originalPrice * 100 - ITEMS_PAISE,
+    discountDisplay: rupees(peanut.originalPrice * 100 - ITEMS_PAISE),
     shippingDisplay: d ? d.display : '',
     totalDisplay: rupees(totalPaise),
     delivery: d ? {
@@ -205,8 +210,8 @@ describe('checkout: pickup or delivery', () => {
 
     const row = await rowOf('Delivery to 412101');
     expect(row).toHaveTextContent('₹66');
-    // ₹299 + ₹66 delivery + ₹7 platform fee + ₹4 convenience fee.
-    expect(within(summary()).getByText('₹376')).toBeInTheDocument();
+    // ₹299 + ₹66 delivery + ₹7 platform fee + ₹2 convenience fee.
+    expect(within(summary()).getByText('₹374')).toBeInTheDocument();
     expect(quotes()[quotes().length - 1]).toMatchObject({ fulfilment: 'delivery', pincode: '412101' });
 
     type('Full name', 'Asha Rao');
@@ -217,7 +222,7 @@ describe('checkout: pickup or delivery', () => {
     type('City', 'Pune');
     type('Note for us (optional)', 'Ring the bell twice');
     expect(payButton()).toBeEnabled();
-    expect(payButton()).toHaveTextContent('Pay ₹376');
+    expect(payButton()).toHaveTextContent('Pay ₹374');
 
     fireEvent.click(payButton());
     await waitFor(() => expect(orders()).toHaveLength(1));
@@ -359,7 +364,7 @@ describe('checkout: pickup or delivery', () => {
     const platform = screen.getByTestId('fee-platform');
     const convenience = screen.getByTestId('fee-convenience');
     expect(platform).toHaveTextContent('Platform fee₹7');
-    expect(convenience).toHaveTextContent('Convenience fee₹4');
+    expect(convenience).toHaveTextContent('Convenience fee₹2');
     const amount = (el) => Number(el.textContent.replace(/[^0-9]/g, ''));
     const total = amount(within(summary()).getByText(/^Total/).parentElement);
     expect(total).toBe(299 + 66 + amount(platform) + amount(convenience));
@@ -369,6 +374,21 @@ describe('checkout: pickup or delivery', () => {
     expect(totals).toHaveClass('njco-totals');
     expect(totals.textContent).not.toMatch(/%|percent/i);
     expect(screen.getByRole('button', { name: /^pay/i }).textContent).not.toMatch(/%/);
+  });
+
+  it('shows the MRP, the discount on it, and what the customer saves', async () => {
+    renderCheckout();
+    await ready();
+    choose('Free pickup');
+    await rowOf('Pickup at Lodha Belmondo');
+    const mrp = peanut.originalPrice;
+    expect(peanut.originalPrice).toBeGreaterThan(peanut.price);
+    expect(screen.getByTestId('mrp-line')).toHaveTextContent(`MRP (1 item)₹${mrp}`);
+    expect(screen.getByTestId('discount-line')).toHaveTextContent(`Discount on MRP−₹${mrp - peanut.price}`);
+    expect(screen.getByTestId('saving')).toHaveTextContent(`You save ₹${mrp - peanut.price} on MRP with this order`);
+    // MRP minus the discount is what the items cost: the rows add up.
+    const n = (id) => Number(screen.getByTestId(id).textContent.replace(/^[^₹]*₹/, '').replace(/[^0-9]/g, ''));
+    expect(n('mrp-line') - n('discount-line')).toBe(peanut.price);
   });
 
   it('explains the convenience fee behind its (i), in the three owner-approved points', async () => {
